@@ -1,0 +1,88 @@
+
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div class="main-container">
+    <div class="buttons-container">
+      <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">{{ !esActualizacion ? 'Guardar' : 'Actualizar'}}</button> 
+      <button type="button" class="btn btn-info" (click)="limpiar()">Clear data</button>
+      <button 
+        type="button" 
+        class="btn btn-info" 
+        (click)="convertToPDF()"
+        [disabled]="!form.value.contrato"
+      >
+        Generar PDF
+      </button>
+      <button type="button" class="btn btn-info" [routerLink]="['/empleados/contratos', form.value.id_empleado]">Regresar</button>
+    </div>
+    <div class="row" *ngIf="!esActualizacion">
+      <div class="col-12">
+        <label for="plantilla">Plantilla:</label>
+        <p-dropdown 
+          id="plantilla"
+          [options]="plantillas"
+          placeholder="Seleccionar una persona" 
+          optionLabel="titulo" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          optionValue="idContratoTemplate"
+          (onChange)="changeTemplate($event)"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+          <label for="titulo">Título:</label>
+          <input 
+            id="titulo"
+            pInputText
+            class="form-control" 
+            maxlength="50" 
+            formControlName="titulo"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('titulo')}"
+          >
+          <div *ngIf="esInvalido('titulo')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('titulo') }}
+            </small>
+          </div>
+      </div>
+      <div class="col-12">
+          <label for="contrato">Plantilla:</label>
+          <p-editor 
+            formControlName="contrato" 
+            [style]="{ height: '320px' }"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('contrato')}"
+          >
+          </p-editor>
+          <div *ngIf="esInvalido('contrato')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('contrato') }}
+            </small>
+          </div>
+      </div>
+      <div class="col-12">
+          <label for="contrato">Campos disponibles:</label>
+          <p-table [value]="campos" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nombre del campo</th>
+                    <th>Valor</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-campo>
+                <tr>
+                    <td>{{ campo.code }}</td>
+                    <td>{{ campo.name }}</td>
+                </tr>
+            </ng-template>
+          </p-table>
+      </div>
+    </div>
+  </div>
+</form>

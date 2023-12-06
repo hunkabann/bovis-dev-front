@@ -1,0 +1,8 @@
+<div class="cont-catalogos">
+  <a [routerLink]="cat.catalogo" (click)="asignarUrlService(cat.nameService)" class="cont-catalogos__card shadow" *ngFor="let cat of catalogos; let i = index;">
+    <p class="cont-catalogos__card--text">
+      <i class="pi pi-book mr-2"></i>
+      {{cat.nombre}}
+    </p>
+  </a>
+</div>

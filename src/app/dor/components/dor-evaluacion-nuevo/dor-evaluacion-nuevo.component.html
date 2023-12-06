@@ -1,0 +1,515 @@
+<div class="main-container">
+  <!-- <br />
+  <br /> -->
+
+  <h1>Evaluación</h1>
+
+  <div class="">
+    <br />
+    <div class="row">
+      <div class="col-sm">
+        <label for="concepto">Empleado:</label>
+        <div class="">
+          <p-dropdown
+            [options]="empleadosSub"
+            placeholder="Seleccionar empleado"
+            optionLabel="name"
+            [showClear]="true"
+            [style]="{ width: '100%' }"
+            (onChange)="onChangeEmpleado($event)"
+            [filter]="true" 
+            filterBy="name"
+          ></p-dropdown>
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="descripcion">Núm. de empleado:</label>
+        <div class="">
+          <!-- <p-dropdown [options]="objetivos" [(ngModel)]="selectedObjetivo" placeholder="Selecciona el objetivo"
+            optionLabel="name" [showClear]="true" [style]="{'width': '100%'}" [disabled]="isConsulta"></p-dropdown> -->
+          <input
+            type="text"
+            class="form-control"
+            [disabled]="isConsulta"
+            [(ngModel)]="subComple.noEmpleado"
+          />
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="email">Proyecto:</label>
+        <div class="">
+          <input
+            type="text"
+            class="form-control"
+            [disabled]="isConsulta"
+            [(ngModel)]="subComple.proyecto"
+          />
+        </div>
+      </div>
+    </div>
+    <br />
+  </div>
+
+  <ng-container *ngIf="isObjetivos">
+    <div class="">
+      <br />
+      <div class="row">
+        <div class="col-4">
+          <label for="descripcion">Dirección Ejecutiva:</label>
+          <div class="">
+            <input
+              type="text"
+              class="form-control"
+              [disabled]="isConsulta"
+              [(ngModel)]="subComple.direccionEjecutiva"
+            />
+          </div>
+        </div>
+        <div class="col-4">
+          <label for="concepto">Unidad de Negocio:</label>
+          <div class="">
+            <input
+              type="text"
+              class="form-control"
+              [disabled]="isConsulta"
+              [(ngModel)]="subComple.unidadDeNegocio"
+            />
+          </div>
+        </div>
+        <div class="col-4">
+            <label>Mes:</label>
+            <!-- <div class="flex gap-2">
+              <p-calendar 
+                view="month" 
+                dateFormat="m/yy" 
+                [readonlyInput]="true" 
+                (onSelect)="onSelectFecha($event)"
+                [style]="{width: '100%'}"
+                placeholder="Seleccionar un mes..."
+                class="flex-1"
+                [(ngModel)]="mesCurso"
+                [maxDate]="maxFecha"
+              ></p-calendar>
+            </div> -->
+            <div class="">
+              <p-dropdown
+                [options]="meses"
+                placeholder="Seleccionar mes"
+                optionLabel="label"
+                [style]="{ width: '100%' }"
+                (onChange)="onSelectFecha($event)"
+                [(ngModel)]="mes"
+                optionValue="value"
+              ></p-dropdown>
+            </div>
+        </div>
+        <div class="col-4">
+            <label>Año:</label>
+            <div class="">
+              <p-dropdown
+                [options]="anios"
+                placeholder="Seleccionar año"
+                optionLabel="label"
+                [style]="{ width: '100%' }"
+                (onChange)="onSelectFecha($event, false)"
+                [(ngModel)]="anio"
+                optionValue="value"
+              ></p-dropdown>
+            </div>
+        </div>
+        <div class="col-sm"></div>
+      </div>
+      <br />
+
+      <ng-container>
+
+      
+
+        <div class="">
+          <br />
+          <div class="row">
+            <div
+              class="col-sm"
+              *ngFor="let tipo of tiposTablasObjGenerales; let i = index"
+            >
+              <ng-container *ngIf="tipo == tiposTablasObjGenerales[0]">
+                <div class="card">
+                  <h5>
+                    <strong>&nbsp;&nbsp;{{ tipo }}</strong>
+                  </h5>
+                  <!-- [tableStyle]="{'min-width': '50rem'}" -->
+                  <div class="text-end">
+                    <!-- <strong>Total resultado:  {{ totalRealTipoUno | number: '1.2-2' }}%</strong
+                    >&nbsp;&nbsp; -->
+                    <strong>Total resultado: {{ docService.totalCorporativoResultado | number: '1.2-2' }}%</strong
+                    >&nbsp;&nbsp;
+                  </div>
+                  <div class="text-end">
+                    <strong>Total porcentaje: {{ totalObjetivosTipoUno }}%</strong
+                    >&nbsp;&nbsp;
+                  </div>
+                  <p-table [value]="listObjGenralesTipoUno">
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>Descripción</th>
+                        <th>Meta</th>
+                        <!-- <th>Meta mensual</th> -->
+                        <th>Real</th>
+                        <th>Porcentaje</th>
+                        <th>Resultado</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-obj>
+                      <tr>
+                        <td pTooltip="{{ obj.tooltip }}" tooltipPosition="top">
+                          {{ obj.descripcion }}
+                        </td>
+                        <td>{{ obj.meta }}{{obj.descripcion.trim() != 'Seguridad' ? '%' : ''}}</td>
+                        <!-- <td>{{ obj | calcularMeta }}{{obj.descripcion != 'Seguridad' ? '%' : ''}}</td> -->
+                        <td>{{ (obj.descripcion.split(' ').join('') == 'GPMBovis' ? obj.metaMensual : obj.real) | number: '1.2-2' }}{{obj.descripcion != 'Seguridad' ? '%' : ''}}</td>
+                        <td>{{ obj.valor }}%</td>
+                        <td>{{ obj | calcularResultado:tipo }}%</td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="tipo == tiposTablasObjGenerales[1]">
+                <div class="card">
+                  <h5>
+                    <strong>&nbsp;&nbsp;{{ tipo }}</strong>
+                  </h5>
+                  <!-- [tableStyle]="{'min-width': '50rem'}" -->
+                  <div class="text-end">
+                    <!-- <strong>Total resultado: {{ totalRealTipoDos | number: '1.2-2' }}%</strong
+                    >&nbsp;&nbsp; -->
+                    <strong>Total resultado: {{ docService.totalDeProyectoResultado | number: '1.2-2' }}%</strong
+                    >&nbsp;&nbsp;
+                  </div>
+                  <div class="text-end">
+                    <strong>Total porcentaje: {{ totalObjetivosTipoDos }}%</strong
+                    >&nbsp;&nbsp;
+                  </div>
+                  <p-table 
+                    [value]="listObjGenralesTipoDos"
+                    dataKey="id"
+                    editMode="row"
+                  >
+                    <ng-template pTemplate="header">
+                      <tr>
+                        <th>Descripción</th>
+                        <th>Meta</th>
+                        <!-- <th>Meta mensual</th> -->
+                        <th>Real</th>
+                        <th>Porcentaje</th>
+                        <th>Resultado</th>
+                        <th>Opciones</th>
+                      </tr>
+                    </ng-template>
+                    <ng-template 
+                      pTemplate="body" 
+                      let-obj
+                      let-editing="editing"
+                      let-ri="rowIndex"
+                    >
+                      <tr [pEditableRow]="obj">
+                        <td pTooltip="{{ obj.tooltip }}" tooltipPosition="top">
+                          {{ obj.descripcion }}
+                        </td>
+                        <td>{{ obj.meta }}{{obj.descripcion.trim() != 'Seguridad' ? '%' : ''}}</td>
+                        <!-- <td>{{ obj.proyectadoTotal }}</td> -->
+                        <!-- <td>{{ obj | calcularMeta }}{{obj.descripcion.trim() != 'Seguridad' ? '%' : ''}}</td> -->
+                        <!-- <td>{{ obj.real | number: '1.2-2' }}{{obj.descripcion != 'Seguridad' ? '%' : ''}}</td> -->
+                        <td>
+                          <p-cellEditor>
+                            <ng-template pTemplate="input">
+                              <input
+                                pInputText
+                                type="text"
+                                [(ngModel)]="obj.real"
+                                required
+                              />
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                              {{ obj.real | number: '1.2-2' }}{{obj.descripcion.trim() != 'Seguridad' ? '%' : ''}}
+                            </ng-template>
+                          </p-cellEditor>
+                        </td>
+                        <td>{{ obj.valor }}%</td>
+                        <td>{{ obj | calcularResultado:tipo }}%</td>
+                        <!-- <ng-template #carteraResultado>
+                          <td>                 
+                            {{(100 - (obj.real * obj.porcentajeEstimado)) | number: '1.2-2'}}%
+                        </ng-template> -->
+                        <td>
+                          <div
+                            class="flex align-items-center justify-content-center gap-2"
+                          >
+                            <ng-container *ngIf="obj.descripcion == 'Planes de trabajo'">
+                              <button
+                                *ngIf="!editing"
+                                pButton
+                                pRipple
+                                type="button"
+                                pInitEditableRow
+                                icon="pi pi-pencil"
+                                (click)="onRowEditInit(obj)"
+                                class="p-button-rounded p-button-text"
+                              ></button>
+                              <button
+                                *ngIf="editing"
+                                pButton
+                                pRipple
+                                type="button"
+                                pSaveEditableRow
+                                icon="pi pi-check"
+                                (click)="onRowEditSave(obj)"
+                                class="p-button-rounded p-button-text p-button-success mr-2"
+                              ></button>
+                              <button
+                                *ngIf="editing"
+                                pButton
+                                pRipple
+                                type="button"
+                                pCancelEditableRow
+                                icon="pi pi-times"
+                                (click)="onRowEditCancel(obj, ri)"
+                                class="p-button-rounded p-button-text p-button-danger"
+                              ></button>
+                            </ng-container>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-template>
+                  </p-table>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <br />
+      <br />
+
+      <div *ngIf="!mostrarContenido; else cualitativos">
+        <p-messages [value]="[{ severity: 'info', summary: 'Nota', detail: 'Los objetivos no han sido aceptados.' }]" [enableService]="false" [closable]="false"></p-messages>
+      </div>
+      
+      <ng-template #cualitativos>
+        <ng-container *ngIf="isMotivoRechazo">
+          <div class="row d-flex justify-content-center">
+            <label for="">
+              <strong style="color: red">Motivo del rechazo</strong>
+            </label>
+          </div>
+          <div class="row d-flex justify-content-center">
+            <textarea
+              [rows]="3"
+              [cols]="80"
+              pInputTextarea
+              [(ngModel)]="motivoRechazoObjetivos"
+              [disabled]="true"
+            ></textarea>
+          </div>
+          <br />
+          <br />
+        </ng-container>
+  
+        <ng-container *ngIf="listObjetivos.length > 0">
+          <div class="card">
+            <h5><strong>&nbsp;&nbsp;CUALITATIVOS</strong></h5>
+            <div class="row">
+              <!-- <div class="col-sm-8"><p class="float-end">left</p></div>
+              <div class="col-sm-2"><p class="float-start">right</p></div>
+              <div class="col-sm-2"><p class="float-start">right</p></div> -->
+              <div class="col-12 text-right">
+                <div class="text-end">
+                  <strong>Total resultado: {{ totalCualitativosResultado | number: '1.2-2' }}%</strong
+                  >&nbsp;&nbsp;
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- <div class="col-sm-8"><p class="float-end">left</p></div>
+              <div class="col-sm-2"><p class="float-start">right</p></div>
+              <div class="col-sm-2"><p class="float-start">right</p></div> -->
+              <div class="col-12 text-right">
+                <div class="text-end">
+                  <strong>Total porcentaje: {{ totalObjetivosCualitativos }}%</strong
+                  >&nbsp;&nbsp;
+                </div>
+              </div>
+            </div>
+  
+            <p-table
+              [value]="listObjetivos"
+              dataKey="id"
+              editMode="row"
+              [tableStyle]="{ 'min-width': '50rem' }"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 60%">Descripción</th>
+                  <th style="width: 10%">Meta</th>
+                  <th style="width: 10%">Real</th>
+                  <th style="width: 10%">Porcentaje</th>
+                  <th style="width: 5%">Resultado</th>
+                  <th style="width: 5%">Opciones</th>
+                </tr>
+              </ng-template>
+              <ng-template
+                pTemplate="body"
+                let-objetivo
+                let-editingCualitativos="editing"
+                let-ri="rowIndex"
+              >
+                <tr [pEditableRow]="objetivo">
+                  <ng-container *ngIf="objetivo.isComodin">
+                    <td pTooltip="{{ objetivo.tooltip }}" tooltipPosition="top">
+                      <p-cellEditor>
+                        <ng-template pTemplate="input">
+                          <textarea
+                            [rows]="3"
+                            [cols]="80"
+                            pInputTextarea
+                            [autoResize]="true"
+                            maxlength="250"
+                            [(ngModel)]="objetivo.descripcion"
+                          ></textarea>
+                        </ng-template>
+                        <ng-template pTemplate="output">
+                          {{ objetivo.descripcion }}
+                        </ng-template>
+                      </p-cellEditor>
+                    </td>
+                  </ng-container>
+  
+                  <ng-container *ngIf="!objetivo.isComodin">
+                    <td pTooltip="{{ objetivo.tooltip }}" tooltipPosition="top">
+                      {{ objetivo.descripcion }}
+                    </td>
+                  </ng-container>
+  
+                  <td>
+                    {{ objetivo.meta }}
+  
+                    <ng-container *ngIf="objetivo.descripcion == 'Capacitación'">
+                      &nbsp; &nbsp; &nbsp; &nbsp; <strong>Cursos</strong>
+                    </ng-container>
+                  </td>
+  
+                  <td>
+                    <p-cellEditor>
+                      <ng-template pTemplate="input">
+                        <input
+                          pInputText
+                          type="text"
+                          [(ngModel)]="objetivo.real"
+                          required
+                        >
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{ objetivo.real | number: '1.2-2' }}
+                      </ng-template>
+                    </p-cellEditor>
+                  </td>
+  
+                  <td>
+                    <!-- <div class="text-end"> -->
+                    {{ objetivo.valor }}%&nbsp;&nbsp;
+                    <!-- </div> -->
+  
+                  </td>
+  
+                  <!-- Resultado -->
+                  <td>{{ objetivo | calcularResultadoObjetivos }} %</td>
+  
+                  <td>
+                    <div
+                      class="flex align-items-center justify-content-center gap-2"
+                    >
+                      <ng-container *ngIf="objetivo.esPersonal">
+                        <button
+                          *ngIf="!editingCualitativos"
+                          pButton
+                          pRipple
+                          type="button"
+                          pInitEditableRow
+                          icon="pi pi-pencil"
+                          (click)="onRowEditInitCualitativos(objetivo)"
+                          class="p-button-rounded p-button-text"
+                        ></button>
+                        <button
+                          *ngIf="editingCualitativos"
+                          pButton
+                          pRipple
+                          type="button"
+                          pSaveEditableRow
+                          icon="pi pi-check"
+                          (click)="onRowEditSaveCualitativos(objetivo)"
+                          class="p-button-rounded p-button-text p-button-success mr-2"
+                        ></button>
+                        <button
+                          *ngIf="editingCualitativos"
+                          pButton
+                          pRipple
+                          type="button"
+                          pCancelEditableRow
+                          icon="pi pi-times"
+                          (click)="onRowEditCancelCualitativos(objetivo, ri)"
+                          class="p-button-rounded p-button-text p-button-danger"
+                        ></button>
+                      </ng-container>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <br />
+          <div class="text-center">
+            <div class="text-center">
+              <strong
+                >Total resultado:
+                {{
+                  totalCualitativosResultado +
+                  docService.totalCorporativoResultado +
+                  docService.totalDeProyectoResultado
+                  | number: '1.2-2'
+                }}
+                %</strong
+              >&nbsp;&nbsp;
+            </div>
+            <strong
+              >Total porcentaje:
+              {{
+                totalObjetivosCualitativos +
+                totalObjetivosTipoUno +
+                totalObjetivosTipoDos
+                | number: '1.2-2'
+              }}
+              %</strong
+            >&nbsp;&nbsp;
+          </div>
+                  <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-start gap-2" *ngIf="!aceptado">
+          <button type="button" class="btn btn-info" (click)="actualizarAcepto()">Evaluado</button>
+        </p-toolbar>
+        </ng-container>
+  
+        <ng-container *ngIf="listObjetivos.length == 0">
+          <div class="text-center">
+            <p-message
+              severity="info"
+              [text]="mensaje_sin_datos"
+              styleClass="p-mr-2"
+            ></p-message>
+          </div>
+        </ng-container>
+      </ng-template>
+
+    </div>
+  </ng-container>
+</div>
+<p-toast></p-toast>
+
+

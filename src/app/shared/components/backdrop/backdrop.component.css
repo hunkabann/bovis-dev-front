@@ -1,0 +1,11 @@
+.backdrop {
+  background-color: var(--surface-900);
+  opacity: .6;
+  position: fixed;
+  z-index: 99999999;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

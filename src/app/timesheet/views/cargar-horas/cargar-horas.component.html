@@ -1,0 +1,243 @@
+
+<p-toast></p-toast>
+
+<div class="main-container">
+
+  <h1>Cargar horas</h1>
+
+  <p-messages severity="error" *ngIf="totalSuperado">
+    <ng-template pTemplate>
+        <div class="ml-2">No puedes superar el total de Días Trabajo / Mes</div>
+    </ng-template>
+  </p-messages>
+
+  <p-messages severity="warn" *ngIf="totalNoAlcanzado">
+    <ng-template pTemplate>
+        <div class="ml-2">Aún falta días por cubrir ({{diasAcumulados}} / {{form.value.dias}}).</div>
+    </ng-template>
+  </p-messages>
+
+  <form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="buttons-container">
+      <button 
+        type="submit" 
+        class="btn btn-info"
+        [disabled]="!form.valid || totalSuperado || totalNoAlcanzado"
+      >Guardar</button>
+    </div>
+  
+    <div class="grid">
+      <div class="col">
+          <label for="empleado">Empleado:</label>
+          <p-dropdown 
+            id="empleado" 
+            [options]="empleados"
+            placeholder="Seleccionar una empleado" 
+            optionLabel="name"
+            [showClear]="true"
+            [style]="{ width: '100%' }"
+            formControlName="empleado"
+            (onChange)="buscarProyectos($event)"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('empleado')}"
+            [filter]="true" 
+            filterBy="name"
+          ></p-dropdown>
+          <div *ngIf="esInvalido('empleado')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('empleado') }}
+            </small>
+          </div>
+      </div>
+      <div class="col">
+        <label for="mes">Mes:</label>
+        <input 
+          id="mes"
+          type="text" 
+          pInputText
+          class="form-control"
+          formControlName="fecha"
+          readonly
+        >
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col">
+        <label for="responsable">Usuario responsable:</label>
+        <input 
+          id="responsable"
+          type="text" 
+          pInputText
+          class="form-control"
+          formControlName="responsable"
+          readonly
+        >
+      </div>
+      <div class="col">
+        <label for="sabados">Sábados:</label>
+        <div class="flex flex-wrap gap-3">
+            <div class="flex align-items-center">
+                <p-radioButton 
+                  name="sabados"
+                  value="SI" 
+                  formControlName="sabados" 
+                  inputId="sabados1"
+                  (onClick)="calcularDias($event)"
+                ></p-radioButton>
+                <label for="sabados1" class="ml-2">Sí</label>
+            </div>
+            <div class="flex align-items-center">
+                <p-radioButton 
+                  name="sabados"
+                  value="NO"
+                  formControlName="sabados"
+                  inputId="sabados2"
+                  (onClick)="calcularDias($event)"
+                ></p-radioButton>
+                <label for="sabados2" class="ml-2">No</label>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col">
+        <label for="dias">Días Trabajo / Mes:</label>
+        <input 
+          id="dias"
+          type="text" 
+          pInputText
+          class="form-control"
+          formControlName="dias"
+          readonly
+        >
+      </div>
+    </div>
+
+    <div class="d-flex gap-2">
+      <h4 class="mt-2">Proyectos</h4>
+      <a
+        title="Agregar proyecto" 
+        pButton 
+        pRipple 
+        icon="pi pi-plus"
+        class="p-button-rounded p-button-info p-mr-2"
+        style="text-decoration: none;"
+        (click)="agregarProyectoModal()"
+      ></a>
+    </div>
+    <hr>
+
+    <div formArrayName="proyectos">
+      <div class="grid" *ngFor="let proyecto of proyectos.controls; let i = index" [formGroupName]="i">
+        <div class="col-5 d-flex align-items-center">
+          <label><b>{{proyecto.get('nombre').value}}</b></label>
+        </div>
+        <div class="col-2 d-flex flex-column">
+          <label for="dias{{i}}">Días:</label>
+          <p-inputNumber 
+            id="dias{{i}}"
+            placeholder="0"
+            formControlName="dias"
+            locale="es-MX" 
+            [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dias', i)}"
+            [style]="{ width: '100%' }"
+            (ngModelChange)="calcularPorcentajes($event, i, 'proyectos')"
+          ></p-inputNumber>
+          <div *ngIf="esInvalidoEnArreglo(proyectos, 'dias', i)">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeErrorEnArreglo(proyectos, 'dias', i) }}
+            </small>
+          </div>
+        </div>
+        <div class="col-2">
+          <label for="dedicacion{{i}}">% Dedicación:</label>
+          <input 
+            id="dedicacion{{i}}"
+            type="text" 
+            pInputText
+            class="form-control"
+            formControlName="dedicacion"
+            readonly
+            [placeholder]="0"
+          >
+        </div>
+        <div class="col-2">
+          <label for="costo{{i}}">% Costo:</label>
+          <input 
+            id="costo{{i}}"
+            type="text" 
+            pInputText
+            class="form-control"
+            formControlName="costo"
+            readonly
+            [placeholder]="0"
+          >
+        </div>
+        <div class="col-1 d-flex justify-content-center align-items-center">
+          <a
+            [title]="'Eliminar proyecto ' + proyecto.get('nombre').value" 
+            pButton 
+            pRipple 
+            icon="pi pi-trash"
+            class="p-button-rounded p-button-danger p-mr-2"
+            style="text-decoration: none;"
+            (click)="eliminarProyecto(proyecto.get('id').value, i)"
+          ></a>
+        </div>
+      </div>
+    </div>
+    
+    <h4 class="mt-2">Otros</h4>
+    <hr>
+
+    <div formArrayName="otros">
+      <div class="grid" *ngFor="let otro of otros.controls; let i = index" [formGroupName]="i">
+        <div class="col d-flex align-items-center">
+          <label><b>{{otro.get('id').value | titlecase}}</b></label>
+        </div>
+        <div class="col d-flex flex-column">
+          <label for="dias{{i}}">Días:</label>
+          <p-inputNumber 
+            id="dias{{i}}"
+            placeholder="0"
+            formControlName="dias"
+            locale="es-MX" 
+            (ngModelChange)="calcularPorcentajes($event, i, 'otros')"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(otros, 'dias', i)}"
+            [style]="{ width: '100%' }"
+            [readonly]="otro.get('id').value === 'feriado'"
+          ></p-inputNumber>
+          <div *ngIf="esInvalidoEnArreglo(otros, 'dias', i)">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeErrorEnArreglo(otros, 'dias', i) }}
+            </small>
+          </div>
+        </div>
+        <div class="col">
+          <label for="dedicacion{{i}}">% Dedicación:</label>
+          <input 
+            id="dedicacion{{i}}"
+            type="text" 
+            pInputText
+            class="form-control"
+            formControlName="dedicacion"
+            readonly
+            [placeholder]="0"
+          >
+        </div>
+      </div>
+    </div>
+
+  </form>
+</div>
+
+<pre>
+  <!-- {{form.value | json}} -->
+</pre>

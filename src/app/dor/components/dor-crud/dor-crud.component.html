@@ -1,0 +1,79 @@
+<div class="content" style="margin:2%">
+  <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="isConsulta">Guardar</button>&nbsp;&nbsp;
+  <button type="button" class="btn btn-info" (click)="clear()" [disabled]="isConsulta">Clear data</button>
+
+  <br>
+  <br>
+
+  <div class="">
+    <br>
+    <div class="row">
+      <div class="col-sm">
+        <label for="concepto">Concepto:</label>
+        <div class="">
+          <p-dropdown [options]="conceptos" [(ngModel)]="selectedConcepto" placeholder="Selecciona el concepto"
+            optionLabel="name" [showClear]="true" [style]="{'width': '100%'}" [disabled]="isConsulta"></p-dropdown>
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="descripcion">Descripción:</label>
+        <div class="">
+          <p-dropdown [options]="objetivos" [(ngModel)]="selectedObjetivo" placeholder="Selecciona el objetivo"
+            optionLabel="name" [showClear]="true" [style]="{'width': '100%'}" [disabled]="isConsulta"></p-dropdown>
+        </div>
+        <!-- <div class="">
+          <input type="text" [(ngModel)]="regDor.descripcion" pInputText placeholder="Ingrese una descripción" [style]="{'width': '100%'}" [disabled]="isConsulta">
+        </div> -->
+      </div>
+      <div class="col-sm">
+        <label for="email">Meta:</label>
+        <div class="">
+          <input type="number" [(ngModel)]="regDor.meta" pInputText placeholder="Ingrese una cantidad" [style]="{'width': '100%'}" [disabled]="isConsulta">
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm">
+        <label for="concepto">Ponderado:</label>
+        <div class="">
+          <input type="number" [(ngModel)]="regDor.ponderado" pInputText placeholder="Ingrese una cantidad" [style]="{'width': '100%'}" [disabled]="isConsulta">
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="descripcion">Calificación:</label>
+        <div class="">
+          <input type="number"  [(ngModel)]="regDor.calificacion" pInputText placeholder="Ingrese una cantidad" [style]="{'width': '100%'}" [disabled]="isConsulta">
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="email">Nivel 2:</label>
+        <div class="">
+          <input type="number"  [(ngModel)]="regDor.nivel_2" pInputText placeholder="Ingrese una cantidad" [style]="{'width': '100%'}" [disabled]="isConsulta">
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-sm">
+        <label for="concepto">Nivel 3:</label>
+        <div class="">
+          <input type="number" [(ngModel)]="regDor.nivel_3" pInputText placeholder="Ingrese una cantidad" [style]="{'width': '100%'}" [disabled]="isConsulta">
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="descripcion">Nivel 4:</label>
+        <div class="">
+          <input type="number" [(ngModel)]="regDor.nivel_4" pInputText placeholder="Ingrese una cantidad" [style]="{'width': '100%'}" [disabled]="isConsulta">
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="email">Nivel 5:</label>
+        <div class="">
+          <input type="number" [(ngModel)]="regDor.nivel_5" pInputText placeholder="Ingrese una cantidad" [style]="{'width': '100%'}" [disabled]="isConsulta">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

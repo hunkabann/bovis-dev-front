@@ -1,0 +1,66 @@
+.cont-catalogos {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+
+  &__card {
+    flex: 0 0 18%;
+    height: 150px;
+    display: flex;
+    margin: 5px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: var(--white);
+    transform: scale(1);
+    -o-transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    cursor: pointer;
+    color: var(--purpel);
+    position: relative;
+    border-radius: 4px;
+    font-weight: 400;
+    padding: 5px;
+
+    &:hover {
+      font-weight: 600;
+      transform: scale(1.1);
+      -o-transform: scale(1.1);
+      -webkit-transform: scale(1.1);
+      -moz-transform: scale(1.1);
+      z-index: 99;
+    }
+
+    &--text {
+      padding: .4rem;
+    }
+
+  }
+
+
+}
+
+@media (max-width:999px) {
+  .cont-catalogos {
+    &__card {
+      flex: 0 0 22%;
+    }
+  }
+}
+
+@media (max-width:678px) {
+  .cont-catalogos {
+    &__card {
+      flex: 0 0 45%;
+    }
+  }
+}
+

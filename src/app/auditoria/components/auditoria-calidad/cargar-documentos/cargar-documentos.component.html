@@ -1,0 +1,83 @@
+<p-toast></p-toast>
+
+<div class="main-container">
+  <div class="row">
+    <div class="col-12">
+      <label for="id_proyecto">Proyecto:</label>
+      <p-dropdown 
+        id="id_proyecto" 
+        [options]="proyectos" 
+        (onChange)="getSecciones($event)"
+        placeholder="Seleccionar un proyecto" 
+        optionLabel="name" 
+        [showClear]="true"
+        [style]="{ width: '100%' }"
+        optionValue="code"
+        [filter]="true" 
+        filterBy="name"
+      ></p-dropdown>
+    </div>
+  </div>
+
+  <div *ngFor="let seccion of secciones; let i = index">
+    <div>
+      <p-divider align="left">
+        <div class="inline-flex align-items-center">
+            <b>{{ seccion.chSeccion }} ({{ (seccion.nuProcentaje / 100) | percent}})</b>
+        </div>
+      </p-divider>
+      <div class="row d-flex align-items-center">
+        <div class="col-1">
+          <label><strong>#</strong></label>
+        </div>
+        <div class="col-2">
+          <label><strong>Punto</strong></label>
+        </div>
+        <div class="col-4">
+          <label><strong>Cumplimiento</strong></label>
+        </div>
+        <div class="col-3">
+          <label><strong>Documentos de referencia</strong></label>
+        </div>
+        <div class="col-2 text-center">
+          <label><strong>Documento</strong></label>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let auditoria of seccion.auditorias; let iChild = index">
+      <div class="row d-flex align-items-center" *ngIf="auditoria.aplica">
+        <div class="col-1">
+          <label><strong>{{ auditoria.idSeccion }}</strong></label>
+        </div>
+        <div class="col-2">
+          <label>{{ auditoria.punto }}</label>
+        </div>
+        <div class="col-4">
+          <label>{{ auditoria.cumplimiento }}</label>
+        </div>
+        <div class="col-3">
+          <label>{{ auditoria.documentoRef }}</label>
+        </div>
+        <div class="col-2 text-center">
+          <!-- <div *ngIf="auditoria.aplica && auditoria.tieneDocumento">
+            <label>Documento cargado</label>
+          </div>
+          <div *ngIf="auditoria.aplica && !auditoria.tieneDocumento">
+          </div> -->
+          <p-fileUpload 
+            mode="basic" 
+            #fileUpload 
+            chooseLabel="Seleccionar" 
+            (onSelect)="onSeleccionArchivo($event, auditoria.idAuditoria, i, iChild, fileUpload)"
+          ></p-fileUpload>
+        </div>
+        <div class="col-12">
+          <p-divider></p-divider>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- <pre>{{ form.value | json }}</pre> -->

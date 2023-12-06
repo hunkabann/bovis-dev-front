@@ -1,0 +1,1044 @@
+
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div class="main-container">
+    <div class="buttons-container">
+      <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">{{ !esActualizacion ? 'Guardar' : 'Actualizar'}}</button>
+      <button type="button" class="btn btn-info" (click)="limpiar()">Clear data</button>
+      <button type="button" class="btn btn-info" routerLink="/empleados/empleado-pri">Regresar</button>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="num_empleado_rr_hh">Número de empleado RRHH:</label>
+        <p-inputNumber 
+          id="num_empleado_rr_hh"
+          class="full-width" 
+          [useGrouping]="false"
+          formControlName="num_empleado_rr_hh"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('num_empleado_rr_hh')}"
+          [disabled]="esActualizacion"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('num_empleado_rr_hh')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('num_empleado_rr_hh') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="id_persona">Persona:</label>
+        <div *ngIf="esActualizacion; else dropdownPersona">
+          <input 
+            pInputText
+            class="form-control" 
+            formControlName="persona_nombre"
+            [readonly]="esActualizacion"
+          >
+        </div>
+        <ng-template #dropdownPersona>
+          <p-dropdown 
+            id="id_persona"
+            [options]="catPersonas"
+            placeholder="Seleccionar una persona" 
+            optionLabel="name" 
+            [showClear]="true"
+            [style]="{ width: '100%' }"
+            formControlName="id_persona"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_persona')}"
+            optionValue="value"
+            [filter]="true" 
+            filterBy="name"
+          ></p-dropdown>
+          <div *ngIf="esInvalido('id_persona')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('id_persona') }}
+            </small>
+          </div>
+        </ng-template>
+      </div>
+      <div class="col-4">
+        <label for="id_tipo_empleado">Tipo empleado:</label>
+        <p-dropdown 
+          id="id_tipo_empleado"
+          [options]="catTipoEmpleados"
+          placeholder="Seleccionar un tipo" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_tipo_empleado"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_tipo_empleado')}"
+          optionValue="value"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_tipo_empleado')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_tipo_empleado') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="id_categoria">Categoría:</label>
+        <p-dropdown 
+          id="id_categoria"
+          [options]="catCategorias"
+          placeholder="Seleccionar una categoría" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_categoria"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_categoria')}"
+          optionValue="value"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_categoria')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_categoria') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="id_tipo_contrato">Tipo de contrato:</label>
+        <p-dropdown 
+          id="id_tipo_contrato"
+          [options]="catTipoContratos"
+          placeholder="Seleccionar un tipo" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_tipo_contrato"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_tipo_contrato')}"
+          optionValue="value"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_tipo_contrato')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_tipo_contrato') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="cve_puesto">Puesto:</label>
+        <p-dropdown 
+          id="cve_puesto"
+          [options]="puestos"
+          placeholder="Seleccionar una puesto" 
+          (onChange)="setearSalarios($event)"
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="cve_puesto"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('cve_puesto')}"
+          optionValue="code"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('cve_puesto')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('cve_puesto') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="id_empresa">Empresa:</label>
+        <p-dropdown 
+          id="id_empresa"
+          [options]="catEmpresas"
+          placeholder="Seleccionar una empresa" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_empresa"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_empresa')}"
+          optionValue="value"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_empresa')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_empresa') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="id_nivel_estudios">Nivel de estudios:</label>
+        <p-dropdown 
+          id="id_nivel_estudios"
+          [options]="catNivelEstudios"
+          placeholder="Seleccionar un nivel" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_nivel_estudios"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_nivel_estudios')}"
+          optionValue="value"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_nivel_estudios')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_nivel_estudios') }}
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-4">
+        <label for="calle">Calle:</label>
+        <input 
+          id="calle"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="calle"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('calle')}"
+        >
+        <div *ngIf="esInvalido('calle')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('calle') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="numero_exterior">Número exterior:</label>
+        <input 
+          id="numero_exterior"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="numero_exterior"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('numero_exterior')}"
+        >
+        <div *ngIf="esInvalido('numero_exterior')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('numero_exterior') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="numero_interior">Número interior:</label>
+        <input 
+          id="numero_interior"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="numero_interior"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('numero_interior')}"
+        >
+        <div *ngIf="esInvalido('numero_interior')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('numero_interior') }}
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-4">
+        <label for="colonia">Colonia:</label>
+        <input 
+          id="colonia"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="colonia"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('colonia')}"
+        >
+        <div *ngIf="esInvalido('colonia')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('colonia') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="alcaldia">Alcaldía:</label>
+        <input 
+          id="alcaldia"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="alcaldia"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('alcaldia')}"
+        >
+        <div *ngIf="esInvalido('alcaldia')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('alcaldia') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="id_estado">Estado:</label>
+        <p-dropdown 
+          id="id_estado"
+          [options]="estados"
+          placeholder="Seleccionar un estado" 
+          (onChange)="buscarCiudades($event)"
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_estado"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_estado')}"
+          optionValue="code"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_estado')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_estado') }}
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-4">
+        <label for="id_ciudad">Ciudad / Municipio:</label>
+        <p-dropdown 
+          id="id_ciudad"
+          [options]="catCiudades"
+          placeholder="Seleccionar una ciudad" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_ciudad"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_ciudad')}"
+          optionValue="value"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_ciudad')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_ciudad') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="id_pais">País:</label>
+        <p-dropdown 
+          id="id_pais"
+          [options]="paises"
+          placeholder="Seleccionar un país" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_pais"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_pais')}"
+          optionValue="code"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_pais')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_pais') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="codigo_postal">Código Postal:</label>
+        <input 
+          id="codigo_postal"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="codigo_postal"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('codigo_postal')}"
+        >
+        <div *ngIf="esInvalido('codigo_postal')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('codigo_postal') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+  
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="id_clasificacion">Clasificación:</label>
+        <p-dropdown 
+          id="id_clasificacion"
+          [options]="catClasificacion"
+          placeholder="Seleccionar una opción" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_clasificacion"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_clasificacion')}"
+          optionValue="value"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_clasificacion')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_clasificacion') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="id_jefe_directo">Jefe directo:</label>
+        <p-dropdown 
+          id="id_jefe_directo"
+          [options]="catJefes"
+          placeholder="Seleccionar un jefe" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_jefe_directo"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_jefe_directo')}"
+          optionValue="value"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_jefe_directo')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_jefe_directo') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="id_unidad_negocio">Unidad de negocio:</label>
+        <p-dropdown 
+          id="id_unidad_negocio"
+          [options]="catUnidadNegocio"
+          placeholder="Seleccionar un número" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_unidad_negocio"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_unidad_negocio')}"
+          optionValue="value"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_unidad_negocio')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_unidad_negocio') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <!-- <div class="col-4">
+        <label for="id_tipo_contrato_sat">Número de sat:</label>
+        <p-dropdown 
+          id="id_tipo_contrato_sat"
+          [options]="[]"
+          placeholder="Seleccionar una opción" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_tipo_contrato_sat"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_tipo_contrato_sat')}"
+          optionValue="value"
+          [disabled]="true"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_tipo_contrato_sat')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_tipo_contrato_sat') }}
+          </small>
+        </div>
+      </div> -->
+      <!-- <div class="col-4">
+        <label for="num_empleado">Número de empleado:</label>
+        <p-inputNumber 
+          id="num_empleado"
+          class="full-width" 
+          formControlName="num_empleado"
+          [useGrouping]="false"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('num_empleado')}"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('num_empleado')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('num_empleado') }}
+          </small>
+        </div>
+      </div> -->
+      <div class="col-4">
+        <label for="fecha_ingreso">Fecha de ingreso:</label>
+        <p-calendar 
+          id="fecha_ingreso"
+          [showIcon]="true"
+          dateFormat="dd/mm/yy"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('fecha_ingreso')}"
+          formControlName="fecha_ingreso"
+        ></p-calendar>
+        <div *ngIf="esInvalido('fecha_ingreso')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('fecha_ingreso') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="fecha_salida">Fecha de salida:</label>
+        <p-calendar 
+          id="fecha_salida"
+          [showIcon]="true"
+          dateFormat="dd/mm/yy"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('fecha_salida')}"
+          formControlName="fecha_salida"
+        ></p-calendar>
+        <div *ngIf="esInvalido('fecha_salida')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('fecha_salida') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="fecha_ultimo_reingreso">Fecha de reingreso:</label>
+        <p-calendar 
+          id="fecha_ultimo_reingreso"
+          [showIcon]="true"
+          dateFormat="dd/mm/yy"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('fecha_ultimo_reingreso')}"
+          formControlName="fecha_ultimo_reingreso"
+        ></p-calendar>
+        <div *ngIf="esInvalido('fecha_ultimo_reingreso')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('fecha_ultimo_reingreso') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="nss">Nss:</label>
+        <p-inputNumber 
+          id="nss"
+          class="full-width" 
+          formControlName="nss"
+          [maxlength]="11"
+          [useGrouping]="false"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('nss')}"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('nss')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('nss') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="email_bovis">Email Bovis:</label>
+        <input 
+          id="email_bovis"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="email_bovis"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('email_bovis')}"
+        >
+        <div *ngIf="esInvalido('email_bovis')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('email_bovis') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="habilidades">Habilidades:</label>
+        <div class="flex-auto">
+          <p-multiSelect 
+            [options]="habilidades" 
+            defaultLabel="Seleccionar una opción" 
+            optionLabel="name" 
+            display="chip"
+            scrollHeight="250px"
+            [style]="{ width: '100%' }"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('habilidades')}"
+            formControlName="habilidades"
+            optionValue="code"
+          ></p-multiSelect>
+          <div *ngIf="esInvalido('habilidades')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('habilidades') }}
+            </small>
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="experiencias">Experiencias:</label>
+        <div class="flex-auto">
+          <p-multiSelect 
+            [options]="experiencias" 
+            defaultLabel="Seleccionar una opción" 
+            optionLabel="name" 
+            display="chip"
+            scrollHeight="250px"
+            [style]="{ width: '100%' }"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('experiencias')}"
+            formControlName="experiencias"
+            optionValue="code"
+          ></p-multiSelect>
+          <div *ngIf="esInvalido('experiencias')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('experiencias') }}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="id_departamento">Departamento:</label>
+        <p-dropdown 
+          id="id_departamento"
+          [options]="catDepartamentos"
+          placeholder="Seleccionar un nivel" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_departamento"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_departamento')}"
+          optionValue="value"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_departamento')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_departamento') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="salario">Salario:</label>
+        <p-inputNumber 
+          id="salario"
+          class="full-width" 
+          formControlName="salario"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('salario')}"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('salario')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('salario') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="id_profesion">Profesión:</label>
+        <p-dropdown 
+          id="id_profesion"
+          [options]="profesiones"
+          placeholder="Seleccionar una opción" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_profesion"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_profesion')}"
+          optionValue="code"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_profesion')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_profesion') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="id_turno">Turno:</label>
+        <p-dropdown 
+          id="id_turno"
+          [options]="catTurno"
+          placeholder="Seleccionar una opción" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="id_turno"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_turno')}"
+          optionValue="value"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_turno')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_turno') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="unidad_medica">Unidad médica:</label>
+        <p-inputNumber 
+          id="unidad_medica"
+          class="full-width" 
+          formControlName="unidad_medica"
+          [useGrouping]="false"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('unidad_medica')}"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('unidad_medica')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('unidad_medica') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="registro_patronal">Registro patronal:</label>
+        <input 
+          id="registro_patronal"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="registro_patronal"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('registro_patronal')}"
+        >
+        <div *ngIf="esInvalido('registro_patronal')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('registro_patronal') }}
+          </small>
+        </div>
+      </div>
+      
+      <div class="col-4">
+        <label for="duracion">Duración:</label>
+        <p-inputNumber 
+          id="duracion"
+          class="full-width" 
+          formControlName="duracion"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('duracion')}"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('duracion')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('duracion') }}
+          </small>
+        </div>
+      </div>
+
+      <div class="col-4">
+        <label for="rol">Rol:</label>
+        <input 
+          id="rol"
+          pInputText
+          class="form-control" 
+          maxlength="50" 
+          formControlName="rol"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('rol')}"
+        >
+        <div *ngIf="esInvalido('rol')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('rol') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="porcentaje_pension">Pensión:</label>
+        <p-dropdown 
+          id="porcentaje_pension"
+          [options]="pensionOpciones"
+          placeholder="Seleccionar una opción" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="porcentaje_pension"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('porcentaje_pension')}"
+          optionValue="code"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('porcentaje_pension')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('porcentaje_pension') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="descuento_pension">Descuento de pensión:</label>
+        <p-inputNumber 
+          id="descuento_pension"
+          class="full-width" 
+          formControlName="descuento_pension"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('descuento_pension'), 'readonly-field': form.value.porcentaje_pension != 'SI'}"
+          [readonly]="form.value.porcentaje_pension != 'SI'"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('descuento_pension')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('descuento_pension') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="fondo_fijo">Fondo fijo:</label>
+        <p-inputNumber 
+          id="fondo_fijo"
+          class="full-width" 
+          formControlName="fondo_fijo"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('fondo_fijo')}"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('fondo_fijo')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('fondo_fijo') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-4">
+        <label for="credito_infonavit">Número de crédito Infonavit:</label>
+        <p-inputNumber 
+          id="credito_infonavit"
+          class="full-width"
+          formControlName="credito_infonavit"
+          [useGrouping]="false"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('credito_infonavit')}"
+          [maxlength]="10"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('credito_infonavit')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('credito_infonavit') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="tipo_descuento">Tipo descuento:</label>
+        <p-dropdown 
+          id="tipo_descuento"
+          [options]="tiposDescuento"
+          placeholder="Seleccionar una opción" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="tipo_descuento"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('tipo_descuento')}"
+          optionValue="code"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('tipo_descuento')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('tipo_descuento') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-4">
+        <label for="valor_descuento">Descuento:</label>
+        <p-inputNumber 
+          id="valor_descuento"
+          class="full-width"
+          formControlName="valor_descuento"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('valor_descuento')}"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('valor_descuento')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('valor_descuento') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    
+
+
+<hr size="8px" color="black"/>
+
+<div class="row">
+<div class="col-4">
+  <label for="id_forma_pago">Forma de pago:</label>
+  <p-dropdown 
+    id="id_forma_pago"
+    [options]="catFormasPago"
+    placeholder="Seleccionar una forma" 
+    optionLabel="name" 
+    [showClear]="true"
+    [style]="{ width: '100%' }"
+    formControlName="id_forma_pago"
+    [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_forma_pago')}"
+    optionValue="value"
+  ></p-dropdown>
+  <div *ngIf="esInvalido('id_forma_pago')">
+    <small
+      class="error-msg"
+    >
+      {{ obtenerMensajeError('id_forma_pago') }}
+    </small>
+  </div>
+</div>
+<div class="col-4">
+  <label for="id_jornada">Jornada:</label>
+  <p-dropdown 
+    id="id_jornada"
+    [options]="catJornadas"
+    placeholder="Seleccionar una ciudad" 
+    optionLabel="name" 
+    [showClear]="true"
+    [style]="{ width: '100%' }"
+    formControlName="id_jornada"
+    [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_jornada')}"
+    optionValue="value"
+  ></p-dropdown>
+  <div *ngIf="esInvalido('id_jornada')">
+    <small
+      class="error-msg"
+    >
+      {{ obtenerMensajeError('id_jornada') }}
+    </small>
+  </div>
+</div>
+    <div class="col-4">
+        <label for="no_empleado_noi">Número de NOI:</label>
+        <p-inputNumber 
+          id="no_empleado_noi"
+          formControlName="no_empleado_noi"
+          [useGrouping]="false"
+          class="full-width"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('no_empleado_noi')}"
+        ></p-inputNumber>
+        <div *ngIf="esInvalido('no_empleado_noi')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('no_empleado_noi') }}
+          </small>
+        </div>
+      </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-4">
+      <label for="url_repo"># Crédito Fonacot:</label>
+      <input 
+        id="url_repo"
+        pInputText
+        class="form-control" 
+        maxlength="50" 
+        formControlName="url_repo"
+        [ngClass]="{'ng-invalid ng-dirty': esInvalido('url_repo')}"
+      >
+      <div *ngIf="esInvalido('url_repo')">
+        <small
+          class="error-msg"
+        >
+          {{ obtenerMensajeError('url_repo') }}
+        </small>
+      </div>
+    </div>
+  
+    <div class="col-4">
+      <label for="cotizacion">Salario diario integrado:</label>
+      <input 
+        id="cotizacion"
+        pInputText
+        class="form-control" 
+        maxlength="50" 
+        formControlName="cotizacion"
+        [ngClass]="{'ng-invalid ng-dirty': esInvalido('cotizacion')}"
+      >
+      <div *ngIf="esInvalido('cotizacion')">
+        <small
+          class="error-msg"
+        >
+          {{ obtenerMensajeError('cotizacion') }}
+        </small>
+      </div>
+    </div>
+  
+  </div>
+
+</div>
+
+
+
+</form>
+
+<!-- <pre>{{ form.value | json }}</pre> -->

@@ -1,0 +1,389 @@
+
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div class="main-container">
+    <div class="buttons-container">
+      <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Actualizar</button>
+      <button type="button" class="btn btn-info" routerLink="/cie/resultado-busqueda">Regresar</button>
+    </div>
+  
+    <div class="row">
+        <div class="col-4">
+            <label for="nombre_cuenta">Nombre de Cuenta: <span class="required"></span></label>
+            <input 
+                id="nombre_cuenta"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="nombre_cuenta"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('nombre_cuenta')}"
+            >
+            <div *ngIf="esInvalido('nombre_cuenta')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('nombre_cuenta') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="cuenta">Cuenta: <span class="required"></span></label>
+            <input 
+                id="cuenta"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="cuenta"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('cuenta')}"
+            >
+            <div *ngIf="esInvalido('cuenta')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('cuenta') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="tipo_poliza">Tipo de Póliza: <span class="required"></span></label>
+            <input 
+                id="tipo_poliza"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="tipo_poliza"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('tipo_poliza')}"
+            >
+            <div *ngIf="esInvalido('tipo_poliza')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('tipo_poliza') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="numero">Número: <span class="required"></span></label>
+            <p-inputNumber 
+                id="numero"
+                class="full-width" 
+                [useGrouping]="false"
+                formControlName="numero"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('numero')}"
+            ></p-inputNumber>
+            <div *ngIf="esInvalido('numero')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('numero') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="fecha">Fecha: <span class="required"></span></label>
+            <p-calendar 
+                id="fecha"
+                [showIcon]="true"
+                dateFormat="dd/mm/yy"
+                [style]="{ width: '100%' }"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('fecha')}"
+                formControlName="fecha"
+            ></p-calendar>
+            <div *ngIf="esInvalido('fecha')">
+                <small
+                class="error-msg"
+                >
+                {{ obtenerMensajeError('fecha') }}
+                </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="mes">Mes: <span class="required"></span></label>
+            <p-dropdown 
+                id="mes"
+                [options]="mesesOpciones"
+                placeholder="Seleccionar un mes" 
+                optionLabel="label" 
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                formControlName="mes"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('mes')}"
+                optionValue="value"
+            ></p-dropdown>
+            <div *ngIf="esInvalido('mes')">
+                <small
+                class="error-msg"
+                >
+                {{ obtenerMensajeError('mes') }}
+                </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="concepto">Concepto: <span class="required"></span></label>
+            <input 
+                id="concepto"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="concepto"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('concepto')}"
+            >
+            <div *ngIf="esInvalido('concepto')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('concepto') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="centro_costos">Centro de Costos: <span class="required"></span></label>
+            <input 
+                id="centro_costos"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="centro_costos"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('centro_costos')}"
+            >
+            <div *ngIf="esInvalido('centro_costos')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('centro_costos') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="proyectos">Proyecto: <span class="required"></span></label>
+            <input 
+                id="proyectos"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="proyectos"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('proyectos')}"
+            >
+            <div *ngIf="esInvalido('proyectos')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('proyectos') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="saldo_inicial">Saldo Inicial: <span class="required"></span></label>
+            <p-inputNumber 
+                id="saldo_inicial"
+                class="full-width" 
+                [useGrouping]="false"
+                formControlName="saldo_inicial"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('saldo_inicial')}"
+            ></p-inputNumber>
+            <div *ngIf="esInvalido('saldo_inicial')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('saldo_inicial') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="debe">Debe: <span class="required"></span></label>
+            <p-inputNumber 
+                id="debe"
+                class="full-width" 
+                [useGrouping]="false"
+                formControlName="debe"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('debe')}"
+            ></p-inputNumber>
+            <div *ngIf="esInvalido('debe')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('debe') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="haber">Haber: <span class="required"></span></label>
+            <p-inputNumber 
+                id="haber"
+                class="full-width" 
+                [useGrouping]="false"
+                formControlName="haber"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('haber')}"
+            ></p-inputNumber>
+            <div *ngIf="esInvalido('haber')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('haber') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="movimiento">Movimiento: <span class="required"></span></label>
+            <p-inputNumber 
+                id="movimiento"
+                class="full-width" 
+                [useGrouping]="false"
+                formControlName="movimiento"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('movimiento')}"
+            ></p-inputNumber>
+            <div *ngIf="esInvalido('movimiento')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('movimiento') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="empresa">Empresa: <span class="required"></span></label>
+            <input 
+                id="empresa"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="empresa"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('empresa')}"
+            >
+            <div *ngIf="esInvalido('empresa')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('empresa') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="num_proyecto">No. Proyecto: <span class="required"></span></label>
+            <p-inputNumber 
+                id="num_proyecto"
+                class="full-width" 
+                [useGrouping]="false"
+                formControlName="num_proyecto"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('num_proyecto')}"
+            ></p-inputNumber>
+            <div *ngIf="esInvalido('num_proyecto')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('num_proyecto') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="tipo_cuenta">Tipo Cuenta:</label>
+            <input 
+                id="tipo_cuenta"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="tipo_cuenta"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('tipo_cuenta')}"
+            >
+            <div *ngIf="esInvalido('tipo_cuenta')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('tipo_cuenta') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="edo_resultados">Estado Resultados:</label>
+            <input 
+                id="edo_resultados"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="edo_resultados"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('edo_resultados')}"
+            >
+            <div *ngIf="esInvalido('edo_resultados')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('edo_resultados') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="responsable">Responsable:</label>
+            <input 
+                id="responsable"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="responsable"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('responsable')}"
+            >
+            <div *ngIf="esInvalido('responsable')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('responsable') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="tipo_proyecto">Tipo Proyecto:</label>
+            <input 
+                id="tipo_proyecto"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="tipo_proyecto"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('tipo_proyecto')}"
+            >
+            <div *ngIf="esInvalido('tipo_proyecto')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('tipo_proyecto') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="tipo_py">Tipo PY:</label>
+            <input 
+                id="tipo_py"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="tipo_py"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('tipo_py')}"
+            >
+            <div *ngIf="esInvalido('tipo_py')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('tipo_py') }}
+            </small>
+            </div>
+        </div>
+        <div class="col-4">
+            <label for="clasificacion_py">Clasificación PY:</label>
+            <input 
+                id="clasificacion_py"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="clasificacion_py"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('clasificacion_py')}"
+            >
+            <div *ngIf="esInvalido('clasificacion_py')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('clasificacion_py') }}
+            </small>
+            </div>
+        </div>
+    </div>
+  </div>
+</form>

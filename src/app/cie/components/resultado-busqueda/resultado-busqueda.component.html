@@ -1,0 +1,178 @@
+
+<p-toast></p-toast>
+
+<div class="main-container">
+  
+    <h1>Resultado - Búsqueda</h1>
+    
+    <div class="row mb-2">
+        <div class="col-4">
+            <label>Fecha:</label>
+            <p-calendar 
+              view="month" 
+              selectionMode="range" 
+              dateFormat="m/yy" 
+              [readonlyInput]="true"
+              [(ngModel)]="fechas" 
+              (onClose)="filtrar()"
+              [style]="{width: '100%'}"
+              placeholder="Seleccionar un mes..."
+              [showButtonBar]="true"
+            ></p-calendar>
+        </div>
+        <div class="col-4">
+            <label>Cuenta:</label>
+            <p-dropdown  
+                [options]="cuentas"
+                placeholder="Seleccionar una cuenta" 
+                optionLabel="name" 
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                optionValue="code"
+                (onChange)="filtrar()"
+                [(ngModel)]="cuenta"
+                [filter]="true" 
+                filterBy="name"
+            ></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label>Concepto:</label>
+            <p-dropdown  
+                [options]="conceptos"
+                placeholder="Seleccionar un concepto" 
+                optionLabel="name" 
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                optionValue="code"
+                (onChange)="filtrar()"
+                [(ngModel)]="concepto"
+                [filter]="true" 
+                filterBy="name"
+            ></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label>Empresa:</label>
+            <p-dropdown  
+                [options]="empresas"
+                placeholder="Seleccionar una empresa" 
+                optionLabel="name" 
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                optionValue="code"
+                (onChange)="filtrar()"
+                [(ngModel)]="empresa"
+                [filter]="true" 
+                filterBy="name"
+            ></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label>No. Proyecto:</label>
+            <p-dropdown  
+                [options]="numsProyecto"
+                placeholder="Seleccionar un número de proyecto" 
+                optionLabel="name" 
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                optionValue="code"
+                (onChange)="filtrar()"
+                [(ngModel)]="numProyecto"
+                [filter]="true" 
+                filterBy="name"
+            ></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label>Responsable:</label>
+            <p-dropdown  
+                [options]="responsables"
+                placeholder="Seleccionar un responsable" 
+                optionLabel="name" 
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                optionValue="code"
+                (onChange)="filtrar()"
+                [(ngModel)]="responsable"
+                [filter]="true" 
+                filterBy="name"
+            ></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label>Clasificación PY:</label>
+            <p-dropdown  
+                [options]="clasificacionesPY"
+                placeholder="Seleccionar una clasificación" 
+                optionLabel="name" 
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                optionValue="code"
+                (onChange)="filtrar()"
+                [(ngModel)]="clasificacionPY"
+                [filter]="true" 
+                filterBy="name"
+            ></p-dropdown>
+        </div>
+    </div>
+
+    <div class="d-flex flex-column gap-2">
+        <p-table 
+            [value]="data" 
+            [tableStyle]="{ 'min-width': '50rem' }"
+            [paginator]="true"
+            [showCurrentPageReport]="true"
+            [totalRecords]="totalRegistros"
+            [lazy]="true"
+            currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[10, 25, 50]"
+            [rows]="noRegistros"
+            [loading]="loading"
+            paginatorPosition="both"
+        >
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngFor="let header of cieHeadersLocal">
+                    {{header}}
+                </th>
+                <th class="text-center">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-record>
+            <tr>
+                <td>{{record.nombreCuenta}}</td>
+                <td>{{record.cuenta}}</td>
+                <td>{{record.tipoPoliza}}</td>
+                <td>{{record.numero}}</td>
+                <td>{{record.fecha}}</td>
+                <td>{{record.mes}}</td>
+                <td>{{record.concepto}}</td>
+                <td>{{record.centroCostos}}</td>
+                <td>{{record.proyectos}}</td>
+                <td>{{record.saldoInicial | currency}}</td>
+                <td>{{record.debe | currency}}</td>
+                <td>{{record.haber | currency}}</td>
+                <td>{{record.movimiento | currency}}</td>
+                <td>{{record.empresa}}</td>
+                <td>{{record.numProyecto}}</td>
+                <td>{{record.tipoProyecto}}</td>
+                <td>{{record.edoResultados}}</td>
+                <td>{{record.responsable}}</td>
+                <td>{{record.tipoCuenta}}</td>
+                <td>{{record.tipoPy}}</td>
+                <td>{{record.clasificacionPy}}</td>
+                <td class="text-align">
+                  <div class="d-flex justify-content-center gap-3">
+                    <button 
+                      title="Modificar registro" 
+                      pButton 
+                      pRipple 
+                      icon="pi pi-pencil" 
+                      class="p-button-rounded p-button-success p-mr-2"
+                      [routerLink]="['/cie/modificar-registro', record.idCie]"
+                      *ngIf="record.idCie != 0"
+                    ></button>
+                  </div>
+                </td>
+            </tr>
+        </ng-template>
+        </p-table>
+    </div>
+
+</div>

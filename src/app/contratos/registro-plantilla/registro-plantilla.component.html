@@ -1,0 +1,49 @@
+
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div class="main-container">
+    <div class="buttons-container">
+      <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">{{ !esActualizacion ? 'Guardar' : 'Actualizar'}}</button> 
+      <button type="button" class="btn btn-info" (click)="limpiar()">Clear data</button>
+      <button type="button" class="btn btn-info" routerLink="/contratos/plantillas">Regresar</button>
+    </div>
+  
+    <div class="row">
+      <div class="col-12">
+          <label for="titulo">Título:</label>
+          <input 
+            id="titulo"
+            pInputText
+            class="form-control" 
+            maxlength="50" 
+            formControlName="titulo"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('titulo')}"
+          >
+          <div *ngIf="esInvalido('titulo')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('titulo') }}
+            </small>
+          </div>
+      </div>
+      <div class="col-12">
+          <label for="template">Plantilla:</label>
+          <p-editor 
+            formControlName="template" 
+            [style]="{ height: '320px' }"
+            [ngClass]="{'ng-invalid ng-dirty': esInvalido('template')}"
+          >
+          </p-editor>
+          <div *ngIf="esInvalido('template')">
+            <small
+              class="error-msg"
+            >
+              {{ obtenerMensajeError('template') }}
+            </small>
+          </div>
+      </div>
+    </div>
+  </div>
+</form>

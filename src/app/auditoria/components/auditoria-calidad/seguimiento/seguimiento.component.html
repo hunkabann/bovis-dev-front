@@ -1,0 +1,102 @@
+
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div class="main-container">
+    <div class="row">
+      <div class="col-12">
+        <label for="id_proyecto">Proyecto:</label>
+        <p-dropdown 
+          id="id_proyecto" 
+          [options]="proyectos" 
+          (onChange)="getSecciones($event)"
+          placeholder="Seleccionar un proyecto" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_proyecto')}"
+          formControlName="id_proyecto"
+          optionValue="code"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_proyecto')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_proyecto') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div formArrayName="auditorias">
+      <div *ngFor="let auditoria of auditorias.controls; let i = index" [formGroupName]="i">
+        <div *ngIf="auditorias.at(i - 1).get('seccion').value != auditoria.get('seccion').value">
+          <p-divider align="left">
+            <div class="inline-flex align-items-center">
+                <b>{{ auditoria.get('seccion').value }}</b>
+            </div>
+          </p-divider>
+          <div class="row d-flex align-items-center">
+            <div class="col-1">
+              <label><strong>#</strong></label>
+            </div>
+            <div class="col-2">
+              <label><strong>Punto</strong></label>
+            </div>
+            <div class="col-4">
+              <label><strong>Cumplimiento</strong></label>
+            </div>
+            <div class="col-3 text-center">
+              <label><strong>Documentos de referencia</strong></label>
+            </div>
+            <div class="col-2 text-center">
+              <label><strong>Ver documentos</strong></label>
+            </div>
+          </div>
+        </div>
+        <div class="row d-flex align-items-center" *ngIf="auditoria.get('aplica').value">
+          <div class="col-1">
+            <label><strong>{{ auditoria.get('id_seccion').value }}</strong></label>
+          </div>
+          <div class="col-2">
+            <label>{{ auditoria.get('punto').value }}</label>
+          </div>
+          <div class="col-4">
+            <label>{{ auditoria.get('cumplimiento').value }}</label>
+          </div>
+          <div class="col-3 text-center">
+            <label 
+              *ngIf="auditoria.get('tieneDocumento').value; else sinDocumento"
+            >
+              {{ auditoria.get('documentoRef').value }}
+            </label>
+            <ng-template #sinDocumento>
+              <label class="text-danger">Ningún documento cargado.</label>
+            </ng-template>
+          </div>
+          <div class="col-2 text-center">
+            <!-- <label *ngIf="auditoria.get('ultimoDocumentoValido').value; else check">
+              El documento ha sido validado.
+            </label> -->
+            <!-- <p-inputSwitch 
+              formControlName="valido"
+            ></p-inputSwitch> -->
+            <p-button 
+              label="Ver" 
+              [disabled]="!auditoria.get('tieneDocumento').value"
+              (onClick)="auditoria.get('tieneDocumento').value ? verDocumentos(auditoria.get('id_auditoria').value) : null"
+            ></p-button>
+          </div>
+          <div class="col-12">
+            <p-divider></p-divider>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+<!-- <pre>{{ form.value | json }}</pre> -->

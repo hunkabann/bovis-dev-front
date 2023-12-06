@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-12">
+    <label for="motivo">Motivo:</label>
+    <textarea 
+      id="motivo"
+      rows="5" 
+      cols="30" 
+      pInputTextarea 
+      [(ngModel)]="motivo"
+      class="form-control"
+    ></textarea>
+  </div>
+  <div class="flex justify-content-end gap-3 mt-3">
+    <p-button 
+      icon="pi pi-check" 
+      type="submit"
+      label="Aceptar" 
+      class="p-button-text"
+      (onClick)="subirArchivo()"
+    ></p-button>
+    <p-button 
+      icon="pi pi-times" 
+      (onClick)="closeDialog()"
+      label="Cancelar"
+    ></p-button>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<div class="row">
+  <div class="col-12">
+    <label for="empleado">Empleado:</label>
+    <p-dropdown 
+      id="empleado" 
+      [options]="empleados"
+      placeholder="Seleccionar una empleado" 
+      optionLabel="name"
+      [showClear]="true"
+      [style]="{ width: '100%' }"
+      (onChange)="seleccionarEmpleado($event)"
+      optionValue="code"
+      [filter]="true" 
+      filterBy="name"
+    ></p-dropdown>
+  </div>
+</div>

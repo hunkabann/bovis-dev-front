@@ -1,0 +1,15 @@
+.container-table {
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  padding: 0;
+}
+
+.cls-id {
+  font-size: .6rem;
+  word-wrap: break-word;
+  width: 100px;
+}
+
+.cls-desc {
+  width: 250px;
+}

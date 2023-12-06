@@ -1,0 +1,176 @@
+
+<p-toast></p-toast>
+
+
+<div class="main-container">
+
+  <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-start gap-2">  
+    <button 
+      type="submit" 
+      class="btn btn-info"
+      routerLink="/empleados/generar-requerimiento"
+    >
+      Nuevo
+    </button>
+  </p-toolbar>
+
+  <div class="row mb-2">
+    <div class="col-4">
+      <label for="director">Director:</label>
+      <p-dropdown 
+        id="director" 
+        [options]="directores" 
+        placeholder="Seleccionar un director" 
+        optionLabel="name" 
+        [showClear]="true"
+        [style]="{ width: '100%' }"
+        optionValue="code"
+        (onChange)="onChangeFiltro('idDirector', $event)"
+        [filter]="true" 
+        filterBy="name"
+      ></p-dropdown>
+    </div>
+    <div class="col-4">
+      <label for="proyecto">Proyecto:</label>
+      <p-dropdown 
+        id="proyecto" 
+        [options]="proyectos" 
+        placeholder="Seleccionar un proyecto" 
+        optionLabel="name" 
+        [showClear]="true"
+        [style]="{ width: '100%' }"
+        optionValue="code"
+        (onChange)="onChangeFiltro('idProyecto', $event)"
+        [filter]="true" 
+        filterBy="name"
+      ></p-dropdown>
+    </div>
+    <div class="col-4">
+      <label for="puesto">Puesto:</label>
+      <p-dropdown 
+        id="puesto" 
+        [options]="puestos" 
+        placeholder="Seleccionar un puesto" 
+        optionLabel="name" 
+        [showClear]="true"
+        [style]="{ width: '100%' }"
+        optionValue="code"
+        (onChange)="onChangeFiltro('idPuesto', $event)"
+        [filter]="true" 
+        filterBy="name"
+      ></p-dropdown>
+    </div>
+  </div>
+
+  <p-table 
+    [value]="data" 
+    [paginator]="true"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [rows]="10"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th 
+          [style]="{opacity: 0.8}"
+          colspan="6"
+        ></th>
+        <th colspan="2">Sueldo</th>
+        <th 
+          [style]="{opacity: 0.8}"
+          colspan="3"
+        ></th>
+      </tr>
+      <tr>
+        <th pSortableColumn="nukidrequerimiento"><div class="d-flex align-items-center">ID <p-sortIcon field="nukidrequerimiento"></p-sortIcon></div></th>
+        <th pSortableColumn="chcategoria"><div class="d-flex align-items-center">Categoría <p-sortIcon field="chcategoria"></p-sortIcon></div></th>
+        <th pSortableColumn="chpuesto"><div class="d-flex align-items-center">Puesto <p-sortIcon field="chpuesto"></p-sortIcon></div></th>
+        <th pSortableColumn="chnivel_estudios"><div class="d-flex align-items-center">Nivel de estudios <p-sortIcon field="chnivel_estudios"></p-sortIcon></div></th>
+        <th pSortableColumn="chprofesion"><div class="d-flex align-items-center">Profesión <p-sortIcon field="chprofesion"></p-sortIcon></div></th>
+        <th pSortableColumn="chjornada"><div class="d-flex align-items-center">Jornada <p-sortIcon field="chjornada"></p-sortIcon></div></th>
+        <th pSortableColumn="nusueldo_min"><div class="d-flex align-items-center">Min <p-sortIcon field="nusueldo_min"></p-sortIcon></div></th>
+        <th pSortableColumn="nusueldo_max"><div class="d-flex align-items-center">Max <p-sortIcon field="nusueldo_max"></p-sortIcon></div></th>
+        <th class="text-center">Opciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-record let-i="rowIndex">
+      <tr>
+        <td>
+          <a 
+            class="text-success font-bold"
+            [routerLink]="['/empleados/modificar-requerimiento', record.nukidrequerimiento]"
+          >
+            {{record.nukidrequerimiento}}
+          </a>
+        </td>
+        <td>{{record.chcategoria}}</td>
+        <td>{{record.chpuesto}}</td>
+        <td>{{record.chnivel_estudios}}</td>
+        <td>{{record.chprofesion}}</td>
+        <td>{{record.chjornada}}</td>
+        <td>{{record.nusueldo_min | currency}}</td>
+        <td>{{record.nusueldo_max | currency}}</td>
+        <td class="text-align">
+          <div class="d-flex justify-content-center gap-3">
+            <button 
+              title="Modificar requerimiento" 
+              pButton 
+              pRipple 
+              icon="pi pi-pencil" 
+              class="p-button-rounded p-button-success p-mr-2"
+              [routerLink]="['/empleados/modificar-requerimiento', record.nukidrequerimiento]"
+            ></button>
+            <button
+              title="Asignar empleado" 
+              pButton 
+              pRipple 
+              icon="pi pi-user" 
+              class="p-button-rounded p-button-info p-mr-2"
+              (click)="mostrarModalPersonas(record)"
+            ></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog 
+  [(visible)]="mostrarModal" 
+  [modal]="true" 
+  [baseZIndex]="10000" 
+  header="Asignar requerimiento"
+  [style]="{minHeight: '25rem', width: '30rem', 'overflow-x': 'hidden'}"
+>
+  <form [formGroup]="form" (ngSubmit)="asignarPersona()">
+    <div class="row">
+      <div class="col-12">
+        <label for="persona">Persona:</label>
+        <p-dropdown 
+          id="persona"
+          [options]="personas"
+          placeholder="Seleccionar una persona" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="persona"
+          [ngClass]="{'ng-invalid ng-dirty': sharedService.esInvalido(form, 'persona')}"
+          optionValue="code"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="sharedService.esInvalido(form, 'persona')">
+          <small
+            class="error-msg"
+          >
+            {{ sharedService.obtenerMensajeError(form, 'persona') }}
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-info" [disabled]="form.invalid">Asignar</button>
+    </div>
+  </form>
+</p-dialog>

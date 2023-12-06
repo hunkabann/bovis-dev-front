@@ -1,0 +1,268 @@
+<div class="main-container">
+
+    <div class="">
+  
+      <div class="row">
+        
+        <div class="col-4">
+            <div class="field">
+                <label for="concepto">Proyecto:</label>
+                <p-dropdown 
+                  id="proyecto" 
+                  [options]="proyectos"
+                  placeholder="Seleccionar una proyecto" 
+                  optionLabel="name"
+                  [showClear]="true"
+                  [style]="{ width: '100%' }"
+                  [(ngModel)]="idProyecto"
+                  optionValue="code"
+                  [filter]="true" 
+                  filterBy="name"
+                ></p-dropdown>
+            </div>
+        </div>
+  
+        <div class="col-8 d-flex align-items-center gap-4">
+            <div class="field">
+              <label for="concepto">Selección de Facturas:</label>
+              <p-fileUpload #fileUpload mode="basic" [customUpload]="true" accept=".xml" (onSelect)="onBasicUpload($event)"
+                [multiple]="true" [maxFileSize]="fileSizeMax" chooseLabel="Cargar XML" [disabled]="!idProyecto"></p-fileUpload>
+            </div>
+            <div class="field" *ngIf="isLoadingFacturas">
+              <br>
+              <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+            </div>
+            <div class="field">
+              <br>
+              <p-button *ngIf="isClear" icon="pi pi-refresh" (onClick)="clearFile()" label="Limpiar carga"></p-button>
+            </div>
+        </div>
+  
+  
+      </div>
+    </div>
+    <br>
+    
+    <div class="row">
+      <div class="col-4">
+        <label for="proyecto">Proyecto:</label>
+        <p-dropdown  
+          [options]="proyectos"
+          placeholder="Seleccionar una proyecto" 
+          optionLabel="name"
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          optionValue="code"
+          [filter]="true" 
+          filterBy="name"
+          (onChange)="buscarRegistros()"
+          [(ngModel)]="proyectoBusqueda"
+        ></p-dropdown>
+      </div>
+      <div class="col-4">
+          <label>Mes:</label>
+          <p-calendar 
+            view="month" 
+            dateFormat="m/yy" 
+            [readonlyInput]="true" 
+            (onSelect)="buscarRegistros()"
+            [style]="{width: '100%'}"
+            placeholder="Seleccionar un mes..."
+            [(ngModel)]="mesBusqueda"
+          ></p-calendar>
+      </div>
+      <div class="col-4"></div>
+      <div class="col-4">
+        <button type="button" class="btn btn-info" (click)="limpiarFiltros()">Limpiar filtros</button>
+      </div>
+    </div>
+
+    <br>
+  
+    <div *ngIf="listResponse && listResponse.length > 0">
+      <p-table [value]="listResponse" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Conceptos</th>
+            <th>Rfc Emisor</th>
+            <th>Rfc Receptor</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Tipo Factura</th>
+            <th>No. Factura</th>
+            <th>Nombre Factura</th>
+            <th>Almacenada</th>
+            <th>Error</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-xml>
+          <tr>
+            <td>
+              {{xml.conceptos}}
+            </td>
+            <td>{{xml.rfcEmisor}}</td>
+            <td>{{xml.rfcReceptor}}</td>
+            <td>{{xml.fechaEmision}}</td>
+            <td>{{xml.total}}</td>
+            <td>{{xml.tipoFactura}}</td>
+            <td>{{xml.noFactura}}</td>
+            <td>{{xml.facturaNombre}}</td>
+            <td>
+              <ng-container *ngIf="xml.almacenada">
+                Si
+              </ng-container>
+              <ng-container *ngIf="!xml.almacenada">
+                No
+              </ng-container>
+  
+            </td>
+            <td>{{xml.error}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  
+    <div *ngIf="errorMEssageFile != ''">
+      <p-message severity="error" [text]="errorMEssageFile"></p-message>
+    </div>
+    
+    <p-toolbar styleClass="p-1">
+      <div class="p-toolbar-group-start">
+          <p-button
+            icon="pi pi-file-excel" 
+            pTooltip="Exportar Excel" 
+            styleClass="p-button-success f-2x" 
+            (click)="exportJsonToExcel()">
+          </p-button>
+      </div>
+    </p-toolbar>
+    <p-table
+      [value]="listBusquedaCompleto" 
+      [paginator]="true"
+      [rows]="5"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Total: {totalRecords}"
+      styleClass="p-datatable-striped" 
+      [scrollable]="true"
+      [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <!-- <th *ngFor="let val of getHeadersTabla()">{{val}}</th> -->
+          <th *ngFor="let val of getHeadersTabla()" [pSortableColumn]="val.key"><div class="d-flex align-items-center">{{val.label}} <p-sortIcon [field]="val.key"></p-sortIcon></div></th>
+          <th 
+            colspan="3" 
+            class="text-center"
+          >
+            Opciones
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-bus>
+        <tr [ngClass]="{'invalid-tr': bus.dtfecha_cancelacion}">
+          <td>
+            <div class="cls-id">{{bus.chuuid_nota_credito}}</div>
+          </td>
+          <td>{{bus.nunum_proyecto}}</td>
+          <td>{{bus.nukidmoneda}}</td>
+          <td>{{bus.nuimporte|currency}}</td>
+          <td>{{bus.nuiva|currency}}</td>
+          <!-- <td>{{bus.ivaRet|currency}}</td> -->
+          <td>{{bus.nutotal|currency}}</td>
+          <td>
+            <div class="cls-desc">{{bus.chconcepto}}</div>
+          </td>
+          <td>{{bus.numes}}</td>
+          <td>{{bus.nuanio}}</td>
+          <td>{{bus.dtfecha_cancelacion|date:'d/MM/yyyy'}}</td>
+          <td>{{bus.nutipo_cambio}}</td>
+          <td>{{bus.chmotivocancela}}</td>
+          <td>
+            <div *ngIf="bus.dtfecha_cancelacion == null || bus.dtfecha_cancelacion == '' ">
+              <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
+              tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
+              <p-button 
+                pTooltip="Cancelar nota de crédito" 
+                styleClass="p-button-rounded p-button-secondary p-button-text"
+                tooltipPosition="left"
+                (click)="cancelarComplemento(bus.chuuid_nota_credito)"
+              >
+                <i class="pi pi-times-circle text-2xl"></i>
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  
+</div>
+
+<!-- Modal para cancelar complemento -->
+<p-dialog 
+  [header]="complementoInfo.titulo" 
+  [(visible)]="complementoInfo.showModal" 
+  [modal]="true" 
+  [style]="{width: '50vw', minHeight: '30rem'}" 
+  [baseZIndex]="10000"
+  [draggable]="false" 
+  [resizable]="false"
+>
+  <form [formGroup]="form" (ngSubmit)="ejecutarCancelacion()">
+    <div class="row">
+      <div class="col-12">
+        <label for="fecha_cancelacion">Fecha de cancelación:</label>
+        <p-calendar 
+          id="fecha_cancelacion"
+          [showIcon]="true"
+          dateFormat="dd/mm/yy"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('fecha_cancelacion')}"
+          formControlName="fecha_cancelacion"
+        ></p-calendar>
+        <div *ngIf="esInvalido('fecha_cancelacion')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('fecha_cancelacion') }}
+          </small>
+        </div>
+      </div>
+      <div class="col-12">
+        <label for="motivo_cancelacion">Motivo:</label>
+        <textarea 
+          id="motivo_cancelacion"
+          placeholder="Ingrese al menos 20 caracteres" 
+          [rows]="3" 
+          [cols]="80" 
+          pInputTextarea  
+          class="form-control"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('motivo_cancelacion')}"
+          formControlName="motivo_cancelacion"
+        ></textarea>
+        <div *ngIf="esInvalido('motivo_cancelacion')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('motivo_cancelacion') }}
+          </small>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-content-end gap-3 mt-3">
+      <p-button 
+        icon="pi pi-check" 
+        type="submit"
+        label="Aceptar" 
+        class="p-button-text" 
+        [disabled]="!this.form.valid"
+      ></p-button>
+      <p-button 
+        icon="pi pi-times" 
+        (click)="complementoInfo.showModal = false" 
+        label="Cancelar"
+      ></p-button>
+    </div>
+  </form>
+</p-dialog>
+  
+<p-toast></p-toast>
+  

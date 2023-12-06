@@ -1,0 +1,91 @@
+
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div class="main-container">
+    <div class="buttons-container">
+      <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">{{ !esActualizacion ? 'Guardar' : 'Actualizar'}}</button>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <label for="id_proyecto">Proyecto:</label>
+        <p-dropdown 
+          id="id_proyecto" 
+          [options]="proyectos" 
+          (onChange)="getCumplimientos($event)"
+          placeholder="Seleccionar un proyecto" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_proyecto')}"
+          formControlName="id_proyecto"
+          optionValue="code"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('id_proyecto')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('id_proyecto') }}
+          </small>
+        </div>
+      </div>
+    </div>
+  
+    <div formArrayName="auditorias">
+      <div *ngFor="let auditoria of auditorias.controls; let i = index" [formGroupName]="i">
+        <div *ngIf="auditorias.at(i - 1).get('seccion').value != auditoria.get('seccion').value">
+          <p-divider align="left">
+            <div class="inline-flex align-items-center">
+                <b>{{ auditoria.get('seccion').value }}</b>
+            </div>
+          </p-divider>
+          <div class="row d-flex align-items-center">
+            <div class="col-1">
+              <label><strong>#</strong></label>
+            </div>
+            <div class="col-2">
+              <label><strong>Punto</strong></label>
+            </div>
+            <div class="col-4">
+              <label><strong>Cumplimiento</strong></label>
+            </div>
+            <div class="col-3">
+              <label><strong>Documentos de referencia</strong></label>
+            </div>
+            <div class="col-2 text-center">
+              <label><strong>Cumplimiento</strong></label>
+            </div>
+          </div>
+        </div>
+        <div class="row d-flex align-items-center">
+          <div class="col-1">
+            <label><strong>{{ auditoria.get('id_seccion').value }}</strong></label>
+          </div>
+          <div class="col-2">
+            <label>{{ auditoria.get('punto').value }}</label>
+          </div>
+          <div class="col-4">
+            <label>{{ auditoria.get('cumplimiento').value }}</label>
+          </div>
+          <div class="col-3">
+            <label>{{ auditoria.get('documentoRef').value }}</label>
+          </div>
+          <div class="col-2 text-center">
+            <p-inputSwitch 
+              formControlName="aplica"
+            ></p-inputSwitch>
+          </div>
+          <div class="col-12">
+            <p-divider></p-divider>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+<!-- <pre>{{ form.value | json }}</pre> -->

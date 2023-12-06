@@ -1,0 +1,196 @@
+<div class="content" style="margin:2%">
+
+  <div class="row" *ngIf="listObjetivos.length > 0">
+    <div>
+      <div class="d-flex justify-content-center">
+        <button pButton pRipple type="button" label="Aprobar Objetivos" (click)="confirm1()"
+          class="p-button-success"></button>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button pButton type="button" label="Rechazar Objetivos" class="p-button-warning" (click)="showModalDialog()"></button>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div class="">
+    <br>
+    <div class="row">
+      <div class="col-sm">
+        <label for="concepto">Empleado:</label>
+        <div class="">
+          <input type="text" class="form-control" [disabled]="isConsulta" [(ngModel)]="empleado.nombre">
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="descripcion">Núm. de empleado:</label>
+        <div class="">
+          <input type="text" class="form-control" [disabled]="isConsulta" [(ngModel)]="empleado.noEmpleado">
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="email">Proyecto:</label>
+        <div class="">
+          <input type="text" class="form-control" [disabled]="isConsulta" [(ngModel)]="empleado.proyecto">
+        </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="row">
+      <div class="col-sm">
+        <label for="descripcion">Dirección Ejecutiva:</label>
+        <div class="">
+          <input type="text" class="form-control" [disabled]="isConsulta" [(ngModel)]="empleado.direccionEjecutiva">
+        </div>
+      </div>
+      <div class="col-sm">
+        <label for="concepto">Unidad de Negocio:</label>
+        <div class="">
+          <input type="text" class="form-control" [disabled]="isConsulta" [(ngModel)]="empleado.unidadDeNegocio">
+        </div>
+      </div>
+      <div class="col-sm">
+      </div>
+    </div>
+    <br>
+
+    <div class="">
+      <br>
+      <div class="row">
+        <div class="col-sm" *ngFor="let tipo of tiposTablasObjGenerales; let i = index;">
+          <ng-container *ngIf="tipo == tiposTablasObjGenerales[0]">
+            <div class="card">
+              <h5><strong>&nbsp;&nbsp;{{tipo}}</strong></h5>
+              <!-- [tableStyle]="{'min-width': '50rem'}" -->
+              <div class="text-end">
+                <strong>Total: {{totalObjetivosTipoUno}}%</strong>&nbsp;&nbsp;
+              </div>
+              <p-table [value]="listObjGenralesTipoUno">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Descripción</th>
+                    <th>Meta</th>
+                    <th>Porcentaje</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-obj>
+                  <tr>
+                    <td pTooltip="{{obj.tooltip}}" tooltipPosition="top">{{obj.descripcion}}</td>
+                    <td>{{obj.meta}}</td>
+                    <td>{{obj.valor}}%</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="tipo == tiposTablasObjGenerales[1]">
+            <div class="card">
+              <h5><strong>&nbsp;&nbsp;{{tipo}}</strong></h5>
+              <!-- [tableStyle]="{'min-width': '50rem'}" -->
+              <div class="text-end">
+                <strong>Total: {{totalObjetivosTipoDos}}%</strong>&nbsp;&nbsp;
+              </div>
+              <p-table [value]="listObjGenralesTipoDos">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Descripción</th>
+                    <th>Meta</th>
+                    <th>Porcentaje</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-obj>
+                  <tr>
+
+                      <td pTooltip="{{obj.tooltip}}" tooltipPosition="top">{{obj.descripcion}}</td>
+                      <td>{{obj.meta}}</td>
+                      <td>{{obj.valor}}%</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <br>
+
+      <div class="row">
+        <div class="col-12">
+
+          <ng-container *ngIf="listObjetivos.length > 0">
+            <div class="card">
+              <h5><strong>&nbsp;&nbsp;CUALITATIVOS</strong></h5>
+              <div class="row">
+                <!-- <div class="col-sm-8"><p class="float-end">left</p></div>
+                <div class="col-sm-2"><p class="float-start">right</p></div>
+                <div class="col-sm-2"><p class="float-start">right</p></div> -->
+                <!-- <div class="col-1">
+                </div> -->
+                <div class="col-11">
+                  <div class="text-end">
+                    <strong>Total: {{totalObjetivosCualitativos}}%</strong>&nbsp;&nbsp;
+                  </div>
+                </div>
+                <div class="col-1">
+                </div>
+              </div>
+              <p-table [value]="listObjetivos" [tableStyle]="{'min-width': '50rem'}">
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th style="width:60%">Descripción</th>
+                    <th style="width:20%">Meta</th>
+                    <th style="width:20%">Porcentaje</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-obj>
+                  <tr>
+                    <td>{{obj.descripcion}}</td>
+                    <td>{{obj.meta}}
+                      <ng-container *ngIf="obj.descripcion == 'Capacitación'">
+                        &nbsp; &nbsp; &nbsp; &nbsp; <strong>Cursos</strong>
+                      </ng-container>
+                    </td>
+                    <td>
+                      {{obj.valor}}%&nbsp;&nbsp;
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+            <br>
+            <div class="text-center">
+              <strong>Total: {{totalObjetivosCualitativos + totalObjetivosTipoUno + totalObjetivosTipoDos}} %</strong>&nbsp;&nbsp;
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="listObjetivos.length == 0">
+            <div class="text-center">
+              <p-message severity="info" [text]="mensaje_sin_datos" styleClass="p-mr-2"></p-message>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <br>
+
+    </div>
+  </div>
+</div>
+<p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000">
+
+</p-confirmDialog>
+<p-toast></p-toast>
+
+<p-dialog header="Rechazar Objetivos" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+    <div class="row d-flex justify-content-center">
+      <label for="">
+        <strong style="color: red;">* Debe ingresar una descripción</strong>
+       </label>
+    </div>
+    <div  class="row d-flex justify-content-center">
+        <textarea placeholder="Ingrese al menos {{count_carapteres}} caracteres" [rows]="3" [cols]="80" pInputTextarea  [(ngModel)]="motivoRechazoObjetivos"></textarea>
+    </div>
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" (click)="saveAllObjetivos('3')" label="Aceptar" class="p-button-text" [disabled]="motivoRechazoObjetivos.length < count_carapteres"></p-button>
+            <p-button icon="pi pi-times" (click)="displayModal=false" label="Cancelar"></p-button>
+        </ng-template>
+</p-dialog>

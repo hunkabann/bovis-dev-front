@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-12">
+    <label for="empleado">Fechas:</label>
+    <p-calendar 
+      [(ngModel)]="fechas"
+      selectionMode="range" 
+      view="month" 
+      dateFormat="mm-y" 
+      [readonlyInput]="true"
+      [showIcon]="true"
+      [style]="{ width: '100%' }"
+      (onClose)="seleccionarFecha()"
+    ></p-calendar>
+  </div>
+</div>

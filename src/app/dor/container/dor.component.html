@@ -1,0 +1,95 @@
+<div class="content" style="margin:2%">
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-info" routerLink="/dor/registro">Nuevo</button>
+  </div>
+
+  <br>
+
+  <div class="busqueda">
+    <ng-container *ngIf="false">
+      <div class="head-busqueda">
+        <p style="color:white">Parámetros de búsqueda</p>
+      </div>
+      <br>
+      <div class="row">
+
+        <div class="col-6 relative">
+          <label for="">Apellido:</label>
+
+          <input type="search" class="form-control" placeholder="Ingrese Apellido Paterno ó Materno">
+        </div>
+
+        <div class="col-6" *ngIf="false">
+
+        </div>
+        <div class="col-6 relative" *ngIf="false">
+        </div>
+      </div>
+      <br>
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-info" routerLink="/empleados/registro">Buscar</button>
+      </div>
+    </ng-container>
+
+    <br>
+    <div class="d-flex justify-content-end align-items-center pb-3">
+      <div class="p-1">
+
+      </div>
+      <div class="d-flex justify-content-center align-items-center">
+        <span class="mr-2">Mostrar: </span>
+        <p-dropdown [options]="[{size:10},{size:20},{size:30},{size:50},{size:100}]" optionLabel="size"
+          optionValue="size" [(ngModel)]="size"></p-dropdown>
+      </div>
+
+    </div>
+    <br>
+
+    <div class="card">
+      <!--  <h5>Custom Sort</h5> -->
+      <p-table [value]="ListDorModel" (sortFunction)="customSort($event)" [customSort]="true">
+        <ng-template pTemplate="header">
+          <tr>
+            <th *ngFor="let h of header" pSortableColumn="h">{{h}} <p-sortIcon field="h"></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-uDor>
+          <tr>
+            <td>{{uDor.concepto}}</td>
+            <td>{{uDor.descripcion}}</td>
+            <td>{{uDor.meta}}</td>
+            <td>{{uDor.ponderado}}</td>
+            <td>{{uDor.calificacion}}</td>
+            <td>{{uDor.nivel_2}}</td>
+            <td>{{uDor.nivel_3}}</td>
+            <td>{{uDor.nivel_4}}</td>
+            <td>{{uDor.nivel_5}}</td>
+            <td>
+              <a [routerLink]="['edicion',uDor.id]" ngbTooltip="Editar registro">
+                <i class="fas fa-edit"></i>
+              </a>
+            </td>
+            <td>
+              <i class="pi pi-trash c-del" ngbTooltip="Eliminar registro" (click)="confirm($event, uDor)"
+                pTooltip="Da clic para eliminar el registro capturado" tooltipPosition="left"></i>
+            </td>
+            <td>
+                <a ngbTooltip="Consultar objetivo" [routerLink]="['consulta',uDor.id]">
+                  <i class="fas fa-eye"></i>
+                </a>
+              </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  <br>
+
+  <div class="d-flex justify-content-center align-items-center">
+    <!-- <ngb-pagination [collectionSize]="120" [(page)]="page" [maxSize]="5" [rotate]="true" [ellipses]="false"
+      [boundaryLinks]="true"></ngb-pagination> -->
+  </div>
+
+
+  <p-toast></p-toast>
+  <p-confirmPopup></p-confirmPopup>

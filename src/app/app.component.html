@@ -1,0 +1,15 @@
+<app-backdrop *ngIf="sharedService.cargando"></app-backdrop>
+
+<app-header [currentModule]="sharedService.pageTitle"></app-header>
+
+<div class="wrapper">
+
+  <app-menu-sidebar *ngIf="loginDisplay" (nameModule)="onEmitter($event)"></app-menu-sidebar>
+
+  <div class="main-app">
+
+    <router-outlet></router-outlet>
+
+  </div>
+</div>
+

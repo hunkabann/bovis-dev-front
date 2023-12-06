@@ -1,0 +1,46 @@
+<p-toast></p-toast>
+
+<div class="main-container">
+
+  <h1>Ejecución Reporte ({{ reporte?.nombre }})</h1>
+
+  <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-start gap-2">  
+    <button 
+      type="button" 
+      class="btn btn-info" 
+      [routerLink]="['/reportes/lista']"
+    >
+        Regresar
+    </button>
+  </p-toolbar>
+
+  <div class="table-container">
+    <p-table 
+      #tablaPrincipal
+      class="tabla-filtro"
+      [columns]="encabezados"
+      [value]="datos" 
+      [paginator]="true"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [rows]="10"
+    >
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{ col }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+                {{ rowData[col] }}
+            </td>
+        </tr>
+    </ng-template>
+    </p-table>
+  </div>
+  
+</div>

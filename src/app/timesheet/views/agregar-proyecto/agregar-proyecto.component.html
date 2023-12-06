@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-12">
+      <p-dropdown 
+        id="id_ciudad"
+        [options]="proyectos"
+        placeholder="Seleccionar un proyecto" 
+        optionLabel="name" 
+        [showClear]="true"
+        [style]="{ width: '100%' }"
+        optionValue="value"
+        (onChange)="seleccionarProyecto($event)"
+        [filter]="true" 
+        filterBy="name"
+      ></p-dropdown>
+  </div>
+</div>

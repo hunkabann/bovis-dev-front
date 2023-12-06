@@ -1,0 +1,96 @@
+<div class="content" style="margin:2%">
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-info" routerLink="/catalogos">Regresar</button>
+  </div>
+  <br>
+
+  <div>
+    <p-toast></p-toast>
+
+    <div class="card">
+      <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+          <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success p-mr-2"
+            (click)="openNew()"></button>
+        </ng-template>
+
+        <ng-template pTemplate="right">
+          <!--  <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block"></p-fileUpload>
+                <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button> -->
+        </ng-template>
+      </p-toolbar>
+
+      <p-table #dt [value]="listViaticosModel" [rows]="10" [paginator]="true"
+        [globalFilterFields]="['descripcion', 'activo']" [(selection)]="selectedProducts" [rowHover]="true" dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+        <ng-template pTemplate="caption">
+          <div class="p-d-flex p-ai-center p-jc-between">
+            <h5 class="p-m-0">Viaticos</h5>
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <!-- (input)="dt.filterGlobal($event.target.value, 'contains')" -->
+              <input pInputText type="text" placeholder="Búsqueda por descripción" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th width="75%" pSortableColumn="descripcion">Descripción <p-sortIcon field="name"></p-sortIcon></th>
+            <th width="10%" pSortableColumn="activo">Estatus <p-sortIcon field="price"></p-sortIcon></th>
+            <th width="15%"></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{product.descripcion}}</td>
+            <td>
+              <ng-container *ngIf="product.activo == true">
+                <div pTooltip="Activo" tooltipPosition="top">
+                  <i class="pi pi-circle-fill" style="font-size: 2rem; color: greenyellow;" ></i>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="product.activo == false">
+                <div pTooltip="Inactivo" tooltipPosition="top">
+                  <i class="pi pi-circle-fill" style="font-size: 2rem; color: red;" ></i>
+                </div>
+              </ng-container>
+             </td>
+            <td>
+              <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                (click)="editProduct(product)"></button>&nbsp;
+              <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                (click)="deleteProduct(product)"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+          <div class="p-d-flex p-ai-center p-jc-between">
+            Total {{products ? products.length : 0 }}
+          </div>
+        </ng-template>
+      </p-table>
+    </div>
+
+     <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Detalles Viaticos" [modal]="true" styleClass="p-fluid">
+        <ng-template pTemplate="content">
+            <div class="p-field">
+                <!-- <label for="name">Name</label>
+                <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus />
+                <small class="p-invalid" *ngIf="submitted && !product.name">Name is required.</small> -->
+            </div>
+            <div class="p-field">
+                <label for="description">Descripción</label>
+                <textarea id="description" pInputTextarea [(ngModel)]="product.descripcion" required rows="3" cols="20"></textarea>
+            </div>
+
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="saveProduct()"></button>
+        </ng-template>
+    </p-dialog>
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+  </div>
+</div>

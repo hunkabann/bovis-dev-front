@@ -1,0 +1,69 @@
+
+<p-toast></p-toast>
+
+<div class="main-container">
+  <div class="row">
+    <div class="col-4">
+        <label>Mes:</label>
+        <p-calendar 
+          view="month" 
+          dateFormat="m/yy" 
+          [readonlyInput]="true" 
+          (onSelect)="buscarRegistros($event)"
+          [style]="{width: '100%'}"
+          placeholder="Seleccionar un mes..."
+          [(ngModel)]="mes"
+        ></p-calendar>
+    </div>
+    <div class="col-8 d-flex justify-content-end align-items-center">
+      <button type="button" class="btn btn-info" (click)="limpiar()">Limpiar</button>
+    </div>
+  </div>
+
+  <p-table 
+    [value]="diasTimesheet" 
+    [tableStyle]="{ 'min-width': '50rem' }"
+    [paginator]="true"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [rows]="10"
+    class="main-table"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Mes</th>
+        <th>Año</th>
+        <th>Días</th>
+        <th>Feriados</th>
+        <th>Sábados</th>
+        <th>Sábados feriados</th>
+        <th class="text-center">Opciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-ts let-i="rowIndex">
+      <tr>
+        <td>{{ts.mes}}</td>
+        <td>{{ts.anio}}</td>
+        <td>{{ts.dias}}</td>
+        <td>{{ts.feriados}}</td>
+        <td>{{ts.sabados}}</td>
+        <td>{{ts.sabados_feriados || 0}}</td>
+        <td class="text-center">
+          <button 
+            title="Modificar días feriados" 
+            pButton 
+            pRipple 
+            icon="pi pi-pencil" 
+            class="p-button-rounded p-button-success p-mr-2"
+            (click)="modificarFeriados(ts, i)"
+            *ngIf="(ts.anio + ts.mes) > +fechaActual; else NoAllowed"
+          ></button>
+          <ng-template #NoAllowed>
+            -
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

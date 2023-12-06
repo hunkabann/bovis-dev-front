@@ -1,0 +1,65 @@
+
+<p-toast></p-toast>
+
+<div class="main-container">
+
+  <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-start gap-2">  
+    <button 
+      type="submit" 
+      class="btn btn-info"
+      routerLink="/contratos/plantillas/registro"
+    >
+      Nuevo
+    </button>
+  </p-toolbar>
+  <div class="table-container">
+    <p-table 
+      [value]="plantillas" 
+      [paginator]="true"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [rows]="10"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="idContratoTemplate">ID <p-sortIcon field="idContratoTemplate"></p-sortIcon></th>
+          <th pSortableColumn="titulo">Título <p-sortIcon field="titulo"></p-sortIcon></th>
+          <th class="text-center">Estatus</th>
+          <th class="text-center">Opciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-plantilla>
+        <tr>
+          <td>
+            <a 
+              class="text-success font-bold"
+              [routerLink]="['/contratos/plantillas/registro', plantilla.idContratoTemplate]"
+            >
+              {{ plantilla.idContratoTemplate }}
+            </a>
+          </td>
+          <td>{{ plantilla.titulo }}</td>
+          <td class="text-center">
+            <p-inputSwitch 
+              [ngModel]="plantilla.activo"
+              (click)="toggleActivo(plantilla.idContratoTemplate, plantilla.activo)"
+              [readonly]="true"
+            ></p-inputSwitch>
+          </td>
+          <td class="text-center">
+            <button 
+              title="Modificar plantilla" 
+              pButton 
+              pRipple 
+              icon="pi pi-pencil" 
+              class="p-button-rounded p-button-success p-mr-2"
+              [routerLink]="['/contratos/plantillas/registro', plantilla.idContratoTemplate]"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  
+</div>

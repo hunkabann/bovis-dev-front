@@ -1,0 +1,27 @@
+<p-menubar [model]="items">
+    <ng-template pTemplate="start">
+        <img src="assets/images/Logo-Bovis_pagina-web_Mesa-de-trabajo-1.png" class="h-logo">
+
+        <label for=""><strong>{{currentModule}}</strong></label>
+    </ng-template>
+
+    <ng-template pTemplate="end">
+        <div *ngIf="loginDisplay" class="user-name">
+            {{ this.objUsuario.user }}
+        </div>
+        <button *ngIf="!loginDisplay"
+                type="button" pButton pRipple
+                icon="pi pi-user"
+                pTooltip="Iniciar Sesion"
+                class="p-button-rounded p-button-secondary p-button-outlined"
+                (click)="loginRedirect()">
+        </button>
+        <button *ngIf="loginDisplay"
+                type="button" pButton pRipple
+                icon="pi pi-user"
+                pTooltip="Cerrar Sesion"
+                class="p-button-rounded p-button-secondary p-button-outlined"
+                (click)="logout()">
+        </button>
+    </ng-template>
+</p-menubar>
