@@ -34,8 +34,24 @@ export class CieService {
     return this.http.post<CieProyectosResponse>(`${this.baseUrl}api/Cie/Proyectos`, body)
   }
 
-  getRegistros(nombre_cuenta: string = '-', mes: number = 0, anio: number = 0,  mesFin: number = 0, anioFin: number = 0, concepto: string = '-', empresa: string = '-', num_proyecto: number = 0, responsable: string = '-', clasificacionPY: string = '', offset: number, limit: number) {
-    return this.http.get<CieRegistrosPaginadosResponse>(`${this.baseUrl}api/Cie/Registros/true/${nombre_cuenta}/${mes}/${anio}/${mesFin}/${anioFin}/${concepto}/${empresa}/${num_proyecto}/${responsable}/${clasificacionPY}/${offset}/${limit}`)
+  getRegistros(nombre_cuenta: string, mes_inicio: number, anio_inicio: number,  mes_fin: number, anio_fin: number, concepto: string, empresa: string, num_proyecto: number, responsable: string, clasificacion_py: string, offset: number, limit: number, sort_field: string, sort_order: string) {
+    return this.http.post<CieRegistrosPaginadosResponse>(`${this.baseUrl}api/Cie/Registros`, {
+        nombre_cuenta,
+        mes_inicio,
+        anio_inicio,
+        mes_fin,
+        anio_fin,
+        concepto,
+        empresa,
+        num_proyecto,
+        responsable,
+        clasificacion_py,
+        limit,
+        offset,
+        sort_field,
+        sort_order
+      //true/${nombre_cuenta}/${mes}/${anio}/${mesFin}/${anioFin}/${concepto}/${empresa}/${num_proyecto}/${responsable}/${clasificacionPY}/${offset}/${limit}
+    })
   }
 
   getCieConceptos() {

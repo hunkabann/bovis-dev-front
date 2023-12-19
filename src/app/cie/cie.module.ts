@@ -9,6 +9,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PrimengModule } from '../shared/primeng.module';
 import { ToastModule } from 'primeng/toast';
 import { ModificarRegistroComponent } from './components/modificar-registro/modificar-registro.component';
+import { RegistrosCargadosComponent } from './components/registros-cargados/registros-cargados.component';
+import { CuentasCargadasComponent } from './components/cuentas-cargadas/cuentas-cargadas.component';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import { ModificarRegistroComponent } from './components/modificar-registro/modi
     CieComponent,
     CargaSaeComponent,
     ResultadoBusquedaComponent,
-    ModificarRegistroComponent
+    ModificarRegistroComponent,
+    RegistrosCargadosComponent,
+    CuentasCargadasComponent
   ],
   imports: [
     CommonModule,

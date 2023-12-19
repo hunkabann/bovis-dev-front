@@ -21,11 +21,11 @@ export class ClientesService {
 
   guardarCliente(body: any, esActualizacion = false) {
     return esActualizacion 
-    ? this.http.put<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Agregar`, body)
-    : this.http.post<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Actualizar`, body)
+    ? this.http.put<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Actualizar`, body)
+    : this.http.post<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Agregar`, body)
   }
 
   eliminarCliente(id: number) {
-    this.http.get<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Borrar`)
+    return this.http.delete<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Borrar/${id}`)
   }
 }

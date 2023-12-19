@@ -9,12 +9,13 @@ import { finalize, forkJoin } from 'rxjs';
 import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { format } from 'date-fns';
 import { CieService } from 'src/app/cie/services/cie.service';
+import { ProyectoJoinPipe } from '../../pipes/proyecto-join.pipe';
 
 @Component({
   selector: 'app-consultar',
   templateUrl: './consultar.component.html',
   styleUrls: ['./consultar.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, ProyectoJoinPipe]
 })
 export class ConsultarComponent implements AfterViewInit {
 
@@ -23,6 +24,7 @@ export class ConsultarComponent implements AfterViewInit {
   messageService    = inject(MessageService)
   sharedService     = inject(SharedService)
   timesheetService  = inject(TimesheetService)
+  proyectoJoin      = inject(ProyectoJoinPipe)
 
   empleados:    Opcion[] = []
   proyectos:    Opcion[] = []
@@ -85,11 +87,34 @@ export class ConsultarComponent implements AfterViewInit {
     .subscribe({
       next: ({data}) => {
         this.timesheets = []
-        data.map(ts => this.timesheets.push(ts))
+        this.timesheets = data.map(ts => ({
+          ...ts,
+          proyectosJoin:      this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
+          proyectosDiasJoin:  this.proyectoJoin.transform(ts.proyectos, 'proyectosDias'),
+          otrosJoin:          this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
+          otrosDiasJoin:      this.proyectoJoin.transform(ts.otros, 'otrosDias'),
+          completado:         ((this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo))) < 100
+        })).sort((a, b) => {
+          if (a.completado === b.completado) {
+            return 0
+          } else if (a.completado === true) {
+            return -1
+          } else {
+            return 1
+          }
+        })
         this.sharedService.cambiarEstado(false)
       },
       error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
     })
+  }
+
+  limpiar() {
+    this.idEmpleado = null
+    this.idProyecto = null
+    this.idUnidad   = null
+    this.idEmpresa  = null
+    this.mes        = null
   }
 
   cambiarParticipacion(timesheet: Timesheet, idTimesheetProyecto: number, event: any) {

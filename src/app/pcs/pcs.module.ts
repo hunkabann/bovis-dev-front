@@ -30,6 +30,10 @@ import { AgregarEmpleadoComponent } from './components/agregar-empleado/agregar-
 import { ModificarEmpleadoComponent } from './components/modificar-empleado/modificar-empleado.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PorcentajeMesPipe } from './pipes/porcentaje-mes.pipe';
+import { ValorMesPipe } from './pipes/valor-mes.pipe';
+import { ModificarRubroComponent } from './components/modificar-rubro/modificar-rubro.component';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { CalcularSubtotalPipe } from './pipes/calcular-subtotal.pipe';
 
 
 @NgModule({
@@ -46,7 +50,10 @@ import { PorcentajeMesPipe } from './pipes/porcentaje-mes.pipe';
     CrearEtapaComponent,
     AgregarEmpleadoComponent,
     ModificarEmpleadoComponent,
-    PorcentajeMesPipe
+    PorcentajeMesPipe,
+    ValorMesPipe,
+    ModificarRubroComponent,
+    CalcularSubtotalPipe
   ],
   imports: [
     CommonModule,
@@ -63,7 +70,8 @@ import { PorcentajeMesPipe } from './pipes/porcentaje-mes.pipe';
     CheckboxModule,
     TimelineModule,
     ButtonModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    InputSwitchModule
   ],
   providers: [ConfirmationService, MessageService]
 })

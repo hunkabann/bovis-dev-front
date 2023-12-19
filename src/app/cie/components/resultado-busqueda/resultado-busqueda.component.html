@@ -14,7 +14,6 @@
               dateFormat="m/yy" 
               [readonlyInput]="true"
               [(ngModel)]="fechas" 
-              (onClose)="filtrar()"
               [style]="{width: '100%'}"
               placeholder="Seleccionar un mes..."
               [showButtonBar]="true"
@@ -29,7 +28,6 @@
                 [showClear]="true"
                 [style]="{ width: '100%' }"
                 optionValue="code"
-                (onChange)="filtrar()"
                 [(ngModel)]="cuenta"
                 [filter]="true" 
                 filterBy="name"
@@ -44,10 +42,10 @@
                 [showClear]="true"
                 [style]="{ width: '100%' }"
                 optionValue="code"
-                (onChange)="filtrar()"
                 [(ngModel)]="concepto"
                 [filter]="true" 
                 filterBy="name"
+                appendTo="body"
             ></p-dropdown>
         </div>
         <div class="col-4">
@@ -59,7 +57,6 @@
                 [showClear]="true"
                 [style]="{ width: '100%' }"
                 optionValue="code"
-                (onChange)="filtrar()"
                 [(ngModel)]="empresa"
                 [filter]="true" 
                 filterBy="name"
@@ -74,7 +71,6 @@
                 [showClear]="true"
                 [style]="{ width: '100%' }"
                 optionValue="code"
-                (onChange)="filtrar()"
                 [(ngModel)]="numProyecto"
                 [filter]="true" 
                 filterBy="name"
@@ -89,7 +85,6 @@
                 [showClear]="true"
                 [style]="{ width: '100%' }"
                 optionValue="code"
-                (onChange)="filtrar()"
                 [(ngModel)]="responsable"
                 [filter]="true" 
                 filterBy="name"
@@ -104,11 +99,15 @@
                 [showClear]="true"
                 [style]="{ width: '100%' }"
                 optionValue="code"
-                (onChange)="filtrar()"
                 [(ngModel)]="clasificacionPY"
                 [filter]="true" 
                 filterBy="name"
             ></p-dropdown>
+        </div>
+        <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+            <p-button label="Exportar Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+            <button type="button" class="btn btn-info" (click)="filtrar()">Buscar</button>
+            <button type="button" class="btn btn-info" (click)="limpiar()">Limpiar filtros</button>
         </div>
     </div>
 
@@ -121,21 +120,28 @@
             [totalRecords]="totalRegistros"
             [lazy]="true"
             currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-            [rowsPerPageOptions]="[10, 25, 50]"
+            [rowsPerPageOptions]="[10, 25, 50, 100]"
             [rows]="noRegistros"
             [loading]="loading"
             paginatorPosition="both"
+            (onLazyLoad)="loadData($event)"
         >
         <ng-template pTemplate="header">
             <tr>
-                <th *ngFor="let header of cieHeadersLocal">
-                    {{header}}
+                <th *ngFor="let header of cieHeadersLocal" [pSortableColumn]="cieHeadersFieldsLocal[header]">
+                  <div class="d-flex align-items-center">{{header}}<p-sortIcon [field]="cieHeadersFieldsLocal[header]"></p-sortIcon></div>
+                  <!-- {{header}} -->
+                </th>
+                <th pSortableColumn="inconsistente">
+                    <div class="d-flex align-items-center">Inconsistente<p-sortIcon field="inconsistente"></p-sortIcon></div>
                 </th>
                 <th class="text-center">Opciones</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-record>
-            <tr>
+            <tr 
+                [ngStyle]="{'background-color': record.inconsistente ? '#ffa4a4' : ''}"
+            >
                 <td>{{record.nombreCuenta}}</td>
                 <td>{{record.cuenta}}</td>
                 <td>{{record.tipoPoliza}}</td>
@@ -157,6 +163,7 @@
                 <td>{{record.tipoCuenta}}</td>
                 <td>{{record.tipoPy}}</td>
                 <td>{{record.clasificacionPy}}</td>
+                <td>{{record.inconsistente ? 'Sí' : 'No'}}</td>
                 <td class="text-align">
                   <div class="d-flex justify-content-center gap-3">
                     <button 

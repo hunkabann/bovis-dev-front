@@ -13,12 +13,14 @@ import { TableModule } from 'primeng/table';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
+import { PintarValorPipe } from './pipes/pintar-valor.pipe';
 
 
 @NgModule({
   declarations: [
     PlantillasComponent,
-    RegistroPlantillaComponent
+    RegistroPlantillaComponent,
+    PintarValorPipe
   ],
   imports: [
     CommonModule,
@@ -33,6 +35,9 @@ import { RippleModule } from 'primeng/ripple';
     ButtonModule,
     RippleModule,
     ReactiveFormsModule
+  ],
+  exports: [
+    PintarValorPipe
   ]
 })
 export class ContratosModule { }

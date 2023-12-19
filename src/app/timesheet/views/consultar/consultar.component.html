@@ -80,6 +80,9 @@
           [(ngModel)]="mes"
         ></p-calendar>
     </div>
+    <div class="col-4 d-flex align-items-center">
+      <button type="button" class="btn btn-info" (click)="limpiar()">Limpiar filtros</button>
+    </div>
   </div>
 
   <p-table 
@@ -103,8 +106,10 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-ts>
-      <tr *ngIf="((ts.proyectos | proyectoJoin:'proyectos' : ts.dias_trabajo) +(ts.otros | proyectoJoin:'otros' : ts.dias_trabajo)) == 100 ">
-        
+      <tr 
+        [ngStyle]="{'background-color': ts.completado ? '#ffa4a4' : ''}"
+      >
+  
           <td>{{ts.mes}}</td>
           <td>{{ts.anio}}</td>
           <td>{{ts.num_empleado}}</td>
@@ -116,9 +121,9 @@
               <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}"/>
             </div>
             <hr>
-            <label><strong>Total: {{ts.proyectos | proyectoJoin:'proyectos' : ts.dias_trabajo}} % - Días: {{ts.proyectos | proyectoJoin:'proyectosDias'}}</strong></label>
+            <label><strong>Total: {{ts.proyectosJoin}} % - Días: {{ts.proyectosDiasJoin}}</strong></label>
             <br>
-            <label><strong>Otros: {{ts.otros | proyectoJoin:'otros' : ts.dias_trabajo}} % - Días: {{ts.otros | proyectoJoin:'otrosDias'}}</strong></label>
+            <label><strong>Otros: {{ts.otrosJoin}} % - Días: {{ts.otrosDiasJoin}}</strong></label>
           </td>
           <td>
             <button 
@@ -132,36 +137,6 @@
           </td>
       
       </tr>
-
-      <tr *ngIf="((ts.proyectos | proyectoJoin:'proyectos' : ts.dias_trabajo) +(ts.otros | proyectoJoin:'otros' : ts.dias_trabajo)) < 100 ">
-        
-        <td bgcolor="#ffa4a4">{{ts.mes}}</td>
-        <td bgcolor="#ffa4a4">{{ts.anio}}</td>
-        <td bgcolor="#ffa4a4">{{ts.num_empleado}}</td>
-        <td bgcolor="#ffa4a4">{{ts.empleado}}</td>
-        <!-- <td>{{ts.proyectos | proyectoJoin}}</td> -->
-        <td bgcolor="#ffa4a4">
-          <div class="form-group" *ngFor="let proyecto of ts.proyectos">
-            <label><strong>{{proyecto.descripcion}}: {{proyecto.tDedicacion}} %</strong></label>
-            <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}"/>
-          </div>
-          <hr>
-          <label><strong>Total: {{ts.proyectos | proyectoJoin:'proyectos' : ts.dias_trabajo}} % - Días: {{ts.proyectos | proyectoJoin:'proyectosDias'}}</strong></label>
-          <br>
-          <label><strong>Otros: {{ts.otros | proyectoJoin:'otros' : ts.dias_trabajo}} % - Días: {{ts.otros | proyectoJoin:'otrosDias'}}</strong></label>
-        </td>
-        <td bgcolor="#ffa4a4">
-          <button 
-            title="txtEditar" 
-            pButton 
-            pRipple 
-            icon="pi pi-pencil" 
-            class="p-button-rounded p-button-success p-mr-2"
-            [routerLink]="['/timesheet/cargar-horas', ts.id]"
-          ></button>
-        </td>
-    
-    </tr>
     </ng-template>
   </p-table>
 </div>

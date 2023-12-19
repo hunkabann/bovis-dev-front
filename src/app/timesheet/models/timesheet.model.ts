@@ -150,21 +150,26 @@ export interface TimesheetPorIdResponse {
 }
 
 export interface Timesheet {
-  id:             number;
-  id_empleado:    number;
-  mes:            number;
-  anio:           number;
-  id_responsable: number;
-  sabados:        boolean;
-  dias_trabajo:   number;
-  empleado?:      string;
-  responsable?:   string;
-  coi_empresa?:   number,
-  noi_empresa?:   number,
-  noi_empleado?:  number,
-  num_empleado?:  number,
-  otros:          Otro[];
-  proyectos:      Proyecto[];
+  id:                 number;
+  id_empleado:        number;
+  mes:                number;
+  anio:               number;
+  id_responsable:     number;
+  sabados:            boolean;
+  dias_trabajo:       number;
+  empleado?:          string;
+  responsable?:       string;
+  coi_empresa?:       number,
+  noi_empresa?:       number,
+  noi_empleado?:      number,
+  num_empleado?:      number,
+  otros:              Otro[];
+  proyectos:          Proyecto[];
+  proyectosJoin?:     number;
+  proyectosDiasJoin?: number;
+  otrosJoin:          number;
+  otrosDiasJoin:      number;
+  completado?:        boolean;
 }
 
 export interface Otro {

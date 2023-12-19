@@ -4,8 +4,11 @@ import { CieService } from '../../services/cie.service';
 import { MessageService } from 'primeng/api';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { CieElementPost, CieProyecto } from '../../models/cie.models';
-import { EXCEL_EXTENSION, SUBJECTS, TITLES, cieHeaders } from 'src/utils/constants';
+import { EXCEL_EXTENSION, SUBJECTS, TITLES, cieHeaders, cieHeadersFields } from 'src/utils/constants';
 import { finalize, forkJoin } from 'rxjs';
+import { DialogService } from 'primeng/dynamicdialog';
+import { RegistrosCargadosComponent } from '../registros-cargados/registros-cargados.component';
+import { CuentasCargadasComponent } from '../cuentas-cargadas/cuentas-cargadas.component';
 
 interface Option {
   name:   string,
@@ -16,17 +19,19 @@ interface Option {
   selector: 'app-carga-sae',
   templateUrl: './carga-sae.component.html',
   styleUrls: ['./carga-sae.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, DialogService]
 })
 export class CargaSaeComponent implements OnInit {
 
-  cieService      = inject(CieService)
-  messageService  = inject(MessageService)
-  sharedService   = inject(SharedService)
+  cieService        = inject(CieService)
+  messageService    = inject(MessageService)
+  sharedService     = inject(SharedService)
+  dialogService     = inject(DialogService)
 
-  excelData:        any
-  jsonData:         CieElementPost[] = []
-  cieHeadersLocal:  string[] = cieHeaders
+  excelData:              any
+  jsonData:               CieElementPost[] = []
+  cieHeadersLocal:        string[] = cieHeaders
+  cieHeadersFieldsLocal:  any = cieHeadersFields
 
   fileSizeMax: number = 10000000
   isLoadingFile = false
@@ -107,7 +112,7 @@ export class CargaSaeComponent implements OnInit {
               fecha:              record.Fecha,
               mes:                record.Fecha.split('/')[1],
               concepto:           record.Concepto,
-              centro_costos:      record['Centro de costos']?.trim(),
+              centro_costos:      record['Centro de costos']?.trim() ?? record['centros de costos']?.trim(),
               proyectos:          record.Proyectos,
               saldo_inicial:      record['Saldo inicial'],
               debe:               record.Debe,
@@ -133,6 +138,9 @@ export class CargaSaeComponent implements OnInit {
       .pipe( finalize(() => this.sharedService.cambiarEstado(false)) )
       .subscribe(([infoCuentasR, infoProyectosR]) => {
 
+        let cuentasArreglo = []
+        this.cuentasFaltantes = []
+
         infoCuentasR.data.forEach(cuenta => this.cuentasEncontradas[cuenta.cuenta] = {...cuenta})
 
         infoProyectosR.data.forEach(proyecto => this.proyectosEncontrados[proyecto.proyecto] = {...proyecto})
@@ -144,7 +152,15 @@ export class CargaSaeComponent implements OnInit {
           const noProyecto = this.proyectosEncontrados[keyProyecto]?.numProyecto
           // console.log(this.cuentasEncontradas[keyCuenta]);
           if(!this.cuentasEncontradas[keyCuenta]) {
-            this.cuentasFaltantes.push({cuenta: keyCuenta, concepto: normalRecord.concepto})
+            if(!cuentasArreglo.includes(keyCuenta)) {
+              let conceptoCuenta = ''
+              const conceptoSplit = normalRecord.nombre_cuenta.split(keyCuenta)
+              if(conceptoSplit.length >= 2) {
+                conceptoCuenta = conceptoSplit[1].trim()
+              }
+              this.cuentasFaltantes.push({cuenta: keyCuenta, concepto: conceptoCuenta})
+              cuentasArreglo.push(keyCuenta)
+            }
           }
           return {
             ...normalRecord,
@@ -158,6 +174,7 @@ export class CargaSaeComponent implements OnInit {
             clasificacion_py:   this.cuentasEncontradas[keyCuenta]?.clasificacionPY || null
           }
         })
+        cuentasArreglo = []
       })
     }
 
@@ -220,6 +237,15 @@ export class CargaSaeComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.messageService.add({severity: 'success', summary: 'SAE cargado', detail: 'El SAE ha sido cargado.'})
+          this.dialogService.open(RegistrosCargadosComponent, {
+            header: "Registros cargados",
+            width: '50%',
+            contentStyle: {overflow: 'auto'},
+            dismissableMask: true,
+            data: {
+              cantidad: this.jsonData.length
+            }
+          })
         },
         error: (err) => {
           this.messageService.add({severity: 'error', summary: 'Oh no...', detail: err.error})
@@ -236,6 +262,15 @@ export class CargaSaeComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'Cuentas cargadas correctamente.'})
+          this.dialogService.open(CuentasCargadasComponent, {
+            header: "Cuentas cargadas",
+            width: '80%',
+            contentStyle: {overflow: 'auto'},
+            dismissableMask: true,
+            data: {
+              cuentas: this.cuentasFaltantes
+            }
+          })
           this.cuentasFaltantes = []
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})

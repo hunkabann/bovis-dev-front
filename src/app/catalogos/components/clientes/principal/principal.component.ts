@@ -26,9 +26,13 @@ export class PrincipalComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.cargarClientes()
+  }
+  
+  cargarClientes() {
     
     this.sharedService.cambiarEstado(true)
-
+  
     this.clientesService.obtenerClientes()
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
@@ -39,7 +43,7 @@ export class PrincipalComponent implements OnInit {
       })
   }
 
-  guardarCliente(cliente: Cliente) {
+  guardarCliente(cliente: Cliente, index: number) {
     
     this.dialogService.open(RegistroComponent, {
       header: `${cliente ? 'Actualizar' : 'Agregar'} cliente`,
@@ -50,10 +54,36 @@ export class PrincipalComponent implements OnInit {
       }
     })
     .onClose.subscribe((result) => {
+      
       if(result && result.exito) {
-        console.log('ok!');
+        
+        this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El cliente ha sido guardado.'})
+
+        if(cliente) {
+          this.clientes[index] = {
+            ...result.clienteActualizado,
+            idCliente: result.clienteActualizado.id_cliente
+          }
+        } else {
+          this.cargarClientes()
+        }
       }
     })
+  }
+
+  eliminarCliente(cliente: Cliente, index: number) {
+    
+    this.sharedService.cambiarEstado(true)
+
+    this.clientesService.eliminarCliente(cliente.idCliente)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({data}) => {
+          this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El cliente ha sido eliminado.'})
+          this.clientes.splice(index, 1)
+        },
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
   }
 
 }

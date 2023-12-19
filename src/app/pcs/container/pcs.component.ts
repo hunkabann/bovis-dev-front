@@ -83,7 +83,8 @@ export class PcsComponent implements OnInit {
       relativeTo: this.activatedRoute,
       queryParams: {
         proyecto:   esEdicion ? this.proyectoId : null,
-        esEdicion:  esEdicion ? 1 : null
+        esEdicion:  esEdicion ? 1 : null,
+        nuevo:      !esEdicion
       }
     })
 

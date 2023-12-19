@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CatEmpleado, CatPersona, CatalogoResponse, Persona, GenerarRequerimientoResponse, RequerimientosResponse, RequerimientoResponse, ActualizarRequerimientoResponse, UpPersonasResponse, GenericResponse, TurnoResponse, UpEmpleadoResponse, UpPersonaResponse, PuestosResponse, OneEmpleadoResponse, ReqProyectosResponse, TiposContratoResponse, EstadosResponse, FiltrosRequerimientos, ContratosResponse, ContratoResponse, PaisesResponse } from '../Models/empleados';
+import { CatEmpleado, CatPersona, CatalogoResponse, Persona, GenerarRequerimientoResponse, RequerimientosResponse, RequerimientoResponse, ActualizarRequerimientoResponse, UpPersonasResponse, GenericResponse, TurnoResponse, UpEmpleadoResponse, UpPersonaResponse, PuestosResponse, OneEmpleadoResponse, ReqProyectosResponse, TiposContratoResponse, EstadosResponse, FiltrosRequerimientos, ContratosResponse, ContratoResponse, PaisesResponse, CostoEmpleadoResponse } from '../Models/empleados';
 import { Observable } from 'rxjs';
 import { PlantillasResponse } from 'src/app/contratos/models/contratos.model';
 
@@ -190,13 +190,32 @@ export class EmpleadosService {
       boactivo: activo
     })
   }
-
+   
   getContratosPorEmpleado(id: number) {
     return this.http.get<ContratosResponse>(`${this.baseUrl}api/Contrato/ContratosEmpleado/${id}`)
   }
 
+  getCostoID(id: string) {
+    return this.http.get<CostoEmpleadoResponse>(`${this.baseUrl}api/Costo/Empleado/${id}`)
+  }
+
+  guardarBeneficioCosto(body: any) {
+    return this.http.post<GenericResponse>(`${this.baseUrl}/api/Beneficios`, body)
+  }
+  
   getContratoPorEmpleado(id: number) {
     return this.http.get<ContratoResponse>(`${this.baseUrl}api/Contrato/ContratoEmpleado/Registro/${id}`)
+  }
+
+  guardarCostoEmpleado(body: any , esActualizacion: boolean) {
+    
+    return this.http.post<GenericResponse>(`${this.baseUrl}api/Costo`, body)
+    
+  }
+
+  guardarCostoEmpleadoActualiza(body: any , esActualizacion: boolean,id: string) {
+    
+    return this.http.put<GenericResponse>(`${this.baseUrl}${id}`, body)
   }
 
   guardarContrato(body: any, esActualizacion: boolean) {

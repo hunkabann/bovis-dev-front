@@ -8,6 +8,10 @@ import { TITLES, errorsArray } from 'src/utils/constants';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { finalize } from 'rxjs';
 import { format } from 'date-fns';
+import { Proyecto } from '../../models/pcs.model';
+import { Opcion } from 'src/models/general.model';
+import { CieService } from 'src/app/cie/services/cie.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-ip',
@@ -23,23 +27,28 @@ export class IpComponent implements OnInit {
   catPaises: ICatalogoCombos[] = [];
   catClientes: ICatalogoCombos[] = [];
   catEstatusProyecto: ICatalogoCombos[] = [];
-  catEmpleados: ICatalogoCombos[] = [];
+  catEmpleados: Opcion[] = []
 
   listCatSectores: Array<ICatalogo> = [];
   listCatPaises: Array<ICatalogo> = [];
   listCatClientes: Array<ICatalogoCliente> = [];
   listCatEstatusProyecto: Array<ICatalogo> = [];
   listEmpleados: Array<IEmpleadoNew> = [];
+  empresas: Opcion[] = []
+
+  proyecto:           Proyecto  = null
+  cargando:           boolean   = true
+  mostrarFormulario:  boolean   = false
 
   form = this.fb.group({
-      num_proyecto:                   [null, [Validators.required]],
-      nombre_proyecto:                [null, [Validators.required]],
-      alcance:                        [null, [Validators.required]],
-      codigo_postal:                  [null, [Validators.required]],
-      ciudad:                         [null, [Validators.required]],
-      id_pais:                        [null, [Validators.required]],
-      id_estatus:                     [null, [Validators.required]],
-      id_sector:                      [null, [Validators.required]],
+      num_proyecto:                   ['', [Validators.required]],
+      nombre_proyecto:                ['', [Validators.required]],
+      alcance:                        [null],
+      codigo_postal:                  [null],
+      ciudad:                         [null],
+      id_pais:                        [null],
+      id_estatus:                     [null],
+      id_sector:                      [null],
       id_tipo_proyecto:               [null],
       id_responsable_preconstruccion: [null],
       id_responsable_construccion:    [null],
@@ -47,10 +56,10 @@ export class IpComponent implements OnInit {
       id_responsable_supervisor:      [null],
       id_cliente:                     [null],
       id_empresa:                     [null],
-      id_director_ejecutivo:          [null, [Validators.required]],
+      id_director_ejecutivo:          ['', [Validators.required]],
       costo_promedio_m2:              [null],
-      fecha_inicio:                   [null, [Validators.required]],
-      fecha_fin:                      [null, [Validators.required]],
+      fecha_inicio:                   [null],
+      fecha_fin:                      [null],
       // total_meses, Validators.required
       // contacto_nombre, Validators.required
       // contacto_posicion, Validators.required
@@ -58,17 +67,77 @@ export class IpComponent implements OnInit {
       // contacto_correo, Validators.required
   })
 
-  constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService) { }
+  constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute) { }
 
   catalogosService = inject(CatalogosService)
   
   ngOnInit(): void {
     this.poblarCombos();
     this.getConfigCalendar();
+    this.pcsService.cambiarEstadoBotonNuevo(true)
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
-        console.log(params)
+        if(!params.proyecto) {
+          this.proyecto = null
+          this.cargando = false
+          this.form.reset()
+        }
       })
+    
+    this.pcsService.obtenerIdProyecto()
+      .subscribe(numProyecto => {
+        // this.proyectoSeleccionado = true
+        // this.form.reset()
+        // this.etapas.clear()
+        if(numProyecto) {
+          this.mostrarFormulario = true
+          // this.sharedService.cambiarEstado(true)
+          // this.cargando = true
+          this.pcsService.obtenerProyectoPorId(numProyecto)
+            .pipe(finalize(() => {
+              // this.sharedService.cambiarEstado(false)
+              this.cargando = false
+            }))
+            .subscribe({
+              next: ({data}) => {
+                if(data.length >= 0) {
+                  const [proyectoData] = data
+                  this.form.patchValue({
+                    num_proyecto:                   proyectoData.nunum_proyecto.toString(),
+                    nombre_proyecto:                proyectoData.chproyecto.toString(),
+                    alcance:                        proyectoData.chalcance.toString(),
+                    codigo_postal:                  proyectoData.chcp.toString(),
+                    ciudad:                         proyectoData.chciudad.toString(),
+                    id_pais:                        proyectoData.nukidpais.toString(),
+                    id_estatus:                     proyectoData.nukidestatus.toString(),
+                    id_sector:                      proyectoData.nukidsector.toString(),
+                    id_tipo_proyecto:               proyectoData.nukidtipo_proyecto,
+                    id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
+                    id_responsable_construccion:    proyectoData.nukidresponsable_construccion,
+                    id_responsable_ehs:             proyectoData.nukidresponsable_ehs,
+                    id_responsable_supervisor:      proyectoData.nukidresponsable_supervisor,
+                    id_cliente:                     proyectoData.nukidcliente,
+                    id_empresa:                     proyectoData.nukidempresa,
+                    id_director_ejecutivo:          proyectoData.nukiddirector_ejecutivo.toString(),
+                    costo_promedio_m2:              proyectoData.nucosto_promedio_m2,
+                    fecha_inicio:                   proyectoData.dtfecha_ini.toString(),
+                    fecha_fin:                      proyectoData.dtfecha_fin.toString(),
+                  })
+                }
+              },
+              error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+            })
+        } else {
+          console.log('No hay proyecto');
+        }
+      })
+    
+    this.activatedRoute.queryParams.subscribe(params => {
+      const nuevo = params['nuevo']
+      if(nuevo) {
+        this.mostrarFormulario = true
+      }
+    });
   }
 
   getConfigCalendar() {
@@ -124,6 +193,19 @@ export class IpComponent implements OnInit {
     this.getClientes();
     this.getEstatusProyecto();
     this.getEmpleados();
+    this.getCatEmpresas();
+  }
+
+  getCatEmpresas() {
+    this.empresas = []
+    this.cieService.getCieEmpresas()
+      .subscribe({
+        next: ({data}) => {
+          console.log(data);
+          this.empresas = data.map(registro => ({name: registro.chempresa, code: registro.nukidempresa.toString()}))
+        },
+        error: (err) => this.empresas = []
+      })
   }
 
   getCatCategorias() {
@@ -186,19 +268,26 @@ export class IpComponent implements OnInit {
     });
   }
 
-  getEmpleados() {
+  /*getEmpleados() {
     this.listEmpleados = [];
-    this.catServ.getEmpleados().subscribe((data) => {
+    this.catServ.getDirectores().subscribe((data) => {
       if (data.success) {
         this.listEmpleados = <IEmpleadoNew[]>data['data'];
         this.listEmpleados.forEach((element) => {
           this.catEmpleados.push({
             name: String(`${element.chnombre} ${element.chap_paterno} ${element.chap_materno} / ${element.chpuesto}`),
-            value: String(element.nukid_empleado),
           });
         });
       }
     });
+  }*/
+
+  getEmpleados() {
+    this.catServ.getDirectores().subscribe((directoresR) => {
+
+      this.catEmpleados = directoresR.data.map(catEmpleados => ({name: catEmpleados.nombre_persona, code: catEmpleados.nunum_empleado_rr_hh.toString()}))
+    });
+
   }
 
   guardar() {
@@ -221,7 +310,7 @@ export class IpComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
-
+          this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El proyecto ha sido guardado.'})
         },
         error: (err) => {
           this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})

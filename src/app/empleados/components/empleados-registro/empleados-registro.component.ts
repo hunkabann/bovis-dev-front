@@ -490,19 +490,93 @@ export class EmpleadosRegistroComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
         }
       })
-this.empleadosServ.guardarCostoEmpleado(this.form1.value)
-        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-        .subscribe({
-          next: (data) => {
-            // console.log(data)
-            this.form1.reset()
-            this.router.navigate(['/empleados/empleado-pri'], {queryParams: {success: true}});
-          },
-          error: (err) => {
-            this.messageService.add({ severity: 'error', summary: TITLES.error, detail:  err.error  })
+
+      console.log(" --------->>>>>>> "+ this.form.value.salario )
+      
+       const bodyCostoEmpleado = {      
+        
+        numEmpleadoRrHh:      this.form.value.num_empleado_rr_hh,
+        sueldoBruto:       this.form.value.salario// 1,
+      }
+      
+      if(!this.esActualizacion){
+
+        this.empleadosServ.guardarCostoEmpleado(bodyCostoEmpleado, this.esActualizacion)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          // console.log(data)
+          //this.form1.reset()
+          this.router.navigate(['/empleados/empleado-pri'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail:  err.error  })
+        }
+      })
+
+      }else{
+        //const idCons = this.empleadosServ.getCostoID(this.form.value.num_empleado_rr_hh)
+
+        //let idCons:string = this.empleadosServ.getCostoID(this.form.value.num_empleado_rr_hh);
+        
+
+        let bodyCostoEmpleadoactualiza = {      
+          idCosto: null,
+          numEmpleadoRrHh:      this.form.value.num_empleado_rr_hh,
+          nuAnno: 2023,
+          nuMes: 12,
+          fechaIngreso:  this.form.value.fecha_ingreso,
+          sueldoBruto:       this.form.value.salario
+                  
+        }
+        
+
+       this.empleadosServ.getCostoID(this.form.value.num_empleado_rr_hh)
+       .subscribe({
+        next:(data) =>{
+          if(data.data.length > 0){
+            bodyCostoEmpleadoactualiza = {
+              ...bodyCostoEmpleadoactualiza,
+               idCosto: data.data[0].idCosto               
+            }
+
+            this.empleadosServ.guardarCostoEmpleadoActualiza(bodyCostoEmpleadoactualiza, this.esActualizacion,"api/Costo/"+data.data[0].idCosto)
+            .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+            .subscribe({
+              next: (data) => {
+                // console.log(data)
+                //this.form1.reset()
+                this.router.navigate(['/empleados/empleado-pri'], {queryParams: {success: true}});
+              },
+              error: (err) => {
+                this.messageService.add({ severity: 'error', summary: TITLES.error, detail:  err.error  })
+              }
+            })
+
           }
-        })
+          
+        }
+       })
+
+      }
+
+      
+
+     
     
+     // this.empleadosServ.guardarCostoEmpleado(bodyCostoEmpleado, this.esActualizacion)
+     // .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+     // .subscribe({
+     //   next: (data) => {
+          // console.log(data)
+          //this.form1.reset()
+      //    this.router.navigate(['/empleados/empleado-pri'], {queryParams: {success: true}});
+      //  },
+      //  error: (err) => {
+      //    this.messageService.add({ severity: 'error', summary: TITLES.error, detail:  err.error  })
+      //  }
+      //})
+
   }
 
   limpiar() {

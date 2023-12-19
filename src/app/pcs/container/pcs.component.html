@@ -35,6 +35,7 @@
       <button 
         type="button" 
         class="btn btn-info ml-2" 
+        *ngIf="pcsService.botonNuevo"
         (click)="cargarProyecto()"
       >
         Nuevo

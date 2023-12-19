@@ -185,12 +185,25 @@ export class ContratosRegistroComponent implements OnInit {
   reemplazar(match: any, campo: string, empleado: UpEmpleado) {
 
     const [campoNombre, pipe] = campo.split('|')
-    let resultado = this.empleado[campoNombre] || '-'
+    
+    let nombreSplit = campoNombre.split('.')
+    let resultado = null
+    let elemento = {...this.empleado}
+
+    const propiedades = nombreSplit
+    propiedades.forEach(propiedad => {
+      elemento = elemento[propiedad]
+    })
+    resultado = elemento || '-'
 
     if(pipe) {
       switch(pipe) {
         case 'monedaTexto':
-          resultado += ` ${NumerosALetras(resultado)}`
+          const prevResultado = (+resultado).toLocaleString('es-MX', {
+            style:    'currency',
+            currency: 'MXN'
+          })
+          resultado = `${prevResultado} ${NumerosALetras(resultado)}`
           break
         default:
           resultado += '-'

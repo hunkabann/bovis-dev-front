@@ -1,12 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { EmpleadosService } from '../../services/empleados.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { TITLES, errorsArray } from 'src/utils/constants';
+import { TITLES, emailsDatos, errorsArray } from 'src/utils/constants';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { MessageService } from 'primeng/api';
 import { finalize, forkJoin, map as mapRxjs, map } from 'rxjs';
 import { Router } from '@angular/router';
 import { Puesto } from '../../Models/empleados';
+import { EmailsService } from 'src/app/services/emails.service';
 
 interface RangoSueldo {
   min: number,
@@ -31,6 +32,7 @@ export class GenerarRequerimientoComponent implements OnInit {
   sharedService     = inject(SharedService)
   messageService    = inject(MessageService)
   router            = inject(Router)
+  emailsService     = inject(EmailsService)
 
   form = this.fb.group({
     categoria:            ['', [Validators.required]],
@@ -52,7 +54,7 @@ export class GenerarRequerimientoComponent implements OnInit {
     disponibilidadViajar: ['NO', [Validators.required]],
     aniosExperiencia:     ['', [Validators.required]],
     nivelIngles:          [null],
-    comentarios:          ['', [Validators.required]],
+    comentarios:          [null],
   })
 
   
@@ -135,10 +137,18 @@ export class GenerarRequerimientoComponent implements OnInit {
     this.empleadosService.generarRequerimiento(body)
       .subscribe({
         next: (data) => {
-          console.log(data)
-          this.form.reset()
-          this.sharedService.cambiarEstado(false)
-          this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}});
+          const emailNuevoRequerimiento = {
+            ...emailsDatos.emailNuevoRequerimiento,
+            body: emailsDatos.emailNuevoRequerimiento.body.replace('nombre_usuario', localStorage.getItem('userName') || '')
+          }
+          // console.log(emailNuevoRequerimiento);
+          this.emailsService.sendEmail(emailNuevoRequerimiento)
+            .pipe(finalize(() => {
+              this.form.reset()
+              this.sharedService.cambiarEstado(false)
+              this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+            }))
+            .subscribe()
         },
         error: (err) => {
           this.sharedService.cambiarEstado(false)

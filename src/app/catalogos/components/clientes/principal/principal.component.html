@@ -9,7 +9,7 @@
         <button 
             type="submit" 
             class="btn btn-info"
-            (click)="guardarCliente(null)"
+            (click)="guardarCliente(null, null)"
         >
             Nuevo
         </button>
@@ -49,7 +49,15 @@
                       pRipple 
                       icon="pi pi-pencil" 
                       class="p-button-rounded p-button-success p-mr-2"
-                      (click)="guardarCliente(cliente)"
+                      (click)="guardarCliente(cliente, i)"
+                    ></button>
+                    <button 
+                      title="Eliminar cliente" 
+                      pButton 
+                      pRipple 
+                      icon="pi pi-trash" 
+                      class="p-button-rounded p-button-danger p-mr-2"
+                      (click)="eliminarCliente(cliente, i)"
                     ></button>
                   </div>
                 </td>

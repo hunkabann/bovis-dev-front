@@ -55,4 +55,8 @@ export class CatalogosService {
     }))
   }
 
+  getDirectores() {
+    return this.http.get<any>(`${this.baseUrl}api/Requerimiento/DirectoresEjecutivos`)
+  }
+
 }

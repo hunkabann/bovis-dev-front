@@ -34,6 +34,7 @@ import { ContratosRegistroComponent } from './components/contratos-registro/cont
 import { EditorModule } from 'primeng/editor';
 import { TagModule } from 'primeng/tag';
 import { MostrarProyectosComponent } from './components/mostrar-proyectos/mostrar-proyectos.component';
+import { ContratosModule } from '../contratos/contratos.module';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { MostrarProyectosComponent } from './components/mostrar-proyectos/mostra
     RadioButtonModule,
     InputTextareaModule,
     EditorModule,
-    TagModule
+    TagModule,
+    ContratosModule
   ],
   exports:[
 

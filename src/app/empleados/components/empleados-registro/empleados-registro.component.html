@@ -131,7 +131,7 @@
         <p-dropdown
           id="cve_puesto"
           [options]="puestos"
-          placeholder="Seleccionar un puesto"
+          placeholder="Seleccionar un puesto" 
           (onChange)="setearSalarios($event)"
           optionLabel="name"
           [showClear]="true"
@@ -381,7 +381,7 @@
     </div>
  
     <div class="row">
-     
+      
       <div class="col-4">
         <label for="id_jornada">Jornada:</label>
         <p-dropdown
@@ -591,7 +591,7 @@
         </div>
       </div>
     </div>
- 
+  
     <!--div class="row">
       <div class="col-4">
         <label for="nss">Nss:</label>
@@ -612,11 +612,11 @@
         </div>
       </div>
     </div-->
- 
+
     <div class="row">
       <div class="col-4">
         <label for="nss">Nss:</label>
-        <input
+        <input 
           id="nss"
           pInputText
           class="form-control"  
@@ -702,7 +702,7 @@
     </div>
  
     <div class="row">
-     
+      
       <div class="col-4">
         <label for="salario">Salario:</label>
         <p-inputNumber
@@ -907,7 +907,7 @@
     </div>
  
     <div class="row">
-     
+      
       <div class="col-4">
         <label for="tipo_descuento">Tipo descuento:</label>
         <p-dropdown
@@ -970,15 +970,15 @@
         </div>
       </div>
     </div>
- 
-   
- 
+
+    
+
 <hr size="8px" color="black">
- 
+
 <div class="row">
   <div class="col-4">
     <label for="no_empleado_noi">Número de NOI:</label>
-    <p-inputNumber
+    <p-inputNumber 
       id="no_empleado_noi"
       formControlName="no_empleado_noi"
       [useGrouping]="false"
@@ -993,14 +993,14 @@
       </small>
     </div>
   </div>
- 
+
   <div class="col-4">
     <label for="url_repo"># Crédito Fonacot:</label>
-    <input
+    <input 
       id="url_repo"
       pInputText
-      class="form-control"
-      maxlength="50"
+      class="form-control" 
+      maxlength="50" 
       formControlName="url_repo"
       [ngClass]="{'ng-invalid ng-dirty': esInvalido('url_repo')}"
     >
@@ -1012,10 +1012,10 @@
       </small>
     </div>
   </div>
- 
+
   <div class="col-4">
     <label for="credito_infonavit">Número de crédito Infonavit:</label>
-    <p-inputNumber
+    <p-inputNumber 
       id="credito_infonavit"
       class="full-width"
       formControlName="credito_infonavit"
@@ -1031,17 +1031,17 @@
       </small>
     </div>
   </div>
- 
+
 </div>
- 
+
 <div class="row">
   <div class="col-4">
     <label for="id_forma_pago">Forma de pago:</label>
-    <p-dropdown
+    <p-dropdown 
       id="id_forma_pago"
       [options]="catFormasPago"
-      placeholder="Seleccionar una forma"
-      optionLabel="name"
+      placeholder="Seleccionar una forma" 
+      optionLabel="name" 
       [showClear]="true"
       [style]="{ width: '100%' }"
       formControlName="id_forma_pago"
@@ -1056,10 +1056,9 @@
       </small>
     </div>
   </div>
- 
+
 </div>
- 
-   
+    
   </div>
 </form>
  
