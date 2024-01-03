@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import * as XLSX from 'xlsx';
+import { formatCurrency } from 'src/helpers/helpers';
 
 @Component({
   selector: 'app-resultado-busqueda',
@@ -43,7 +44,7 @@ export class ResultadoBusquedaComponent implements OnInit {
   numProyecto:      number
   responsable:      string
   clasificacionPY:  string
-  fechas:           Date[]
+  fechas:           Date[] = [new Date(), null]
 
   firstLoading:     boolean = true
 
@@ -165,42 +166,84 @@ export class ResultadoBusquedaComponent implements OnInit {
   }
 
   exportJsonToExcel(fileName: string = 'CIE'): void {
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet( [] );
 
-    const workbook: XLSX.WorkBook = {
-      Sheets: { 
-        'Detalle': worksheet 
-      },
-      SheetNames: ['Detalle'],
-    };
-    const jsonData = this.data.map(registro => ({
-      nombre_cuenta:      registro.nombreCuenta,
-      cuenta:             registro.cuenta,
-      tipo_poliza:        registro.tipoPoliza,
-      numero:             registro.numero,
-      fecha:              registro.fecha,
-      mes:                registro.mes,
-      concepto:           registro.concepto,
-      centro_costos:      registro.centroCostos,
-      proyectos:          registro.proyectos,
-      saldo_inicial:      registro.saldoInicial,
-      debe:               registro.debe,
-      haber:              registro.haber,
-      movimiento:         registro.movimiento,
-      empresa:            registro.empresa,
-      num_proyecto:       registro.numProyecto,
-      tipo_proyecto:      registro.tipoProyecto,
-      edo_resultados:     registro.edoResultados,
-      responsable:        registro.responsable,
-      tipo_cuenta:        registro.tipoCuenta,
-      tipo_py:            registro.tipoPy,
-      clasificacion_py:   registro.clasificacionPy
-    }))
-    XLSX.utils.sheet_add_json(worksheet, jsonData, { origin: 'A2', skipHeader: true })
-    XLSX.utils.sheet_add_aoa(worksheet, [this.cieHeadersLocal]);
+    this.sharedService.cambiarEstado(true)
+  
+    let mes     = null
+    let anio    = null
+    let mesFin  = null
+    let anioFin = null
 
-    // save to file
-    XLSX.writeFile(workbook, `${fileName + '_' + Date.now()}${EXCEL_EXTENSION}`);
+    if(this.fechas && this.fechas.length > 0) {
+      if(this.fechas[0]) {
+        mes   = +format(this.fechas[0], 'M')
+        anio  = +format(this.fechas[0], 'Y')
+      }
+      if(this.fechas[1]) {
+        mesFin   = +format(this.fechas[1], 'M')
+        anioFin  = +format(this.fechas[1], 'Y')
+      }
+    }
+    
+    this.cieService.getRegistros(
+        this.cuenta, 
+        mes,
+        anio,
+        mesFin,
+        anioFin,
+        this.concepto,
+        this.empresa,
+        this.numProyecto,
+        this.responsable,
+        this.clasificacionPY,
+        -1, 
+        -1,
+        null,
+        'DESC'
+      )
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({data}) => {
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet( [] );
+      
+          const workbook: XLSX.WorkBook = {
+            Sheets: { 
+              'Detalle': worksheet 
+            },
+            SheetNames: ['Detalle'],
+          };
+          const jsonDataRes = data.registros.map(registro => ({
+            nombre_cuenta:      registro.nombreCuenta,
+            cuenta:             registro.cuenta,
+            tipo_poliza:        registro.tipoPoliza,
+            numero:             registro.numero,
+            fecha:              registro.fecha,
+            mes:                registro.mes,
+            concepto:           registro.concepto,
+            centro_costos:      registro.centroCostos,
+            proyectos:          registro.proyecto,
+            saldo_inicial:      formatCurrency(registro.saldoInicial),
+            debe:               formatCurrency(registro.debe),
+            haber:              formatCurrency(registro.haber),
+            movimiento:         formatCurrency(registro.movimiento),
+            empresa:            registro.empresa,
+            num_proyecto:       registro.numProyecto,
+            tipo_proyecto:      registro.tipoProyecto,
+            edo_resultados:     registro.edoResultados,
+            responsable:        registro.responsable,
+            tipo_cuenta:        registro.tipoCuenta,
+            tipo_py:            registro.tipoPy,
+            clasificacion_py:   registro.clasificacionPy
+          }))
+          XLSX.utils.sheet_add_json(worksheet, jsonDataRes, { origin: 'A2', skipHeader: true })
+          XLSX.utils.sheet_add_aoa(worksheet, [this.cieHeadersLocal]);
+      
+          // save to file
+          XLSX.writeFile(workbook, `${fileName + '_' + Date.now()}${EXCEL_EXTENSION}`);
+        },
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
+
   }
 
   filtrar() {

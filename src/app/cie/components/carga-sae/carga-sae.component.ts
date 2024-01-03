@@ -9,6 +9,8 @@ import { finalize, forkJoin } from 'rxjs';
 import { DialogService } from 'primeng/dynamicdialog';
 import { RegistrosCargadosComponent } from '../registros-cargados/registros-cargados.component';
 import { CuentasCargadasComponent } from '../cuentas-cargadas/cuentas-cargadas.component';
+import { ProyectosFaltantesComponent } from '../proyectos-faltantes/proyectos-faltantes.component';
+import { formatCurrency } from 'src/helpers/helpers';
 
 interface Option {
   name:   string,
@@ -30,6 +32,8 @@ export class CargaSaeComponent implements OnInit {
 
   excelData:              any
   jsonData:               CieElementPost[] = []
+  jsonDataPaquetes:       any[] = []
+  paqueteActual:          number = 0
   cieHeadersLocal:        string[] = cieHeaders
   cieHeadersFieldsLocal:  any = cieHeadersFields
 
@@ -42,9 +46,11 @@ export class CargaSaeComponent implements OnInit {
   cuentas: string[] = []
   proyectos: string[] = []
   cuentasFaltantes: {
-    cuenta:   string,
-    concepto: string
+    cuenta:         string,
+    nombre_cuenta:  string,
+    concepto:       string
   }[] = []
+  proyectosFaltantes: string[] = []
 
   proyectosEncontrados: any = {}
   cuentasEncontradas: any = {}
@@ -101,32 +107,34 @@ export class CargaSaeComponent implements OnInit {
         } else {
           if(record.Concepto) {
             const cuenta = cuentaActual.split(' ')[2]
-            this.cuentas.push(cuenta)
-            this.proyectos.push(record.Proyectos)
-            tempNormalRecords.push({
-              // ...record, 
-              nombre_cuenta:      cuentaActual,
-              cuenta:             cuenta,
-              tipo_poliza:        record.__EMPTY,
-              numero:             +record.Numero,
-              fecha:              record.Fecha,
-              mes:                record.Fecha.split('/')[1],
-              concepto:           record.Concepto,
-              centro_costos:      record['Centro de costos']?.trim() ?? record['centros de costos']?.trim(),
-              proyectos:          record.Proyectos,
-              saldo_inicial:      record['Saldo inicial'],
-              debe:               record.Debe,
-              haber:              record.Haber,
-              movimiento:         record.Debe - record.Haber,
-              empresa:            this.selectedOption.name.trim(),
-              num_proyecto:       null, //record['Centro de costos'] ? +record['Centro de costos'].split('.')[0] : 0,
-              tipo_proyecto:      null,
-              edo_resultados:     null,
-              responsable:        null,
-              tipo_cuenta:        null,
-              tipo_py:            null,
-              clasificacion_py:   null
-            })
+            if(!['703002003'].includes(cuenta)) {
+              this.cuentas.push(cuenta)
+              this.proyectos.push(record.Proyectos)
+              tempNormalRecords.push({
+                // ...record, 
+                nombre_cuenta:      cuentaActual,
+                cuenta:             cuenta,
+                tipo_poliza:        record.__EMPTY,
+                numero:             +record.Numero,
+                fecha:              record.Fecha,
+                mes:                record.Fecha.split('/')[1],
+                concepto:           record.Concepto,
+                centro_costos:      record['Centro de costos']?.trim() ?? record['centros de costos']?.trim(),
+                proyectos:          record.Proyectos,
+                saldo_inicial:      record['Saldo inicial'],
+                debe:               record.Debe,
+                haber:              record.Haber,
+                movimiento:         record.Debe - record.Haber,
+                empresa:            this.selectedOption.name.trim(),
+                num_proyecto:       null, //record['Centro de costos'] ? +record['Centro de costos'].split('.')[0] : 0,
+                tipo_proyecto:      null,
+                edo_resultados:     null,
+                responsable:        null,
+                tipo_cuenta:        null,
+                tipo_py:            null,
+                clasificacion_py:   null
+              })
+            }
           }
         }
       })
@@ -139,7 +147,9 @@ export class CargaSaeComponent implements OnInit {
       .subscribe(([infoCuentasR, infoProyectosR]) => {
 
         let cuentasArreglo = []
+        let proyectosArreglo = []
         this.cuentasFaltantes = []
+        this.proyectosFaltantes = []
 
         infoCuentasR.data.forEach(cuenta => this.cuentasEncontradas[cuenta.cuenta] = {...cuenta})
 
@@ -158,10 +168,18 @@ export class CargaSaeComponent implements OnInit {
               if(conceptoSplit.length >= 2) {
                 conceptoCuenta = conceptoSplit[1].trim()
               }
-              this.cuentasFaltantes.push({cuenta: keyCuenta, concepto: conceptoCuenta})
+              this.cuentasFaltantes.push({cuenta: keyCuenta, nombre_cuenta: conceptoCuenta, concepto: normalRecord.concepto})
               cuentasArreglo.push(keyCuenta)
             }
           }
+
+          if(!noProyecto) {
+            if(!proyectosArreglo.includes(keyProyecto)) {
+              this.proyectosFaltantes.push(keyProyecto)
+              proyectosArreglo.push(keyProyecto)
+            }
+          }
+
           return {
             ...normalRecord,
             centro_costos:      normalRecord.centro_costos, //?.split('.')[0]
@@ -217,7 +235,16 @@ export class CargaSaeComponent implements OnInit {
       },
       SheetNames: ['Detalle'],
     };
-    XLSX.utils.sheet_add_json(worksheet, this.jsonData, { origin: 'A2', skipHeader: true })
+    const jsonConFormato = this.jsonData.map(registro => {
+      return {
+        ...registro,
+        saldo_inicial: formatCurrency(registro.saldo_inicial),
+        debe: formatCurrency(registro.debe),
+        haber: formatCurrency(registro.haber),
+        movimiento: formatCurrency(registro.movimiento)
+      }
+    })
+    XLSX.utils.sheet_add_json(worksheet, jsonConFormato, { origin: 'A2', skipHeader: true })
     XLSX.utils.sheet_add_aoa(worksheet, [this.cieHeadersLocal]);
 
     // save to file
@@ -225,32 +252,76 @@ export class CargaSaeComponent implements OnInit {
   }
 
   cargar() {
+
+    if(this.proyectosFaltantes.length > 0) {
+      
+      this.dialogService.open(ProyectosFaltantesComponent, {
+        header: "Atención",
+        width: '50%',
+        contentStyle: {overflow: 'auto'},
+        dismissableMask: true,
+        data: {
+          proyectos: this.proyectosFaltantes
+        }
+      })
+
+      return;
+    }
+    
     this.sharedService.cambiarEstado(true)
-    console.log(this.jsonData)
-    // console.log(this.jsonData)
-    this.cieService.cargarSae(this.jsonData, this.currentFileName)
-      .pipe(
-        finalize(() => {
-          this.sharedService.cambiarEstado(false)
-        })
-      )
+
+    const tamanio = 100
+    this.jsonDataPaquetes = this.partirArreglo(this.jsonData, tamanio)
+    this.paqueteActual = 1
+
+    this.cargarPaquetes()
+  }
+
+  cargarPaquetes() {
+
+    this.cieService.cargarSae(this.jsonDataPaquetes[this.paqueteActual - 1], this.currentFileName)
+      // .pipe(
+      //   finalize(() => {
+      //     this.sharedService.cambiarEstado(false)
+      //   })
+      // )
       .subscribe({
         next: (response) => {
-          this.messageService.add({severity: 'success', summary: 'SAE cargado', detail: 'El SAE ha sido cargado.'})
-          this.dialogService.open(RegistrosCargadosComponent, {
-            header: "Registros cargados",
-            width: '50%',
-            contentStyle: {overflow: 'auto'},
-            dismissableMask: true,
-            data: {
-              cantidad: this.jsonData.length
-            }
-          })
+          
+          this.messageService.add({severity: 'success', summary: 'SAE cargado', detail: `${this.paqueteActual}/${this.jsonDataPaquetes.length}`})
+
+          if(this.paqueteActual >= this.jsonDataPaquetes.length) {
+            this.dialogService.open(RegistrosCargadosComponent, {
+              header: "Registros cargados",
+              width: '50%',
+              contentStyle: {overflow: 'auto'},
+              dismissableMask: true,
+              data: {
+                cantidad: this.jsonData.length
+              }
+            })
+            this.paqueteActual = 0
+            this.sharedService.cambiarEstado(false)
+            return
+          }
+
+          this.paqueteActual = this.paqueteActual + 1
+          this.cargarPaquetes()
         },
         error: (err) => {
           this.messageService.add({severity: 'error', summary: 'Oh no...', detail: err.error})
+          this.sharedService.cambiarEstado(false)
         }
       })
+
+  }
+  
+  partirArreglo(arreglo: CieElementPost[], tamanio: number): any[] {
+    const arreglosPartidos = [];
+    for (let i = 0; i < arreglo.length; i += tamanio) {
+      arreglosPartidos.push(arreglo.slice(i, i + tamanio));
+    }
+    return arreglosPartidos;
   }
 
   cargarCuentasFaltantes() {
@@ -268,7 +339,7 @@ export class CargaSaeComponent implements OnInit {
             contentStyle: {overflow: 'auto'},
             dismissableMask: true,
             data: {
-              cuentas: this.cuentasFaltantes
+              cuentas: data.data
             }
           })
           this.cuentasFaltantes = []

@@ -52,3 +52,10 @@ export const obtenerMeses = (fechaInicio: Date, fechaFin: Date): Mes[] => {
 
   return meses
 }
+
+export const formatCurrency = (valor: number) => {
+  return valor.toLocaleString('es-MX', {
+    style: 'currency',
+    currency: 'MXN',
+  })
+}

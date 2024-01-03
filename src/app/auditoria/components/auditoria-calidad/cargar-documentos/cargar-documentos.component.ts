@@ -43,6 +43,9 @@ export class CargarDocumentosComponent implements OnInit {
 
   proyectos:  Opcion[] = []
   secciones:  Seccion[] = []
+
+  totalDocumentos: number = 0
+  totalDocumentosValidados: number = 0
   
   constructor() { }
 
@@ -58,7 +61,7 @@ export class CargarDocumentosComponent implements OnInit {
     .subscribe({
       next: (value) => {
         const [proyectosR] = value
-        this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: proyecto.nombre}))
+        this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}`}))
       },
       error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
     })
@@ -84,11 +87,19 @@ export class CargarDocumentosComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
     const {value: id} = event
 
+    this.totalDocumentos = 0
+    this.totalDocumentosValidados = 0
     this.auditoriaService.getProyectoCumplimiento(id)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
           this.secciones = data
+          this.secciones.forEach(seccion => {
+            seccion.auditorias.forEach(auditoria => {
+              this.totalDocumentos += +auditoria.aplica
+              this.totalDocumentosValidados += (auditoria.aplica && auditoria.tieneDocumento) ? +auditoria.ultimoDocumentoValido : 0
+            })
+          })
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
       })
@@ -137,6 +148,7 @@ export class CargarDocumentosComponent implements OnInit {
             .subscribe({
               next: (data) => {
                 auditoria.tieneDocumento = true
+                auditoria.ultimoDocumentoValido = true
                 this.messageService.add({severity: 'success', summary: 'Documento cargado', detail: 'El documento ha sido cargado correctamente'})
               },
               error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})

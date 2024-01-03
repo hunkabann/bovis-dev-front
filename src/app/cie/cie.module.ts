@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { ModificarRegistroComponent } from './components/modificar-registro/modificar-registro.component';
 import { RegistrosCargadosComponent } from './components/registros-cargados/registros-cargados.component';
 import { CuentasCargadasComponent } from './components/cuentas-cargadas/cuentas-cargadas.component';
+import { ProyectosFaltantesComponent } from './components/proyectos-faltantes/proyectos-faltantes.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { CuentasCargadasComponent } from './components/cuentas-cargadas/cuentas-
     ResultadoBusquedaComponent,
     ModificarRegistroComponent,
     RegistrosCargadosComponent,
-    CuentasCargadasComponent
+    CuentasCargadasComponent,
+    ProyectosFaltantesComponent
   ],
   imports: [
     CommonModule,

@@ -11,14 +11,14 @@
     <div class="row">
       <div class="col-4">
         <label for="num_empleado_rr_hh">Número de empleado RRHH:</label>
-        <p-inputNumber
+        <input 
           id="num_empleado_rr_hh"
-          class="full-width"
-          [useGrouping]="false"
+          pInputText
+          class="full-width" 
           formControlName="num_empleado_rr_hh"
           [ngClass]="{'ng-invalid ng-dirty': esInvalido('num_empleado_rr_hh')}"
           [disabled]="esActualizacion"
-        ></p-inputNumber>
+        >
         <div *ngIf="esInvalido('num_empleado_rr_hh')">
           <small
             class="error-msg"

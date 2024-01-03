@@ -13,7 +13,7 @@
   </div>
 </ng-template>
 
-<ng-container [formGroup]="form">
+<ng-container [formGroup]="form" *ngIf="!cargando">
     <ng-container formArrayName="secciones">
         <p-accordion [activeIndex]="i" [formGroupName]="i" *ngFor="let seccion of secciones.controls; let i = index">
         <p-accordionTab>

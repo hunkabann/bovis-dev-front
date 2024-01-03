@@ -53,7 +53,7 @@ export class SeleccionarDocumentosComponent implements OnInit {
       next: (value) => {
         const [auditoriaR, proyectosR] = value
         this.secciones = auditoriaR.data
-        this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: proyecto.nombre}))
+        this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}`}))
         this.secciones.forEach(seccion => {
           seccion.auditorias.forEach(auditoria => {
             this.auditorias.push(this.fb.group({

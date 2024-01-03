@@ -60,7 +60,7 @@ export class PcsService {
     : this.http.post<any>(`${this.baseUrl}api/Pcs/Empleados/Fase`, body)
   }
 
-  eliminarEmpleado(numEmpleado: number, idEtapa: number) {
+  eliminarEmpleado(numEmpleado: string, idEtapa: number) {
     return this.http.delete<GenericResponse>(`${this.baseUrl}api/Pcs/Empleados/${numEmpleado}/Fase/${idEtapa}`)
   }
 

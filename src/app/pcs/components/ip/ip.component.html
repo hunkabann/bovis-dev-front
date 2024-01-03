@@ -43,7 +43,7 @@
               </div>
               <div class="col-4">
                 <label for="email">Nombre del Cliente:</label>
-                <p-dropdown optionLabel="name" [options]="catClientes" [showClear]="true" [style]="{ width: '100%' }"
+                <p-dropdown optionLabel="name" [options]="catClientes" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
                   [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_cliente" optionValue="value" appendTo="body"></p-dropdown>
               </div>
             </div>
@@ -97,7 +97,7 @@
             <div class="row">
               <div class="col-4">
                 <label for="email">Sector: </label>
-                <p-dropdown optionLabel="name" [options]="catSectores" [showClear]="true" [style]="{ width: '100%' }"
+                <p-dropdown optionLabel="name" [options]="catSectores" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
                   [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_sector" optionValue="value"></p-dropdown>
               </div>
               <div class="col-4">
@@ -106,7 +106,7 @@
               </div>
               <div class="col-4">
                 <label for="email">Estado del Proyecto: </label>
-                <p-dropdown optionLabel="name" [options]="catEstatusProyecto" [showClear]="true" [style]="{ width: '100%' }"
+                <p-dropdown optionLabel="name" [options]="catEstatusProyecto" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
                 [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_estatus" optionValue="value"></p-dropdown>
               </div>
             </div>
@@ -124,7 +124,7 @@
               </div>
               <div class="col-4">
                 <label for="email">Pais: </label>
-                <p-dropdown optionLabel="name" [options]="catPaises"  [showClear]="true" [style]="{ width: '100%' }"
+                <p-dropdown optionLabel="name" [options]="catPaises" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
                   [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_pais" optionValue="value"></p-dropdown>
               </div>
             </div>
@@ -144,17 +144,17 @@
             <div class="row">
               <div class="col-4">
                 <label for="email">Responsable de proyecto para Preconstrucción:</label>
-                <p-dropdown optionLabel="name" [options]="catEmpleados" [showClear]="true" [style]="{ width: '100%' }"
+                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
                   [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_preconstruccion" optionValue="value"></p-dropdown>
               </div>
               <div class="col-4">
                 <label for="email">Responsable de proyecto para Construcción:</label>
-                <p-dropdown optionLabel="name" [options]="catEmpleados" [showClear]="true" [style]="{ width: '100%' }"
+                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
                   [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_construccion" optionValue="value"></p-dropdown>
               </div>
               <div class="col-4">
                 <label for="email">Responsable de proyecto para EHS:</label>
-                <p-dropdown optionLabel="name" [options]="catEmpleados" [showClear]="true" [style]="{ width: '100%' }"
+                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
                   [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_ehs" optionValue="value"></p-dropdown>
               </div>
             </div>
@@ -164,7 +164,7 @@
             <div class="row">
               <div class="col-4">
                 <label for="email">Responsable de proyecto para Supervision campo:</label>
-                <p-dropdown optionLabel="name" [options]="catEmpleados" [showClear]="true" [style]="{ width: '100%' }"
+                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
                   [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_supervisor" optionValue="value"></p-dropdown>
               </div>
               <div class="col-4">
@@ -239,15 +239,15 @@
             <div class="row">
               <div class="col-4">
                 <label for="email">Nombre del Contacto:</label>
-                <input type="text" class="form-control" [disabled]="isConsulta" />
+                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="nombre_contacto"/>
               </div>
               <div class="col-4">
                 <label for="email">Posicion del Contacto:</label>
-                <input type="text" class="form-control" [disabled]="isConsulta" />
+                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="posicion_contacto"/>
               </div>
               <div class="col-4">
                 <label for="email">Telefono del Contacto:</label>
-                <input type="text" class="form-control" [disabled]="isConsulta" />
+                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="telefono_contacto" />
               </div>
             </div>
   
@@ -256,7 +256,7 @@
             <div class="row">
               <div class="col-4">
                 <label for="email">Correo del Contacto:</label>
-                <input type="text" class="form-control" [disabled]="isConsulta" />
+                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="correo_contacto"/>
               </div>
               <div class="col-4">
   

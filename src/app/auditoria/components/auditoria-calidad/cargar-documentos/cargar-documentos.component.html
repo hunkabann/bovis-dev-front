@@ -18,6 +18,15 @@
       ></p-dropdown>
     </div>
   </div>
+  
+  <div class="row">
+    <div class="col-12">
+      <app-progreso
+        [totalDocumentos]="totalDocumentos"
+        [totalDocumentosValidados]="totalDocumentosValidados"
+      ></app-progreso>
+    </div>
+  </div>
 
   <div *ngFor="let seccion of secciones; let i = index">
     <div>
@@ -33,7 +42,7 @@
         <div class="col-2">
           <label><strong>Punto</strong></label>
         </div>
-        <div class="col-4">
+        <div class="col-2">
           <label><strong>Cumplimiento</strong></label>
         </div>
         <div class="col-3">
@@ -41,6 +50,9 @@
         </div>
         <div class="col-2 text-center">
           <label><strong>Documento</strong></label>
+        </div>
+        <div class="col-2 text-center">
+          <label><strong>Tiene documentos cargados</strong></label>
         </div>
       </div>
     </div>
@@ -52,7 +64,7 @@
         <div class="col-2">
           <label>{{ auditoria.punto }}</label>
         </div>
-        <div class="col-4">
+        <div class="col-2">
           <label>{{ auditoria.cumplimiento }}</label>
         </div>
         <div class="col-3">
@@ -70,6 +82,9 @@
             chooseLabel="Seleccionar" 
             (onSelect)="onSeleccionArchivo($event, auditoria.idAuditoria, i, iChild, fileUpload)"
           ></p-fileUpload>
+        </div>
+        <div class="col-2 text-center">
+          <label><strong>{{ (auditoria.tieneDocumento && auditoria.ultimoDocumentoValido) ? 'Sí' : 'No' }}</strong></label>
         </div>
         <div class="col-12">
           <p-divider></p-divider>

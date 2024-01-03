@@ -16,7 +16,7 @@ export interface ICatalogoCliente{
 }
 
 export interface IEmpleado{
-  numEmpleadoRrHh: number;
+  numEmpleadoRrHh: string;
   idPersona: number;
   cvePuesto: string;
   idEmpresa: number;

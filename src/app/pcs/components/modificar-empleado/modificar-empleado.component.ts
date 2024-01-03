@@ -15,8 +15,9 @@ import { TITLES, errorsArray } from 'src/utils/constants';
 import { obtenerMeses } from 'src/helpers/helpers';
 
 interface EtapaEmpleado {
-  etapa:    Etapa,
-  empleado: Empleado
+  etapa:        Etapa,
+  empleado:     Empleado,
+  num_proyecto: number
 }
 
 @Component({
@@ -45,6 +46,7 @@ export class ModificarEmpleadoComponent implements OnInit {
   form = this.fb.group({
     id_fase:      [null],
     num_empleado: [null],
+    num_proyecto: [null],
     fechas:       this.fb.array([])
   })
 
@@ -60,7 +62,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     if(data) {
       this.form.patchValue({
         id_fase:      data.etapa.idFase,
-        num_empleado: data.empleado?.numempleadoRrHh || null
+        num_empleado: data.empleado?.numempleadoRrHh || null,
+        num_proyecto: data.num_proyecto || null
       })
 
       if(!data.empleado) {
@@ -101,7 +104,7 @@ export class ModificarEmpleadoComponent implements OnInit {
             this.empleado = {
               id:               null,
               empleado:         empleadoEncontrado.nombre_persona,
-              numempleadoRrHh:  empleadoEncontrado.nunum_empleado_rr_hh,
+              numempleadoRrHh:  empleadoEncontrado.nunum_empleado_rr_hh.toString(),
               idFase:           this.form.value.id_fase,
               fechas:           []
             }

@@ -4,7 +4,7 @@ export interface EmpleadosSub {
 }
 
 export interface Subordinados {
-  numEmpleadoRrHh: number;
+  numEmpleadoRrHh: string;
   idPersona: number;
   idJefeDirecto: number;
   nombre: string;
@@ -32,7 +32,7 @@ export interface BaseOtros {
 
 export interface ProyectosEmpleados {
   numProyecto: number;
-  numEmpleadoRrHh: number;
+  numEmpleadoRrHh: string;
   porcentajeParticipacion: number;
   aliasPuesto: string;
   grupoProyecto: string;

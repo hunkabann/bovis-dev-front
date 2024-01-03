@@ -196,7 +196,8 @@ export class StaffingPlanComponent implements OnInit {
       contentStyle: {overflow: 'auto'},
       data: {
         etapa,
-        empleado
+        empleado,
+        num_proyecto: this.form.value.numProyecto
       }
     })
     .onClose.subscribe((result) => {

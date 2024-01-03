@@ -36,7 +36,7 @@ export class TimesheetService {
       .pipe(map(info => {
         if(!info) return {habiles: 0, feriados: 0}
 
-        return {habiles: info.dias_habiles, feriados: info.feriados}
+        return {habiles: info.dias_habiles+info.feriados, feriados: info.feriados}
       }))
   }
 

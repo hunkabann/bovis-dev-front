@@ -12,11 +12,15 @@ import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { FormBuilder, Validators } from '@angular/forms';
 import { format } from 'date-fns';
+import { formatCurrency } from 'src/helpers/helpers';
+import { DialogService } from 'primeng/dynamicdialog';
+import { VincularNotaCreditoComponent } from '../vincular-nota-credito/vincular-nota-credito.component';
 
 @Component({
   selector: 'app-nota-credito-sin-factura',
   templateUrl: './nota-credito-sin-factura.component.html',
-  styleUrls: ['./nota-credito-sin-factura.component.css']
+  styleUrls: ['./nota-credito-sin-factura.component.css'],
+  providers: [MessageService, DialogService]
 })
 export class NotaCreditoSinFacturaComponent implements OnInit {
 
@@ -25,6 +29,7 @@ export class NotaCreditoSinFacturaComponent implements OnInit {
   timesheetService  = inject(TimesheetService)
   sharedService     = inject(SharedService)
   fb                = inject(FormBuilder)
+  dialogService     = inject(DialogService)
 
   isLoadingFacturas: boolean = false;
   fileSizeMax = 1000000;
@@ -272,9 +277,9 @@ export class NotaCreditoSinFacturaComponent implements OnInit {
       worksheet.getCell(row + index, 1).value = nota.chuuid_nota_credito
       worksheet.getCell(row + index, 2).value = nota.nunum_proyecto 
       worksheet.getCell(row + index, 3).value = nota.nukidmoneda
-      worksheet.getCell(row + index, 4).value = nota.nuimporte
-      worksheet.getCell(row + index, 5).value = nota.nuiva
-      worksheet.getCell(row + index, 6).value = nota.nutotal
+      worksheet.getCell(row + index, 4).value = formatCurrency(nota.nuimporte)
+      worksheet.getCell(row + index, 5).value = formatCurrency(nota.nuiva)
+      worksheet.getCell(row + index, 6).value = formatCurrency(nota.nutotal)
       worksheet.getCell(row + index, 7).value = nota.chconcepto
       worksheet.getCell(row + index, 8).value = nota.numes 
       worksheet.getCell(row + index, 9).value = nota.nuanio
@@ -333,6 +338,24 @@ export class NotaCreditoSinFacturaComponent implements OnInit {
     })
 
     return mensaje
+  }
+
+  vicularNotaCredito(nota: NotaCreditoSF, i: number) {
+
+    this.dialogService.open(VincularNotaCreditoComponent, {
+      header: 'Vincular Nota de crédito',
+      width: '50%',
+      contentStyle: {overflow: 'auto'},
+      data: {
+        nota,
+      }
+    })
+    .onClose.subscribe((result) => {
+      if(result && result.ok) {
+        this.listBusquedaCompleto.splice(i, 1)
+        this.messageService.add({severity: "success", summary: TITLES.success, detail: "Nota vinculada."});
+      }
+    })
   }
 
 }

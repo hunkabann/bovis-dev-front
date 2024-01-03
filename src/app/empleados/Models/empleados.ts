@@ -66,7 +66,7 @@ export class CatPersona{
 
 export class CatEmpleado {
 
-  numEmpleadoRrHh: number = null;
+  numEmpleadoRrHh: string = null;
   idPersona: number = null;
   idTipoEmpleado: number = null;
   idCategoria: number = null;
@@ -465,7 +465,7 @@ export interface ContratoPlantilla {
   idContratoEmpleado: number;
   titulo:             string;
   contrato:           string;
-  numEmpleadoRrHh:    number;
+  numEmpleadoRrHh:    string;
   activo:             boolean;
 }
 
@@ -480,7 +480,7 @@ export interface CostoEmpleadoResponse {
 
 export interface CostoEmpleado {
   idCosto:                        number;
-  numEmpleadoRrHh:                number;
+  numEmpleadoRrHh:                string;
   nuAnno:                         number;
   nuMes:                          number;
   numEmpleadoNoi:                 number;

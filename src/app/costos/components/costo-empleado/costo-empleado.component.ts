@@ -31,7 +31,7 @@ export class CostoEmpleadoComponent implements OnInit {
         next: ({data}) => {
           this.costos = data
         },
-        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
   }
 

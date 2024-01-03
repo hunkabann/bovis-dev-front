@@ -19,3 +19,10 @@ export interface Mes {
   anio: number
   desc: string
 }
+
+export interface ListaStringResponse {
+  data:          string[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}

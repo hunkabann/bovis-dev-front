@@ -61,10 +61,10 @@ export class IpComponent implements OnInit {
       fecha_inicio:                   [null],
       fecha_fin:                      [null],
       // total_meses, Validators.required
-      // contacto_nombre, Validators.required
-      // contacto_posicion, Validators.required
-      // contacto_telefono, Validators.required
-      // contacto_correo, Validators.required
+      nombre_contacto:                [null, Validators.required],
+      posicion_contacto:              [null, Validators.required],
+      telefono_contacto:              [null, Validators.required],
+      correo_contacto:                [null, Validators.required]
   })
 
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute) { }
@@ -120,8 +120,8 @@ export class IpComponent implements OnInit {
                     id_empresa:                     proyectoData.nukidempresa,
                     id_director_ejecutivo:          proyectoData.nukiddirector_ejecutivo.toString(),
                     costo_promedio_m2:              proyectoData.nucosto_promedio_m2,
-                    fecha_inicio:                   proyectoData.dtfecha_ini.toString(),
-                    fecha_fin:                      proyectoData.dtfecha_fin.toString(),
+                    fecha_inicio:                   proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
+                    fecha_fin:                      proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null
                   })
                 }
               },

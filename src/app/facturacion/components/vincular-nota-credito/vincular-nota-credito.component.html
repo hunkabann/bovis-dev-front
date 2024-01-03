@@ -1,0 +1,58 @@
+
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+
+    <div class="row">
+        <div class="col-12">
+            <label for="uuid_nota_credito">UUID Nota Crédito:</label>
+            <input 
+                id="uuid_nota_credito"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="uuid_nota_credito"
+                readonly
+                
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('uuid_nota_credito')}"
+            >
+            <div *ngIf="esInvalido('uuid_nota_credito')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('uuid_nota_credito') }}
+            </small>
+            </div>
+        </div>
+        
+        <div class="col-12">
+            <label for="id_factura">Factura:</label>
+            <p-dropdown 
+              id="id_factura"
+              [options]="facturas"
+              placeholder="Seleccionar una factura" 
+              optionLabel="name" 
+              [showClear]="true"
+              [style]="{ width: '100%' }"
+              formControlName="id_factura"
+              [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_factura')}"
+              optionValue="code"
+              [filter]="true" 
+              filterBy="name"
+              appendTo="body"
+            ></p-dropdown>
+            <div *ngIf="esInvalido('id_factura')">
+              <small
+                class="error-msg"
+              >
+                {{ obtenerMensajeError('id_factura') }}
+              </small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="d-flex justify-content-end mt-2">
+        <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Guardar</button>
+    </div>
+
+</form>

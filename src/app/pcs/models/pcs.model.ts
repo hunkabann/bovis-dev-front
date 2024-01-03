@@ -26,7 +26,7 @@ export interface Etapa {
 export interface Empleado {
     id:              number;
     idFase:          number;
-    numempleadoRrHh: number;
+    numempleadoRrHh: string;
     empleado:        string;
     fechas:          Fecha[];
 }

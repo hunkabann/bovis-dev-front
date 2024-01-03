@@ -30,6 +30,15 @@
       </div>
     </div>
   
+    <div class="row">
+      <div class="col-12">
+        <app-progreso
+          [totalDocumentos]="totalDocumentos"
+          [totalDocumentosValidados]="totalDocumentosValidados"
+        ></app-progreso>
+      </div>
+    </div>
+  
     <div formArrayName="auditorias">
       <div *ngFor="let auditoria of auditorias.controls; let i = index" [formGroupName]="i">
         <div *ngIf="auditorias.at(i - 1).get('seccion').value != auditoria.get('seccion').value">

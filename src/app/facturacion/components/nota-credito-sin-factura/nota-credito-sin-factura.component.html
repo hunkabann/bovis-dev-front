@@ -157,7 +157,7 @@
           </th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-bus>
+      <ng-template pTemplate="body" let-bus let-i="index">
         <tr [ngClass]="{'invalid-tr': bus.dtfecha_cancelacion}">
           <td>
             <div class="cls-id">{{bus.chuuid_nota_credito}}</div>
@@ -177,17 +177,29 @@
           <td>{{bus.nutipo_cambio}}</td>
           <td>{{bus.chmotivocancela}}</td>
           <td>
-            <div *ngIf="bus.dtfecha_cancelacion == null || bus.dtfecha_cancelacion == '' ">
-              <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
-              tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
-              <p-button 
-                pTooltip="Cancelar nota de crédito" 
-                styleClass="p-button-rounded p-button-secondary p-button-text"
-                tooltipPosition="left"
-                (click)="cancelarComplemento(bus.chuuid_nota_credito)"
-              >
-                <i class="pi pi-times-circle text-2xl"></i>
-              </p-button>
+            <div class="d-flex">
+              <div *ngIf="bus.dtfecha_cancelacion == null || bus.dtfecha_cancelacion == '' ">
+                <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
+                tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
+                <p-button 
+                  pTooltip="Cancelar nota de crédito" 
+                  styleClass="p-button-rounded p-button-secondary p-button-text"
+                  tooltipPosition="left"
+                  (click)="cancelarComplemento(bus.chuuid_nota_credito)"
+                >
+                  <i class="pi pi-times-circle text-2xl"></i>
+                </p-button>
+              </div>
+              <div>
+                <p-button 
+                  pTooltip="Vincular nota de crédito" 
+                  styleClass="p-button-rounded p-button-secondary p-button-text"
+                  tooltipPosition="left"
+                  (click)="vicularNotaCredito(bus, i)"
+                >
+                  <i class="pi pi-link text-2xl"></i>
+                </p-button>
+              </div>
             </div>
           </td>
         </tr>

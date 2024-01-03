@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { CargaCuenta } from '../../models/cie.models';
 
 @Component({
   selector: 'app-cuentas-cargadas',
@@ -11,10 +12,7 @@ export class CuentasCargadasComponent implements OnInit {
   ref                 = inject(DynamicDialogRef)
   config              = inject(DynamicDialogConfig)
 
-  cuentasCargadas: {
-    cuenta:   string,
-    concepto: string
-  }[] = []
+  cuentasCargadas: CargaCuenta[] = []
 
   constructor() { }
 

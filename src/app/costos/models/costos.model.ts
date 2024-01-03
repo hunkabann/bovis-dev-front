@@ -9,18 +9,24 @@ export interface CostosEmpleadoResponse {
 
 export interface CostoEmpleado {
   idCosto:                        number;
-  numEmpleadoRrHh:                number;
+  numEmpleadoRrHh:                string;
   nuAnno:                         number;
   nuMes:                          number;
   numEmpleadoNoi:                 number;
-  idPersona:                      number;
+  idpersona:                      number;
+  nombrePersona:                  number;
   reubicacion:                    string;
-  idPuesto:                       number;
+  idpuesto:                       number;
+  puesto:                         string;
   numProyecto:                    number;
+  proyecto:                       string;
   idUnidadNegocio:                number;
+  unidadHegocio:                  string;
   idEmpresa:                      number;
+  Empresa:                        string;
   timesheet:                      string;
-  idEmpleadoJefe:                 number;
+  idEmpleadoJefe:                 string;
+  nombreJefe:                     string;
   fechaIngreso:                   string;
   antiguedad:                     number;
   avgDescuentoEmpleado:           number;

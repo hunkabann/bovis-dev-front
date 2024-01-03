@@ -6,10 +6,13 @@ import { Opcion } from 'src/models/general.model';
 import { TimesheetService } from '../../services/timesheet.service';
 import { Timesheet } from '../../models/timesheet.model';
 import { finalize, forkJoin } from 'rxjs';
-import { SUBJECTS, TITLES } from 'src/utils/constants';
+import { MODULOS, SUBJECTS, TITLES } from 'src/utils/constants';
 import { format } from 'date-fns';
 import { CieService } from 'src/app/cie/services/cie.service';
 import { ProyectoJoinPipe } from '../../pipes/proyecto-join.pipe';
+import { UserService } from 'src/app/services/user.service';
+import { EmpleadosService } from 'src/app/empleados/services/empleados.service';
+import { FacturacionService } from 'src/app/facturacion/services/facturacion.service';
 
 @Component({
   selector: 'app-consultar',
@@ -19,12 +22,15 @@ import { ProyectoJoinPipe } from '../../pipes/proyecto-join.pipe';
 })
 export class ConsultarComponent implements AfterViewInit {
 
-  activatedRoute    = inject(ActivatedRoute)
-  cieService        = inject(CieService)
-  messageService    = inject(MessageService)
-  sharedService     = inject(SharedService)
-  timesheetService  = inject(TimesheetService)
-  proyectoJoin      = inject(ProyectoJoinPipe)
+  activatedRoute      = inject(ActivatedRoute)
+  cieService          = inject(CieService)
+  messageService      = inject(MessageService)
+  sharedService       = inject(SharedService)
+  timesheetService    = inject(TimesheetService)
+  proyectoJoin        = inject(ProyectoJoinPipe)
+  userService         = inject(UserService)
+  empleadosService    = inject(EmpleadosService)
+  facturacionService  = inject(FacturacionService)
 
   empleados:    Opcion[] = []
   proyectos:    Opcion[] = []
@@ -45,24 +51,29 @@ export class ConsultarComponent implements AfterViewInit {
 
     this.sharedService.cambiarEstado(true)
 
-    forkJoin([
-      this.timesheetService.getEmpleadosByJefeEmail(localStorage.getItem('userMail') || ''),
-      this.timesheetService.getCatProyectosByJefeEmail(localStorage.getItem('userMail') || ''),
-      this.timesheetService.getCatUnidadNegocio(),
-      this.cieService.getEmpresas()
-    ])
-    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-    .subscribe({
-      next: (value) => {
-        const [empleadosR, proyectosR, unidadesR, empresasR] = value
-        this.empleados = empleadosR.data.map(({nunum_empleado_rr_hh, nombre_persona}) => ({name: nombre_persona, code: nunum_empleado_rr_hh.toString()}))
-        this.proyectos = proyectosR.data.map(({numProyecto, nombre}) => ({name: nombre, code: numProyecto.toString()}))
-        this.unidades = unidadesR.data.map(({id, descripcion}) => ({name: descripcion, code: id.toString()}))
-        this.empresas = empresasR.data.map(({chempresa, nukidempresa}) => ({ name: chempresa, code: nukidempresa.toString()}))
-        this.sharedService.cambiarEstado(false)
-      },
-      error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
-    })
+    
+    this.userService.getRolesRealTime()
+      .subscribe(data => {
+
+        forkJoin([
+          this.userService.verificarRol(MODULOS.TIMESHEET_CONSULTA_MODIFICACION)?.administrador ? this.empleadosService.getEmpleados() : this.timesheetService.getEmpleadosByJefeEmail(localStorage.getItem('userMail') || ''),
+          this.userService.verificarRol(MODULOS.TIMESHEET_CONSULTA_MODIFICACION)?.administrador ? this.facturacionService.getProyectos() : this.timesheetService.getCatProyectosByJefeEmail(localStorage.getItem('userMail') || ''),
+          this.timesheetService.getCatUnidadNegocio(),
+          this.cieService.getEmpresas()
+        ])
+        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe({
+          next: (value) => {
+            const [empleadosR, proyectosR, unidadesR, empresasR] = value
+            this.empleados = empleadosR.data.map(({nunum_empleado_rr_hh, nombre_persona}) => ({name: nombre_persona, code: nunum_empleado_rr_hh.toString()}))
+            this.proyectos = proyectosR.data.map(({numProyecto, nombre}) => ({name: nombre, code: numProyecto.toString()}))
+            this.unidades = unidadesR.data.map(({id, descripcion}) => ({name: descripcion, code: id.toString()}))
+            this.empresas = empresasR.data.map(({chempresa, nukidempresa}) => ({ name: chempresa, code: nukidempresa.toString()}))
+            this.sharedService.cambiarEstado(false)
+          },
+          error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
+        })
+      })
   }
 
   verificarEstado() {

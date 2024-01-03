@@ -156,21 +156,26 @@
             </div>
         </div>
         <div class="col-4">
-            <label for="proyectos">Proyecto: <span class="required"></span></label>
-            <input 
-                id="proyectos"
-                pInputText
-                class="form-control" 
-                maxlength="50" 
-                formControlName="proyectos"
-                [ngClass]="{'ng-invalid ng-dirty': esInvalido('proyectos')}"
-            >
-            <div *ngIf="esInvalido('proyectos')">
-            <small
-                class="error-msg"
-            >
-                {{ obtenerMensajeError('proyectos') }}
-            </small>
+            <label for="num_proyecto">Proyecto: <span class="required"></span></label>
+            <p-dropdown 
+                id="num_proyecto" 
+                [options]="proyectosLista"
+                placeholder="Seleccionar una proyecto" 
+                optionLabel="name"
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                optionValue="code"
+                [filter]="true" 
+                filterBy="name"
+                formControlName="num_proyecto"
+                appendTo="body"
+            ></p-dropdown>
+            <div *ngIf="esInvalido('num_proyecto')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('num_proyecto') }}
+                </small>
             </div>
         </div>
         <div class="col-4">
@@ -259,7 +264,7 @@
             </small>
             </div>
         </div>
-        <div class="col-4">
+        <!-- <div class="col-4">
             <label for="num_proyecto">No. Proyecto: <span class="required"></span></label>
             <p-inputNumber 
                 id="num_proyecto"
@@ -275,7 +280,7 @@
                 {{ obtenerMensajeError('num_proyecto') }}
             </small>
             </div>
-        </div>
+        </div> -->
         <div class="col-4">
             <label for="tipo_cuenta">Tipo Cuenta:</label>
             <input 
@@ -350,14 +355,19 @@
         </div>
         <div class="col-4">
             <label for="tipo_py">Tipo PY:</label>
-            <input 
-                id="tipo_py"
-                pInputText
-                class="form-control" 
-                maxlength="50" 
-                formControlName="tipo_py"
-                [ngClass]="{'ng-invalid ng-dirty': esInvalido('tipo_py')}"
-            >
+            <p-dropdown 
+              id="tipo_py"
+              [options]="tiposPY"
+              placeholder="Seleccionar una tipo" 
+              optionLabel="name" 
+              [showClear]="true"
+              [style]="{ width: '100%' }"
+              formControlName="tipo_py"
+              [ngClass]="{'ng-invalid ng-dirty': esInvalido('tipo_py')}"
+              optionValue="code"
+              [filter]="true" 
+              filterBy="name"
+            ></p-dropdown>
             <div *ngIf="esInvalido('tipo_py')">
             <small
                 class="error-msg"
@@ -368,14 +378,19 @@
         </div>
         <div class="col-4">
             <label for="clasificacion_py">Clasificación PY:</label>
-            <input 
-                id="clasificacion_py"
-                pInputText
-                class="form-control" 
-                maxlength="50" 
-                formControlName="clasificacion_py"
-                [ngClass]="{'ng-invalid ng-dirty': esInvalido('clasificacion_py')}"
-            >
+            <p-dropdown 
+              id="clasificacion_py"
+              [options]="clasificacionesPY"
+              placeholder="Seleccionar una clasificación" 
+              optionLabel="name" 
+              [showClear]="true"
+              [style]="{ width: '100%' }"
+              formControlName="clasificacion_py"
+              [ngClass]="{'ng-invalid ng-dirty': esInvalido('clasificacion_py')}"
+              optionValue="code"
+              [filter]="true" 
+              filterBy="name"
+            ></p-dropdown>
             <div *ngIf="esInvalido('clasificacion_py')">
             <small
                 class="error-msg"

@@ -1,6 +1,12 @@
 <div class="row">
     <div class="col-12" *ngFor="let cuenta of cuentasCargadas">
-        <p><strong>{{cuenta.cuenta}}</strong></p>
-        <p>{{cuenta.concepto}}</p>
+        <p>Cuenta: <strong>{{cuenta.ctaContable}}</strong></p>
+        <p>Nombre Cuenta: <strong>{{cuenta.nombreCtaContable}}</strong></p>
+        <p>Concepto: <strong>{{cuenta.concepto}}</strong></p>
+        <p>Tipo: <strong>{{cuenta.tipoCuenta}}</strong></p>
+        <p>Edo. Resultados: <strong>{{cuenta.tipoResultado}}</strong></p>
+        <p>Tipo PY: <strong>{{cuenta.pcs}}</strong></p>
+        <p>Clasificación PY: <strong>{{cuenta.pcs2}}</strong></p>
+        <hr>
     </div>
 </div>

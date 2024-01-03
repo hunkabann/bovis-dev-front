@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Busqueda, CargaFile, FacrurasNC, InfoProyectoFacturas, LstFacturas, facturaCancelacion } from '../Models/FacturacionModels';
+import { GenericResponse } from 'src/app/empleados/Models/empleados';
 
 
 @Injectable({
@@ -70,6 +71,10 @@ export class FacturacionService {
 
   obtenerNotasSinFactura(numProyecto: number = 0, mes: number = 0, anio: number = 0) {
     return this.http.get<any>(`${this.baseUrl}api/Factura/NotaCredito/${numProyecto}/${mes}/${anio}`);
+  }
+
+  vincularNotaCredito(body: any) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Factura/NotaCredito/AddToFactura`, body)
   }
 
 }

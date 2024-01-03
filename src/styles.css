@@ -398,3 +398,7 @@ span.required:after{
 input.p-inputnumber-input {
   width: 100% !important;
 }
+
+.super-z-index {
+  z-index: 9999999 !important;
+}

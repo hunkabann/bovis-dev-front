@@ -49,10 +49,10 @@ export class ModificarRubroComponent implements OnInit {
     if(this.config.data) {
       this.form.patchValue({
         idRubro:          rubro.idRubro,
-        unidad:           rubro.unidad.toString(),
-        cantidad:         rubro.cantidad.toString(),
-        reembolsable:     rubro.reembolsable,
-        aplicaTodosMeses: rubro.aplicaTodosMeses
+        unidad:           rubro.unidad?.toString(),
+        cantidad:         rubro.cantidad?.toString(),
+        reembolsable:     rubro.reembolsable || false,
+        aplicaTodosMeses: rubro.aplicaTodosMeses || false
       })
     }
 

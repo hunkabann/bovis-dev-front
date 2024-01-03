@@ -78,6 +78,8 @@ export class GastosComponent implements OnInit {
           this.proyectoFechaFin     = new Date(data.fechaFin)
           this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
+          this.secciones.clear()
+
           data.secciones.forEach((seccion, seccionIndex) => {
             
             this.secciones.push(this.fb.group({

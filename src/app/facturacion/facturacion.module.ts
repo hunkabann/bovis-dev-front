@@ -19,6 +19,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { MessagesModule } from 'primeng/messages';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
 import { NotaCreditoSinFacturaComponent } from './components/nota-credito-sin-factura/nota-credito-sin-factura.component';
+import { VincularNotaCreditoComponent } from './components/vincular-nota-credito/vincular-nota-credito.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { NotaCreditoSinFacturaComponent } from './components/nota-credito-sin-fa
     NotaCreditoComponent,
     FacturaCrpComponent,
     BusquedaCancelacionComponent,
-    NotaCreditoSinFacturaComponent
+    NotaCreditoSinFacturaComponent,
+    VincularNotaCreditoComponent
   ],
   imports: [
     CommonModule,

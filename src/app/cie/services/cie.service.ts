@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
-import { CieClasificacionesPYResponse, CieConceptosResponse, CieCuentasListaResponse, CieCuentasResponse, CieElementPost, CieEmpresasResponse, CieNumsProyectoResponse, CieProyectosResponse, CieRegistroUResponse, CieRegistrosPaginadosResponse, CieResponsablesResponse } from '../models/cie.models';
+import { CargaCuentasResponse, CieClasificacionesPYResponse, CieConceptosResponse, CieCuentasListaResponse, CieCuentasResponse, CieElementPost, CieEmpresasResponse, CieNumsProyectoResponse, CieProyectosResponse, CieRegistroUResponse, CieRegistrosPaginadosResponse, CieResponsablesResponse } from '../models/cie.models';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
+import { ListaStringResponse } from 'src/models/general.model';
 
 interface StringRequest {
   data: string[]
@@ -82,11 +83,19 @@ export class CieService {
     return this.http.get<CieRegistroUResponse>(`${this.baseUrl}api/Cie/Registro/${id}`)
   }
 
+  getTiposPY() {
+    return this.http.get<ListaStringResponse>(`${this.baseUrl}api/Cie/TiposPY`)
+  }
+
+  getClasificacionesPY() {
+    return this.http.get<ListaStringResponse>(`${this.baseUrl}api/Cie/ClasificacionesPY`)
+  }
+
   actualizarCieRegistro(body: any) {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/Cie/Registro/Actualizar`, body)
   }
 
   cargarCuentasNuevas(body: any) {
-    return this.http.post<GenericResponse>(`${this.baseUrl}api/Cie/Cuentas/Agregar`, body)
+    return this.http.post<CargaCuentasResponse>(`${this.baseUrl}api/Cie/Cuentas/Agregar`, body)
   }
 }

@@ -19,6 +19,8 @@ import { SubirArchivoComponent } from './components/auditoria-calidad/subir-arch
 import { VerDocumentosComponent } from './components/ver-documentos/ver-documentos.component';
 import { TableModule } from 'primeng/table';
 import { SharedModule } from '../shared/shared.module';
+import { ProgresoComponent } from './components/progreso/progreso.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { SharedModule } from '../shared/shared.module';
     CargarDocumentosComponent,
     SeguimientoComponent,
     SubirArchivoComponent,
-    VerDocumentosComponent
+    VerDocumentosComponent,
+    ProgresoComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +46,8 @@ import { SharedModule } from '../shared/shared.module';
     InputSwitchModule,
     FileUploadModule,
     TableModule,
-    SharedModule
+    SharedModule,
+    ProgressBarModule
   ]
 })
 export class AuditoriaModule { }

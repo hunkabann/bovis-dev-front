@@ -127,12 +127,14 @@
           <td>{{bus.idMoneda}}</td>
           <td>{{bus.tipoCambio}}</td>
           <td>{{bus.importe|currency}}</td>
+          <td>{{bus.importeEnPesos|currency}}</td>
           <td>{{bus.iva|currency}}</td>
           <td>{{bus.ivaRet|currency}}</td>
           <td>{{bus.total|currency}}</td>
           <td>
             <div class="cls-desc">{{bus.concepto}}</div>
           </td>
+          <td>{{bus.importePendiente|currency}}</td>
           <!-- <td>{{bus.anio}}</td> -->
           <!-- <td>{{bus.fechaPago|date:'d/MM/yyyy'}}</td> -->
           <!-- <td>{{bus.fechaCancelacion|date:'d/MM/yyyy'}}</td> -->
@@ -158,14 +160,14 @@
               pTooltip="Ver notas de crédito" 
               styleClass="p-button-rounded p-button-secondary p-button-text"
               tooltipPosition="left"
-              (click)="bus.totalNotasCredito > 0 && show(true, bus.uuid)"
-              [disabled]="bus.totalNotasCredito <= 0" 
+              (click)="calcularNotasCreditoCobranzas(bus) > 0 && show(true, bus.uuid)"
+              [disabled]="calcularNotasCreditoCobranzas(bus) <= 0" 
             >
               <i 
                 class="pi pi-file text-2xl" 
                 pBadge
-                [badgeDisabled]="bus.totalNotasCredito <= 0" 
-                [value]="bus.totalNotasCredito" 
+                [badgeDisabled]="calcularNotasCreditoCobranzas(bus) <= 0" 
+                [value]="calcularNotasCreditoCobranzas(bus).toString()" 
                 severity="danger"
               ></i>
             </p-button>
@@ -177,14 +179,14 @@
               pTooltip="Ver pago" 
               styleClass="p-button-rounded p-button-secondary p-button-text"
               tooltipPosition="left"
-              (click)="bus.totalCobranzas > 0 && show(false, bus.uuid)"
-              [disabled]="bus.totalCobranzas <= 0" 
+              (click)="calcularNotasCreditoCobranzas(bus, false) > 0 && show(false, bus.uuid)"
+              [disabled]="calcularNotasCreditoCobranzas(bus, false) <= 0" 
             >
               <i 
                 class="pi pi-dollar text-2xl" 
                 pBadge 
-                [badgeDisabled]="bus.totalCobranzas <= 0" 
-                [value]="bus.totalCobranzas" 
+                [badgeDisabled]="calcularNotasCreditoCobranzas(bus, false) <= 0" 
+                [value]="calcularNotasCreditoCobranzas(bus, false).toString()" 
                 severity="danger"
               ></i>
             </p-button>
@@ -342,6 +344,7 @@
               <tr>
                 <td><div class="cls-id">{{bus.c_UuidCobranza}}</div></td>
                 <td>{{bus.c_IdMonedaP}}</td>
+                <td>{{bus.crp}}</td>
                 <td>{{bus.c_ImportePagado|currency}}</td>
                 <td>{{bus.c_ImpSaldoAnt|currency}}</td>
                 <td>{{bus.c_ImporteSaldoInsoluto|currency}}</td>

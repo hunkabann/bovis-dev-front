@@ -38,6 +38,9 @@ export class SeguimientoComponent implements OnInit {
 
   proyectos:  Opcion[] = []
   secciones:  Seccion[] = []
+  
+  totalDocumentos: number = 0
+  totalDocumentosValidados: number = 0
 
   constructor() { }
 
@@ -56,7 +59,7 @@ export class SeguimientoComponent implements OnInit {
     .subscribe({
       next: (value) => {
         const [proyectosR] = value
-        this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: proyecto.nombre}))
+        this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}`}))
       },
       error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
     })
@@ -85,6 +88,11 @@ export class SeguimientoComponent implements OnInit {
   getSeccionesPorId(id: number) {
     this.sharedService.cambiarEstado(true)
 
+    this.totalDocumentos = 0
+    this.totalDocumentosValidados = 0
+    
+    this.auditorias.clear()
+
     this.auditoriaService.getProyectoCumplimiento(id)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
@@ -105,10 +113,10 @@ export class SeguimientoComponent implements OnInit {
                 id_documento:           [auditoria.idDocumento],
                 seccion:                [seccion.chSeccion],
               }))
+              this.totalDocumentos += +auditoria.aplica
+              this.totalDocumentosValidados += (auditoria.aplica && auditoria.tieneDocumento) ? +auditoria.ultimoDocumentoValido : 0
             })
           })
-
-          console.log(this.auditorias.value)
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
       })

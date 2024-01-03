@@ -186,7 +186,8 @@ export const PERMISOS = Object.freeze({
 })
 
 export const MODULOS = Object.freeze({
-  TIMESHEET_CARGA_DE_HORAS: 'timesheet.carga-de-horas'
+  TIMESHEET_CARGA_DE_HORAS: 'timesheet.carga-de-horas',
+  TIMESHEET_CONSULTA_MODIFICACION: 'timesheet.consulta-y-modificacion'
 })
 
 export const MENU = [

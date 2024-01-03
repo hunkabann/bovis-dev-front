@@ -24,23 +24,25 @@ export interface Seccion {
 }
 
 export interface Auditoria {
-  idAuditoriaCumplimiento: number;
-  idAuditoria:             number;
-  idProyecto:              number;
-  idDirector:              number;
-  mes:                     number;
-  fecha:                   string;
-  punto:                   string;
-  idSeccion:               number;
-  cumplimiento:            string;
-  cumplimientoCalidad:     string;
-  cumplimientoLegal:       string;
-  documentoRef:            string;
-  aplica:                  boolean;
-  motivo:                  string;
-  tieneDocumento:          boolean;
-  idDocumento:             number;
-  ultimoDocumentoValido:   boolean;
+  idAuditoriaCumplimiento:      number;
+  idAuditoria:                  number;
+  idProyecto:                   number;
+  idDirector:                   number;
+  mes:                          number;
+  fecha:                        string;
+  punto:                        string;
+  idSeccion:                    number;
+  cumplimiento:                 string;
+  cumplimientoCalidad:          string;
+  cumplimientoLegal:            string;
+  documentoRef:                 string;
+  aplica:                       boolean;
+  motivo:                       string;
+  tieneDocumento:               boolean;
+  idDocumento:                  number;
+  ultimoDocumentoValido:        boolean;
+  cantidadDocumentos:           number;
+  cantidadDocumentosValidados:  number;
 }
 
 export interface DocumentoResponse {
