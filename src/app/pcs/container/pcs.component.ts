@@ -55,6 +55,12 @@ export class PcsComponent implements OnInit {
       },
       error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
     })
+
+    this.pcsService.obtenerNuevoProyecto()
+      .subscribe(proyecto => {
+        this.proyectos.push({code: proyecto.id.toString(), name: `${proyecto.id.toString()} - ${proyecto.nombre}`})
+        // this.proyectoId = proyecto.id
+      })
   }
 
   verificarEstado() {

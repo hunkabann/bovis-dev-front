@@ -60,8 +60,8 @@ export class TimesheetService {
     return this.http.post<CargarHorasResponse>(`${this.baseUrl}api/Timesheet/Registro/Agregar`, body)
   }
 
-  getTimeSheetsPorEmpleado(empleadoId: number = 0, proyectoId: number = 0, unidadId: number = 0, empresaId: number = 0, mes: number = 0) {
-    return this.http.get<TimesheetsPorEmpleadoResponse>(`${this.baseUrl}api/Timesheet/TimeSheets/Filtro/${empleadoId}/${proyectoId}/${unidadId}/${empresaId}/${mes}`)
+  getTimeSheetsPorEmpleado(empleadoId: number = 0, proyectoId: number = 0, unidadId: number = 0, empresaId: number = 0, mes: number = 0, anio = 0) {
+    return this.http.get<TimesheetsPorEmpleadoResponse>(`${this.baseUrl}api/Timesheet/TimeSheets/Filtro/${empleadoId}/${proyectoId}/${unidadId}/${empresaId}/${mes}/${anio}`)
   }
 
   getTimeSheetPorId(timesheetId: number) {

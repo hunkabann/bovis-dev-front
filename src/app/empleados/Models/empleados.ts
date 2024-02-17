@@ -335,6 +335,7 @@ export interface UpEmpleado {
   nuvalor_descuento:        number;
   nuno_empleado_noi:        string;
   chrol:                    string;
+  nuproyecto_principal:     number;
   experiencias:             Experiencia[];
   habilidades:              Habilidad[];
 }

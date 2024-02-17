@@ -24,6 +24,27 @@
             </small>
             </div>
         </div>
+
+        <div class="col-12">
+            <label for="chnota_credito">Numero de Factura:</label>
+            <input 
+                id="chnota_credito"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="chnota_credito"
+                readonly
+                
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('chnota_credito')}"
+            >
+            <div *ngIf="esInvalido('chnota_credito')">
+            <small
+                class="error-msg"
+            >
+                {{ obtenerMensajeError('chnota_credito') }}
+            </small>
+            </div>
+        </div>
         
         <div class="col-12">
             <label for="id_factura">Factura:</label>

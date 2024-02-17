@@ -42,16 +42,6 @@
                 <input type="text" class="form-control" maxlength="100" [disabled]="isConsulta" formControlName="nombre_proyecto"/>
               </div>
               <div class="col-4">
-                <label for="email">Nombre del Cliente:</label>
-                <p-dropdown optionLabel="name" [options]="catClientes" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
-                  [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_cliente" optionValue="value" appendTo="body"></p-dropdown>
-              </div>
-            </div>
-  
-            <br />
-  
-            <div class="row">
-              <div class="col-4">
                 <label for="email">Director Ejecutivo: <span class="required"></span></label>
                 <p-dropdown optionLabel="name" 
                 [options]="catEmpleados" 
@@ -64,7 +54,11 @@
                 formControlName="id_director_ejecutivo" 
                 optionValue="code"></p-dropdown>
               </div>
-              
+            </div>
+  
+            <br />
+  
+            <div class="row">
               <div class="col-4">
                   <label>Empresa:</label>
                   <p-dropdown  
@@ -79,7 +73,24 @@
                       filterBy="name"
                   ></p-dropdown>
               </div>
-              <div class="col-4"></div>
+              <!-- <div class="col-4"></div> -->
+              <div class="col-8">
+                <label for="email">Nombre del Cliente:</label>
+                <div class="flex-auto">
+                  <p-multiSelect 
+                    [options]="catClientes" 
+                    defaultLabel="Seleccionar al menos un cliente" 
+                    optionLabel="name" 
+                    display="chip"
+                    scrollHeight="250px"
+                    [style]="{ width: '100%' }"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('ids_clientes')}"
+                    formControlName="ids_clientes"
+                    optionValue="value"
+                    appendTo="body"
+                  ></p-multiSelect>
+                </div>
+              </div>
             </div>
   
           </div>
@@ -208,7 +219,7 @@
                 width: '100%',
                 display: 'inline-flex',
                 height: '39px'
-              }" dateFormat="dd/mm/yy" [disabled]="isConsulta" formControlName="fecha_inicio"></p-calendar>
+              }" dateFormat="dd/mm/yy" [disabled]="isConsulta" formControlName="fecha_inicio" (onSelect)="actualizarTotalMeses()"></p-calendar>
               </div>
               <div class="col-4">
                 <label for="email">Fin del proyecto: </label>
@@ -216,11 +227,11 @@
                 width: '100%',
                 display: 'inline-flex',
                 height: '39px'
-              }" dateFormat="dd/mm/yy" [disabled]="isConsulta" formControlName="fecha_fin"></p-calendar>
+              }" dateFormat="dd/mm/yy" [disabled]="isConsulta" formControlName="fecha_fin" (onSelect)="actualizarTotalMeses()"></p-calendar>
               </div>
               <div class="col-4">
                 <label for="email">Total en meses:</label>
-                <input type="number" id="typeNumber" class="form-control" [disabled]="true" />
+                <input type="number" id="typeNumber" class="form-control" formControlName="total_meses" [readonly]="true" />
               </div>
             </div>
   

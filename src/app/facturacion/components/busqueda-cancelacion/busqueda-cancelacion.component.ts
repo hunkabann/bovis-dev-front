@@ -28,6 +28,8 @@ import { saveAs } from 'file-saver';
 
 const EXCEL_EXTENSION = '.xlsx';
 
+import { DatePipe } from '@angular/common';
+
 interface FiltroCancelacion {
   name: string;
   value: string;
@@ -43,6 +45,11 @@ interface AssociativeArray {
   styleUrls: ['./busqueda-cancelacion.component.css'],
 })
 export class BusquedaCancelacionComponent implements OnInit {
+
+  today: Date = new Date();
+      pipe = new DatePipe('en-US');
+      todayWithPipe = null;
+  
   //objBusqueda: Busqueda = new Busqueda();
   listBusquedaCompleto: Array<BusquedaCancelacion> =
     new Array<BusquedaCancelacion>();
@@ -314,7 +321,8 @@ export class BusquedaCancelacionComponent implements OnInit {
 
           if(factura.cobranzas.length > 0) {
             factura.cobranzas.forEach(cobranza => {
-              importePendiente -= +cobranza.c_ImportePagado
+              //importePendiente -= +cobranza.c_ImportePagado
+              importePendiente -= +cobranza.base
             })
           }
 
@@ -378,6 +386,7 @@ export class BusquedaCancelacionComponent implements OnInit {
       {key: 'uuid', label: 'UUID'},
       {key: 'mes', label: 'MES'},
       {key: 'numProyecto', label: 'No. Proyecto'},
+      {key: 'empresa', label: 'EMPRESA'},
       {key: 'cliente', label: 'CLIENTE'},
       {key: 'fechaEmision', label: 'FECHA DE EMISIÓN'},
       {key: 'noFactura', label: 'NO. DE FACTURA'},
@@ -391,6 +400,7 @@ export class BusquedaCancelacionComponent implements OnInit {
       {key: 'total', label: 'TOTAL'},
       {key: 'concepto', label: 'CONCEPTO'},
       {key: 'importePendientePorPagar', label: 'IMPORTE PENDIENTE POR PAGAR (saldo)'},
+      {key: 'importePendientePorPagar_dls', label: 'IMPORTE PENDIENTE POR PAGAR DLS (saldo)'},
       // {key: 'anio', label: 'Año'},
       // {key: 'fechaPago', label: 'Fecha Pago'},
       // {key: 'fechaCancelacion', label: 'Fecha Cancelacion'},
@@ -622,7 +632,10 @@ export class BusquedaCancelacionComponent implements OnInit {
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
 
-      saveAs(blob, `FacturacionCancelacion_${Date.now()}${EXCEL_EXTENSION}`)
+      //saveAs(blob, `FacturacionCancelacion_${Date.now()}${EXCEL_EXTENSION}`)
+      this.todayWithPipe = this.pipe.transform(Date.now(), 'dd_MM_yyyy');
+      
+      saveAs(blob, `FacturacionCancelacion_`+this.todayWithPipe+`${EXCEL_EXTENSION}`)
     });
 
   }
@@ -630,7 +643,7 @@ export class BusquedaCancelacionComponent implements OnInit {
   _setXLSXTitles(worksheet: ExcelJS.Worksheet) {
 
     const fillNota: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ff91d2ff' } }
-    const fillNotaCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffff5733' } }
+    const fillNotaCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
     const fillCobranza: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffa4ffa4' } }
     const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
@@ -640,7 +653,7 @@ export class BusquedaCancelacionComponent implements OnInit {
     worksheet.getCell('R2').value = 'Complemento de pago'
     worksheet.getCell('R2').fill = fillCobranza
     worksheet.getCell('R2').alignment = alignment
-    worksheet.getCell('S2').value = 'Nota de crédito cancelada'
+    worksheet.getCell('S2').value = 'Comprobantes Cancelados'
     worksheet.getCell('S2').fill = fillNotaCancelada
     worksheet.getCell('S2').alignment = alignment
   }
@@ -661,23 +674,32 @@ export class BusquedaCancelacionComponent implements OnInit {
   _setXLSXContent(worksheet: ExcelJS.Worksheet) {
 
     const fillNota: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ff91d2ff' } }
-    const fillNotaCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffff5733' } }
+    const fillNotaCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
     const fillCobranza: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffa4ffa4' } }
+    const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
 
     let inicio = 5
+   
 
     this.listBusquedaCompleto.forEach(factura => {
       const inicioFactura = inicio
       let columnaImportePendiente = 0
+      let columnaImportePendiente_dls = 0
+      let ImporteNotayPago = 0
       encabezados.forEach((encabezado, indexE) => {
         if(encabezado.id == 'importePendientePorPagar') {
           columnaImportePendiente = indexE + 1
         }
+        if(encabezado.id == 'importePendientePorPagar_dls') {
+          columnaImportePendiente_dls = indexE + 1
+        }
         let cell = worksheet.getCell(inicio, indexE + 1)
         cell.value = factura[encabezado.id]
+        cell.fill = factura['fechaCancelacion'] ? fillNotaCancelada : fillFactura
         const encabezadosRedondeados = ['total', 'importe', 'iva', 'ivaRet', 'importeEnPesos'] 
         if(encabezadosRedondeados.includes(encabezado.id)) {
-          cell.value = this.formatCurrency(+cell.value)
+          //cell.value = this.formatCurrency(+cell.value)
+          cell.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : +cell.value)
         }
 
       })
@@ -695,9 +717,19 @@ export class BusquedaCancelacionComponent implements OnInit {
             }
             if(encabezado.id == 'importe') {
               cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
+              console.log(" +cell.value " + nota['nC_Importe'])
+              ImporteNotayPago +=  nota['nC_Importe']
+              console.log(" ImporteNotayPago " + ImporteNotayPago)
             }
             if(encabezado.id == 'iva') {
               cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
+              //console.log(" +cell.value2 " + nota['nC_Iva'])
+              //ImporteNotayPago +=   nota['nC_Iva']
+              //console.log(" ImporteNotayPago2 " + ImporteNotayPago)
+            }
+            if(encabezado.id == 'numProyecto') {
+              cell.value = factura['numProyecto']
+              
             }
             if(encabezado.id == 'importeEnPesos') {
               let importeEnPesos = 0
@@ -705,6 +737,12 @@ export class BusquedaCancelacionComponent implements OnInit {
               importeEnPesos = nota['nC_IdMoneda'] === 'MXN' ? nota['nC_Importe'] : nota['nC_Importe'] * +nota['nC_TipoCambio']
               cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : importeEnPesos)
             }
+
+            if(encabezado.id == 'mes') {
+              cell.value = nota['nC_Mes']
+            }
+
+           
 
           })
           inicio++
@@ -717,25 +755,81 @@ export class BusquedaCancelacionComponent implements OnInit {
             let cell = worksheet.getCell(inicio, indexE + 1)
             const campo = this.equivalentesCobranzas[encabezado.id]
             cell.value = cobranza[campo]
-            cell.fill = fillCobranza
+            cell.fill = cobranza['c_FechaCancelacion'] ? fillNotaCancelada : fillCobranza
+            //cell.fill = fillCobranza
             if(encabezado.id == 'total') {
-              cell.value = this.formatCurrency(+cell.value)
+              //cell.value = this.formatCurrency(+cell.value)
+              cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
             }
             if(encabezado.id == 'importe') {
-              cell.value = this.formatCurrency(+cell.value)
+             //cell.value = this.formatCurrency(+cell.value)
+              cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
+              //console.log(" +cell.value3 " + + cobranza['base'])
+              ImporteNotayPago += cobranza['base']
+              //console.log(" ImporteNotayPago3 " + ImporteNotayPago)
             }
             if(encabezado.id == 'iva') {
-              cell.value = this.formatCurrency(+cell.value)
+              //cell.value = this.formatCurrency(+cell.value)
+              cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
+              //console.log(" +cell.value4 " + + cobranza['c_IvaP'])
+              //ImporteNotayPago +=  cobranza['c_IvaP']
+              //console.log(" ImporteNotayPago4 " + ImporteNotayPago)
             }
+            if(encabezado.id == 'numProyecto') {
+              cell.value = factura['numProyecto']
+            }
+            if(encabezado.id == 'importeEnPesos') {
+              let importeEnPesos = 0
+              
+              //importeEnPesos = cobranza['c_IdMonedaP'] === 'MXN' ? cobranza['c_ImportePagado'] : cobranza['c_ImportePagado'] * +cobranza['c_TipoCambioP']
+              importeEnPesos = cobranza['c_IdMonedaP'] === 'MXN' ? cobranza['base'] : cobranza['base'] * +cobranza['c_TipoCambioP']
+              cell.value = cobranza['c_FechaCancelacion'] ? 0 : importeEnPesos
+            }
+
+            if(encabezado.id == 'mes') {
+              cell.value = factura['mes']
+            }
+
             
           })
           inicio++
         })
       }
 
-      // Cálculos
+
+      if(factura['idMoneda'] === 'MXN'){
+
       let cell = worksheet.getCell(inicioFactura, columnaImportePendiente)
-      cell.value = this.formatCurrency(factura['importePendiente'])
+
+      let importePorPagarPesos = 0
+
+      importePorPagarPesos = factura['importe']-ImporteNotayPago
+      
+
+      //cell.value = this.formatCurrency(importePorPagarPesos)
+      cell.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagarPesos)
+
+      let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
+      cell_dls.value =this.formatCurrency(0.0)
+
+      }else{
+        let cell = worksheet.getCell(inicioFactura, columnaImportePendiente)
+      cell.value = this.formatCurrency(0.0)
+
+      let importePorPagar = 0
+     
+
+      //const myNumber = Number(factura['tipoCambio']);
+      importePorPagar = factura['importe']-ImporteNotayPago
+
+      console.log(" importePorPagar " + importePorPagar)
+
+      let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
+      //cell_dls.value = this.formatCurrency(importePorPagar)
+      cell_dls.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagar)
+      }
+      // Cálculos
+      
 
     })
 

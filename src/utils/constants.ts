@@ -202,21 +202,21 @@ export const MENU = [
           items: [
             {
               label: 'Requerimientos',
-              routerLink: ['/empleados/requerimientos'],
+              routerLink: ['empleados/requerimientos'],
               id: 'requerimientos',
               command: () =>
                 localStorage.setItem('pageTitle', 'Requerimientos'.toUpperCase()),
             },
             {
               label: 'Personas',
-              routerLink: ['/empleados/persona'],
+              routerLink: ['empleados/persona'],
               id: 'personas',
               command: () =>
                 localStorage.setItem('pageTitle', 'Registro de Persona'.toUpperCase()),
             },
             {
               label: 'Empleados',
-              routerLink: ['/empleados/empleado-pri'],
+              routerLink: ['empleados/empleado-pri'],
               id: 'empleados',
               command: () =>
                 localStorage.setItem('pageTitle', 'Registro de Empleado'.toUpperCase()),
@@ -339,8 +339,10 @@ export const MENU = [
               routerLink: ['auditoria'],
               id: 'auditoria-legal',
               queryParams: {tipo: 'legal'},
-              command: () =>
-                localStorage.setItem('pageTitle', 'Auditoría Legal'.toUpperCase()),
+              command: () => {
+                localStorage.setItem('pageTitle', 'Auditoría Legal'.toUpperCase())
+                localStorage.removeItem('esLegal')
+              }
             },
             {
               label: 'Auditoría de Calidad',

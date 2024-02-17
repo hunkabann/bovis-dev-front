@@ -118,6 +118,7 @@
           </td>
           <td>{{bus.mes}}</td>
           <td>{{bus.numProyecto}}</td>
+           <td>{{bus.empresa}}</td>
           <td>{{bus.cliente}}</td>
           <td>{{bus.fechaEmision|date:'d/MM/yyyy'}}</td>
           <td>{{bus.noFactura}}</td>
@@ -126,11 +127,31 @@
           </td>
           <td>{{bus.idMoneda}}</td>
           <td>{{bus.tipoCambio}}</td>
-          <td>{{bus.importe|currency}}</td>
-          <td>{{bus.importeEnPesos|currency}}</td>
-          <td>{{bus.iva|currency}}</td>
-          <td>{{bus.ivaRet|currency}}</td>
-          <td>{{bus.total|currency}}</td>
+          
+          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenimporte else elseimporte"> </td>
+            <ng-template #thenimporte> <td>{{bus.importe|currency}}</td> </ng-template>
+            <ng-template #elseimporte> <td>{{0.0|currency}}</td> </ng-template>
+
+          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenimportePesos else elseimportePesos"> </td>
+            <ng-template #thenimportePesos> <td>{{bus.importeEnPesos|currency}}</td> </ng-template>
+            <ng-template #elseimportePesos> <td>{{0.0|currency}}</td> </ng-template>
+          <!--td>{{bus.importeEnPesos|currency}}</td-->
+
+          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then theniva else elseiva"> </td>
+            <ng-template #theniva> <td>{{bus.iva|currency}}</td> </ng-template>
+            <ng-template #elseiva> <td>{{0.0|currency}}</td> </ng-template>
+          <!--td>{{bus.iva|currency}}</td-->
+
+          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenivaRet else elseivaRet"> </td>
+            <ng-template #thenivaRet> <td>{{bus.ivaRet|currency}}</td> </ng-template>
+            <ng-template #elseivaRet> <td>{{0.0|currency}}</td> </ng-template>
+          <!--td>{{bus.ivaRet|currency}}</td-->
+
+          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thentotal else elsetotal"> </td>
+            <ng-template #thentotal> <td>{{bus.total|currency}}</td> </ng-template>
+            <ng-template #elsetotal> <td>{{0.0|currency}}</td> </ng-template>
+          <!--td>{{bus.total|currency}}</td-->
+          
           <td>
             <div class="cls-desc">{{bus.concepto}}</div>
           </td>
@@ -310,7 +331,10 @@
           </ng-template>
           <ng-template pTemplate="body" let-bus>
             <ng-container *ngIf="isTypeHeader">
-              <tr *ngIf="bus.nC_Anio != '0'">
+              <tr 
+                *ngIf="bus.nC_Anio != '0'"
+                [ngStyle]="{'background-color': bus.nC_FechaCancelacion ? '#ffa4a4' : ''}"
+              >
               <td><div class="cls-id">{{bus.nC_UuidNotaCredito}}</div></td>
               <td>{{bus.nC_IdMoneda}}</td>
               <td>{{bus.nC_IdTipoRelacion}}</td>
@@ -324,7 +348,7 @@
               <td>{{bus.nC_TipoCambio}}</td>
               <td>{{bus.nC_FechaNotaCredito|date:'d/MM/yyyy'}}</td>
               <td>
-                <div *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == '' ">
+                <div *ngIf="bus.nC_FechaCancelacion == null || bus.nC_FechaCancelacion == '' ">
                   <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
                   tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
                   <p-button 

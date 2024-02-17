@@ -15,6 +15,6 @@ export class CostosService {
   constructor() { }
 
   getCostosEmpleado() {
-    return this.http.get<CostosEmpleadoResponse>(`${ this.baseUrl }api/Costo/costos`)
+    return this.http.get<CostosEmpleadoResponse>(`${ this.baseUrl }api/Costo/costos/0`)
   }
 }

@@ -60,10 +60,75 @@ export interface DocumentosResponse {
 }
 
 export interface Documento {
-  idDocumento:                     number;
-  idAuditoriaCumplimientoProyecto: number;
-  motivo:                          string;
-  fecha:                           string;
-  documentoBase64:                 string;
-  valido:                          boolean;
+  idDocumento:                      number;
+  idAuditoriaCumplimientoProyecto:  number;
+  motivo:                           string;
+  fecha:                            string;
+  documentoBase64:                  string;
+  nombreDocumento:                  string;
+  valido:                           boolean;
+}
+
+export interface TsProyectosResponse {
+  data:          TSProyecto[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface TSProyecto {
+  numProyecto:                  number;
+  nombre:                       string;
+  alcance:                      string;
+  cp:                           string;
+  ciudad:                       string;
+  idEstatus:                    number;
+  idSector:                     number;
+  idTipoProyecto:               number;
+  idResponsablePreconstruccion: number;
+  idResponsableConstruccion:    number;
+  idResponsableEhs:             number;
+  idResponsableSupervisor:      number;
+  idCliente:                    number;
+  idEmpresa:                    number;
+  idPais:                       number;
+  idDirectorEjecutivo:          number;
+  costoPromedioM2:              number;
+  fechaIni:                     string;
+  fechaFin:                     string;
+}
+
+export interface ComentariosResponse {
+  data:          Comentario[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface Comentario {
+  idComentario:     number;
+  numProyecto:      number;
+  comentario:       string;
+  fecha:            string;
+  idTipoComentario: number;
+  tipoComentario:   string;
+  fechaAuditoria:   string;
+}
+
+export interface TiposComentarioResponse {
+  data:          TipoComentario[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface TipoComentario {
+  idTipoComentario: number;
+  tipoComentario:   string;
+  activo:           boolean;
+}
+
+export interface FechaAuditoria {
+  numProyecto:      number;
+  fechaAuditoria:            string;
 }

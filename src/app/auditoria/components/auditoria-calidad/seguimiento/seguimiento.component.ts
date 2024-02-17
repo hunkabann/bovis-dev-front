@@ -12,6 +12,7 @@ import { descargarArchivo } from 'src/helpers/helpers';
 import { Opcion } from 'src/models/general.model';
 import { SUBJECTS, TITLES, errorsArray } from 'src/utils/constants';
 import { VerDocumentosComponent } from '../../ver-documentos/ver-documentos.component';
+import { ComentariosModalComponent } from '../../comentarios-modal/comentarios-modal.component';
 
 @Component({
   selector: 'app-seguimiento',
@@ -41,6 +42,7 @@ export class SeguimientoComponent implements OnInit {
   
   totalDocumentos: number = 0
   totalDocumentosValidados: number = 0
+  numProyecto: number = null
 
   constructor() { }
 
@@ -81,6 +83,8 @@ export class SeguimientoComponent implements OnInit {
 
   getSecciones(event: any) {
     const {value: id} = event
+    
+    this.numProyecto = id
 
     this.getSeccionesPorId(id)
   }
@@ -174,7 +178,7 @@ export class SeguimientoComponent implements OnInit {
 
     this.dialogService.open(VerDocumentosComponent, {
       header: 'Documentos cargados',
-      width: '50%',
+      width: '90%',
       height: '450px',
       contentStyle: {overflow: 'auto'},
       data: {idAuditoria}
@@ -184,6 +188,25 @@ export class SeguimientoComponent implements OnInit {
         if(data.exito) {
           this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'Los documentos han sido validados.'})
         }
+      }
+    })
+  }
+
+  mostrarModalComentarios() {
+
+    this.dialogService.open(ComentariosModalComponent, {
+      header: 'Comentarios',
+      width: '90%',
+      height: '90%',
+      contentStyle: {overflow: 'auto'},
+      data: {
+        readOnly: false,
+        numProyecto: this.numProyecto
+      }
+    })
+    .onClose.subscribe(data => {
+      if(data) {
+        console.log(data)
       }
     })
   }

@@ -195,6 +195,29 @@
           </small>
         </div>
       </div>
+      <div class="col-4">
+        <label for="num_proyecto_principal">Proyecto principal:</label>
+        <p-dropdown 
+          id="num_proyecto_principal"
+          [options]="proyectos"
+          placeholder="Seleccionar un proyecto" 
+          optionLabel="name" 
+          [showClear]="true"
+          [style]="{ width: '100%' }"
+          formControlName="num_proyecto_principal"
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('num_proyecto_principal')}"
+          optionValue="code"
+          [filter]="true" 
+          filterBy="name"
+        ></p-dropdown>
+        <div *ngIf="esInvalido('num_proyecto_principal')">
+          <small
+            class="error-msg"
+          >
+            {{ obtenerMensajeError('num_proyecto_principal') }}
+          </small>
+        </div>
+      </div>
     </div>
  
     <div class="row">

@@ -78,7 +78,8 @@ export class UploadFileComponent implements OnInit {
           const xmlData: string = (evt as any).target.result;
           var parser = new DOMParser();
           var xmlz = parser.parseFromString(xmlData, "application/xml");
-          this.strFileBase64 = window.btoa((new XMLSerializer()).serializeToString(xmlz));
+          //this.strFileBase64 = window.btoa((new XMLSerializer()).serializeToString(xmlz));
+          this.strFileBase64 = window.btoa(unescape(encodeURIComponent(xmlData)));
           let stXML: LstFacturas = new LstFacturas();
           stXML.NombreFactura = file.name;
           stXML.FacturaB64 = this.strFileBase64

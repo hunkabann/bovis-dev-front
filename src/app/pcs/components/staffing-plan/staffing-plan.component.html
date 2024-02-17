@@ -81,7 +81,7 @@
                           type="button"
                           class="btn btn-primary"
                           (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)"
-                          [disabled]="!empleado.value.id"
+                          
                         >
                           <i class="pi pi-calendar vertical-align-middle"></i>
                         </button>
@@ -90,7 +90,7 @@
                           type="button"
                           class="btn btn-danger"
                           (click)="eliminarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)"
-                          [disabled]="!empleado.value.id"
+                          
                         >
                           <i class="pi pi-trash vertical-align-middle"></i>
                         </button>

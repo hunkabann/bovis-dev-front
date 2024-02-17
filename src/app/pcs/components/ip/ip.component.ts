@@ -7,11 +7,11 @@ import { PcsService } from '../../services/pcs.service';
 import { TITLES, errorsArray } from 'src/utils/constants';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { finalize } from 'rxjs';
-import { format } from 'date-fns';
+import { differenceInMonths, format } from 'date-fns';
 import { Proyecto } from '../../models/pcs.model';
 import { Opcion } from 'src/models/general.model';
 import { CieService } from 'src/app/cie/services/cie.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-ip',
@@ -54,20 +54,20 @@ export class IpComponent implements OnInit {
       id_responsable_construccion:    [null],
       id_responsable_ehs:             [null],
       id_responsable_supervisor:      [null],
-      id_cliente:                     [null],
-      id_empresa:                     [null],
+      ids_clientes:                   [[''], [Validators.required]],
+      id_empresa:                     ['', [Validators.required]],
       id_director_ejecutivo:          ['', [Validators.required]],
       costo_promedio_m2:              [null],
       fecha_inicio:                   [null],
       fecha_fin:                      [null],
-      // total_meses, Validators.required
-      nombre_contacto:                [null, Validators.required],
-      posicion_contacto:              [null, Validators.required],
-      telefono_contacto:              [null, Validators.required],
-      correo_contacto:                [null, Validators.required]
+      total_meses:                    [0],
+      nombre_contacto:                [null],
+      posicion_contacto:              [null],
+      telefono_contacto:              [null],
+      correo_contacto:                [null]
   })
 
-  constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute) { }
+  constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   catalogosService = inject(CatalogosService)
   
@@ -100,8 +100,10 @@ export class IpComponent implements OnInit {
             }))
             .subscribe({
               next: ({data}) => {
+                console.log(data)
                 if(data.length >= 0) {
                   const [proyectoData] = data
+                  const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
                   this.form.patchValue({
                     num_proyecto:                   proyectoData.nunum_proyecto.toString(),
                     nombre_proyecto:                proyectoData.chproyecto.toString(),
@@ -116,13 +118,18 @@ export class IpComponent implements OnInit {
                     id_responsable_construccion:    proyectoData.nukidresponsable_construccion,
                     id_responsable_ehs:             proyectoData.nukidresponsable_ehs,
                     id_responsable_supervisor:      proyectoData.nukidresponsable_supervisor,
-                    id_cliente:                     proyectoData.nukidcliente,
-                    id_empresa:                     proyectoData.nukidempresa,
+                    ids_clientes,
+                    id_empresa:                     proyectoData.nukidempresa.toString(),
                     id_director_ejecutivo:          proyectoData.nukiddirector_ejecutivo.toString(),
                     costo_promedio_m2:              proyectoData.nucosto_promedio_m2,
                     fecha_inicio:                   proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
-                    fecha_fin:                      proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null
+                    fecha_fin:                      proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
+                    nombre_contacto:                proyectoData.chcontacto_nombre,
+                    posicion_contacto:              proyectoData.chcontacto_posicion,
+                    telefono_contacto:              proyectoData.chcontacto_telefono,
+                    correo_contacto:                proyectoData.chcontacto_correo
                   })
+                  this.actualizarTotalMeses()
                 }
               },
               error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
@@ -187,6 +194,17 @@ export class IpComponent implements OnInit {
     });
   }
 
+  actualizarTotalMeses() {
+    console.log('first')
+    let total_meses = 0
+    
+    if(this.form.value.fecha_inicio && this.form.value.fecha_fin) {
+      total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)
+    }
+
+    this.form.patchValue({ total_meses })
+  }
+
   poblarCombos() {
     this.getCatCategorias();
     this.getPaises();
@@ -201,7 +219,6 @@ export class IpComponent implements OnInit {
     this.cieService.getCieEmpresas()
       .subscribe({
         next: ({data}) => {
-          console.log(data);
           this.empresas = data.map(registro => ({name: registro.chempresa, code: registro.nukidempresa.toString()}))
         },
         error: (err) => this.empresas = []
@@ -311,6 +328,23 @@ export class IpComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El proyecto ha sido guardado.'})
+          if(!this.catalogosService.esEdicion) {
+            
+            this.pcsService.enviarNuevoProyecto({
+              id:     +this.form.value.num_proyecto,
+              nombre: this.form.value.nombre_proyecto
+            })
+            
+            this.router.navigate([], {
+              relativeTo: this.activatedRoute,
+              queryParams: {
+                proyecto:   this.form.value.num_proyecto,
+                esEdicion:  1,
+                nuevo:      false
+              },
+              queryParamsHandling: 'merge'
+            })
+          }
         },
         error: (err) => {
           this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})

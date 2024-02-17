@@ -29,7 +29,8 @@ const routes: Routes = [
   { path: 'cat_habilidad', component: CatalogosGeneralesComponent },
   { path: 'cat_experiencia', component: CatalogosGeneralesComponent },
   { path: 'cat_profesion', component: CatalogosGeneralesComponent },
-  { path: 'cat_dias', component: DiasTimesheetComponent }
+  { path: 'cat_dias', component: DiasTimesheetComponent },
+  { path: 'cat_cta_contable', component: CatalogosGeneralesComponent }
 ];
 
 @NgModule({

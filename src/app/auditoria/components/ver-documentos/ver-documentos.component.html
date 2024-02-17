@@ -5,6 +5,7 @@
           <ng-template pTemplate="header">
               <tr>
                   <th>Documento</th>
+                  <th>Archivo</th>
                   <th class="text-center">Válido</th>
               </tr>
           </ng-template>
@@ -16,6 +17,14 @@
                       (click)="descargarDocumento(documento.value.id_documento)"
                     >
                       {{documento.value.fecha + '_' + documento.value.id_documento.toString()}}
+                    </a>
+                  </td>
+                  <td>
+                    <a 
+                      class="text-success font-bold pointer"
+                      (click)="descargarDocumento(documento.value.id_documento)"
+                    >
+                      {{documento.value.nombre_documento || '-'}}
                     </a>
                   </td>
                   <td class="text-center">

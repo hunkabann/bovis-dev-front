@@ -140,7 +140,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-record>
             <tr 
-                [ngStyle]="{'background-color': record.inconsistente ? '#ffa4a4' : ''}"
+                [ngStyle]="{'background-color': record.inconsistente ? '#ffa4a4' : '', 'color': record.fechaCancelacion ? '#ffa4a4' : ''}"
             >
                 <td>{{record.nombreCuenta}}</td>
                 <td>{{record.cuenta}}</td>

@@ -62,7 +62,7 @@ export class UserService {
         .pipe(map(data => {
           if(data.data) {
             const {permisos} = data.data
-            this._roles = permisos.map(permiso => ({rol: (`${permiso.chmodulo_slug}.${permiso.chsub_modulo_slug}`).toLowerCase(), administrador: permiso.chpermiso === PERMISOS.ADMIN}))
+            this._roles = permisos.map(permiso => ({rol: (`${permiso.chmodulo_slug}.${permiso.chsub_modulo_slug}${permiso.botab ? ('-' + permiso.chtab) : ''}`).toLowerCase(), administrador: permiso.chpermiso === PERMISOS.ADMIN}))
             this.sendRoles(this._roles)
             const tempMenu: MegaMenuItem[] = []
             MENU.forEach(opcion => {
@@ -99,6 +99,17 @@ export class UserService {
     const findIndex = this.rolesG.findIndex((registro) => registro.rol === rol)
 
     // console.log([rol]);
+
+    if(findIndex >= 0) {
+      return this.rolesG.at(findIndex)
+    }
+
+    return null
+  }
+  
+  verificarRolTabs(rol: string): RolPermiso | null {
+
+    const findIndex = this.rolesG.findIndex((registro) => registro.rol.trim() === rol)
 
     if(findIndex >= 0) {
       return this.rolesG.at(findIndex)

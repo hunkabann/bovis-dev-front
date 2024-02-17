@@ -1,6 +1,21 @@
 <p-toast></p-toast>
 
 <div class="main-container">
+  <div class="row" *ngIf="auditoriaService.esLegal && numProyecto">
+    <div class="col-12">
+      <p-toolbar>
+        <div class="w-100 text-right">
+          <button 
+            type="button" 
+            class="btn btn-info" 
+            (click)="mostrarModalComentarios()"
+          >
+            Ver comentarios
+          </button>
+        </div>
+      </p-toolbar>
+    </div>
+  </div>
   <div class="row">
     <div class="col-12">
       <label for="id_proyecto">Proyecto:</label>

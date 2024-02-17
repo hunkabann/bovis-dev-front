@@ -11,6 +11,7 @@ import { finalize, forkJoin } from 'rxjs';
 import { CieService } from 'src/app/cie/services/cie.service';
 import { Opcion } from 'src/models/general.model';
 import { differenceInCalendarYears, format } from 'date-fns';
+import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
 
 interface ICatalogo {
   name: string;
@@ -67,6 +68,8 @@ export class EmpleadosRegistroComponent implements OnInit {
     {code: 'Factor de descuento', name: 'Factor de descuento'}
   ];
 
+  proyectos: Opcion[] = []
+
   form = this.fb.group({
     id_requerimiento:       [0],
     num_empleado_rr_hh:     ['', Validators.required],
@@ -118,7 +121,8 @@ export class EmpleadosRegistroComponent implements OnInit {
     rol:                    [null], // no requerido
     habilidades:            [null], // no requerido ['']
     experiencias:           [null], // no requerido ['']
-    persona_nombre:         [null]
+    persona_nombre:         [null],
+    num_proyecto_principal: ['', Validators.required]
   })
 
   form1 = this.fb.group({
@@ -137,7 +141,8 @@ export class EmpleadosRegistroComponent implements OnInit {
     private fb: FormBuilder,
     private sharedService: SharedService,
     private cieService: CieService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private timesheetService: TimesheetService
   ) {}
 
   ngOnInit(): void {
@@ -165,7 +170,8 @@ export class EmpleadosRegistroComponent implements OnInit {
           this.empleadosServ.getPuestos(),
           this.empleadosServ.getEmpleados(),
           this.empleadosServ.getCatEstados(),
-          this.empleadosServ.getCatPaises()
+          this.empleadosServ.getCatPaises(),
+          this.timesheetService.getCatProyectos()
         ])
         .pipe(finalize(() => this.verificarActualizacion()))
         .subscribe({
@@ -188,7 +194,8 @@ export class EmpleadosRegistroComponent implements OnInit {
             puestoR,
             empleadosR,
             estadosR,
-            paisesR
+            paisesR,
+            proyectosR
           ]) => {
             this.setCatPersonas(personaR.data)
             this.setCatTipoEmpleado(tipoEmpleadoR.data)
@@ -210,6 +217,7 @@ export class EmpleadosRegistroComponent implements OnInit {
             this.catJefes = empleadosR.data.map(empleado => ({name: empleado.nombre_persona, value: empleado.nunum_empleado_rr_hh.toString()}))
             this.estados = estadosR.data.map(estado => ({name: estado.estado, code: estado.idEstado.toString()}))
             this.paises = paisesR.data.map(pais => ({name: pais.descripcion, code: pais.id.toString()}))
+            this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}`}))
           },
           error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
         })
@@ -350,7 +358,8 @@ export class EmpleadosRegistroComponent implements OnInit {
                   rol:                    data.chrol,
                   habilidades:            habilidades as any,
                   experiencias:           experiencias as any,
-                  persona_nombre:         data.nombre_persona
+                  persona_nombre:         data.nombre_persona,
+                  num_proyecto_principal: data.nuproyecto_principal.toString()
                 })
 
                 this.buscarCiudades({value: this.form.value.id_estado})

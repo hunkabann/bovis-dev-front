@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { CumplimientoResponse, DocumentoResponse, DocumentosResponse, ProyectoCumplimientoResponse } from '../models/auditoria.model';
+import { ComentariosResponse, CumplimientoResponse, DocumentoResponse, DocumentosResponse, ProyectoCumplimientoResponse,TiposComentarioResponse,TsProyectosResponse } from '../models/auditoria.model';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 
 @Injectable({
@@ -47,6 +47,32 @@ export class AuditoriaService {
 
   validarDocumentos(body: any) {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/Auditoria/Documento/Validacion`, body)
+  }
+  
+  getCatProyectos(ordenAlfabetico: boolean = true) {
+    if('legal' == `${this.tipo}`){
+      return this.http.get<TsProyectosResponse>(`${this.baseUrl}api/Auditoria/proyectos/legal`)
+    }else{
+      return this.http.get<TsProyectosResponse>(`${this.baseUrl}api/pcs/proyectos/${ordenAlfabetico}`)
+    }
+
+    
+  }
+
+  getTiposComentario() {
+    return this.http.get<TiposComentarioResponse>(`${this.baseUrl}api/Auditoria/TipoComentarios`)
+  }
+
+  getComentarios(numProyecto: number) {
+    return this.http.get<ComentariosResponse>(`${this.baseUrl}api/Auditoria/Comentarios/${numProyecto}`)
+  }
+
+  agregarComentario(body: any) {
+    return this.http.post<GenericResponse>(`${this.baseUrl}api/Auditoria/Comentarios`, body)
+  }
+
+  agregarFechaProxAuditoria(body: any) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/pcs/Proyectos/FechaAuditoria`, body)
   }
 
 }

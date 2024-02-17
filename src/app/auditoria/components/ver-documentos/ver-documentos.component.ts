@@ -44,9 +44,10 @@ export class VerDocumentosComponent implements OnInit {
             data.forEach(documento => {
                 this.documentos.push(
                   this.fb.group({
-                    fecha:        [documento.fecha],
-                    id_documento: [documento.idDocumento],
-                    valido:       [documento.valido]
+                    fecha:            [documento.fecha],
+                    id_documento:     [documento.idDocumento],
+                    nombre_documento: [documento.nombreDocumento],
+                    valido:           [documento.valido]
                   })
                 )
               }

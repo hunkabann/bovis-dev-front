@@ -9,6 +9,7 @@ import { SharedService } from './shared/services/shared.service';
 import { AuthService } from './auth/services/auth.service';
 import { UserService } from './services/user.service';
 import { AuditoriaService } from './auditoria/services/auditoria.service';
+import { MENU } from 'src/utils/constants';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isModulos = false;
   roles: any = null;
   private _mobileQueryListener!: () => void;
+  tituloPaginaLocal = ''
 
   constructor(
     @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
@@ -90,6 +92,8 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       });
 
+    this.setearTitulo();
+
     this.msalBroadcastService.inProgress$
       .pipe(
         filter((status: InteractionStatus) => status === InteractionStatus.None),
@@ -101,6 +105,36 @@ export class AppComponent implements OnInit, OnDestroy {
       })
 
 
+  }
+
+  setearTitulo() {
+    
+    let menuOpciones = []
+
+    MENU.forEach(opcion => {
+      if(opcion.items) {
+        opcion.items[0][0].items.forEach(item => {
+          menuOpciones.push({ titulo: opcion.title, url: item.routerLink[0].split('/')[0] })
+        })
+      } else {
+        menuOpciones.push({ titulo: opcion.title, url: opcion.routerLink[0].split('/')[0] })
+      }
+    })
+    
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        const urlActual = event.url.split('/')[1];
+        let tituloPagina = ''
+        if(urlActual) {
+          const opcion = menuOpciones.find(opcion => opcion.url === urlActual)
+          if(opcion) {
+            tituloPagina = opcion.titulo
+          }
+        }
+
+        this.tituloPaginaLocal = tituloPagina
+      });
   }
 
   setLoginDisplay() {

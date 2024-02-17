@@ -222,3 +222,13 @@ export interface CargaCuenta {
   idPcs2:                      null;
   pcs2:                        string;
 }
+export interface CieCuentasDeleteResponse {
+  data:          CieCuentaDelete[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface CieCuentaDelete {
+  nombre_archivo:          string;
+}

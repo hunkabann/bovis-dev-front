@@ -22,6 +22,8 @@ export interface Permiso {
   chsub_modulo_slug:  string;
   chpermiso:          string;
   perfiles:           string[];
+  botab:              boolean;
+  chtab:              string;
 }
 
 export interface RolPermiso {

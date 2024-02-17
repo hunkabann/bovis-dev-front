@@ -24,11 +24,13 @@ export interface Etapa {
 }
 
 export interface Empleado {
-    id:              number;
-    idFase:          number;
-    numempleadoRrHh: string;
-    empleado:        string;
-    fechas:          Fecha[];
+    id:                 number;
+    idFase:             number;
+    numempleadoRrHh:    string;
+    empleado:           string;
+    fechas:             Fecha[];
+    aplicaTodosMeses:   boolean;
+    cantidad:           number;
 }
 
 export interface Fecha {
@@ -81,6 +83,17 @@ export interface Proyecto {
     nuporcantaje_participacion:       null;
     chalias_puesto:                   null;
     chgrupo_proyecto:                 null;
+    chcontacto_nombre?:               string;
+    chcontacto_posicion?:             string;
+    chcontacto_telefono?:             string;
+    chcontacto_correo?:               string;
+    clientes:                         ClientePcs[];
+}
+
+export interface ClientePcs {
+    idCliente:  number,
+    cliente:    string,
+    rfc:        string
 }
 
 export interface GastosIngresosSeccionesResponse {

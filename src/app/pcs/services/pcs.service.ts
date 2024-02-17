@@ -5,6 +5,11 @@ import { GenericResponse } from 'src/app/empleados/Models/empleados';
 import { environment } from 'src/environments/environment';
 import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse } from '../models/pcs.model';
 
+interface NuevoProyecto {
+  id:     number,
+  nombre: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +22,7 @@ export class PcsService {
   http = inject(HttpClient)
 
   private idProyectoObject = new Subject<number>()
+  private nuevoProyecto = new Subject<NuevoProyecto>()
 
   constructor() { }
   
@@ -31,9 +37,17 @@ export class PcsService {
   enviarIdProyecto(data: number) {
     this.idProyectoObject.next(data)
   }
+  
+  enviarNuevoProyecto(data: NuevoProyecto) {
+    this.nuevoProyecto.next(data)
+  }
 
   obtenerIdProyecto() {
     return this.idProyectoObject.asObservable()
+  }
+
+  obtenerNuevoProyecto() {
+    return this.nuevoProyecto.asObservable()
   }
 
   guardar(esActualizacion: boolean = false, body: any) {

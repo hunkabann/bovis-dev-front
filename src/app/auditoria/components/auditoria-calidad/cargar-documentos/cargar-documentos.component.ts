@@ -12,6 +12,7 @@ import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
 import { Opcion } from 'src/models/general.model';
 import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { SubirArchivoComponent } from '../subir-archivo/subir-archivo.component';
+import { ComentariosModalComponent } from '../../comentarios-modal/comentarios-modal.component';
 
 interface UploadEvent {
   originalEvent: Event;
@@ -46,6 +47,7 @@ export class CargarDocumentosComponent implements OnInit {
 
   totalDocumentos: number = 0
   totalDocumentosValidados: number = 0
+  numProyecto: number = null
   
   constructor() { }
 
@@ -55,7 +57,7 @@ export class CargarDocumentosComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
 
     forkJoin([
-      this.timesheetService.getCatProyectos()
+      this.auditoriaService.getCatProyectos()
     ])
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
@@ -86,6 +88,8 @@ export class CargarDocumentosComponent implements OnInit {
   getSecciones(event: any) {
     this.sharedService.cambiarEstado(true)
     const {value: id} = event
+    
+    this.numProyecto = id
 
     this.totalDocumentos = 0
     this.totalDocumentosValidados = 0
@@ -126,6 +130,7 @@ export class CargarDocumentosComponent implements OnInit {
       const body = {
         id_auditoria_proyecto:  auditoria.idAuditoria,
         motivo:                 'Documento',
+        nombre_documento:       archivo.name,
         documento_base64
       }
 
@@ -158,6 +163,27 @@ export class CargarDocumentosComponent implements OnInit {
     };
 
     lector.readAsDataURL(archivo);
+  }
+
+  mostrarModalComentarios() {
+
+    this.dialogService.open(ComentariosModalComponent, {
+      header: 'Comentarios',
+      width: '90%',
+      height: '90%',
+      contentStyle: {overflow: 'auto'},
+      data: {
+        readOnly: true,
+        numProyecto: this.numProyecto,
+        totalDocumentos: this.totalDocumentos,
+        totalDocumentosValidados: this.totalDocumentosValidados 
+      }
+    })
+    .onClose.subscribe(data => {
+      if(data) {
+        console.log(data)
+      }
+    })
   }
 
 }

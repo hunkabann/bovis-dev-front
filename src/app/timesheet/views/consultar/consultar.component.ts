@@ -92,8 +92,9 @@ export class ConsultarComponent implements AfterViewInit {
     this.sharedService.cambiarEstado(true)
 
     const mesFormateado = this.mes ? +format(this.mes, 'M') : 0
+    const anioFormateado = this.mes ? +format(this.mes, 'Y') : 0
     
-    this.timesheetService.getTimeSheetsPorEmpleado(this.idEmpleado || 0, this.idProyecto || 0, this.idUnidad || 0, this.idEmpresa || 0, mesFormateado)
+    this.timesheetService.getTimeSheetsPorEmpleado(this.idEmpleado || 0, this.idProyecto || 0, this.idUnidad || 0, this.idEmpresa || 0, mesFormateado, anioFormateado)
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: ({data}) => {

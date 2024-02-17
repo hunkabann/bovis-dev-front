@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
-import { CargaCuentasResponse, CieClasificacionesPYResponse, CieConceptosResponse, CieCuentasListaResponse, CieCuentasResponse, CieElementPost, CieEmpresasResponse, CieNumsProyectoResponse, CieProyectosResponse, CieRegistroUResponse, CieRegistrosPaginadosResponse, CieResponsablesResponse } from '../models/cie.models';
+import { CargaCuentasResponse, CieClasificacionesPYResponse, CieConceptosResponse, CieCuentasListaResponse, CieCuentasResponse, CieElementPost, CieEmpresasResponse, CieNumsProyectoResponse, CieProyectosResponse, CieRegistroUResponse, CieRegistrosPaginadosResponse, CieResponsablesResponse,CieCuentasDeleteResponse,CieCuentaDelete } from '../models/cie.models';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 import { ListaStringResponse } from 'src/models/general.model';
 
@@ -14,6 +14,7 @@ interface StringRequest {
   providedIn: 'root'
 })
 export class CieService {
+  nombre_archivo : string
 
   baseUrl = environment.urlApiBovis;
 
@@ -23,8 +24,12 @@ export class CieService {
     return this.http.get<CieEmpresasResponse>(`${this.baseUrl}api/Cie/Empresas/true`);
   }
 
-  cargarSae(data: CieElementPost[], filename: String) {
-    return this.http.post<any>(`${this.baseUrl}api/Cie/Registros/Agregar`, {data, nombre_archivo: filename})
+ cargarSae(data: CieElementPost[], filename: String, paqueteInicial:boolean ) {
+    return this.http.post<any>(`${this.baseUrl}api/Cie/Registros/Agregar`, {data, nombre_archivo: filename, paquete_inicial: paqueteInicial})
+  }
+
+ EliminaSae(body: CieCuentaDelete ) {
+    return this.http.delete<CieCuentasDeleteResponse>(`${this.baseUrl}api/Cie/Archivo`, {body})
   }
 
   getInfoCuentas(body: StringRequest) {

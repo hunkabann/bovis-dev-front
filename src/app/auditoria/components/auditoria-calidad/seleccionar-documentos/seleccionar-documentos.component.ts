@@ -34,7 +34,9 @@ export class SeleccionarDocumentosComponent implements OnInit {
 
   proyectos:  Opcion[] = []
   secciones:  Seccion[] = []
-
+  
+  Label_cumplimiento: string;
+  
   constructor() { }
 
   get auditorias() {
@@ -43,6 +45,12 @@ export class SeleccionarDocumentosComponent implements OnInit {
 
   ngOnInit(): void {
     this.sharedService.cambiarEstado(true)
+
+    if(this.auditoriaService.esLegal){
+      this.Label_cumplimiento = "Descripción del entregable"
+    }else{
+      this.Label_cumplimiento = "Cumplimiento"
+    }
 
     forkJoin([
       this.auditoriaService.getCumplimiento(),
@@ -80,7 +88,8 @@ export class SeleccionarDocumentosComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
-          this.router.navigate(['auditoria/cargar'], {queryParams: {success: true, tipo: this.auditoriaService.esLegal ? 'legal' : null}})
+          this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' })
+          // this.router.navigate(['auditoria/cargar'], {queryParams: {success: true, tipo: this.auditoriaService.esLegal ? 'legal' : null}})
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })

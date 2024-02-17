@@ -34,6 +34,7 @@ import { ValorMesPipe } from './pipes/valor-mes.pipe';
 import { ModificarRubroComponent } from './components/modificar-rubro/modificar-rubro.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CalcularSubtotalPipe } from './pipes/calcular-subtotal.pipe';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import { CalcularSubtotalPipe } from './pipes/calcular-subtotal.pipe';
     TimelineModule,
     ButtonModule,
     ProgressSpinnerModule,
-    InputSwitchModule
+    InputSwitchModule,
+    MultiSelectModule
   ],
   providers: [ConfirmationService, MessageService]
 })

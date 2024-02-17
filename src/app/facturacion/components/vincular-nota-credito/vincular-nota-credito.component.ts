@@ -34,7 +34,8 @@ export class VincularNotaCreditoComponent implements OnInit {
 
   form = this.fb.group({
     id_factura:         [null, Validators.required],
-    uuid_nota_credito:  ['']
+    uuid_nota_credito:  [''],
+    chnota_credito:  ['']
   })
 
   constructor() { }
@@ -47,6 +48,10 @@ export class VincularNotaCreditoComponent implements OnInit {
         this.form.patchValue({
           uuid_nota_credito: data.nota.chuuid_nota_credito
         })
+         this.form.patchValue({
+            chnota_credito: data.nota.chnota_credito
+            
+          })
         
         this.busqueda = {
           idProyecto: null,

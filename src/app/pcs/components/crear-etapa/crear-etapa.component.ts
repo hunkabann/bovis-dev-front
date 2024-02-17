@@ -5,7 +5,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { CALENDAR, TITLES, errorsArray } from 'src/utils/constants';
 import { PcsService } from '../../services/pcs.service';
-import { format } from 'date-fns';
+import { format, startOfMonth } from 'date-fns';
 import { finalize } from 'rxjs';
 
 @Component({
@@ -49,8 +49,8 @@ export class CrearEtapaComponent implements OnInit {
         })
       }
       if(data.fechaInicio && data.fechaFin) {
-        // this.fechaMinima = data.fechaInicio
-        // this.fechaMaxima = data.fechaFin
+        this.fechaMinima = startOfMonth(data.fechaInicio)
+        this.fechaMaxima = startOfMonth(data.fechaFin)
       }
     }
   }

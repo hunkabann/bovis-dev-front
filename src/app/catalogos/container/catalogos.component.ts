@@ -124,10 +124,10 @@ export class CatalogosComponent implements OnInit {
       nameService: 'TipoCie'
     },
     {
-      catalogo: 'cat_cta_contable',
+       catalogo: 'cat_cta_contable',
       id: null,
       nombre: 'Tipo Cta Contable',
-      nameService: ''
+      nameService: 'TipoCtacontable'
     },
     {
       catalogo: 'cat_tipo_cuenta',

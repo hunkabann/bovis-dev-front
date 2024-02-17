@@ -3,7 +3,7 @@ import * as XLSX from 'xlsx';
 import { CieService } from '../../services/cie.service';
 import { MessageService } from 'primeng/api';
 import { SharedService } from 'src/app/shared/services/shared.service';
-import { CieElementPost, CieProyecto } from '../../models/cie.models';
+import { CieElementPost, CieProyecto,CieCuentaDelete } from '../../models/cie.models';
 import { EXCEL_EXTENSION, SUBJECTS, TITLES, cieHeaders, cieHeadersFields } from 'src/utils/constants';
 import { finalize, forkJoin } from 'rxjs';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -42,7 +42,7 @@ export class CargaSaeComponent implements OnInit {
   companyOptions: Option[] = []
   selectedOption: Option
   uploaded = false
-  currentFileName: String = ''
+  currentFileName: string = ''
   cuentas: string[] = []
   proyectos: string[] = []
   cuentasFaltantes: {
@@ -54,6 +54,12 @@ export class CargaSaeComponent implements OnInit {
 
   proyectosEncontrados: any = {}
   cuentasEncontradas: any = {}
+  paqueteInicial: boolean
+
+  ArchivoElimina: {
+    nombre_archivo: string
+   
+  }[] = []
 
   constructor() {}
 
@@ -107,7 +113,8 @@ export class CargaSaeComponent implements OnInit {
         } else {
           if(record.Concepto) {
             const cuenta = cuentaActual.split(' ')[2]
-            if(!['703002003'].includes(cuenta)) {
+            //if(!['703002003'].includes(cuenta))
+            {
               this.cuentas.push(cuenta)
               this.proyectos.push(record.Proyectos)
               tempNormalRecords.push({
@@ -279,7 +286,14 @@ export class CargaSaeComponent implements OnInit {
 
   cargarPaquetes() {
 
-    this.cieService.cargarSae(this.jsonDataPaquetes[this.paqueteActual - 1], this.currentFileName)
+    if((this.paqueteActual - 1) > 0){
+      this.paqueteInicial = false
+    }else{
+      this.paqueteInicial = true
+
+    }
+   
+    this.cieService.cargarSae(this.jsonDataPaquetes[this.paqueteActual - 1], this.currentFileName,this.paqueteInicial)
       // .pipe(
       //   finalize(() => {
       //     this.sharedService.cambiarEstado(false)
@@ -309,7 +323,16 @@ export class CargaSaeComponent implements OnInit {
           this.cargarPaquetes()
         },
         error: (err) => {
-          this.messageService.add({severity: 'error', summary: 'Oh no...', detail: err.error})
+         if(err.error === "El archivo \""+this.currentFileName+"\" ya fue cargado anteriormente."){
+           
+            //this.messageService.add({severity: 'error', summary: 'Oh no...', detail: err.error})
+            
+            this.confirmar()
+          }else{
+            this.messageService.add({severity: 'error', summary: 'Oh no...', detail: err.error})
+          }
+
+          
           this.sharedService.cambiarEstado(false)
         }
       })
@@ -344,8 +367,39 @@ export class CargaSaeComponent implements OnInit {
           })
           this.cuentasFaltantes = []
         },
-        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
   }
+
+  confirmar(){
+      var r = confirm("Ya existe un Archivo Cargado, los datos anteriores se eliminaran , ¿deseas continuar?"); 
+      if (r == true) {
+        const body: CieCuentaDelete = {
+          nombre_archivo:                 this.currentFileName,
+         
+        }
+        
+        this.ArchivoElimina.push({nombre_archivo: this.currentFileName})
+       // this.cieService.EliminaSae(this.ArchivoElimina)
+        this.cieService.EliminaSae(body)
+        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe({
+          next: (data) => {
+           // this.empleados(etapaIndex).removeAt(empleadoIndex)
+            this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'Los registros se eliminaron correctamente'})
+          }, 
+          error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+        })
+      
+  
+  
+        //alert("\'Ya paso la eliminacion\'");
+  
+        
+      } else {
+          //alert("\'codgio de redireccion (false)\'");
+          return;
+      }
+    }
 
 }

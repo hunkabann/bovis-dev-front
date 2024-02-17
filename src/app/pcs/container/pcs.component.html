@@ -8,6 +8,16 @@
 <div class="main-container">
 
   <div class="row">
+    <div class="col-12 text-right">
+      <button 
+        type="button" 
+        class="btn btn-info" 
+        *ngIf="pcsService.botonNuevo"
+        (click)="cargarProyecto()"
+      >
+        Nuevo
+      </button>
+    </div>
     <div class="col-12">
       <label for="id_proyecto">Proyecto:</label>
       <p-dropdown 
@@ -31,14 +41,6 @@
         [disabled]="!proyectoId"
       >
         Editar
-      </button>
-      <button 
-        type="button" 
-        class="btn btn-info ml-2" 
-        *ngIf="pcsService.botonNuevo"
-        (click)="cargarProyecto()"
-      >
-        Nuevo
       </button>
     </div>
   </div>
