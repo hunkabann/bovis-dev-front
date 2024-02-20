@@ -179,9 +179,12 @@ export class SeguimientoComponent implements OnInit {
     this.dialogService.open(VerDocumentosComponent, {
       header: 'Documentos cargados',
       width: '90%',
-      height: '450px',
+      height: '90%',
       contentStyle: {overflow: 'auto'},
-      data: {idAuditoria}
+      data: {
+        idAuditoria,
+        esEdicion: true
+      }
     })
     .onClose.subscribe(data => {
       if(data) {

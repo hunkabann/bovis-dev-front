@@ -348,8 +348,10 @@ export const MENU = [
               label: 'Auditoría de Calidad',
               routerLink: ['auditoria'],
               id: 'auditoria-de-calidad',
-              command: () =>
-                localStorage.setItem('pageTitle', 'Auditoría de Calidad'.toUpperCase()),
+              command: () => {
+                localStorage.setItem('pageTitle', 'Auditoría de Calidad'.toUpperCase())
+                localStorage.removeItem('esCalidad')
+              }
             }
           ],
         },

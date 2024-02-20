@@ -13,6 +13,7 @@ import { Opcion } from 'src/models/general.model';
 import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { SubirArchivoComponent } from '../subir-archivo/subir-archivo.component';
 import { ComentariosModalComponent } from '../../comentarios-modal/comentarios-modal.component';
+import { VerDocumentosComponent } from '../../ver-documentos/ver-documentos.component';
 
 interface UploadEvent {
   originalEvent: Event;
@@ -163,6 +164,26 @@ export class CargarDocumentosComponent implements OnInit {
     };
 
     lector.readAsDataURL(archivo);
+  }
+
+  verDocumentos(idAuditoria: number) {
+
+    this.dialogService.open(VerDocumentosComponent, {
+      header: 'Documentos cargados',
+      width: '90%',
+      height: '90%',
+      contentStyle: {overflow: 'auto'},
+      data: {
+        idAuditoria
+      }
+    })
+    .onClose.subscribe(data => {
+      // if(data) {
+      //   if(data.exito) {
+      //     this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'Los documentos han sido validados.'})
+      //   }
+      // }
+    })
   }
 
   mostrarModalComentarios() {

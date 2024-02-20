@@ -67,7 +67,7 @@
           <label><strong>Documento</strong></label>
         </div>
         <div class="col-2 text-center">
-          <label><strong>Tiene documentos cargados</strong></label>
+          <label><strong>Documentos cargados</strong></label>
         </div>
       </div>
     </div>
@@ -99,7 +99,11 @@
           ></p-fileUpload>
         </div>
         <div class="col-2 text-center">
-          <label><strong>{{ (auditoria.tieneDocumento && auditoria.ultimoDocumentoValido) ? 'Sí' : 'No' }}</strong></label>
+          <p-button 
+            label="Ver" 
+            [disabled]="!auditoria.tieneDocumento"
+            (onClick)="auditoria.tieneDocumento ? verDocumentos(auditoria.idAuditoria) : null"
+          ></p-button>
         </div>
         <div class="col-12">
           <p-divider></p-divider>

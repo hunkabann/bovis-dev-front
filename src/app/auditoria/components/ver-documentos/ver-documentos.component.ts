@@ -24,6 +24,8 @@ export class VerDocumentosComponent implements OnInit {
   ref               = inject(DynamicDialogRef)
   sharedService     = inject(SharedService)
 
+  esEdicion: boolean = false
+
   // documentos: Documento[]
   
   formDocumentos = this.fb.group({
@@ -38,16 +40,18 @@ export class VerDocumentosComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.config.data?.idAuditoria) {
+      this.esEdicion = !!this.config.data.esEdicion
       this.auditoriaService.getDocumentos(this.config.data.idAuditoria)
         .subscribe({
           next: ({data}) => {
             data.forEach(documento => {
                 this.documentos.push(
                   this.fb.group({
-                    fecha:            [documento.fecha],
-                    id_documento:     [documento.idDocumento],
-                    nombre_documento: [documento.nombreDocumento],
-                    valido:           [documento.valido]
+                    fecha:              [documento.fecha],
+                    id_documento:       [documento.idDocumento],
+                    nombre_documento:   [documento.nombreDocumento],
+                    valido:             [documento.valido],
+                    comentario_rechazo: [documento.comentarioRechazo]
                   })
                 )
               }
@@ -57,6 +61,14 @@ export class VerDocumentosComponent implements OnInit {
         })
     } else {
       this.closeDialog()
+    }
+  }
+  
+  cambiarValorComentario(i: number, event: any) {
+    if(event.checked) {
+      this.documentos.at(i).patchValue({
+        comentario_rechazo: null
+      })
     }
   }
 

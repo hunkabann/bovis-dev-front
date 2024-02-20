@@ -61,8 +61,8 @@ export class AuditoriaCalidadComponent implements OnInit {
         this.items = tabs
         this.items = this.items.map(item => ({...item, queryParams: {tipo: null}}))
         this.auditoriaService.esLegal = false
-        if(localStorage.getItem('esLegal')) {
-          localStorage.removeItem('esLegal')
+        if(!localStorage.getItem('esCalidad')) {
+          localStorage.setItem('esCalidad', '1')
           window.location.reload()
         }
       }

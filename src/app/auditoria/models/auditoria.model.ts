@@ -67,6 +67,7 @@ export interface Documento {
   documentoBase64:                  string;
   nombreDocumento:                  string;
   valido:                           boolean;
+  comentarioRechazo:                string;
 }
 
 export interface TsProyectosResponse {

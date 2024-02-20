@@ -359,7 +359,7 @@ export class EmpleadosRegistroComponent implements OnInit {
                   habilidades:            habilidades as any,
                   experiencias:           experiencias as any,
                   persona_nombre:         data.nombre_persona,
-                  num_proyecto_principal: data.nuproyecto_principal.toString()
+                  num_proyecto_principal: data.nuproyecto_principal?.toString()
                 })
 
                 this.buscarCiudades({value: this.form.value.id_estado})
