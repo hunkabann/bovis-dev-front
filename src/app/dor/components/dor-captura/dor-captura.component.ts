@@ -53,24 +53,24 @@ export class DorCapturaComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
     this.docService.getDatosEjecutivo(this.userMail).subscribe(data => {
       const dataMod = data as any
-      if(dataMod.success) {
+      if (dataMod.success) {
         const str = 'data' as any;
         let datos = data[str as keyof typeof data];
         let nombre = datos['nombre' as keyof typeof datos];
         this.docService.getDatosSubordinados(nombre)
-        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-        .subscribe({
-          next: (dataSub) => {
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe({
+            next: (dataSub) => {
               this.listSubordinados = <Subordinados[]>dataSub.data;
               this.listSubordinados.forEach(element => {
                 this.empleadosSub.push({ name: String(element.nombre), value: String(element.nombre) })
               });
-          },
-          error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-        })
+            },
+            error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+          })
       } else {
         this.sharedService.cambiarEstado(false)
-        this.messageService.add({severity: 'error', summary: TITLES.error, detail: dataMod.message})
+        this.messageService.add({ severity: 'warn', summary: TITLES.error, detail: dataMod.message })
       }
     });
   }
@@ -94,25 +94,25 @@ export class DorCapturaComponent implements OnInit {
 
       this.getObjetivosPorProyecto(String(this.anio), this.subComple.centrosdeCostos, this.subComple.noEmpleado, subordinado.nivel || '', EstatusObjetivosPorProyecto.inicial, true);
 
-/*       this.docService.getConsultarGPM(this.subComple.centrosdeCostos).subscribe(gpm => {
-        //console.log(gpm);
-        this.docService.getObjetivosGenerales(subordinado.nivel || '', subordinado?.unidadDeNegocio || '').subscribe(generales => {
-          this.listObjGenrales = generales.data;
-          //console.log(this.listObjGenrales);
-          this.getTablasObjetivosGenerales(gpm);
-        });
-      }); */
+      /*       this.docService.getConsultarGPM(this.subComple.centrosdeCostos).subscribe(gpm => {
+              //console.log(gpm);
+              this.docService.getObjetivosGenerales(subordinado.nivel || '', subordinado?.unidadDeNegocio || '').subscribe(generales => {
+                this.listObjGenrales = generales.data;
+                //console.log(this.listObjGenrales);
+                this.getTablasObjetivosGenerales(gpm);
+              });
+            }); */
       this.docService.getConsultarMetasProyecto(this.subComple.centrosdeCostos, subordinado.nivel)
-      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-      .subscribe(gpm => {
-      //  this.docService.getConsultarMetasProyecto('274', '4').subscribe(gpm => {
-        // console.log(gpm);
-        this.docService.getObjetivosGenerales(subordinado.nivel || '', subordinado?.unidadDeNegocio || '').subscribe(generales => {
-          this.listObjGenrales = generales.data;
-          // console.log(this.listObjGenrales);
-          this.getTablasObjetivosGenerales(gpm);
+        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe(gpm => {
+          //  this.docService.getConsultarMetasProyecto('274', '4').subscribe(gpm => {
+          // console.log(gpm);
+          this.docService.getObjetivosGenerales(subordinado.nivel || '', subordinado?.unidadDeNegocio || '').subscribe(generales => {
+            this.listObjGenrales = generales.data;
+            // console.log(this.listObjGenrales);
+            this.getTablasObjetivosGenerales(gpm);
+          });
         });
-      });
     }
   }
 
@@ -188,7 +188,7 @@ export class DorCapturaComponent implements OnInit {
       this.totalObjetivosTipoUno += Number(obj.valor || '');
     });
 
-    if(gpm.data.length > 0){
+    if (gpm.data.length > 0) {
       //let objGPM: ObjetivosGenerales = gpm.data[0];
       let objGPM: ObjetivosGenerales[];
       objGPM = gpm.data;
@@ -196,7 +196,7 @@ export class DorCapturaComponent implements OnInit {
       //console.log('objGPM');
       //console.log(objGPM);
       objGPM.forEach(function (value) {
-        value.meta = value.meta ? value.meta +' %' : '-'
+        value.meta = value.meta ? value.meta + ' %' : '-'
       });
 
       //this.listObjGenralesTipoDos.splice(0,0, objGPM);

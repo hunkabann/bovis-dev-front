@@ -1,63 +1,36 @@
+<p-toast>
+</p-toast>
 
-<p-toast></p-toast>
 
 <form [formGroup]="form" (ngSubmit)="guardar()">
-  <div class="main-container">
-    <div class="buttons-container">
-      <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">{{ !esActualizacion ? 'Guardar' : 'Actualizar'}}</button> 
-      <button type="button" class="btn btn-info" (click)="limpiar()">Clear data</button>
-      <button type="button" class="btn btn-info" [routerLink]="['/reportes/lista', form.value.id_reporte]">Regresar</button>
-    </div>
-    <div class="row">
-      <div class="col-12">
-          <label for="nombre">Nombre:</label>
-          <input 
-            id="nombre"
-            pInputText
-            class="form-control" 
-            maxlength="50" 
-            formControlName="nombre"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('nombre')}"
-          >
-          <div *ngIf="esInvalido('nombre')">
-            <small
-              class="error-msg"
-            >
-              {{ obtenerMensajeError('nombre') }}
-            </small>
-          </div>
-      </div>
-      <div class="col-12">
-          <label for="descripcion">Descripción:</label>
-          <input 
-            id="descripcion"
-            pInputText
-            class="form-control" 
-            maxlength="50" 
-            formControlName="descripcion"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('descripcion')}"
-          >
-          <div *ngIf="esInvalido('descripcion')">
-            <small
-              class="error-msg"
-            >
-              {{ obtenerMensajeError('descripcion') }}
-            </small>
-          </div>
-      </div>
-      <div class="col-12">
-          <label for="query">Query:</label>
-          <textarea 
-            pInputTextarea
-            name="query" 
-            id="query" 
-            cols="30" 
-            rows="10"
-            class="form-control"
-            formControlName="query"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('query')}"
-          ></textarea>
-          <!-- <input 
+    <div class="main-container">
+        <h1>{{ !esActualizacion ? 'Nuevo reporte' : 'Reporte'}}</h1>
+        <p-toolbar styleClass="p-1 mt-5 mb-4 d-flex justify-content-end gap-2 text-right">
+            <button type="button" class="btn btn-secondary" routerLink="/reportes/lista"><i class="fas fa-arrow-left"></i> Regresar</button>
+            <button type="button" class="btn btn-dark" (click)="limpiar()"><i class="fas fa-eraser"></i> Limpiar campos</button>
+            <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!form.valid"><i class="fas fa-save"></i> {{ !esActualizacion ? 'Guardar' : 'Actualizar'}}</button>
+        </p-toolbar>
+
+
+        <div class="row">
+            <div class="col-12">
+                <label for="nombre">Nombre:</label>
+                <input id="nombre" pInputText class="form-control" maxlength="50" formControlName="nombre" [ngClass]="{'ng-invalid ng-dirty': esInvalido('nombre')}">
+                <div *ngIf="esInvalido('nombre')">
+                    <small class="error-msg">{{ obtenerMensajeError('nombre') }}</small>
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="descripcion">Descripción:</label>
+                <input id="descripcion" pInputText class="form-control" maxlength="50" formControlName="descripcion" [ngClass]="{'ng-invalid ng-dirty': esInvalido('descripcion')}">
+                <div *ngIf="esInvalido('descripcion')">
+                    <small class="error-msg">{{ obtenerMensajeError('descripcion') }}</small>
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="query">Query:</label>
+                <textarea pInputTextarea name="query" id="query" cols="30" rows="10" class="form-control" formControlName="query" [ngClass]="{'ng-invalid ng-dirty': esInvalido('query')}"></textarea>
+                <!-- <input 
             id="query"
             pInputText
             class="form-control" 
@@ -65,14 +38,10 @@
             formControlName="query"
             [ngClass]="{'ng-invalid ng-dirty': esInvalido('query')}"
           > -->
-          <div *ngIf="esInvalido('query')">
-            <small
-              class="error-msg"
-            >
-              {{ obtenerMensajeError('query') }}
-            </small>
-          </div>
-      </div>
+                <div *ngIf="esInvalido('query')">
+                    <small class="error-msg">{{ obtenerMensajeError('query') }}</small>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </form>

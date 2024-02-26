@@ -2,64 +2,37 @@
 
 <div class="main-container">
 
-  <h1>Reportes</h1>
+    <h1>Reportes</h1>
 
-  <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-start gap-2">  
-    <button 
-      type="submit" 
-      class="btn btn-info"
-      routerLink="/reportes/registro"
-    >
-      Nuevo
-    </button>
-  </p-toolbar>
+    <p-toolbar styleClass="p-1 mb-4 d-flex justify-content-end gap-2 text-right">
+        <button type="submit" class="btn btn-primary" routerLink="/reportes/registro"><i class="fas fa-plus"></i> Nuevo reporte</button>
+    </p-toolbar>
 
-  <div class="table-container">
-    <p-table 
-      #tablaPrincipal
-      [value]="reportes" 
-      [paginator]="true"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      [rows]="10"
-    >
-    <ng-template pTemplate="header">
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Fecha creación</th>
-        <th class="text-center">Opciones</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-reporte>
-      <tr>
-        <td>{{ reporte.idReporte }}</td>
-        <td>{{ reporte.nombre }}</td>
-        <td>{{ reporte.fechaCreacion | date: 'Y-m-d' }}</td>
-        <td>
-          <div class="d-flex gap-2">
-            <button 
-              title="Modificar reporte" 
-              pButton 
-              pRipple 
-              icon="pi pi-pencil" 
-              class="p-button-rounded p-button-success p-mr-2"
-              [routerLink]="['/reportes/registro', reporte.idReporte]"
-            ></button>
-            <button 
-              title="Ejecutar reporte" 
-              pButton 
-              pRipple 
-              icon="pi pi-play" 
-              class="p-button-rounded p-button-success p-mr-2"
-              [routerLink]="['/reportes/ejecucion', reporte.idReporte]"
-            ></button>
-          </div>
-        </td>
-      </tr>
-    </ng-template>
-    </p-table>
-  </div>
-  
+    <div class="table-container">
+        <p-table #tablaPrincipal [value]="reportes" [paginator]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]" [rows]="10" paginatorPosition="both"
+            styleClass="p-datatable-striped">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Fecha creación</th>
+                    <th class="text-center">Opciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-reporte>
+                <tr>
+                    <td>{{ reporte.idReporte }}</td>
+                    <td>
+                        <a class="text-success font-bold" [routerLink]="['/reportes/ejecucion', reporte.idReporte]">{{ reporte.nombre }}</a>
+                    </td>
+                    <td>{{ reporte.fechaCreacion | date: 'Y-m-d' }}</td>
+                    <td class="text-center">
+                        <button title="Modificar reporte" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2 mr-3" [routerLink]="['/reportes/registro', reporte.idReporte]"></button>
+                        <button title="Ejecutar reporte" pButton pRipple icon="pi pi-play" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/reportes/ejecucion', reporte.idReporte]"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
 </div>

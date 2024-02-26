@@ -26,6 +26,10 @@ export class ComentariosModalComponent implements OnInit {
   maxDate: Date;
   //fecha: Date;
   FechaAuditoProx: string;
+  FechaAuditoIni: string;
+  responsableAsignado: string;
+  directorResponsable: string;
+  nombreAuditor: string;
   Estatus: string;
   URLImagen: string;
   
@@ -47,6 +51,8 @@ export class ComentariosModalComponent implements OnInit {
   formFecha = this.fb.group({
     numProyecto:       [null],
     fechaAuditoria:         ['', Validators.required],
+    fechaAuditoriaInicial:  ['', Validators.required],
+    responsableAsignado:   ['', Validators.required]
     
   })
 
@@ -81,7 +87,7 @@ export class ComentariosModalComponent implements OnInit {
       this.Estatus = "Satisfactorio"
       this.URLImagen = "assets/images/SemaforoVerde.png"
     }else{
-      this.Estatus = "Regular / Malo"
+      this.Estatus = "No Cumple"
       this.URLImagen = "assets/images/SemaforoRojo.png"
     }
 
@@ -117,6 +123,10 @@ export class ComentariosModalComponent implements OnInit {
           this.comentarios[comentario.idTipoComentario].push(comentario)
          // console.log("Valor de comentario: " + comentario.fechaAuditoria)
           this.FechaAuditoProx = comentario.fechaAuditoria
+          this.FechaAuditoIni = comentario.fechaAuditoriaInicial
+          this.responsableAsignado = comentario.responsableAsignado
+          this.directorResponsable = comentario.directorResponsable
+          this.nombreAuditor = comentario.nombreAuditor
           
         })
       },
@@ -145,7 +155,11 @@ export class ComentariosModalComponent implements OnInit {
             fecha:            this.form.value.fecha,
             idTipoComentario: +this.form.value.id_tipo_comentario,
             tipoComentario:   '',
-            fechaAuditoria:''
+            fechaAuditoria:'',
+            fechaAuditoriaInicial:'',
+            responsableAsignado:'',            
+            directorResponsable:'',
+            nombreAuditor:''
           })
           this.form.reset()
         },
@@ -170,7 +184,9 @@ export class ComentariosModalComponent implements OnInit {
           this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'La Proxima Fecha de Auditoria ha sido agregada.'})
           this.FechaAuditoriaProx[this.formFecha.value.fechaAuditoria].push({
             numProyecto:      this.formFecha.value.numProyecto,
-            fechaAuditoria:            this.formFecha.value.fechaAuditoria
+            fechaAuditoria:            this.formFecha.value.fechaAuditoria,
+            fechaAuditoriaInicial:  this.formFecha.value.fechaAuditoriaInicial,
+            responsableAsignado:    this.formFecha.value.responsableAsignado
           })
           this.formFecha.reset()
         },

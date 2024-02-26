@@ -63,6 +63,7 @@ export class DiasTimesheetComponent implements OnInit {
 
   limpiar() {
     this.obtenerDias(0)
+    this.mes = null;
   }
 
   obtenerDias(mes: number) {

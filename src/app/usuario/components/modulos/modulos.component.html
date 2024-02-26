@@ -1,5 +1,5 @@
-
-<p-toast></p-toast>
+<p-toast>
+</p-toast>
 
 
 <div class="main-container">
@@ -16,16 +16,8 @@
         </button>
     </p-toolbar> -->
 
-    <p-table 
-        #tablaPrincipal
-        [value]="modulos" 
-        [paginator]="true"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        [rows]="10"
-        [globalFilterFields]="['modulo', 'subModulo']"
-    >
+    <p-table #tablaPrincipal [value]="modulos" [paginator]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]" [rows]="10" paginatorPosition="both"
+        [globalFilterFields]="['modulo', 'subModulo']">
         <ng-template pTemplate="caption">
             <div class="flex">
                 <span class="p-input-icon-left ml-auto">
@@ -35,25 +27,37 @@
             </div>
         </ng-template>
         <ng-template pTemplate="header">
-        <tr>
-            <!-- <th>ID</th> -->
-            <th pSortableColumn="modulo"><div class="d-flex align-items-center">Módulo <p-sortIcon field="modulo"></p-sortIcon></div></th>
-            <th pSortableColumn="subModulo"><div class="d-flex align-items-center">Submódulo <p-sortIcon field="subModulo"></p-sortIcon></div></th>
-            <th class="text-center">Pestaña</th>
-            <th>Activo</th>
-            <!-- <th class="text-center">Opciones</th> -->
-        </tr>
+            <tr>
+                <!-- <th>ID</th> -->
+                <th pSortableColumn="modulo">
+                    <div class="d-flex align-items-center">Módulo
+                        <p-sortIcon field="modulo"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="subModulo">
+                    <div class="d-flex align-items-center">Submódulo
+                        <p-sortIcon field="subModulo"></p-sortIcon>
+                    </div>
+                </th>
+                <th class="text-center">Pestaña</th>
+                <th class="text-center">Estatus</th>
+                <!-- <th class="text-center">Opciones</th> -->
+            </tr>
         </ng-template>
         <ng-template pTemplate="body" let-modulo let-i="rowIndex">
-        <tr>
-            <!-- <td>{{modulo.idModulo}}</td> -->
-            <td>{{modulo.modulo}}</td>
-            <td>{{modulo.subModulo}}</td>
-            <td class="text-center">
-                <p-badge severity="success" *ngIf="modulo.isTab" [value]="modulo.tab"></p-badge>
-            </td>
-            <td>{{modulo.activo}}</td>
-            <!-- <td class="text-align">
+            <tr>
+                <!-- <td>{{modulo.idModulo}}</td> -->
+                <td>{{modulo.modulo}}</td>
+                <td>{{modulo.subModulo}}</td>
+                <td class="text-center">
+                    <p-badge severity="info" *ngIf="modulo.isTab" [value]="modulo.tab"></p-badge>
+
+                </td>
+                <td class="text-center">
+                    <p-tag severity="success" *ngIf="modulo.activo">Activo</p-tag>
+                    <p-tag severity="danger" *ngIf="!modulo.activo">Inactivo</p-tag>
+                </td>
+                <!-- <td class="text-align">
                 <div class="d-flex justify-content-center gap-3">
                     <button
                     title="Modificar modulos" 
@@ -65,7 +69,7 @@
                     ></button>
                 </div>
             </td> -->
-        </tr>
+            </tr>
         </ng-template>
     </p-table>
 </div>

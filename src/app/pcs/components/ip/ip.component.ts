@@ -36,60 +36,60 @@ export class IpComponent implements OnInit {
   listEmpleados: Array<IEmpleadoNew> = [];
   empresas: Opcion[] = []
 
-  proyecto:           Proyecto  = null
-  cargando:           boolean   = true
-  mostrarFormulario:  boolean   = false
+  proyecto: Proyecto = null
+  cargando: boolean = true
+  mostrarFormulario: boolean = false
 
   form = this.fb.group({
-      num_proyecto:                   ['', [Validators.required]],
-      nombre_proyecto:                ['', [Validators.required]],
-      alcance:                        [null],
-      codigo_postal:                  [null],
-      ciudad:                         [null],
-      id_pais:                        [null],
-      id_estatus:                     [null],
-      id_sector:                      [null],
-      id_tipo_proyecto:               [null],
-      id_responsable_preconstruccion: [null],
-      id_responsable_construccion:    [null],
-      id_responsable_ehs:             [null],
-      id_responsable_supervisor:      [null],
-      ids_clientes:                   [[''], [Validators.required]],
-      id_empresa:                     ['', [Validators.required]],
-      id_director_ejecutivo:          ['', [Validators.required]],
-      costo_promedio_m2:              [null],
-      fecha_inicio:                   [null],
-      fecha_fin:                      [null],
-      total_meses:                    [0],
-      nombre_contacto:                [null],
-      posicion_contacto:              [null],
-      telefono_contacto:              [null],
-      correo_contacto:                [null]
+    num_proyecto: ['', [Validators.required]],
+    nombre_proyecto: ['', [Validators.required]],
+    alcance: [null],
+    codigo_postal: [null],
+    ciudad: [null],
+    id_pais: [null],
+    id_estatus: [null],
+    id_sector: [null],
+    id_tipo_proyecto: [null],
+    id_responsable_preconstruccion: [null],
+    id_responsable_construccion: [null],
+    id_responsable_ehs: [null],
+    id_responsable_supervisor: [null],
+    ids_clientes: [[''], [Validators.required]],
+    id_empresa: ['', [Validators.required]],
+    id_director_ejecutivo: ['', [Validators.required]],
+    costo_promedio_m2: [null],
+    fecha_inicio: [null],
+    fecha_fin: [null],
+    total_meses: [0],
+    nombre_contacto: [null],
+    posicion_contacto: [null],
+    telefono_contacto: [null],
+    correo_contacto: [null]
   })
 
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   catalogosService = inject(CatalogosService)
-  
+
   ngOnInit(): void {
     this.poblarCombos();
     this.getConfigCalendar();
     this.pcsService.cambiarEstadoBotonNuevo(true)
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
-        if(!params.proyecto) {
+        if (!params.proyecto) {
           this.proyecto = null
           this.cargando = false
           this.form.reset()
         }
       })
-    
+
     this.pcsService.obtenerIdProyecto()
       .subscribe(numProyecto => {
         // this.proyectoSeleccionado = true
         // this.form.reset()
         // this.etapas.clear()
-        if(numProyecto) {
+        if (numProyecto) {
           this.mostrarFormulario = true
           // this.sharedService.cambiarEstado(true)
           // this.cargando = true
@@ -99,49 +99,49 @@ export class IpComponent implements OnInit {
               this.cargando = false
             }))
             .subscribe({
-              next: ({data}) => {
+              next: ({ data }) => {
                 console.log(data)
-                if(data.length >= 0) {
+                if (data.length >= 0) {
                   const [proyectoData] = data
                   const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
                   this.form.patchValue({
-                    num_proyecto:                   proyectoData.nunum_proyecto.toString(),
-                    nombre_proyecto:                proyectoData.chproyecto.toString(),
-                    alcance:                        proyectoData.chalcance.toString(),
-                    codigo_postal:                  proyectoData.chcp.toString(),
-                    ciudad:                         proyectoData.chciudad.toString(),
-                    id_pais:                        proyectoData.nukidpais.toString(),
-                    id_estatus:                     proyectoData.nukidestatus.toString(),
-                    id_sector:                      proyectoData.nukidsector.toString(),
-                    id_tipo_proyecto:               proyectoData.nukidtipo_proyecto,
+                    num_proyecto: proyectoData.nunum_proyecto.toString(),
+                    nombre_proyecto: proyectoData.chproyecto.toString(),
+                    alcance: proyectoData.chalcance.toString(),
+                    codigo_postal: proyectoData.chcp.toString(),
+                    ciudad: proyectoData.chciudad.toString(),
+                    id_pais: proyectoData.nukidpais.toString(),
+                    id_estatus: proyectoData.nukidestatus.toString(),
+                    id_sector: proyectoData.nukidsector.toString(),
+                    id_tipo_proyecto: proyectoData.nukidtipo_proyecto,
                     id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
-                    id_responsable_construccion:    proyectoData.nukidresponsable_construccion,
-                    id_responsable_ehs:             proyectoData.nukidresponsable_ehs,
-                    id_responsable_supervisor:      proyectoData.nukidresponsable_supervisor,
+                    id_responsable_construccion: proyectoData.nukidresponsable_construccion,
+                    id_responsable_ehs: proyectoData.nukidresponsable_ehs,
+                    id_responsable_supervisor: proyectoData.nukidresponsable_supervisor,
                     ids_clientes,
-                    id_empresa:                     proyectoData.nukidempresa.toString(),
-                    id_director_ejecutivo:          proyectoData.nukiddirector_ejecutivo.toString(),
-                    costo_promedio_m2:              proyectoData.nucosto_promedio_m2,
-                    fecha_inicio:                   proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
-                    fecha_fin:                      proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
-                    nombre_contacto:                proyectoData.chcontacto_nombre,
-                    posicion_contacto:              proyectoData.chcontacto_posicion,
-                    telefono_contacto:              proyectoData.chcontacto_telefono,
-                    correo_contacto:                proyectoData.chcontacto_correo
+                    id_empresa: proyectoData.nukidempresa.toString(),
+                    id_director_ejecutivo: proyectoData.nukiddirector_ejecutivo.toString(),
+                    costo_promedio_m2: proyectoData.nucosto_promedio_m2,
+                    fecha_inicio: proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
+                    fecha_fin: proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
+                    nombre_contacto: proyectoData.chcontacto_nombre,
+                    posicion_contacto: proyectoData.chcontacto_posicion,
+                    telefono_contacto: proyectoData.chcontacto_telefono,
+                    correo_contacto: proyectoData.chcontacto_correo
                   })
                   this.actualizarTotalMeses()
                 }
               },
-              error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+              error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
             })
         } else {
           console.log('No hay proyecto');
         }
       })
-    
+
     this.activatedRoute.queryParams.subscribe(params => {
       const nuevo = params['nuevo']
-      if(nuevo) {
+      if (nuevo) {
         this.mostrarFormulario = true
       }
     });
@@ -197,8 +197,8 @@ export class IpComponent implements OnInit {
   actualizarTotalMeses() {
     console.log('first')
     let total_meses = 0
-    
-    if(this.form.value.fecha_inicio && this.form.value.fecha_fin) {
+
+    if (this.form.value.fecha_inicio && this.form.value.fecha_fin) {
       total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)
     }
 
@@ -218,8 +218,8 @@ export class IpComponent implements OnInit {
     this.empresas = []
     this.cieService.getCieEmpresas()
       .subscribe({
-        next: ({data}) => {
-          this.empresas = data.map(registro => ({name: registro.chempresa, code: registro.nukidempresa.toString()}))
+        next: ({ data }) => {
+          this.empresas = data.map(registro => ({ name: registro.chempresa, code: registro.nukidempresa.toString() }))
         },
         error: (err) => this.empresas = []
       })
@@ -301,17 +301,16 @@ export class IpComponent implements OnInit {
 
   getEmpleados() {
     this.catServ.getDirectores().subscribe((directoresR) => {
-
-      this.catEmpleados = directoresR.data.map(catEmpleados => ({name: catEmpleados.nombre_persona, code: catEmpleados.nunum_empleado_rr_hh.toString()}))
+      this.catEmpleados = directoresR.data.map(catEmpleados => ({ name: catEmpleados.nombre_persona, code: catEmpleados.nunum_empleado_rr_hh.toString() }))
     });
 
   }
 
   guardar() {
-    
+
     console.log(this.form.value)
 
-    if(!this.form.valid) {
+    if (!this.form.valid) {
       this.form.markAllAsTouched()
       return
     }
@@ -320,48 +319,48 @@ export class IpComponent implements OnInit {
 
     this.form.patchValue({
       fecha_inicio: this.form.value.fecha_inicio ? format(new Date(this.form.value.fecha_inicio), 'Y-MM-dd') as any : null,
-      fecha_fin:    this.form.value.fecha_fin ? format(new Date(this.form.value.fecha_fin), 'Y-MM-dd') as any : null
+      fecha_fin: this.form.value.fecha_fin ? format(new Date(this.form.value.fecha_fin), 'Y-MM-dd') as any : null
     })
 
     this.pcsService.guardar(this.catalogosService.esEdicion, this.form.value)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
-          this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El proyecto ha sido guardado.'})
-          if(!this.catalogosService.esEdicion) {
-            
+          this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'El proyecto ha sido guardado.' })
+          if (!this.catalogosService.esEdicion) {
+
             this.pcsService.enviarNuevoProyecto({
-              id:     +this.form.value.num_proyecto,
+              id: +this.form.value.num_proyecto,
               nombre: this.form.value.nombre_proyecto
             })
-            
+
             this.router.navigate([], {
               relativeTo: this.activatedRoute,
               queryParams: {
-                proyecto:   this.form.value.num_proyecto,
-                esEdicion:  1,
-                nuevo:      false
+                proyecto: this.form.value.num_proyecto,
+                esEdicion: 1,
+                nuevo: false
               },
               queryParamsHandling: 'merge'
             })
           }
         },
         error: (err) => {
-          this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
         }
       })
   }
 
   esInvalido(campo: string): boolean {
-    return this.form.get(campo).invalid && 
-            (this.form.get(campo).dirty || this.form.get(campo).touched)
+    return this.form.get(campo).invalid &&
+      (this.form.get(campo).dirty || this.form.get(campo).touched)
   }
 
   obtenerMensajeError(campo: string): string {
     let mensaje = ''
 
     errorsArray.forEach((error) => {
-      if(this.form.get(campo).hasError(error.tipo))
+      if (this.form.get(campo).hasError(error.tipo))
         mensaje = error.mensaje.toString()
     })
 

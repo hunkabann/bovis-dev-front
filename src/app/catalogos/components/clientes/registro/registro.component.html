@@ -1,52 +1,34 @@
-
-<p-toast></p-toast>
+<p-toast>
+</p-toast>
 
 <form [formGroup]="form" (ngSubmit)="guardar()">
 
     <div class="row">
-        
+
         <div class="col-12">
             <label for="cliente">Cliente:</label>
-            <input 
-                id="cliente"
-                pInputText
-                class="form-control" 
-                maxlength="50" 
-                formControlName="cliente"
-                [ngClass]="{'ng-invalid ng-dirty': esInvalido('cliente')}"
-                >
+            <input id="cliente" pInputText class="form-control" maxlength="50" formControlName="cliente" [ngClass]="{'ng-invalid ng-dirty': esInvalido('cliente')}">
             <div *ngIf="esInvalido('cliente')">
-                <small
-                    class="error-msg"
-                >
+                <small class="error-msg">
                     {{ obtenerMensajeError('cliente') }}
                 </small>
             </div>
         </div>
-        
+
         <div class="col-12">
             <label for="rfc">RFC:</label>
-            <input 
-                id="rfc"
-                pInputText
-                class="form-control" 
-                maxlength="50" 
-                formControlName="rfc"
-                [ngClass]="{'ng-invalid ng-dirty': esInvalido('rfc')}"
-                >
+            <input id="rfc" pInputText class="form-control" maxlength="50" formControlName="rfc" [ngClass]="{'ng-invalid ng-dirty': esInvalido('rfc')}">
             <div *ngIf="esInvalido('rfc')">
-                <small
-                    class="error-msg"
-                >
+                <small class="error-msg">
                     {{ obtenerMensajeError('rfc') }}
                 </small>
             </div>
         </div>
-        
+
     </div>
-    
+
     <div class="d-flex justify-content-end mt-2">
-        <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Guardar</button>
+        <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!form.valid"><i class="fas fa-save"></i> Guardar</button>
     </div>
 
 </form>

@@ -1,96 +1,84 @@
 <div class="main-container">
 
+    <h1>Carga de CFDI</h1>
 
-  <div class="">
+    <div class="mt-5">
+        <div class="formgroup-inline">
+            <div class="field col-6">
+                <label for="firstname2">Proyecto:</label>
+                <br>
+                <p-dropdown id="id_proyecto" [options]="proyectos" (onChange)="changeEnter($event)" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [(ngModel)]="proyecto"></p-dropdown>
+            </div>
+            <div class="field" *ngIf="isLoadingGPM">
+                <br>
+                <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+            </div>
+            <div class="field">
+                <label for="concepto">Selección de Facturas:</label>
+                <p-fileUpload #fileUpload mode="basic" [customUpload]="true" accept=".xml" (onSelect)="onBasicUpload($event)" [multiple]="true" [maxFileSize]="fileSizeMax" chooseIcon="pi pi-upload" chooseLabel="Cargar XML" [disabled]="isXml"></p-fileUpload>
+            </div>
+            <div class="field" *ngIf="isLoadingFacturas">
+                <br>
+                <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+            </div>
+        </div>
+        <div class="formgroup-inline">
+            <div class="field">
+                <br>
+                <p-button *ngIf="isClear" icon="pi pi-refresh" (onClick)="clearFile()" label="Limpiar carga"></p-button>
+            </div>
+        </div>
 
-    <div class="formgroup-inline">
-      <div class="field">
-        <label for="firstname2">Proyecto:</label>
-        <br>
-        <p-dropdown 
-          id="id_proyecto" 
-          [options]="proyectos" 
-          (onChange)="changeEnter($event)"
-          placeholder="Seleccionar un proyecto" 
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-          [(ngModel)]="proyecto"
-        ></p-dropdown>
-      </div>
-      <div class="field" *ngIf="isLoadingGPM">
-        <br>
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      </div>
-      <div class="field">
-        <label for="concepto">Selección de Facturas:</label>
-        <p-fileUpload #fileUpload mode="basic" [customUpload]="true" accept=".xml" (onSelect)="onBasicUpload($event)"
-          [multiple]="true" [maxFileSize]="fileSizeMax" chooseLabel="Cargar XML" [disabled]="isXml"></p-fileUpload>
-      </div>
-      <div class="field" *ngIf="isLoadingFacturas">
-        <br>
-        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-      </div>
-    </div>
-    <div class="formgroup-inline">
-      <div class="field">
-        <br>
-        <p-button *ngIf="isClear" icon="pi pi-refresh" (onClick)="clearFile()" label="Limpiar carga"></p-button>
-      </div>
     </div>
 
-  </div>
-  <br>
+    <br>
 
-  <div *ngIf="listResponse && listResponse.length > 0">
-    <p-table [value]="listResponse" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
-      <ng-template pTemplate="header">
-        <tr>
-          <th>Conceptos</th>
-          <th>Rfc Emisor</th>
-          <th>Rfc Receptor</th>
-          <th>Fecha</th>
-          <th>Total</th>
-          <th>Tipo Factura</th>
-          <th>No. Factura</th>
-          <th>Nombre Factura</th>
-          <th>Almacenada</th>
-          <th>Error</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-xml>
-        <tr>
-          <td>
-            {{xml.conceptos}}
-          </td>
-          <td>{{xml.rfcEmisor}}</td>
-          <td>{{xml.rfcReceptor}}</td>
-          <td>{{xml.fechaEmision}}</td>
-          <td>{{xml.total}}</td>
-          <td>{{xml.tipoFactura}}</td>
-          <td>{{xml.noFactura}}</td>
-          <td>{{xml.facturaNombre}}</td>
-          <td>
-            <ng-container *ngIf="xml.almacenada">
-              Si
-            </ng-container>
-            <ng-container *ngIf="!xml.almacenada">
-              No
-            </ng-container>
+    <div *ngIf="listResponse && listResponse.length > 0">
+        <p-table [value]="listResponse" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Conceptos</th>
+                    <th>Rfc Emisor</th>
+                    <th>Rfc Receptor</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Tipo Factura</th>
+                    <th>No. Factura</th>
+                    <th>Nombre Factura</th>
+                    <th>Almacenada</th>
+                    <th>Error</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-xml>
+                <tr>
+                    <td>
+                        {{xml.conceptos}}
+                    </td>
+                    <td>{{xml.rfcEmisor}}</td>
+                    <td>{{xml.rfcReceptor}}</td>
+                    <td>{{xml.fechaEmision}}</td>
+                    <td>{{xml.total}}</td>
+                    <td>{{xml.tipoFactura}}</td>
+                    <td>{{xml.noFactura}}</td>
+                    <td>{{xml.facturaNombre}}</td>
+                    <td>
+                        <ng-container *ngIf="xml.almacenada">
+                            Si
+                        </ng-container>
+                        <ng-container *ngIf="!xml.almacenada">
+                            No
+                        </ng-container>
 
-          </td>
-          <td>{{xml.error}}</td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
+                    </td>
+                    <td>{{xml.error}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
 
-  <div *ngIf="errorMEssageFile != ''">
-    <p-message severity="error" [text]="errorMEssageFile"></p-message>
-  </div>
+    <div *ngIf="errorMEssageFile != ''">
+        <p-message severity="error" [text]="errorMEssageFile"></p-message>
+    </div>
 
 </div>
 <p-toast></p-toast>

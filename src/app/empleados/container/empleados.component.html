@@ -1,98 +1,116 @@
-
-<p-toast></p-toast>
+<p-toast>
+</p-toast>
 
 <div class="main-container">
 
-  <h1>Personas</h1>
+    <h1>Personas</h1>
 
-  <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-start gap-2">  
-    <button 
-      type="submit" 
-      class="btn btn-info"
-      routerLink="/empleados/registro-persona"
-    >
-      Nuevo
-    </button>
-  </p-toolbar>
-  <p-table 
-    #tablaPrincipal
-    [value]="personas" 
-    [paginator]="true"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-    [rowsPerPageOptions]="[10, 25, 50]"
-    [rows]="10"
-    [globalFilterFields]="['chnombre_completo', 'chrfc']"
-  >
-    <ng-template pTemplate="caption">
-      <div class="flex">
-          <span class="p-input-icon-left ml-auto">
-              <i class="pi pi-search"></i>
-              <input pInputText #buscador type="text" (input)="tablaPrincipal.filterGlobal(buscador.value, 'contains')" placeholder="Buscar..." />
-          </span>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="chnombre"><div class="d-flex align-items-center">Nombre <p-sortIcon field="chnombre"></p-sortIcon></div></th>
-        <th pSortableColumn="chrfc"><div class="d-flex align-items-center">RFC <p-sortIcon field="chrfc"></p-sortIcon></div></th>
-        <th pSortableColumn="dtfecha_nacimiento"><div class="d-flex align-items-center">Fecha de Nacimiento <p-sortIcon field="dtfecha_nacimiento"></p-sortIcon></div></th>
-        <th pSortableColumn="chemail"><div class="d-flex align-items-center">Email <p-sortIcon field="chemail"></p-sortIcon></div></th>
-        <th pSortableColumn="chtelefono"><div class="d-flex align-items-center">Teléfono <p-sortIcon field="chtelefono"></p-sortIcon></div></th>
-        <th pSortableColumn="chcelular"><div class="d-flex align-items-center">Celular <p-sortIcon field="chcelular"></p-sortIcon></div></th>
-        <th pSortableColumn="chcurp"><div class="d-flex align-items-center">CURP <p-sortIcon field="chcurp"></p-sortIcon></div></th>
-        <th pSortableColumn="chsexo"><div class="d-flex align-items-center">Sexo <p-sortIcon field="chsexo"></p-sortIcon></div></th>
-        <th pSortableColumn="chtipo_persona"><div class="d-flex align-items-center">Tipo Persona <p-sortIcon field="chtipo_persona"></p-sortIcon></div></th>
-        <th pSortableColumn="chedo_civil"><div class="d-flex align-items-center">EdoCivil <p-sortIcon field="chedo_civil"></p-sortIcon></div></th>
-        <th pSortableColumn="chtipo_sangre"><div class="d-flex align-items-center">TipoSangre <p-sortIcon field="chtipo_sangre"></p-sortIcon></div></th>
-        <th pSortableColumn="boempleado"><div class="d-flex align-items-center">Es Empleado <p-sortIcon field="boempleado"></p-sortIcon></div></th>
-        <th class="text-center">Estatus</th>
-        <th class="text-center">Opciones</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-empleado>
-      <tr>
-        <td>
-          <a 
-            class="text-success font-bold"
-            [routerLink]="['/empleados/edicion-persona', empleado.nukidpersona]"
-          >
-            {{ empleado | fullName }}
-          </a>
-        </td>
-        <td>{{ empleado.chrfc }}</td>
-        <td>{{ empleado.dtfecha_nacimiento | date:'Y/MM/dd' }}</td>
-        <td>{{ empleado.chemail }}</td>
-        <td>{{ empleado.chtelefono }}</td>
-        <td>{{ empleado.chcelular }}</td>
-        <td>{{ empleado.chcurp }}</td>
-        <td>{{ empleado.chsexo }}</td>
-        <td>{{ empleado.chtipo_persona }}</td>
-        <td>{{ empleado.chedo_civil }}</td>
-        <td>{{ empleado.chtipo_sangre }}</td>
-        <td>{{ empleado.boempleado ? 'Sí' : 'No' }}</td>
-        <!--<td [ngClass]="{'text-danger': !empleado.boactivo, 'text-success': empleado.boactivo}">
-          {{ empleado.boactivo ? 'Activo' : 'Inactivo' }}
-        </td>-->
-        <td class="text-center">
-          <p-inputSwitch 
-            [ngModel]="empleado.boactivo"
-            (click)="toggleActivo(empleado.nukidpersona, empleado.boactivo)"
-            [readonly]="true"
-          ></p-inputSwitch>
-        </td>
-        <td class="text-center">
-          <button 
-            title="Modificar persona" 
-            pButton 
-            pRipple 
-            icon="pi pi-pencil" 
-            class="p-button-rounded p-button-success p-mr-2"
-            [routerLink]="['/empleados/edicion-persona', empleado.nukidpersona]"
-          ></button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-  
+    <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-end gap-2 text-right">
+        <button type="submit" class="btn btn-primary" routerLink="/empleados/registro-persona"><i class="fas fa-plus"></i> Nueva persona</button>
+    </p-toolbar>
+    <p-table #tablaPrincipal [value]="personas" [paginator]="true" [showCurrentPageReport]="true" paginatorPosition="both" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]" [rows]="10"
+        [globalFilterFields]="['chnombre_completo', 'chrfc']" styleClass="p-datatable-striped">
+        <ng-template pTemplate="caption">
+            <div class="flex">
+                <span class="p-input-icon-left ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText #buscador type="text" (input)="tablaPrincipal.filterGlobal(buscador.value, 'contains')" placeholder="Buscar..." />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="chnombre">
+                    <div class="d-flex align-items-center">Nombre
+                        <p-sortIcon field="chnombre"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chrfc">
+                    <div class="d-flex align-items-center">RFC
+                        <p-sortIcon field="chrfc"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="dtfecha_nacimiento">
+                    <div class="d-flex align-items-center">Fecha de Nacimiento
+                        <p-sortIcon field="dtfecha_nacimiento"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chemail">
+                    <div class="d-flex align-items-center">Email
+                        <p-sortIcon field="chemail"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chtelefono">
+                    <div class="d-flex align-items-center">Teléfono
+                        <p-sortIcon field="chtelefono"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chcelular">
+                    <div class="d-flex align-items-center">Celular
+                        <p-sortIcon field="chcelular"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chcurp">
+                    <div class="d-flex align-items-center">CURP
+                        <p-sortIcon field="chcurp"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chsexo">
+                    <div class="d-flex align-items-center">Sexo
+                        <p-sortIcon field="chsexo"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chtipo_persona">
+                    <div class="d-flex align-items-center">Tipo Persona
+                        <p-sortIcon field="chtipo_persona"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chedo_civil">
+                    <div class="d-flex align-items-center">EdoCivil
+                        <p-sortIcon field="chedo_civil"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="chtipo_sangre">
+                    <div class="d-flex align-items-center">TipoSangre
+                        <p-sortIcon field="chtipo_sangre"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="boempleado">
+                    <div class="d-flex align-items-center">Es Empleado
+                        <p-sortIcon field="boempleado"></p-sortIcon>
+                    </div>
+                </th>
+                <th class="text-center">Estatus</th>
+                <th class="text-center">Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-empleado>
+            <tr>
+                <td>
+                    <a class="text-success font-bold" [routerLink]="['/empleados/edicion-persona', empleado.nukidpersona]">{{ empleado | fullName }}</a>
+                </td>
+                <td>{{ empleado.chrfc }}</td>
+                <td>{{ empleado.dtfecha_nacimiento | date:'Y/MM/dd' }}</td>
+                <td>{{ empleado.chemail }}</td>
+                <td>{{ empleado.chtelefono }}</td>
+                <td>{{ empleado.chcelular }}</td>
+                <td>{{ empleado.chcurp }}</td>
+                <td>{{ empleado.chsexo }}</td>
+                <td>{{ empleado.chtipo_persona }}</td>
+                <td>{{ empleado.chedo_civil }}</td>
+                <td>{{ empleado.chtipo_sangre }}</td>
+                <td>{{ empleado.boempleado ? 'Sí' : 'No' }}</td>
+                <!--<td [ngClass]="{'text-danger': !empleado.boactivo, 'text-success': empleado.boactivo}">
+                    {{ empleado.boactivo ? 'Activo' : 'Inactivo' }}
+                </td>-->
+                <td class="text-center">
+                    <p-inputSwitch [ngModel]="empleado.boactivo" (click)="toggleActivo(empleado.nukidpersona, empleado.boactivo)" [readonly]="true"></p-inputSwitch>
+                </td>
+                <td class="text-center">
+                    <button title="Modificar persona" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info p-mr-2" [routerLink]="['/empleados/edicion-persona', empleado.nukidpersona]"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
 </div>

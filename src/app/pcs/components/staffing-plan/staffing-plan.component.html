@@ -1,111 +1,81 @@
+<p-toast>
+</p-toast>
 
-<p-toast></p-toast>
-
-<div class="d-flex gap-2 mb-2 justify-content-between">
-  <h1>Etapas</h1>
-  <a
-    title="Agregar etapa" 
-    pButton 
-    pRipple 
-    icon="pi pi-plus"
-    class="p-button-rounded p-button-info p-mr-2"
-    style="text-decoration: none;"
-    (click)="agregarEtapa()"
-  ></a>
+<div class="d-flex gap-2 mb-2 justify-content-between mt-5" *ngIf="proyectoSeleccionado">
+    <h1>Etapas</h1>
+    <a title="Agregar etapa" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" style="text-decoration: none;" (click)="agregarEtapa()"></a>
 </div>
 
-<div class="text-center" *ngIf="!proyectoSeleccionado; else cargandoView">
-  <p>Seleccione un proyecto y presione el botón <strong>Editar</strong>.</p>
-</div>
+<!--<div class="text-center" *ngIf="!proyectoSeleccionado; else cargandoView">
+    <p>Seleccione un proyecto y presione el botón <strong>Editar</strong>.</p>
+</div>-->
 
 <ng-template #cargandoView>
-  <div class="text-center" *ngIf="cargando">
-    <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
-    <p>Cargando etapas...</p>
-    <p><strong>Un momento.</strong></p>
-  </div>
+    <div class="text-center" *ngIf="cargando">
+        <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+        <p>Cargando etapas...</p>
+        <p><strong>Un momento.</strong></p>
+    </div>
 </ng-template>
 
 <div class="text-center" *ngIf="!cargando && etapas.controls.length == 0; else tablaEtapas">
-  <p>Agregue al menos una etapa para comenzar.</p>
+    <p>Agregue al menos una etapa para comenzar.</p>
 </div>
 
 <ng-template #tablaEtapas [formGroup]="form">
     <ng-container formArrayName="etapas">
-      <p-accordion [activeIndex]="i" [formGroupName]="i" *ngFor="let etapa of etapas.controls; let i = index">
-        <p-accordionTab>
-          <ng-template pTemplate="header">
-            <div class="d-flex justify-content-between align-items-center w-100">
-              <div class="title">
-                <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
-                <span class="vertical-align-middle">{{obtenerNombreFase(etapa.value)}}</span>
-              </div>
-              <div class="options d-flex gap-2">
-                <button 
-                  title="Agregar empleado" 
-                  type="button" 
-                  class="btn btn-success" 
-                  (click)="modificarEmpleado($event, etapa.value, null, i, null)"
-                >
+        <p-accordion [activeIndex]="i" [formGroupName]="i" *ngFor="let etapa of etapas.controls; let i = index">
+            <p-accordionTab>
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">{{obtenerNombreFase(etapa.value)}}</span>
+                        </div>
+                        <div class="options d-flex gap-2">
+                            <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null)">
                   <i class="pi pi-user-plus vertical-align-middle"></i>
                 </button>
-                <button
-                  title="Eliminar etapa" 
-                  type="button"
-                  class="btn btn-danger"
-                  (click)="eliminarEtapa($event, etapa.value, i)"
-                >
+                            <button title="Eliminar etapa" type="button" class="btn btn-danger" (click)="eliminarEtapa($event, etapa.value, i)">
                   <i class="pi pi-trash vertical-align-middle"></i>
                 </button>
-              </div>
-            </div>
-          </ng-template>
-          <ng-template pTemplate="content">
-            <p-table [value]="empleados(i).controls" [scrollable]="true" scrollHeight="400px">
-              <ng-template pTemplate="header">
-                  <tr>
-                      <th width="100px">Opciones</th>
-                      <th width="100px">No. Empleado</th>
-                      <th>Nombre</th>
-                      <th *ngFor="let mesRegistro of etapa.value.meses">
-                        {{mesRegistro.desc | uppercase}}
-                      </th>
-                  </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-empleado let-iEmpleado="rowIndex">
-                  <tr>
-                    <td>
-                      <div class="d-flex gap-2 justify-content-center">
-                        <button 
-                          title="Modificar fechas" 
-                          type="button"
-                          class="btn btn-primary"
-                          (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)"
-                          
-                        >
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <p-table [value]="empleados(i).controls" [scrollable]="true" scrollHeight="400px">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th width="100px">Opciones</th>
+                                <th width="100px">No. Empleado</th>
+                                <th>Nombre</th>
+                                <th *ngFor="let mesRegistro of etapa.value.meses">
+                                    {{mesRegistro.desc | uppercase}}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-empleado let-iEmpleado="rowIndex">
+                            <tr>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)">
                           <i class="pi pi-calendar vertical-align-middle"></i>
                         </button>
-                        <button 
-                          title="Eliminar empleado"
-                          type="button"
-                          class="btn btn-danger"
-                          (click)="eliminarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)"
-                          
-                        >
+                                        <button title="Eliminar empleado" type="button" class="btn btn-danger" (click)="eliminarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)">
                           <i class="pi pi-trash vertical-align-middle"></i>
                         </button>
-                      </div>
-                    </td>
-                    <td>{{empleado.value.numempleadoRrHh}}</td>
-                    <td>{{empleado.value.empleado}}</td>
-                    <td *ngFor="let mesRegistro of etapa.value.meses">
-                      {{empleado.value.fechas | porcentajeMes:mesRegistro}}
-                    </td>
-                  </tr>
-              </ng-template>
-            </p-table>
-          </ng-template>
-        </p-accordionTab>
-      </p-accordion>
+                                    </div>
+                                </td>
+                                <td>{{empleado.value.numempleadoRrHh}}</td>
+                                <td>{{empleado.value.empleado}}</td>
+                                <td *ngFor="let mesRegistro of etapa.value.meses">
+                                    {{empleado.value.fechas | porcentajeMes:mesRegistro}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>
     </ng-container>
 </ng-template>

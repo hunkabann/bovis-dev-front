@@ -1,184 +1,134 @@
-
-<p-toast></p-toast>
+<p-toast>
+</p-toast>
 
 <div class="main-container">
-  
+
     <h1>Resultado - Búsqueda</h1>
-    
+
     <div class="row mb-2">
         <div class="col-4">
             <label>Fecha:</label>
-            <p-calendar 
-              view="month" 
-              selectionMode="range" 
-              dateFormat="m/yy" 
-              [readonlyInput]="true"
-              [(ngModel)]="fechas" 
-              [style]="{width: '100%'}"
-              placeholder="Seleccionar un mes..."
-              [showButtonBar]="true"
-            ></p-calendar>
+            <p-calendar view="month" selectionMode="range" dateFormat="m/yy" [readonlyInput]="true" [(ngModel)]="fechas" [style]="{width: '100%'}" placeholder="Seleccionar un mes..." [showButtonBar]="true"></p-calendar>
         </div>
         <div class="col-4">
             <label>Cuenta:</label>
-            <p-dropdown  
-                [options]="cuentas"
-                placeholder="Seleccionar una cuenta" 
-                optionLabel="name" 
-                [showClear]="true"
-                [style]="{ width: '100%' }"
-                optionValue="code"
-                [(ngModel)]="cuenta"
-                [filter]="true" 
-                filterBy="name"
-            ></p-dropdown>
+            <p-dropdown [options]="cuentas" placeholder="Seleccionar una cuenta" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [(ngModel)]="cuenta" [filter]="true" filterBy="name"></p-dropdown>
         </div>
         <div class="col-4">
             <label>Concepto:</label>
-            <p-dropdown  
-                [options]="conceptos"
-                placeholder="Seleccionar un concepto" 
-                optionLabel="name" 
-                [showClear]="true"
-                [style]="{ width: '100%' }"
-                optionValue="code"
-                [(ngModel)]="concepto"
-                [filter]="true" 
-                filterBy="name"
-                appendTo="body"
-            ></p-dropdown>
+            <p-dropdown [options]="conceptos" placeholder="Seleccionar un concepto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [(ngModel)]="concepto" [filter]="true" filterBy="name" appendTo="body"></p-dropdown>
         </div>
         <div class="col-4">
             <label>Empresa:</label>
-            <p-dropdown  
-                [options]="empresas"
-                placeholder="Seleccionar una empresa" 
-                optionLabel="name" 
-                [showClear]="true"
-                [style]="{ width: '100%' }"
-                optionValue="code"
-                [(ngModel)]="empresa"
-                [filter]="true" 
-                filterBy="name"
-            ></p-dropdown>
+            <p-dropdown [options]="empresas" placeholder="Seleccionar una empresa" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [(ngModel)]="empresa" [filter]="true" filterBy="name"></p-dropdown>
         </div>
         <div class="col-4">
             <label>No. Proyecto:</label>
-            <p-dropdown  
-                [options]="numsProyecto"
-                placeholder="Seleccionar un número de proyecto" 
-                optionLabel="name" 
-                [showClear]="true"
-                [style]="{ width: '100%' }"
-                optionValue="code"
-                [(ngModel)]="numProyecto"
-                [filter]="true" 
-                filterBy="name"
-            ></p-dropdown>
+            <p-dropdown [options]="numsProyecto" placeholder="Seleccionar un número de proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [(ngModel)]="numProyecto" [filter]="true" filterBy="name"></p-dropdown>
         </div>
         <div class="col-4">
             <label>Responsable:</label>
-            <p-dropdown  
-                [options]="responsables"
-                placeholder="Seleccionar un responsable" 
-                optionLabel="name" 
-                [showClear]="true"
-                [style]="{ width: '100%' }"
-                optionValue="code"
-                [(ngModel)]="responsable"
-                [filter]="true" 
-                filterBy="name"
-            ></p-dropdown>
+            <p-dropdown [options]="responsables" placeholder="Seleccionar un responsable" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [(ngModel)]="responsable" [filter]="true" filterBy="name"></p-dropdown>
         </div>
         <div class="col-4">
             <label>Clasificación PY:</label>
-            <p-dropdown  
-                [options]="clasificacionesPY"
-                placeholder="Seleccionar una clasificación" 
-                optionLabel="name" 
-                [showClear]="true"
-                [style]="{ width: '100%' }"
-                optionValue="code"
-                [(ngModel)]="clasificacionPY"
-                [filter]="true" 
-                filterBy="name"
-            ></p-dropdown>
+            <p-dropdown [options]="clasificacionesPY" placeholder="Seleccionar una clasificación" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [(ngModel)]="clasificacionPY" [filter]="true" filterBy="name"></p-dropdown>
         </div>
         <div class="col-12 d-flex justify-content-center align-items-center gap-2">
-            <p-button label="Exportar Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+            <button type="button" class="btn btn-dark" (click)="limpiar()">Limpiar filtros</button>
             <button type="button" class="btn btn-info" (click)="filtrar()">Buscar</button>
-            <button type="button" class="btn btn-info" (click)="limpiar()">Limpiar filtros</button>
         </div>
     </div>
 
     <div class="d-flex flex-column gap-2">
-        <p-table 
-            [value]="data" 
-            [tableStyle]="{ 'min-width': '50rem' }"
-            [paginator]="true"
-            [showCurrentPageReport]="true"
-            [totalRecords]="totalRegistros"
-            [lazy]="true"
-            currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-            [rowsPerPageOptions]="[10, 25, 50, 100]"
-            [rows]="noRegistros"
-            [loading]="loading"
-            paginatorPosition="both"
-            (onLazyLoad)="loadData($event)"
-        >
-        <ng-template pTemplate="header">
-            <tr>
-                <th *ngFor="let header of cieHeadersLocal" [pSortableColumn]="cieHeadersFieldsLocal[header]">
-                  <div class="d-flex align-items-center">{{header}}<p-sortIcon [field]="cieHeadersFieldsLocal[header]"></p-sortIcon></div>
-                  <!-- {{header}} -->
-                </th>
-                <th pSortableColumn="inconsistente">
-                    <div class="d-flex align-items-center">Inconsistente<p-sortIcon field="inconsistente"></p-sortIcon></div>
-                </th>
-                <th class="text-center">Opciones</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-record>
-            <tr 
-                [ngStyle]="{'background-color': record.inconsistente ? '#ffa4a4' : '', 'color': record.fechaCancelacion ? '#ffa4a4' : ''}"
-            >
-                <td>{{record.nombreCuenta}}</td>
-                <td>{{record.cuenta}}</td>
-                <td>{{record.tipoPoliza}}</td>
-                <td>{{record.numero}}</td>
-                <td>{{record.fecha}}</td>
-                <td>{{record.mes}}</td>
-                <td>{{record.concepto}}</td>
-                <td>{{record.centroCostos}}</td>
-                <td>{{record.proyecto}}</td>
-                <td>{{record.saldoInicial | currency}}</td>
-                <td>{{record.debe | currency}}</td>
-                <td>{{record.haber | currency}}</td>
-                <td>{{record.movimiento | currency}}</td>
-                <td>{{record.empresa}}</td>
-                <td>{{record.numProyecto}}</td>
-                <td>{{record.tipoProyecto}}</td>
-                <td>{{record.edoResultados}}</td>
-                <td>{{record.responsable}}</td>
-                <td>{{record.tipoCuenta}}</td>
-                <td>{{record.tipoPy}}</td>
-                <td>{{record.clasificacionPy}}</td>
-                <td>{{record.inconsistente ? 'Sí' : 'No'}}</td>
-                <td class="text-align">
-                  <div class="d-flex justify-content-center gap-3">
-                    <button 
-                      title="Modificar registro" 
-                      pButton 
-                      pRipple 
-                      icon="pi pi-pencil" 
-                      class="p-button-rounded p-button-success p-mr-2"
-                      [routerLink]="['/cie/modificar-registro', record.idCie]"
-                      *ngIf="record.idCie != 0"
-                    ></button>
-                  </div>
-                </td>
-            </tr>
-        </ng-template>
+        <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="totalRegistros > 0">
+            <p-button label="Exportar Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+        </p-toolbar>
+
+        <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [showCurrentPageReport]="true" [totalRecords]="totalRegistros" [lazy]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50, 100]"
+            [rows]="noRegistros" [loading]="loading" paginatorPosition="both" (onLazyLoad)="loadData($event)" styleClass="p-datatable-striped">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th *ngFor="let header of cieHeadersLocal" [pSortableColumn]="cieHeadersFieldsLocal[header]">
+                        <div class="d-flex align-items-center">{{header}}
+                            <p-sortIcon [field]="cieHeadersFieldsLocal[header]"></p-sortIcon>
+                        </div>
+                        <!-- {{header}} -->
+                    </th>
+                    <th pSortableColumn="inconsistente">
+                        <div class="d-flex align-items-center">Inconsistente
+                            <p-sortIcon field="inconsistente"></p-sortIcon>
+                        </div>
+                    </th>
+                    <th class="text-center">Opciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-record>
+                <tr [ngStyle]="{'background-color': record.inconsistente ? '#ffa4a4' : '', 'color': record.fechaCancelacion ? '#ffa4a4' : ''}">
+                    <td>{{record.nombreCuenta}}</td>
+                    <td>{{record.cuenta}}</td>
+                    <td>{{record.tipoPoliza}}</td>
+                    <td>{{record.numero}}</td>
+                    <td *ngIf="record.fechaCancelacion == null || record.fechaCancelacion == ''; then thenfecha else elsefecha"> </td>
+                    <ng-template #thenfecha>
+                        <td>{{record.fecha}}</td>
+                    </ng-template>
+                    <ng-template #elsefecha>
+                        <td>{{record.fechaCancelacion}}</td>
+                    </ng-template>
+                    <!--td>{{record.fecha}}</td-->
+                    <td *ngIf="record.fechaCancelacion == null || record.fechaCancelacion == ''; then thenmes else elsemes"> </td>
+                    <ng-template #thenmes>
+                        <td>{{record.mes}}</td>
+                    </ng-template>
+                    <ng-template #elsemes>
+                        <td>{{regresames(record.fechaCancelacion)}}</td>
+                    </ng-template>
+                    <!--td>{{record.mes}}</td-->
+                    <td>{{record.concepto}}</td>
+                    <td>{{record.centroCostos}}</td>
+                    <td>{{record.proyecto}}</td>
+                    <td>{{record.saldoInicial | currency}}</td>
+                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion); then thendebe else elsedebe"> </td>
+                    <ng-template #thendebe>
+                        <td>{{record.debe|currency}}</td>
+                    </ng-template>
+                    <ng-template #elsedebe>
+                        <td>{{0.0|currency}}</td>
+                    </ng-template>
+                    <!--td>{{record.debe | currency}}</td-->
+                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion); then thenhaber else elsehaber"> </td>
+                    <ng-template #thenhaber>
+                        <td>{{record.haber|currency}}</td>
+                    </ng-template>
+                    <ng-template #elsehaber>
+                        <td>{{0.0|currency}}</td>
+                    </ng-template>
+                    <!--td>{{record.haber | currency}}</td-->
+                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion); then thenmovimiento else elsemovimiento"> </td>
+                    <ng-template #thenmovimiento>
+                        <td>{{record.movimiento|currency}}</td>
+                    </ng-template>
+                    <ng-template #elsemovimiento>
+                        <td>{{0.0|currency}}</td>
+                    </ng-template>
+                    <!--td>{{record.movimiento | currency}}</td-->
+                    <td>{{record.empresa}}</td>
+                    <td>{{record.numProyecto}}</td>
+                    <td>{{record.tipoProyecto}}</td>
+                    <td>{{record.edoResultados}}</td>
+                    <td>{{record.responsable}}</td>
+                    <td>{{record.tipoCuenta}}</td>
+                    <td>{{record.tipoPy}}</td>
+                    <td>{{record.clasificacionPy}}</td>
+                    <td>{{record.inconsistente ? 'Sí' : 'No'}}</td>
+                    <td class="text-align">
+                        <div class="d-flex justify-content-center gap-3">
+                            <button title="Modificar registro" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/cie/modificar-registro', record.idCie]" *ngIf="record.idCie != 0"></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
         </p-table>
     </div>
 

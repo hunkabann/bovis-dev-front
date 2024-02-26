@@ -3,13 +3,9 @@
 <app-header [currentModule]="tituloPaginaLocal"></app-header>
 
 <div class="wrapper">
+    <app-menu-sidebar *ngIf="loginDisplay" (nameModule)="onEmitter($event)"></app-menu-sidebar>
 
-  <app-menu-sidebar *ngIf="loginDisplay" (nameModule)="onEmitter($event)"></app-menu-sidebar>
-
-  <div class="main-app">
-
-    <router-outlet></router-outlet>
-
-  </div>
+    <div class="main-app">
+        <router-outlet></router-outlet>
+    </div>
 </div>
-

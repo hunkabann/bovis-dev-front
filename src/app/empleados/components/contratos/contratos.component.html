@@ -1,57 +1,40 @@
-
-<p-toast></p-toast>
+<p-toast>
+</p-toast>
 
 <div class="main-container">
 
-  <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-start gap-2">  
-    <button 
-      type="submit" 
-      class="btn btn-info"
-      [routerLink]="['/empleados/contratos/registro', idEmpleado]"
-    >
+    <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-start gap-2">
+        <button type="submit" class="btn btn-info" [routerLink]="['/empleados/contratos/registro', idEmpleado]">
       Nuevo
     </button>
-  </p-toolbar>
-  <div class="table-container">
-    <p-table 
-      [value]="plantillas" 
-      [paginator]="true"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-      [rowsPerPageOptions]="[10, 25, 50]"
-      [rows]="10"
-    >
-      <ng-template pTemplate="header">
-        <tr>
-          <th pSortableColumn="idContratoEmpleado">ID <p-sortIcon field="idContratoEmpleado"></p-sortIcon></th>
-          <th pSortableColumn="titulo">Título <p-sortIcon field="titulo"></p-sortIcon></th>
-          <th class="text-center">Opciones</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-plantilla>
-        <tr>
-          <td>
-            <a 
-              class="text-success font-bold"
-              [routerLink]="['/empleados/contratos/registro', idEmpleado, plantilla.idContratoEmpleado]"
-            >
+    </p-toolbar>
+    <div class="table-container">
+        <p-table [value]="plantillas" [paginator]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]" [rows]="10" paginatorPosition="both">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="idContratoEmpleado">ID
+                        <p-sortIcon field="idContratoEmpleado"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="titulo">Título
+                        <p-sortIcon field="titulo"></p-sortIcon>
+                    </th>
+                    <th class="text-center">Opciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-plantilla>
+                <tr>
+                    <td>
+                        <a class="text-success font-bold" [routerLink]="['/empleados/contratos/registro', idEmpleado, plantilla.idContratoEmpleado]">
               {{ plantilla.idContratoEmpleado }}
             </a>
-          </td>
-          <td>{{ plantilla.titulo }}</td>
-          <td class="text-center">
-            <button 
-              title="Modificar plantilla" 
-              pButton 
-              pRipple 
-              icon="pi pi-pencil" 
-              class="p-button-rounded p-button-success p-mr-2"
-              [routerLink]="['/empleados/contratos/registro', idEmpleado, plantilla.idContratoEmpleado]"
-            ></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
-  
+                    </td>
+                    <td>{{ plantilla.titulo }}</td>
+                    <td class="text-center">
+                        <button title="Modificar plantilla" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/empleados/contratos/registro', idEmpleado, plantilla.idContratoEmpleado]"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+
 </div>

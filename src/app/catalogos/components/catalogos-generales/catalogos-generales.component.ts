@@ -25,6 +25,7 @@ export class CatalogosGeneralesComponent implements OnInit {
   selectedEstatus: any;
   nombreServicio: string = '';
   loading: boolean = true;
+  nombreCatalogo = "";
   constructor(private catalogosService: CatalogosGeneralesService, private messageService: MessageService,
     private confirmationService: ConfirmationService) {
     this.nombreServicio = localStorage.getItem('nombreService') || '';
@@ -40,6 +41,7 @@ export class CatalogosGeneralesComponent implements OnInit {
   }
 
   getDataCatalogo() {
+    this.nombreCatalogo = this.capitalizeFirstLetter(this.agregarEspacios(this.nombreServicio));
     this.catalogosService.getDataCatalogo(this.nombreServicio).subscribe(data => {
       this.listCatalogo = data.data;
     });
@@ -55,10 +57,18 @@ export class CatalogosGeneralesComponent implements OnInit {
     this.isDialog = true;
   }
 
+  capitalizeFirstLetter(str) {
+    return str[0].toUpperCase() + str.slice(1);
+  }
+
+  agregarEspacios(string) {
+    return string.replace(/([A-Z])/g, ' $1').trim();
+  }
+
   save() {
-  /*   console.log(this.catElement);
-    console.log(this.selectedEstatus);
-    console.log(this.isNuevo); */
+    /*   console.log(this.catElement);
+      console.log(this.selectedEstatus);
+      console.log(this.isNuevo); */
     if (!this.isNuevo) {
       this.catalogosService.saveElement(this.catElement, this.nombreServicio).subscribe(data => {
         console.log(data);
@@ -73,11 +83,11 @@ export class CatalogosGeneralesComponent implements OnInit {
           this.getDataCatalogo();
         }
       });
-    }else{
+    } else {
       //console.log(this.catElement);
       this.getPosicion();
       this.catalogosService.updateElement(this.catElement, this.nombreServicio).subscribe(data => {
-       // console.log(data);
+        // console.log(data);
         if (data) {
           this.messageService.add({
             severity: "success",
@@ -119,7 +129,7 @@ export class CatalogosGeneralesComponent implements OnInit {
 
   }
 
-  getPosicion(){
+  getPosicion() {
     window.scroll({
       top: 0,
       left: 0,

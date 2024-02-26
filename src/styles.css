@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+
+
 /* @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 html, body { height: 100%; }
@@ -8,157 +10,192 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 
+
 /* @import '~@angular/material/prebuilt-themes/deeppurple-amber.css'; */
+
 
 /* html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .container { margin: 1%; } */
 
+
 /* Inicio */
+
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 @import url(../node_modules//quill/dist/quill.snow.css);
 @import url(../node_modules//quill/dist/quill.core.css);
 body {
-  font-family: "Poppins", sans-serif;
-  background-color: #fafafa;
-  /* background-image: url('assets/images/decoration-img.png'); */
+    font-family: "Poppins", sans-serif;
+    background-color: #fafafa;
+    /* background-image: url('assets/images/decoration-img.png'); */
 }
+
 
 /** PERSONALIZACION **/
+
 .bg-white {
-  background-color: #fff;
+    background-color: #fff;
 }
 
-.wrapper{
-  display: grid;
-  grid-template-columns: 7rem 1fr;
+.wrapper {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
 }
 
 .content {
-  overflow-x: hidden;
+    overflow-x: hidden;
 }
 
 .menu-principal {
-  max-width: 7rem;
-}
-.menu-principal .p-menuitem-icon {
-  width: 3rem;
-  font-size: 2rem;
-}
-.menu-principal .icon-empleado {
-  content: url('assets/icons-menu/Gestión_Empleados.png');
-}
-.menu-principal .icon-timesheet {
-  content: url('assets/icons-menu/Gestión-Timesheet.png');
-}
-.menu-principal .icon-costos {
-  content: url('assets/icons-menu/Gestión-Costos.png');
-}
-.menu-principal .icon-cie {
-  content: url('assets/icons-menu/Gestión-CIE.png');
-}
-.menu-principal .icon-pcs {
-  content: url('assets/icons-menu/Gestión-PCS.png');
-}
-.menu-principal .icon-auditoria-legal {
-  content: url('assets/icons-menu/Gestión-Auditoria legal.png');
-}
-.menu-principal .icon-reportes {
-  content: url('assets/icons-menu/Gestión-Reporte.png');
-}
-.menu-principal .icon-pec {
-  content: url('assets/icons-menu/Gestión-PEC.png');
-}
-.menu-principal .icon-facturacion {
-  content: url('assets/icons-menu/Gestión-Facturación.png');
-}
-.menu-principal .icon-admin {
-  content: url('assets/icons-menu/Gestión-Admin.png');
-}
-.menu-principal .icon-catalogos {
-  content: url('assets/icons-menu/Gestión-Catalogos.png');
-}
-.menu-principal .p-megamenu-panel {
-  /* background-color: #f8f9fa; */
-  border-radius: 1rem;
-}
-.menu-principal .p-menuitem-link:not(.p-disabled):hover {
-  /* background-image: url('assets/images/decoration-img.png'); */
-  background-size: 10rem;
-  border-radius: .5rem;
+    max-width: 7rem;
 }
 
+.menu-principal .p-menuitem-icon {
+    width: 3rem;
+    font-size: 2rem;
+}
+
+.menu-principal .icon-empleado {
+    content: url('assets/icons-menu/Gestión_Empleados.png');
+}
+
+.menu-principal .icon-timesheet {
+    content: url('assets/icons-menu/Gestión-Timesheet.png');
+}
+
+.menu-principal .icon-costos {
+    content: url('assets/icons-menu/Gestión-Costos.png');
+}
+
+.menu-principal .icon-cie {
+    content: url('assets/icons-menu/Gestión-CIE.png');
+}
+
+.menu-principal .icon-pcs {
+    content: url('assets/icons-menu/Gestión-PCS.png');
+}
+
+.menu-principal .icon-auditoria-legal {
+    content: url('assets/icons-menu/Gestión-Auditoria legal.png');
+}
+
+.menu-principal .icon-reportes {
+    content: url('assets/icons-menu/Gestión-Reporte.png');
+}
+
+.menu-principal .icon-pec {
+    content: url('assets/icons-menu/Gestión-PEC.png');
+}
+
+.menu-principal .icon-facturacion {
+    content: url('assets/icons-menu/Gestión-Facturación.png');
+}
+
+.menu-principal .icon-admin {
+    content: url('assets/icons-menu/Gestión-Admin.png');
+}
+
+.menu-principal .icon-catalogos {
+    content: url('assets/icons-menu/Gestión-Catalogos.png');
+}
+
+.menu-principal .p-megamenu-panel {
+    /* background-color: #f8f9fa; */
+    border-radius: 1rem;
+}
+
+.menu-principal .p-menuitem-link:not(.p-disabled):hover {
+    /* background-image: url('assets/images/decoration-img.png'); */
+    background-size: 10rem;
+    border-radius: .5rem;
+}
+
+
 /** BOTONES **/
+
 .p-button {
-  padding: 0.5rem 1.25rem;
-  background: var(--bluegray-300);
-  border: 1px solid var(--bluegray-300);
+    padding: 0.5rem 1.25rem;
+    background: var(--bluegray-300);
+    border: 1px solid var(--bluegray-300);
 }
 
 .p-button:enabled:hover {
-  background: var(--bluegray-400);
-  border: 1px solid var(--bluegray-400);
+    background: var(--bluegray-400);
+    border: 1px solid var(--bluegray-400);
 }
 
 .p-button.f-2x .p-button-icon-left {
-  font-size: 1.5rem;
+    font-size: 1.5rem;
 }
 
 .p-button.f-2x .p-button-icon {
-  font-size: 1.5rem;
+    font-size: 1.5rem;
 }
+
 
 /**  CALENDARIO **/
+
 .p-inputtext,
 .p-button.p-button-icon-only {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 }
+
 
 /** TABLA **/
+
 table {
-  font-size: 0.9rem;
+    font-size: 0.9rem;
 }
 
-.p-datatable .p-datatable-thead > tr > th {
-  background-color: var(--bluegray-300) !important;
-  color: var(--surface-50) !important;
+.p-datatable .p-datatable-thead>tr>th {
+    background-color: var(--bluegray-300) !important;
+    color: var(--surface-50) !important;
 }
 
-.p-datatable .p-datatable-thead > tr > th,
-.p-datatable .p-datatable-tbody > tr > td {
-  padding: 0.75rem !important;
+.p-datatable .p-datatable-thead>tr>th,
+.p-datatable .p-datatable-tbody>tr>td {
+    padding: 0.75rem !important;
 }
+
 
 /** CALENDARIO **/
+
 .p-datepicker .p-datepicker-header {
-  padding: 0;
+    padding: 0;
 }
 
 .p-datepicker table {
-  margin: 0;
+    margin: 0;
 }
 
 .p-datepicker table th {
-  background-color: var(--bluegray-300) !important;
-  color: var(--surface-50) !important;
-  text-align: center;
+    background-color: var(--bluegray-300) !important;
+    color: var(--surface-50) !important;
+    text-align: center;
 }
 
 .p-datepicker table th,
 .p-datepicker table td {
-  padding: 0.25rem;
+    padding: 0.25rem;
 }
 
-.p-datepicker table td > span {
-  height: 2rem;
-  width: 2rem;
+.p-datepicker table td>span {
+    height: 2rem;
+    width: 2rem;
 }
+
 
 /** CHIP **/
+
 .p-chip-text {
-  font-size: 0.75rem;
+    font-size: 0.75rem;
 }
+
+a {
+    color: blue
+}
+
 
 /* p {
   font-family: "Poppins", sans-serif;
@@ -286,13 +323,14 @@ a.article:hover {
   transition: all 0.3s;
 } */
 
+
 /* .left-menu {
   min-width: 190px;
   height: 700px;
 } */
 
 @media (maz-width: 768px) {
-  /* #sidebar {
+    /* #sidebar {
     margin-left: -250px;
   }
   #sidebar.active {
@@ -303,102 +341,104 @@ a.article:hover {
   } */
 }
 
+
 /* Agregado por sebastian.flores */
+
 .main-app {
-  width: 100%; 
-  min-height: 100vh;
-  overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .main-container {
-  margin: 2rem;
+    margin: 2rem;
 }
 
 .table-container {
-  overflow-x: auto;
-  min-height: 70vh;
+    overflow-x: auto;
+    min-height: 70vh;
 }
 
 .buttons-container {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
 .p-tabmenu .p-tabmenu-nav .p-tabmenuitem.p-highlight .p-menuitem-link {
-  color: var(--dark-blue, #00436C) !important;
-  border-color: var(--dark-blue) !important;
+    color: var(--dark-blue, #00436C) !important;
+    border-color: var(--dark-blue) !important;
 }
 
 .custom-input-number .p-inputnumber-input {
-  max-width: 5rem !important;
+    max-width: 5rem !important;
 }
 
 .p-multiselect-label {
-  flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .error-msg {
-  color: var(--red-600);
+    color: var(--red-600);
 }
 
 .p-megamenu-panel {
-z-index: 99 !important;
+    z-index: 99 !important;
 }
 
 tfoot th {
-  padding: 0.75rem !important;
+    padding: 0.75rem !important;
 }
 
 .full-width {
-  width: 100% !important;
+    width: 100% !important;
 }
 
-.full-width .p-inputnumber{
-  display: block;
-  width: 100% !important;
+.full-width .p-inputnumber {
+    display: block;
+    width: 100% !important;
 }
 
-.full-width .p-inputnumber input{
-  width: 100% !important;
+.full-width .p-inputnumber input {
+    width: 100% !important;
 }
 
 .invalid-tr {
-  color: red !important;
+    color: red !important;
 }
 
-.readonly-field input{
-  background-color: var(--bs-gray-200);
+.readonly-field input {
+    background-color: var(--bs-gray-200);
 }
 
 .tabla-filtro table {
-  min-height: 600px !important;
+    min-height: 600px !important;
 }
 
 span.required {
-  color: red !important;
+    color: red !important;
 }
 
-span.required:after{
-  content: '*';
+span.required:after {
+    content: '*';
 }
 
 .main-table table tr:nth-child(2n) {
-  background-color: #EEEEEE;
+    background-color: #EEEEEE;
 }
 
 .pointer {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .loading-div {
-  min-height: 300px;
+    min-height: 300px;
 }
 
 input.p-inputnumber-input {
-  width: 100% !important;
+    width: 100% !important;
 }
 
 .super-z-index {
-  z-index: 9999999 !important;
+    z-index: 9999999 !important;
 }

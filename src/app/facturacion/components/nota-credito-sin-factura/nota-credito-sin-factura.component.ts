@@ -52,6 +52,7 @@ export class NotaCreditoSinFacturaComponent implements OnInit {
   mesBusqueda: Date
   mesSeleccionado: number = null
   anioSeleccionado: number = null
+  totalRecords:number = 0
 
   listBusquedaCompleto: NotaCreditoSF[] = []
   
@@ -74,6 +75,7 @@ export class NotaCreditoSinFacturaComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
+          this.totalRecords = data.length
           const [proyectosR, notasCreditoR] = data
           this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}`}))
           this.listBusquedaCompleto = notasCreditoR.data
@@ -91,6 +93,7 @@ export class NotaCreditoSinFacturaComponent implements OnInit {
       .subscribe({
         next: ({data}) => {
           this.listBusquedaCompleto = data
+          this.totalRecords = data.length
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })

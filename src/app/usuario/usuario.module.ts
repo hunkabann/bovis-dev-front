@@ -19,6 +19,7 @@ import { BadgeModule } from 'primeng/badge';
 import { AsignarPermisosComponent } from './components/asignar-permisos/asignar-permisos.component';
 import { PerfilRegistroComponent } from './components/perfil-registro/perfil-registro.component';
 import { InputTextModule } from 'primeng/inputtext';
+import { TagModule } from 'primeng/tag';
 
 
 @NgModule({
@@ -43,7 +44,8 @@ import { InputTextModule } from 'primeng/inputtext';
     InputTextModule,
     InputSwitchModule,
     TabMenuModule,
-    BadgeModule
+    BadgeModule,
+    TagModule
   ]
 })
 export class UsuarioModule { }

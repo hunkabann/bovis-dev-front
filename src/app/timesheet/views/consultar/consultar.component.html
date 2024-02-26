@@ -1,142 +1,94 @@
-
-<p-toast></p-toast>
+<p-toast>
+</p-toast>
 
 <div class="main-container">
-  <div class="row">
-    <div class="col-4">
-        <label for="proyecto">Proyecto:</label>
-        <p-dropdown 
-          id="proyecto" 
-          [options]="proyectos"
-          placeholder="Seleccionar una proyecto" 
-          optionLabel="name"
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          (onChange)="buscarRegistros($event, 'proyecto')"
-          [(ngModel)]="idProyecto"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-    </div>
-    <div class="col-4">
-        <label for="empleado">Empleado:</label>
-        <p-dropdown 
-          id="empleado" 
-          [options]="empleados"
-          placeholder="Seleccionar una empleado" 
-          optionLabel="name"
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          (onChange)="buscarRegistros($event, 'empleado')"
-          [(ngModel)]="idEmpleado"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-    </div>
-    <div class="col-4">
-        <label>Unidad de negocio:</label>
-        <p-dropdown 
-          id="unidad" 
-          [options]="unidades"
-          placeholder="Seleccionar una unidad" 
-          optionLabel="name"
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          (onChange)="buscarRegistros($event, 'unidad')"
-          [(ngModel)]="idUnidad"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-    </div>
-    <div class="col-4">
-        <label for="company">Empresa:</label>
-        <br>
-        <p-dropdown 
-          id="company" 
-          [options]="empresas" 
-          placeholder="Seleccionar una empresa" 
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          (onChange)="buscarRegistros($event, 'empresa')"
-          [(ngModel)]="idEmpresa"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-    </div>
-    <div class="col-4">
-        <label>Mes:</label>
-        <p-calendar 
-          view="month" 
-          dateFormat="m/yy" 
-          [readonlyInput]="true" 
-          (onSelect)="buscarRegistros($event, 'mes')"
-          [style]="{width: '100%'}"
-          placeholder="Seleccionar un mes..."
-          [(ngModel)]="mes"
-        ></p-calendar>
-    </div>
-    <div class="col-4 d-flex align-items-center">
-      <button type="button" class="btn btn-info" (click)="limpiar()">Limpiar filtros</button>
-    </div>
-  </div>
+    <h1>Consultar / Modificar</h1>
 
-  <p-table 
-    [value]="timesheets" 
-    [tableStyle]="{ 'min-width': '50rem' }"
-    [paginator]="true"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
-    [rowsPerPageOptions]="[10, 25, 50]"
-    [rows]="10"
-    class="main-table"
-  >
-    <ng-template pTemplate="header">
-      <tr>
-        <th pSortableColumn="mes"><div class="d-flex align-items-center">Mes <p-sortIcon field="mes"></p-sortIcon></div></th>
-        <th pSortableColumn="anio"><div class="d-flex align-items-center">Año <p-sortIcon field="anio"></p-sortIcon></div></th>
-        <th pSortableColumn="num_empleado"><div class="d-flex align-items-center">No. Empleado <p-sortIcon field="num_empleado"></p-sortIcon></div></th>
-        <th pSortableColumn="empleado"><div class="d-flex align-items-center">Empleado <p-sortIcon field="empleado"></p-sortIcon></div></th>
-        <th>Proyectos</th>
-        <th>Opciones</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-ts>
-      <tr 
-        [ngStyle]="{'background-color': ts.completado ? '#ffa4a4' : ''}"
-      >
-  
-          <td>{{ts.mes}}</td>
-          <td>{{ts.anio}}</td>
-          <td>{{ts.num_empleado}}</td>
-          <td>{{ts.empleado}}</td>
-          <!-- <td>{{ts.proyectos | proyectoJoin}}</td> -->
-          <td>
-            <div class="form-group" *ngFor="let proyecto of ts.proyectos">
-              <label><strong>{{proyecto.descripcion}}: {{proyecto.tDedicacion}} %</strong></label>
-              <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}"/>
-            </div>
-            <hr>
-            <label><strong>Total: {{ts.proyectosJoin}} % - Días: {{ts.proyectosDiasJoin}}</strong></label>
+    <div class="row">
+        <div class="col-4">
+            <label for="proyecto">Proyecto:</label>
+            <p-dropdown id="proyecto" [options]="proyectos" placeholder="Seleccionar una proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'proyecto')" [(ngModel)]="idProyecto" optionValue="code" [filter]="true"
+                filterBy="name"></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label for="empleado">Empleado:</label>
+            <p-dropdown id="empleado" [options]="empleados" placeholder="Seleccionar una empleado" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'empleado')" [(ngModel)]="idEmpleado" optionValue="code" [filter]="true"
+                filterBy="name"></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label>Unidad de negocio:</label>
+            <p-dropdown id="unidad" [options]="unidades" placeholder="Seleccionar una unidad" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'unidad')" [(ngModel)]="idUnidad" optionValue="code" [filter]="true"
+                filterBy="name"></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label for="company">Empresa:</label>
             <br>
-            <label><strong>Otros: {{ts.otrosJoin}} % - Días: {{ts.otrosDiasJoin}}</strong></label>
-          </td>
-          <td>
-            <button 
-              title="txtEditar" 
-              pButton 
-              pRipple 
-              icon="pi pi-pencil" 
-              class="p-button-rounded p-button-success p-mr-2"
-              [routerLink]="['/timesheet/cargar-horas', ts.id]"
-            ></button>
-          </td>
-      
-      </tr>
-    </ng-template>
-  </p-table>
+            <p-dropdown id="company" [options]="empresas" placeholder="Seleccionar una empresa" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'empresa')" [(ngModel)]="idEmpresa" optionValue="code" [filter]="true"
+                filterBy="name"></p-dropdown>
+        </div>
+        <div class="col-4">
+            <label>Mes:</label>
+            <p-calendar view="month" dateFormat="m/yy" [readonlyInput]="true" (onSelect)="buscarRegistros($event, 'mes')" [style]="{width: '100%'}" placeholder="Seleccionar un mes..." [(ngModel)]="mes"></p-calendar>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12 d-flex align-items-center">
+            <button type="button" class="btn btn-dark" (click)="limpiar()"><i class="fas fa-eraser"></i> Limpiar filtros</button>
+        </div>
+    </div>
+
+    <p-table [value]="timesheets" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]" [rows]="10"
+        class="main-table" paginatorPosition="both" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="mes">
+                    <div class="d-flex align-items-center">Mes
+                        <p-sortIcon field="mes"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="anio">
+                    <div class="d-flex align-items-center">Año
+                        <p-sortIcon field="anio"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="num_empleado">
+                    <div class="d-flex align-items-center">No. Empleado
+                        <p-sortIcon field="num_empleado"></p-sortIcon>
+                    </div>
+                </th>
+                <th pSortableColumn="empleado">
+                    <div class="d-flex align-items-center">Empleado
+                        <p-sortIcon field="empleado"></p-sortIcon>
+                    </div>
+                </th>
+                <th>Proyectos</th>
+                <th>Opciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-ts>
+            <tr [ngStyle]="{'background-color': ts.completado ? '#ffa4a4' : ''}">
+
+                <td>{{ts.mes}}</td>
+                <td>{{ts.anio}}</td>
+                <td>{{ts.num_empleado}}</td>
+                <td>{{ts.empleado}}</td>
+                <!-- <td>{{ts.proyectos | proyectoJoin}}</td> -->
+                <td>
+                    <div class="form-group" *ngFor="let proyecto of ts.proyectos">
+                        <label><strong>{{proyecto.descripcion}}: {{proyecto.tDedicacion}} %</strong></label>
+                        <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}" />
+                    </div>
+                    <hr>
+                    <label><strong>Total: {{ts.proyectosJoin}} % - Días: {{ts.proyectosDiasJoin}}</strong></label>
+                    <br>
+                    <label><strong>Otros: {{ts.otrosJoin}} % - Días: {{ts.otrosDiasJoin}}</strong></label>
+                </td>
+                <td>
+                    <button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/timesheet/cargar-horas', ts.id]"></button>
+                </td>
+
+            </tr>
+        </ng-template>
+    </p-table>
 </div>

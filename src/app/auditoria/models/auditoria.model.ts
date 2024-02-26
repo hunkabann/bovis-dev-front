@@ -114,6 +114,10 @@ export interface Comentario {
   idTipoComentario: number;
   tipoComentario:   string;
   fechaAuditoria:   string;
+  fechaAuditoriaInicial:     string;
+  responsableAsignado:       string;
+  directorResponsable:       string;
+  nombreAuditor:       string;
 }
 
 export interface TiposComentarioResponse {
@@ -130,6 +134,8 @@ export interface TipoComentario {
 }
 
 export interface FechaAuditoria {
-  numProyecto:      number;
+  numProyecto:               number;
   fechaAuditoria:            string;
+  fechaAuditoriaInicial:     string;
+  responsableAsignado:       string;
 }

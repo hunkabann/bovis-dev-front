@@ -1,20 +1,20 @@
-
-<p-toast></p-toast>
+<p-toast>
+</p-toast>
 
 
 <div class="main-container">
-    
+
     <form [formGroup]="form" (ngSubmit)="guardar()">
 
         <ng-container formArrayName="modulos">
 
             <h1>Módulos: {{nombrePerfil || 'N/A'}}</h1>
-            
-            <div class="buttons-container mt-4">
-                <button type="submit" class="btn btn-info" [disabled]="!form.valid">Guardar</button>
-                <button type="button" class="btn btn-info" routerLink="/usuarios/perfiles">Regresar</button>
-            </div>
-    
+
+            <p-toolbar styleClass="p-1 mb-4 d-flex justify-content-end gap-2 text-right">
+                <button type="button" class="btn btn-secondary" routerLink="/usuarios/perfiles"><i class="fas fa-arrow-left"></i> Regresar</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!form.valid"><i class="fas fa-save"></i> Guardar</button>
+            </p-toolbar>
+
             <p><strong>Selecciona los módulos:</strong></p>
 
             <div class="row">
@@ -22,27 +22,21 @@
                     <div *ngIf="modulos.controls[i].get('modulo').value != modulos.controls[i-1]?.get('modulo').value" class="col-12">
                         <h1>{{modulo.get('modulo').value}}</h1>
                     </div>
-    
+
                     <div class="col-4 d-flex alig-items-center gap-3">
-                        <p-inputSwitch 
-                            [id]="'modulo-' + i"
-                            formControlName="activo"
-                        ></p-inputSwitch>
-                        <label 
-                            [for]="'modulo-' + i"
-                            class="text-uppercase"
-                        >
+                        <p-inputSwitch [id]="'modulo-' + i" formControlName="activo"></p-inputSwitch>
+                        <label [for]="'modulo-' + i" class="text-uppercase">
                             {{modulo.get('subModulo').value}}
                             <br>
                             <small class="text-success"><strong>{{modulo.get('isTab').value ? modulo.get('tab').value + ' [Pestaña]' : ''}}</strong></small>
                         </label>
                     </div>
                 </ng-container>
-    
+
             </div>
 
         </ng-container>
-    
+
     </form>
 
 </div>

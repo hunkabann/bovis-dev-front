@@ -1,108 +1,94 @@
 <p-toast></p-toast>
 
 <div class="content" style="margin:2%">
-  <div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-info" routerLink="/catalogos">Regresar</button>
-  </div>
-  <br>
+    <h1>{{nombreCatalogo}}</h1>
 
-  <div>
+    <p-toolbar styleClass="p-1 mt-5 mb-4 d-flex justify-content-end gap-2 text-right">
+        <button type="button" class="btn btn-secondary" routerLink="/catalogos"><i class="fas fa-arrow-left"></i> Regresar</button>
+        <button title="btnNuevo" label="Nuevo" icon="pi pi-plus" class="btn btn-primary p-mr-2" (click)="openDialog(null)"><i class="fas fa-plus"></i> Nuevo</button>
+    </p-toolbar>
 
-    <p-toast></p-toast>
+    <br>
 
-    <div class="card">
-      <p-toolbar styleClass="p-mb-4">
-        <ng-template pTemplate="left">
-          <button title="btnNuevo" pButton pRipple label="New" icon="pi pi-plus" class="p-button-success p-mr-2"
-            (click)="openDialog(null)"></button>
-          <!--  <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button> -->
-        </ng-template>
+    <div>
 
-        <ng-template pTemplate="right">
-          <!--  <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="p-mr-2 p-d-inline-block"></p-fileUpload>
-            <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button> -->
-        </ng-template>
-      </p-toolbar>
+        <p-toast></p-toast>
 
-      <p-table #dt [value]="listCatalogo" [rows]="10" [paginator]="true" [(selection)]="selectedRegistros"
-        selectionMode="single" [responsive]="true" [rowHover]="true" dataKey="id"
-        currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} elementos" [lazy]="false"
-        [scrollable]="true" [showCurrentPageReport]="true" [globalFilterFields]="['descripcion', 'id']"
-        [rowsPerPageOptions]="[10,25,50]" selectionMode="single">
-        <ng-template pTemplate="caption">
-           <div class="table-header">
-              Catalogo
-              <span class="p-input-icon-left">
-                  <i class="pi pi-search"></i>
-                  <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
-                   placeholder="Búsqueda por descripción" />
-              </span>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="header">
-          <tr>
-            <th pSortableColumn="id" style="width:10%">ID <p-sortIcon field="id"></p-sortIcon></th>
-            <th pSortableColumn="descripcion" style="width:60%">Descripción <p-sortIcon
-                field="descripcion"></p-sortIcon>
-            </th>
-            <th pSortableColumn="activo" style="width:10%">Estatus <p-sortIcon field="activo"></p-sortIcon></th>
+        <div class="card">
+            <p-table #dt [value]="listCatalogo" [rows]="10" [paginator]="true" [(selection)]="selectedRegistros" paginatorPosition="both" selectionMode="single" [responsive]="true" [rowHover]="true" dataKey="id" currentPageReportTemplate="Mostrando {first} de {last} de {totalRecords} elementos"
+                [lazy]="false" [scrollable]="true" [showCurrentPageReport]="true" [globalFilterFields]="['descripcion', 'id']" [rowsPerPageOptions]="[10,25,50]" selectionMode="single" styleClass="p-datatable-striped">
+                <ng-template pTemplate="caption">
+                    <div class="table-header">
+                        <span></span>
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')" placeholder="Búsqueda por descripción" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="id" style="width:10%">ID
+                            <p-sortIcon field="id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="descripcion" style="width:60%">Descripción
+                            <p-sortIcon field="descripcion"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="activo" style="width:10%" class="text-center">Estatus
+                            <p-sortIcon field="activo"></p-sortIcon>
+                        </th>
 
-            <th></th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-elemento>
-          <tr>
-            <td>{{elemento.id}}</td>
-            <td>{{elemento.descripcion}}</td>
-            <td> <p-tag severity="success" *ngIf="elemento.activo == 1">Activo</p-tag>
-              <p-tag severity="danger" *ngIf="elemento.activo == 0">Inactivo</p-tag>
-            </td>
-            <td>
-              <button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
-                (click)="openDialog(elemento)"></button>
-              &nbsp;&nbsp; <button title="btnEliminar" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
-                (click)="eliminarRegistro(elemento)"></button>
-            </td>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-          <!--  <div class="p-d-flex p-ai-center p-jc-between">
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-elemento>
+                    <tr>
+                        <td>{{elemento.id}}</td>
+                        <td>{{elemento.descripcion}}</td>
+                        <td class="text-center">
+                            <p-tag severity="success" *ngIf="elemento.activo == 1">Activo</p-tag>
+                            <p-tag severity="danger" *ngIf="elemento.activo == 0">Inactivo</p-tag>
+                        </td>
+                        <td class="text-center">
+                            <button title="Editar registro" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info  p-mr-2 mr-3" (click)="openDialog(elemento)"></button>
+                            <button title="Eliminar registro" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="eliminarRegistro(elemento)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary">
+                    <!--  <div class="p-d-flex p-ai-center p-jc-between">
                 In total there are {{products ? products.length : 0 }} products.
             </div> -->
-        </ng-template>
-      </p-table>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="isDialog" [style]="{width: '450px'}" header="Información" [modal]="true" styleClass="p-fluid">
+            <ng-template pTemplate="content">
+
+                <div class="p-field">
+                    <label for="description">Descripción</label>
+                    <textarea id="description" [(ngModel)]="catElement.descripcion" pInputTextarea required rows="3" cols="20"></textarea>
+                </div>
+                <div class="p-field" *ngIf="false">
+                    <label class="p-mb-3">Estatus</label>
+                    <div class="p-formgrid p-grid">
+                        <p-dropdown [options]="listEstatus" [(ngModel)]="selectedEstatus" placeholder="Seleccione un Estatus" optionLabel="label" [showClear]="true"></p-dropdown>
+                    </div>
+                </div>
+
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button title="btnCancel" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="isDialog = !isDialog"></button>
+                <button title="btnSave" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-toast></p-toast>
+
+        <!-- <p-confirmDialog [style]="{width: '50vw'}" key="positionDialog" [baseZIndex]="10000"></p-confirmDialog> -->
+        <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
     </div>
-
-    <p-dialog [(visible)]="isDialog" [style]="{width: '450px'}" header="Información" [modal]="true"
-      styleClass="p-fluid">
-      <ng-template pTemplate="content">
-
-        <div class="p-field">
-          <label for="description">Descripción</label>
-          <textarea id="description" [(ngModel)]="catElement.descripcion" pInputTextarea required rows="3"
-            cols="20"></textarea>
-        </div>
-        <div class="p-field" *ngIf="false">
-          <label class="p-mb-3">Estatus</label>
-          <div class="p-formgrid p-grid">
-            <p-dropdown [options]="listEstatus" [(ngModel)]="selectedEstatus" placeholder="Seleccione un Estatus"
-              optionLabel="label" [showClear]="true"></p-dropdown>
-          </div>
-        </div>
-
-      </ng-template>
-
-      <ng-template pTemplate="footer">
-        <button title="btnCancel" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"
-          (click)="isDialog = !isDialog"></button>
-        <button title="btnSave" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" (click)="save()"></button>
-      </ng-template>
-    </p-dialog>
-
-    <p-toast></p-toast>
-
-    <!-- <p-confirmDialog [style]="{width: '50vw'}" key="positionDialog" [baseZIndex]="10000"></p-confirmDialog> -->
-    <p-confirmDialog icon="pi pi-exclamation-triangle"></p-confirmDialog>
-
-  </div>
 </div>

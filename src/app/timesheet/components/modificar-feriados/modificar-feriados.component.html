@@ -3,25 +3,13 @@
         <div class="col-12">
             <div class="form-group">
                 <label for="dias">Sábados feriados:</label>
-                <p-calendar 
-                    [readonlyInput]="true"
-                    [style]="{width: '100%'}"
-                    placeholder="Seleccionar un mes..."
-                    appendTo="body"
-                    [minDate]="fechaMinima"
-                    [maxDate]="fechaMaxima"
-                    [disabledDates]="fechasDeshabilitadas"
-                    [monthNavigator]="false" 
-                    [yearNavigator]="false"
-                    selectionMode="multiple"
-                    formControlName="dias_seleccionados"
-                    [defaultDate]="fechaMinima"
-                ></p-calendar>
+                <p-calendar [readonlyInput]="true" [style]="{width: '100%'}" placeholder="Seleccionar un mes..." appendTo="body" [minDate]="fechaMinima" [maxDate]="fechaMaxima" [disabledDates]="fechasDeshabilitadas" [monthNavigator]="false" [yearNavigator]="false" selectionMode="multiple"
+                    formControlName="dias_seleccionados" [defaultDate]="fechaMinima"></p-calendar>
             </div>
         </div>
         <div class="col-12">
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Guardar</button>
+                <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!form.valid"><i class="fas fa-save"></i> Guardar</button>
             </div>
         </div>
     </div>

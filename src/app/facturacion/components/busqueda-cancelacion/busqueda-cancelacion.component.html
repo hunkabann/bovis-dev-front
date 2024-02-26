@@ -1,298 +1,214 @@
 <div class="main-container">
-  <!-- contenedor de filtros -->
-  <div class="container-fluid container-filter">
-  
-    <div class="row mt-3 mx-2">
-      <div class="col-4">
-        <label for="concepto">Proyecto:</label>
-        <div class="">
-          <p-dropdown class="w-full" styleClass="w-full"
-            [options]="filtroProyectos" (onChange)="onChangeCombo($event, 1)" 
-            [disabled]="isDisableProyecto" placeholder="Selecciona un proyecto" 
-            optionLabel="name" [showClear]="true" #dropDownProyecto
-            [filter]="true" 
-            filterBy="name"></p-dropdown>
-        </div>
-      </div>
-      <div class="col-4">
-        <label for="descripcion">Empresa:</label>
-        <div class="">
-          <p-dropdown class="w-full" styleClass="w-full"
-            [options]="filtroEmpresas" (onChange)="onChangeCombo($event, 2)" 
-            [disabled]="isDisableEmpresa" placeholder="Selecciona una empresa" 
-            optionLabel="name" [showClear]="true" #dropDownEmpresa
-            [filter]="true" 
-            filterBy="name"></p-dropdown>
-        </div>
-  
-      </div>
-      <div class="col-4">
-        <label for="email">Cliente:</label>
-        <div class="">
-          <p-dropdown class="w-full" styleClass="w-full"
-            [options]="filtroClientes" (onChange)="onChangeCombo($event, 3)"
-            [disabled]="isDisableCliente" placeholder="Selecciona un cliente" 
-            optionLabel="name" [showClear]="true" #dropDownCliente
-            [filter]="true" 
-            filterBy="name"></p-dropdown>
-        </div>
-      </div>
-    </div>
-    
-    <div class="row mt-2 mx-2">
-      <div class="col-4">
-        <label for="email">Fecha Inicio:</label>
-          <div class="">
-            <p-calendar [showIcon]="true" styleClass="w-full"
-            dateFormat="dd/mm/yy" [maxDate]="maxDate" [(ngModel)]="fechaInicio"></p-calendar>
-            <!-- [disabled]="isConsulta" -->
-          </div>
-      </div>
-      <div class="col-4">
-        <label for="email">Fecha Fin:</label>
-          <div class="">
-            <p-calendar [showIcon]="true" styleClass="w-full"
-            dateFormat="dd/mm/yy" [maxDate]="maxDate" [(ngModel)]="fechaFin" ></p-calendar>
-            <!-- [disabled]="isConsulta" -->
-          </div>
-      </div>
-      <div class="col-4">
-        <label for="noFactura">No. Factura:</label>
-        <input 
-          id="noFactura"
-          pInputText
-          class="form-control" 
-          maxlength="50" 
-          [(ngModel)]="noFactura"
-        >
-      </div>
-    </div>
-  
-    <div class="row border-top border-bottom">
-      <div class="col-12 text-center">
-          <p-button label="Limpiar filtros" styleClass="p-button-raised p-button-text p-button-secondary me-2 py-1" (click)="clearFiltros()"></p-button>
-          <p-button label="Buscar" icon="pi pi-search" styleClass="p-button-raised p-button-text p-button-secondary py-1" (click)="busqueda()"></p-button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- contenedor de Grid -->
-  <!-- <div *ngIf="listBusquedaCompleto && listBusquedaCompleto.length > 0" class="container-fluid container-table">  -->
-    <div>
-    <!-- barra de herramientas -->
-    <p-toolbar styleClass="p-1">
-      <div class="p-toolbar-group-start">
-          <p-button
-            icon="pi pi-file-excel" 
-            pTooltip="Exportar Excel" 
-            styleClass="p-button-success f-2x" 
-            (click)="exportJsonToExcel()">
-          </p-button>
-      </div>
-    </p-toolbar>
-    <p-table
-      [value]="listBusquedaCompleto" 
-      [paginator]="true"
-      [rows]="5"
-      [showCurrentPageReport]="true"
-      currentPageReportTemplate="Total: {totalRecords}"
-      styleClass="p-datatable-striped" 
-      [scrollable]="true"
-      [tableStyle]="{ 'min-width': '50rem' }">
-      <ng-template pTemplate="header">
-        <tr>
-          <!-- <th *ngFor="let val of getHeadersTabla()">{{val}}</th> -->
-          <th *ngFor="let val of getHeadersTabla()" [pSortableColumn]="val.key"><div class="d-flex align-items-center">{{val.label}} <p-sortIcon [field]="val.key"></p-sortIcon></div></th>
-          <th 
-            colspan="3" 
-            class="text-center"
-          >
-            Opciones
-          </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-bus>
-        <tr [ngClass]="{'invalid-tr': bus.fechaCancelacion}">
-          <td>
-            <div class="cls-id">{{bus.uuid}} {{ bus.id }}</div>
-          </td>
-          <td>{{bus.mes}}</td>
-          <td>{{bus.numProyecto}}</td>
-           <td>{{bus.empresa}}</td>
-          <td>{{bus.cliente}}</td>
-          <td>{{bus.fechaEmision|date:'d/MM/yyyy'}}</td>
-          <td>{{bus.noFactura}}</td>
-          <td>
-            <p-chip [label]="bus.idTipoFactura"></p-chip>
-          </td>
-          <td>{{bus.idMoneda}}</td>
-          <td>{{bus.tipoCambio}}</td>
-          
-          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenimporte else elseimporte"> </td>
-            <ng-template #thenimporte> <td>{{bus.importe|currency}}</td> </ng-template>
-            <ng-template #elseimporte> <td>{{0.0|currency}}</td> </ng-template>
+    <h1>Búsqueda / Cancelación</h1>
 
-          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenimportePesos else elseimportePesos"> </td>
-            <ng-template #thenimportePesos> <td>{{bus.importeEnPesos|currency}}</td> </ng-template>
-            <ng-template #elseimportePesos> <td>{{0.0|currency}}</td> </ng-template>
-          <!--td>{{bus.importeEnPesos|currency}}</td-->
-
-          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then theniva else elseiva"> </td>
-            <ng-template #theniva> <td>{{bus.iva|currency}}</td> </ng-template>
-            <ng-template #elseiva> <td>{{0.0|currency}}</td> </ng-template>
-          <!--td>{{bus.iva|currency}}</td-->
-
-          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenivaRet else elseivaRet"> </td>
-            <ng-template #thenivaRet> <td>{{bus.ivaRet|currency}}</td> </ng-template>
-            <ng-template #elseivaRet> <td>{{0.0|currency}}</td> </ng-template>
-          <!--td>{{bus.ivaRet|currency}}</td-->
-
-          <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thentotal else elsetotal"> </td>
-            <ng-template #thentotal> <td>{{bus.total|currency}}</td> </ng-template>
-            <ng-template #elsetotal> <td>{{0.0|currency}}</td> </ng-template>
-          <!--td>{{bus.total|currency}}</td-->
-          
-          <td>
-            <div class="cls-desc">{{bus.concepto}}</div>
-          </td>
-          <td>{{bus.importePendiente|currency}}</td>
-          <!-- <td>{{bus.anio}}</td> -->
-          <!-- <td>{{bus.fechaPago|date:'d/MM/yyyy'}}</td> -->
-          <!-- <td>{{bus.fechaCancelacion|date:'d/MM/yyyy'}}</td> -->
-          <td>{{bus.motivoCancelacion}}</td>
-          <td>
-            <div *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == '' ">
-              <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
-              tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
-              <p-button 
-                pTooltip="Cancelar factura" 
-                styleClass="p-button-rounded p-button-secondary p-button-text"
-                tooltipPosition="left"
-                (click)="showModalDialog(bus.id)"
-              >
-                <i class="pi pi-times-circle text-2xl"></i>
-              </p-button>
+    <!-- contenedor de filtros -->
+    <div class="container-fluid container-filter mt-5">
+        <div class="row mt-3 mx-2">
+            <div class="col-4">
+                <label for="concepto">Proyecto:</label>
+                <div class="">
+                    <p-dropdown class="w-full" styleClass="w-full" [options]="filtroProyectos" (onChange)="onChangeCombo($event, 1)" [disabled]="isDisableProyecto" placeholder="Selecciona un proyecto" optionLabel="name" [showClear]="true" #dropDownProyecto [filter]="true"
+                        filterBy="name"></p-dropdown>
+                </div>
             </div>
-          </td>
-          <td>
-            <!-- <i class="pi pi-eye" title="Ver notas de crédito"
+            <div class="col-4">
+                <label for="descripcion">Empresa:</label>
+                <div class="">
+                    <p-dropdown class="w-full" styleClass="w-full" [options]="filtroEmpresas" (onChange)="onChangeCombo($event, 2)" [disabled]="isDisableEmpresa" placeholder="Selecciona una empresa" optionLabel="name" [showClear]="true" #dropDownEmpresa [filter]="true" filterBy="name"></p-dropdown>
+                </div>
+
+            </div>
+            <div class="col-4">
+                <label for="email">Cliente:</label>
+                <div class="">
+                    <p-dropdown class="w-full" styleClass="w-full" [options]="filtroClientes" (onChange)="onChangeCombo($event, 3)" [disabled]="isDisableCliente" placeholder="Selecciona un cliente" optionLabel="name" [showClear]="true" #dropDownCliente [filter]="true" filterBy="name"></p-dropdown>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-2 mx-2">
+            <div class="col-4">
+                <label for="email">Fecha Inicio:</label>
+                <div class="">
+                    <p-calendar [showIcon]="true" styleClass="w-full" dateFormat="dd/mm/yy" [maxDate]="maxDate" [(ngModel)]="fechaInicio"></p-calendar>
+                    <!-- [disabled]="isConsulta" -->
+                </div>
+            </div>
+            <div class="col-4">
+                <label for="email">Fecha Fin:</label>
+                <div class="">
+                    <p-calendar [showIcon]="true" styleClass="w-full" dateFormat="dd/mm/yy" [maxDate]="maxDate" [(ngModel)]="fechaFin"></p-calendar>
+                    <!-- [disabled]="isConsulta" -->
+                </div>
+            </div>
+            <div class="col-4">
+                <label for="noFactura">No. Factura:</label>
+                <input id="noFactura" pInputText class="form-control" maxlength="50" [(ngModel)]="noFactura">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+                <button type="button" class="btn btn-dark" (click)="clearFiltros()"><i class="fas fa-eraser"></i> Limpiar filtros</button>
+                <button type="button" class="btn btn-primary" (click)="busqueda()"><i class="fas fa-save"></i> Buscar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- contenedor de Grid -->
+    <!-- <div *ngIf="listBusquedaCompleto && listBusquedaCompleto.length > 0" class="container-fluid container-table">  -->
+    <div class="mt-5">
+        <!-- barra de herramientas -->
+        <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="totalRecords > 0">
+            <p-button icon="pi pi-file-excel" pTooltip="Exportar Excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+        </p-toolbar>
+        <p-table [value]="listBusquedaCompleto" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" currentPageReportTemplate="Total: {totalRecords}" styleClass="p-datatable-striped" [scrollable]="true" paginatorPosition="both" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <!-- <th *ngFor="let val of getHeadersTabla()">{{val}}</th> -->
+                    <th *ngFor="let val of getHeadersTabla()" [pSortableColumn]="val.key">
+                        <div class="d-flex align-items-center">{{val.label}}
+                            <p-sortIcon [field]="val.key"></p-sortIcon>
+                        </div>
+                    </th>
+                    <th colspan="3" class="text-center">
+                        Opciones
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-bus>
+                <tr [ngClass]="{'invalid-tr': bus.fechaCancelacion}">
+                    <td>
+                        <div class="cls-id">{{bus.uuid}} {{ bus.id }}</div>
+                    </td>
+                    <td>{{bus.mes}}</td>
+                    <td>{{bus.numProyecto}}</td>
+                    <td>{{bus.empresa}}</td>
+                    <td>{{bus.cliente}}</td>
+                    <td>{{bus.fechaEmision|date:'d/MM/yyyy'}}</td>
+                    <td>{{bus.noFactura}}</td>
+                    <td>
+                        <p-chip [label]="bus.idTipoFactura"></p-chip>
+                    </td>
+                    <td>{{bus.idMoneda}}</td>
+                    <td>{{bus.tipoCambio}}</td>
+
+                    <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenimporte else elseimporte"> </td>
+                    <ng-template #thenimporte>
+                        <td>{{bus.importe|currency}}</td>
+                    </ng-template>
+                    <ng-template #elseimporte>
+                        <td>{{0.0|currency}}</td>
+                    </ng-template>
+
+                    <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenimportePesos else elseimportePesos"> </td>
+                    <ng-template #thenimportePesos>
+                        <td>{{bus.importeEnPesos|currency}}</td>
+                    </ng-template>
+                    <ng-template #elseimportePesos>
+                        <td>{{0.0|currency}}</td>
+                    </ng-template>
+                    <!--td>{{bus.importeEnPesos|currency}}</td-->
+
+                    <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then theniva else elseiva"> </td>
+                    <ng-template #theniva>
+                        <td>{{bus.iva|currency}}</td>
+                    </ng-template>
+                    <ng-template #elseiva>
+                        <td>{{0.0|currency}}</td>
+                    </ng-template>
+                    <!--td>{{bus.iva|currency}}</td-->
+
+                    <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thenivaRet else elseivaRet"> </td>
+                    <ng-template #thenivaRet>
+                        <td>{{bus.ivaRet|currency}}</td>
+                    </ng-template>
+                    <ng-template #elseivaRet>
+                        <td>{{0.0|currency}}</td>
+                    </ng-template>
+                    <!--td>{{bus.ivaRet|currency}}</td-->
+
+                    <td *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == ''; then thentotal else elsetotal"> </td>
+                    <ng-template #thentotal>
+                        <td>{{bus.total|currency}}</td>
+                    </ng-template>
+                    <ng-template #elsetotal>
+                        <td>{{0.0|currency}}</td>
+                    </ng-template>
+                    <!--td>{{bus.total|currency}}</td-->
+
+                    <td>
+                        <div class="cls-desc">{{bus.concepto}}</div>
+                    </td>
+                    <td>{{bus.importePendiente|currency}}</td>
+                    <!-- <td>{{bus.anio}}</td> -->
+                    <!-- <td>{{bus.fechaPago|date:'d/MM/yyyy'}}</td> -->
+                    <!-- <td>{{bus.fechaCancelacion|date:'d/MM/yyyy'}}</td> -->
+                    <td>{{bus.motivoCancelacion}}</td>
+                    <td>
+                        <div *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == '' ">
+                            <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
+              tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
+                            <p-button pTooltip="Cancelar factura" styleClass="p-button-rounded p-button-secondary p-button-text" tooltipPosition="left" (click)="showModalDialog(bus.id)">
+                                <i class="pi pi-times-circle text-2xl"></i>
+                            </p-button>
+                        </div>
+                    </td>
+                    <td>
+                        <!-- <i class="pi pi-eye" title="Ver notas de crédito"
             tooltipPosition="left" (click)="show(true, bus.uuid)"></i> -->
-            <p-button 
-              pTooltip="Ver notas de crédito" 
-              styleClass="p-button-rounded p-button-secondary p-button-text"
-              tooltipPosition="left"
-              (click)="calcularNotasCreditoCobranzas(bus) > 0 && show(true, bus.uuid)"
-              [disabled]="calcularNotasCreditoCobranzas(bus) <= 0" 
-            >
-              <i 
-                class="pi pi-file text-2xl" 
-                pBadge
-                [badgeDisabled]="calcularNotasCreditoCobranzas(bus) <= 0" 
-                [value]="calcularNotasCreditoCobranzas(bus).toString()" 
-                severity="danger"
-              ></i>
-            </p-button>
-          </td>
-          <td>
-            <!-- <i class="pi pi-eye" title="Ver pago"
+                        <p-button pTooltip="Ver notas de crédito" styleClass="p-button-rounded p-button-secondary p-button-text" tooltipPosition="left" (click)="calcularNotasCreditoCobranzas(bus) > 0 && show(true, bus.uuid)" [disabled]="calcularNotasCreditoCobranzas(bus) <= 0">
+                            <i class="pi pi-file text-2xl" pBadge [badgeDisabled]="calcularNotasCreditoCobranzas(bus) <= 0" [value]="calcularNotasCreditoCobranzas(bus).toString()" severity="danger"></i>
+                        </p-button>
+                    </td>
+                    <td>
+                        <!-- <i class="pi pi-eye" title="Ver pago"
             tooltipPosition="left" (click)="show(false, bus.uuid)"></i> -->
-            <p-button 
-              pTooltip="Ver pago" 
-              styleClass="p-button-rounded p-button-secondary p-button-text"
-              tooltipPosition="left"
-              (click)="calcularNotasCreditoCobranzas(bus, false) > 0 && show(false, bus.uuid)"
-              [disabled]="calcularNotasCreditoCobranzas(bus, false) <= 0" 
-            >
-              <i 
-                class="pi pi-dollar text-2xl" 
-                pBadge 
-                [badgeDisabled]="calcularNotasCreditoCobranzas(bus, false) <= 0" 
-                [value]="calcularNotasCreditoCobranzas(bus, false).toString()" 
-                severity="danger"
-              ></i>
-            </p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    
-  </div>
-  
-  <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
-  <p-toast></p-toast>
-  
-  <!--Cancelación de factura general-->
-  <p-dialog 
-    header="Cancelación" 
-    [(visible)]="displayModal" 
-    [modal]="true" 
-    [style]="{width: '50vw', minHeight: '30rem'}" 
-    [baseZIndex]="10000"
-    [draggable]="false" 
-    [resizable]="false"
-  >
-    <form [formGroup]="formGeneral" (ngSubmit)="preConfirmarCancelacion()">
-      <div class="row">
-        <div class="col-12">
-          <label for="FechaCancelacion">Fecha de cancelación:</label>
-          <p-calendar 
-            id="FechaCancelacion"
-            [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalidoGeneral('FechaCancelacion')}"
-            formControlName="FechaCancelacion"
-          ></p-calendar>
-          <div *ngIf="esInvalidoGeneral('FechaCancelacion')">
-            <small
-              class="error-msg"
-            >
+                        <p-button pTooltip="Ver pago" styleClass="p-button-rounded p-button-secondary p-button-text" tooltipPosition="left" (click)="calcularNotasCreditoCobranzas(bus, false) > 0 && show(false, bus.uuid)" [disabled]="calcularNotasCreditoCobranzas(bus, false) <= 0">
+                            <i class="pi pi-dollar text-2xl" pBadge [badgeDisabled]="calcularNotasCreditoCobranzas(bus, false) <= 0" [value]="calcularNotasCreditoCobranzas(bus, false).toString()" severity="danger"></i>
+                        </p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </div>
+
+    <p-confirmDialog [style]="{width: '30vw'}" [baseZIndex]="10000"></p-confirmDialog>
+    <p-toast></p-toast>
+
+    <!--Cancelación de factura general-->
+    <p-dialog header="Cancelación" [(visible)]="displayModal" [modal]="true" [style]="{width: '50vw', minHeight: '30rem'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+        <form [formGroup]="formGeneral" (ngSubmit)="preConfirmarCancelacion()">
+            <div class="row">
+                <div class="col-12">
+                    <label for="FechaCancelacion">Fecha de cancelación:</label>
+                    <p-calendar id="FechaCancelacion" [showIcon]="true" dateFormat="dd/mm/yy" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalidoGeneral('FechaCancelacion')}" formControlName="FechaCancelacion"></p-calendar>
+                    <div *ngIf="esInvalidoGeneral('FechaCancelacion')">
+                        <small class="error-msg">
               {{ obtenerMensajeErrorGeneral('FechaCancelacion') }}
             </small>
-          </div>
-        </div>
-        <div class="col-12">
-          <label for="MotivoCancelacion">Motivo:</label>
-          <textarea 
-            id="MotivoCancelacion"
-            placeholder="Ingrese al menos {{count_carapteres}} caracteres" 
-            [rows]="3" 
-            [cols]="80" 
-            pInputTextarea  
-            class="form-control"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalidoGeneral('MotivoCancelacion')}"
-            formControlName="MotivoCancelacion"
-          ></textarea>
-          <div *ngIf="esInvalidoGeneral('MotivoCancelacion')">
-            <small
-              class="error-msg"
-            >
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="MotivoCancelacion">Motivo:</label>
+                    <textarea id="MotivoCancelacion" placeholder="Ingrese al menos {{count_carapteres}} caracteres" [rows]="3" [cols]="80" pInputTextarea class="form-control" [ngClass]="{'ng-invalid ng-dirty': esInvalidoGeneral('MotivoCancelacion')}" formControlName="MotivoCancelacion"></textarea>
+                    <div *ngIf="esInvalidoGeneral('MotivoCancelacion')">
+                        <small class="error-msg">
               {{ obtenerMensajeErrorGeneral('MotivoCancelacion') }}
             </small>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-content-end gap-3 mt-3">
-        <p-button 
-          icon="pi pi-check" 
-          type="submit"
-          label="Aceptar" 
-          class="p-button-text" 
-          [disabled]="!formGeneral.valid || showConfirm"
-        ></p-button>
-      </div>
-      <div class="d-flex flex-column justify-content-center align-items-center" *ngIf="showConfirm">
-        <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
-        <p-button 
-          icon="pi pi-check" 
-          type="submit"
-          label="Sí, estoy seguro" 
-          class="p-button-text" 
-          (onClick)="changeCancelar()"
-        ></p-button>
-      </div>
-    </form>
-    <!--<div class="row d-flex justify-content-center">
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-content-end gap-3 mt-3">
+                <p-button icon="pi pi-check" type="submit" label="Aceptar" class="p-button-text" [disabled]="!formGeneral.valid || showConfirm"></p-button>
+            </div>
+            <div class="d-flex flex-column justify-content-center align-items-center" *ngIf="showConfirm">
+                <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
+                <p-button icon="pi pi-check" type="submit" label="Sí, estoy seguro" class="p-button-text" (onClick)="changeCancelar()"></p-button>
+            </div>
+        </form>
+        <!--<div class="row d-flex justify-content-center">
       <label for="">
         <strong style="color: red;">* Debe ingresar una descripción</strong>
       </label>
@@ -311,158 +227,109 @@
         <p-button icon="pi pi-check" (click)="changeCancelar()" label="Aceptar" class="p-button-text" [disabled]="motivoCancelacion.length < count_carapteres"></p-button>
         <p-button icon="pi pi-times" (click)="displayModal=false" label="Cancelar"></p-button>
     </ng-template>-->
-  </p-dialog>
-  
-  <!-- Modal para mostrar complementos -->
-  <p-dialog [header]="headerModalCancelacion"
-      [(visible)]="isCancelacionVisible" [modal]="true"
-      [draggable]="true" [resizable]="true"
-      [style]="{width: '75vw'}"
-      [baseZIndex]="10000">
-      <p>
-        <p-table [value]="listBusquedaModal" [tableStyle]="{'min-width': '50rem'}">
-          <ng-template pTemplate="header" ngIf="isTypeHeader">
-            <tr>
-              <th *ngFor="let val of (isTypeHeader ? notaCreditoHeader : cobranzaHeader)">{{val}}</th>
-              <th>
-                Opciones
-              </th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-bus>
-            <ng-container *ngIf="isTypeHeader">
-              <tr 
-                *ngIf="bus.nC_Anio != '0'"
-                [ngStyle]="{'background-color': bus.nC_FechaCancelacion ? '#ffa4a4' : ''}"
-              >
-              <td><div class="cls-id">{{bus.nC_UuidNotaCredito}}</div></td>
-              <td>{{bus.nC_IdMoneda}}</td>
-              <td>{{bus.nC_IdTipoRelacion}}</td>
-              <td>{{bus.nC_NotaCredito}}</td>
-              <td>{{bus.nC_Importe|currency}}</td>
-              <td>{{bus.nC_Iva|currency}}</td>
-              <td>{{bus.nC_Total|currency}}</td>
-              <td><div class="cls-desc">{{bus.nC_Concepto}}</div></td>
-              <td>{{bus.nC_Mes}}</td>
-              <td>{{bus.nC_Anio}}</td>
-              <td>{{bus.nC_TipoCambio}}</td>
-              <td>{{bus.nC_FechaNotaCredito|date:'d/MM/yyyy'}}</td>
-              <td>
-                <div *ngIf="bus.nC_FechaCancelacion == null || bus.nC_FechaCancelacion == '' ">
-                  <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
-                  tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
-                  <p-button 
-                    pTooltip="Cancelar factura" 
-                    styleClass="p-button-rounded p-button-secondary p-button-text"
-                    tooltipPosition="left"
-                    (click)="cancelarComplemento(false, bus.nC_UuidNotaCredito)"
-                  >
-                    <i class="pi pi-times-circle text-2xl"></i>
-                  </p-button>
-                </div>
-              </td>
-              </tr>
-            </ng-container>
-  
-            <ng-container *ngIf="!isTypeHeader">
-              <tr>
-                <td><div class="cls-id">{{bus.c_UuidCobranza}}</div></td>
-                <td>{{bus.c_IdMonedaP}}</td>
-                <td>{{bus.crp}}</td>
-                <td>{{bus.c_ImportePagado|currency}}</td>
-                <td>{{bus.c_ImpSaldoAnt|currency}}</td>
-                <td>{{bus.c_ImporteSaldoInsoluto|currency}}</td>
-                <td>{{bus.c_IvaP|currency}}</td>
-                <td>{{bus.c_TipoCambioP}}</td>
-                <td>{{bus.c_FechaPago|date:'d/MM/yyyy'}}</td>
-                <td>
-                  <div *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == '' ">
-                    <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
-                    tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
-                    <p-button 
-                      pTooltip="Cancelar factura" 
-                      styleClass="p-button-rounded p-button-secondary p-button-text"
-                      tooltipPosition="left"
-                      (click)="cancelarComplemento(true, bus.c_UuidCobranza)"
-                    >
-                      <i class="pi pi-times-circle text-2xl"></i>
-                    </p-button>
-                  </div>
-                </td>
-              </tr>
-            </ng-container>
-  
-          </ng-template>
-      </p-table>
-      </p>
-  </p-dialog>
+    </p-dialog>
 
-  <!-- Modal para cancelar complemento -->
-  <p-dialog 
-    [header]="complementoInfo.titulo" 
-    [(visible)]="complementoInfo.showModal" 
-    [modal]="true" 
-    [style]="{width: '50vw', minHeight: '30rem'}" 
-    [baseZIndex]="10000"
-    [draggable]="false" 
-    [resizable]="false"
-  >
-    <form [formGroup]="form" (ngSubmit)="ejecutarCancelacion()">
-      <div class="row">
-        <div class="col-12">
-          <label for="fecha_cancelacion">Fecha de cancelación:</label>
-          <p-calendar 
-            id="fecha_cancelacion"
-            [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('fecha_cancelacion')}"
-            formControlName="fecha_cancelacion"
-          ></p-calendar>
-          <div *ngIf="esInvalido('fecha_cancelacion')">
-            <small
-              class="error-msg"
-            >
+    <!-- Modal para mostrar complementos -->
+    <p-dialog [header]="headerModalCancelacion" [(visible)]="isCancelacionVisible" [modal]="true" [draggable]="true" [resizable]="true" [style]="{width: '75vw'}" [baseZIndex]="10000">
+        <p>
+            <p-table [value]="listBusquedaModal" [tableStyle]="{'min-width': '50rem'}">
+                <ng-template pTemplate="header" ngIf="isTypeHeader">
+                    <tr>
+                        <th *ngFor="let val of (isTypeHeader ? notaCreditoHeader : cobranzaHeader)">{{val}}</th>
+                        <th>
+                            Opciones
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-bus>
+                    <ng-container *ngIf="isTypeHeader">
+                        <tr *ngIf="bus.nC_Anio != '0'" [ngStyle]="{'background-color': bus.nC_FechaCancelacion ? '#ffa4a4' : ''}">
+                            <td>
+                                <div class="cls-id">{{bus.nC_UuidNotaCredito}}</div>
+                            </td>
+                            <td>{{bus.nC_IdMoneda}}</td>
+                            <td>{{bus.nC_IdTipoRelacion}}</td>
+                            <td>{{bus.nC_NotaCredito}}</td>
+                            <td>{{bus.nC_Importe|currency}}</td>
+                            <td>{{bus.nC_Iva|currency}}</td>
+                            <td>{{bus.nC_Total|currency}}</td>
+                            <td>
+                                <div class="cls-desc">{{bus.nC_Concepto}}</div>
+                            </td>
+                            <td>{{bus.nC_Mes}}</td>
+                            <td>{{bus.nC_Anio}}</td>
+                            <td>{{bus.nC_TipoCambio}}</td>
+                            <td>{{bus.nC_FechaNotaCredito|date:'d/MM/yyyy'}}</td>
+                            <td>
+                                <div *ngIf="bus.nC_FechaCancelacion == null || bus.nC_FechaCancelacion == '' ">
+                                    <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
+                  tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
+                                    <p-button pTooltip="Cancelar factura" styleClass="p-button-rounded p-button-secondary p-button-text" tooltipPosition="left" (click)="cancelarComplemento(false, bus.nC_UuidNotaCredito)">
+                                        <i class="pi pi-times-circle text-2xl"></i>
+                                    </p-button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+
+                    <ng-container *ngIf="!isTypeHeader">
+                        <tr>
+                            <td>
+                                <div class="cls-id">{{bus.c_UuidCobranza}}</div>
+                            </td>
+                            <td>{{bus.c_IdMonedaP}}</td>
+                            <td>{{bus.crp}}</td>
+                            <td>{{bus.c_ImportePagado|currency}}</td>
+                            <td>{{bus.c_ImpSaldoAnt|currency}}</td>
+                            <td>{{bus.c_ImporteSaldoInsoluto|currency}}</td>
+                            <td>{{bus.c_IvaP|currency}}</td>
+                            <td>{{bus.c_TipoCambioP}}</td>
+                            <td>{{bus.c_FechaPago|date:'d/MM/yyyy'}}</td>
+                            <td>
+                                <div *ngIf="bus.fechaCancelacion == null || bus.fechaCancelacion == '' ">
+                                    <!-- <i class="pi pi-trash c-del" title="Cancelar factura"
+                    tooltipPosition="left" (click)="showModalDialog(bus.id)"></i> -->
+                                    <p-button pTooltip="Cancelar factura" styleClass="p-button-rounded p-button-secondary p-button-text" tooltipPosition="left" (click)="cancelarComplemento(true, bus.c_UuidCobranza)">
+                                        <i class="pi pi-times-circle text-2xl"></i>
+                                    </p-button>
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+
+                </ng-template>
+            </p-table>
+        </p>
+    </p-dialog>
+
+    <!-- Modal para cancelar complemento -->
+    <p-dialog [header]="complementoInfo.titulo" [(visible)]="complementoInfo.showModal" [modal]="true" [style]="{width: '50vw', minHeight: '30rem'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+        <form [formGroup]="form" (ngSubmit)="ejecutarCancelacion()">
+            <div class="row">
+                <div class="col-12">
+                    <label for="fecha_cancelacion">Fecha de cancelación:</label>
+                    <p-calendar id="fecha_cancelacion" [showIcon]="true" dateFormat="dd/mm/yy" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('fecha_cancelacion')}" formControlName="fecha_cancelacion"></p-calendar>
+                    <div *ngIf="esInvalido('fecha_cancelacion')">
+                        <small class="error-msg">
               {{ obtenerMensajeError('fecha_cancelacion') }}
             </small>
-          </div>
-        </div>
-        <div class="col-12">
-          <label for="motivo_cancelacion">Motivo:</label>
-          <textarea 
-            id="motivo_cancelacion"
-            placeholder="Ingrese al menos {{count_carapteres}} caracteres" 
-            [rows]="3" 
-            [cols]="80" 
-            pInputTextarea  
-            class="form-control"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('motivo_cancelacion')}"
-            formControlName="motivo_cancelacion"
-          ></textarea>
-          <div *ngIf="esInvalido('motivo_cancelacion')">
-            <small
-              class="error-msg"
-            >
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="motivo_cancelacion">Motivo:</label>
+                    <textarea id="motivo_cancelacion" placeholder="Ingrese al menos {{count_carapteres}} caracteres" [rows]="3" [cols]="80" pInputTextarea class="form-control" [ngClass]="{'ng-invalid ng-dirty': esInvalido('motivo_cancelacion')}" formControlName="motivo_cancelacion"></textarea>
+                    <div *ngIf="esInvalido('motivo_cancelacion')">
+                        <small class="error-msg">
               {{ obtenerMensajeError('motivo_cancelacion') }}
             </small>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-content-end gap-3 mt-3">
-        <p-button 
-          icon="pi pi-check" 
-          type="submit"
-          label="Aceptar" 
-          class="p-button-text" 
-          [disabled]="!this.form.valid"
-        ></p-button>
-        <p-button 
-          icon="pi pi-times" 
-          (click)="complementoInfo.showModal = false" 
-          label="Cancelar"
-        ></p-button>
-      </div>
-    </form>
-  </p-dialog>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-content-end gap-3 mt-3">
+                <p-button icon="pi pi-check" type="submit" label="Aceptar" class="p-button-text" [disabled]="!this.form.valid"></p-button>
+                <p-button icon="pi pi-times" (click)="complementoInfo.showModal = false" label="Cancelar"></p-button>
+            </div>
+        </form>
+    </p-dialog>
 
 </div>

@@ -80,31 +80,46 @@ export class DorEvaluacionNuevoComponent implements OnInit {
 
   getInicialDatosEjecutivo() {
     this.sharedService.cambiarEstado(true)
-    this.docService.getDatosEjecutivo(this.userMail).subscribe(data => {
-    //  this.docService.getDatosEjecutivo('jmmorales@hunkabann.com.mx').subscribe(data => {
-    //console.log(data);
-      const str = 'data' as any;
-      let datos = data[str as keyof typeof data];
-      //console.log(datos['nombre' as keyof typeof datos]);
-      let nombre = datos['nombre' as keyof typeof datos];
-      this.docService.getDatosSubordinados(nombre)
-      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-      .subscribe(dataSub => {
-        //console.log(dataSub);
-        this.listSubordinados = <Subordinados[]>dataSub.data;
-        //console.log(this.listSubordinados);
-        this.listSubordinados.forEach(element => {
-          this.empleadosSub.push({ name: String(element.nombre), value: String(element.nombre), id: +element.noEmpleado })
-        });
+    try {
+      this.docService.getDatosEjecutivo(this.userMail).subscribe(data => {
+        //this.docService.getDatosEjecutivo('jmmorales@hunkabann.com.mx').subscribe(data => {
+        //console.log(data);
+        if (!data['data'])
+        {
+          this.sharedService.cambiarEstado(false)
+          this.messageService.add({ severity: 'warn', summary: TITLES.error, detail: data['message'] })
+          return;
+        }
+
+
+        const str = 'data' as any;
+        let datos = data[str as keyof typeof data];
+        //console.log(datos['nombre' as keyof typeof datos]);
+        let nombre = datos['nombre' as keyof typeof datos];
+        this.docService.getDatosSubordinados(nombre)
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe(dataSub => {
+            //console.log(dataSub);
+            this.listSubordinados = <Subordinados[]>dataSub.data;
+            //console.log(this.listSubordinados);
+            this.listSubordinados.forEach(element => {
+              this.empleadosSub.push({ name: String(element.nombre), value: String(element.nombre), id: +element.noEmpleado })
+            });
+          });
       });
-    });
+    }
+    catch (ex) {
+      this.sharedService.cambiarEstado(false)
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: ex.error.message })
+    }
   }
+
 
   onChangeEmpleado(event: any) {
     /*console.log('event :' + event);
      console.log(event.value);*/
     if (event.value) {
-      
+
       this.sharedService.cambiarEstado(true)
 
       this.idEmpleado = event.value;
@@ -123,30 +138,30 @@ export class DorEvaluacionNuevoComponent implements OnInit {
 
       this.getObjetivosPorProyecto(String(this.anio), this.subComple.centrosdeCostos, this.subComple.noEmpleado, subordinado.nivel || '', EstatusObjetivosPorProyecto.inicial, true, this.mes);
 
-/*       this.docService.getConsultarGPM(this.subComple.centrosdeCostos).subscribe(gpm => {
-        //console.log(gpm);
-        this.docService.getObjetivosGenerales(subordinado.nivel || '', subordinado?.unidadDeNegocio || '').subscribe(generales => {
-          this.listObjGenrales = generales.data;
-          //console.log(this.listObjGenrales);
-          this.getTablasObjetivosGenerales(gpm);
-        });
-      }); */
+      /*       this.docService.getConsultarGPM(this.subComple.centrosdeCostos).subscribe(gpm => {
+              //console.log(gpm);
+              this.docService.getObjetivosGenerales(subordinado.nivel || '', subordinado?.unidadDeNegocio || '').subscribe(generales => {
+                this.listObjGenrales = generales.data;
+                //console.log(this.listObjGenrales);
+                this.getTablasObjetivosGenerales(gpm);
+              });
+            }); */
       this.docService.getConsultarMetasProyecto(this.subComple.centrosdeCostos, subordinado.nivel, this.mes, 'Evaluacion', event.value.id, this.anio)
-      // .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-      .subscribe({
-        next: (gpm) => {
-          this.docService.getObjetivosGenerales(subordinado.nivel || '', subordinado?.unidadDeNegocio || '', this.mes, 'Evaluacion', this.anio)
-          .subscribe({
-            next: (generales) => {
-              this.listObjGenrales = generales.data;
-              this.getTablasObjetivosGenerales(gpm);
-              this.sharedService.cambiarEstado(false)
-            },
-            error: (err) => this.sharedService.cambiarEstado(false)
-          });
-        },
-        error: (err) => this.sharedService.cambiarEstado(false)
-      });
+        // .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe({
+          next: (gpm) => {
+            this.docService.getObjetivosGenerales(subordinado.nivel || '', subordinado?.unidadDeNegocio || '', this.mes, 'Evaluacion', this.anio)
+              .subscribe({
+                next: (generales) => {
+                  this.listObjGenrales = generales.data;
+                  this.getTablasObjetivosGenerales(gpm);
+                  this.sharedService.cambiarEstado(false)
+                },
+                error: (err) => this.sharedService.cambiarEstado(false)
+              });
+          },
+          error: (err) => this.sharedService.cambiarEstado(false)
+        });
     }
   }
 
@@ -186,13 +201,20 @@ export class DorEvaluacionNuevoComponent implements OnInit {
           obj.descripcion?.includes('Evaluación 360°') ? obj.isEditable = true : obj.isEditable = false;
           //obj.descripcion?.includes('Objetivo personal') ? obj.isEditable = true : obj.isEditable = false;
 
-         // if(obj.descripcion?.includes('Evaluación 360°') || obj.descripcion == 'Objetivo personal') {
-          if(obj.descripcion?.includes('Evaluación 360°') || obj.descripcion.startsWith("2")) {
+          // if(obj.descripcion?.includes('Evaluación 360°') || obj.descripcion == 'Objetivo personal') {
+          if (obj.descripcion?.includes('Evaluación 360°') || obj.descripcion.startsWith("2")) {
             obj.resultadoTemporal = (obj.real / +obj.meta)
           }
 
           this.totalObjetivosCualitativos += Number(obj.valor || '');
-          this.totalCualitativosResultado += (+obj.porcentajeReal >= +obj.valor ? +obj.valor : 0)
+
+          if (obj.descripcion.startsWith("2")) {
+            this.totalCualitativosResultado += (((+obj.porcentajeReal * 100) / +obj.valor) >= 80 ? +obj.porcentajeReal : 0)
+          } else {
+            this.totalCualitativosResultado += (+obj.porcentajeReal >= +obj.valor ? +obj.valor : 0)
+          }
+          //this.totalCualitativosResultado += (+obj.porcentajeReal >= +obj.valor ? +obj.valor : 0)
+
           this.totalRealCualitativos += Number(obj.real)
 
           if (obj.motivoR != null && obj.motivoR != '' && +obj.acepto != 2) {
@@ -204,7 +226,7 @@ export class DorEvaluacionNuevoComponent implements OnInit {
             this.isMotivoRechazo = false;
           }
 
-          if(+obj.acepto == 2 || +obj.acepto == 5) {
+          if (+obj.acepto == 2 || +obj.acepto == 5) {
             this.mostrarContenido = true
           }
 
@@ -240,8 +262,8 @@ export class DorEvaluacionNuevoComponent implements OnInit {
       this.totalRealTipoUno += Number((obj.descripcion.split(' ').join('') == 'GPMBovis' ? obj.metaMensual : obj.real) || '');
     });
 
-    if(gpm.data.length > 0){
-      if(!tipos.includes('DE PROYECTO')) {
+    if (gpm.data.length > 0) {
+      if (!tipos.includes('DE PROYECTO')) {
         tipos = [...tipos, 'DE PROYECTO'];
       }
       this.tiposTablasObjGenerales = tipos;
@@ -276,11 +298,11 @@ export class DorEvaluacionNuevoComponent implements OnInit {
 
     //console.log( this.listObjGenralesTipoDos);
     this.tiposTablasObjGenerales = [...new Set([
-      ...this.listObjGenralesTipoUno.map(({concepto}) => concepto),
-      ...this.listObjGenralesTipoDos.map(({concepto}) => concepto)
+      ...this.listObjGenralesTipoUno.map(({ concepto }) => concepto),
+      ...this.listObjGenralesTipoDos.map(({ concepto }) => concepto)
     ])]
 
-    if(this.tiposTablasObjGenerales.length > 2) {
+    if (this.tiposTablasObjGenerales.length > 2) {
       this.tiposTablasObjGenerales.pop()
     }
 
@@ -349,20 +371,20 @@ export class DorEvaluacionNuevoComponent implements OnInit {
     if (objetivo.real) {
       this.sharedService.cambiarEstado(true)
       this.docService.actualizarReal({
-        id:   objetivo.id,
+        id: objetivo.id,
         // id_empleado: this.idEmpleadoActual,
         id_empleado: objetivo.empleado,
         real: objetivo.real
       })
-      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-      .subscribe({
-        next: (data) => {
-          this.messageService.add({ severity: 'success', summary: 'Valor actualizado', detail:'El valor ha sido actualizado.' })
-          this.sharedService.cambiarEstado(true)
-          this.onChangeEmpleado({value: this.idEmpleado})
-        },
-        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-      })
+        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe({
+          next: (data) => {
+            this.messageService.add({ severity: 'success', summary: 'Valor actualizado', detail: 'El valor ha sido actualizado.' })
+            this.sharedService.cambiarEstado(true)
+            this.onChangeEmpleado({ value: this.idEmpleado })
+          },
+          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        })
     }
     else {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Campo Real Requerido' })
@@ -381,29 +403,29 @@ export class DorEvaluacionNuevoComponent implements OnInit {
    */
 
   onRowEditInitCualitativos(product: Objetivos) {
-    this.objetivoAModificar = {...product}
+    this.objetivoAModificar = { ...product }
     this.clonedObjetivos[product.id] = { ...product };
   }
 
   onRowEditSaveCualitativos(objetivo: Objetivos) {
 
-    if(!isNaN(objetivo.real)) {
+    if (!isNaN(objetivo.real)) {
       if (objetivo.real) {
-        if(objetivo.real <= 100) {
+        if (objetivo.real <= 100) {
           this.sharedService.cambiarEstado(true)
           this.docService.actualizarRealCualitativos({
-            id:   objetivo.idEmpOb,
+            id: objetivo.idEmpOb,
             real: objetivo.real
           })
-          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-          .subscribe({
-            next: (data) => {
-              this.messageService.add({ severity: 'success', summary: 'Valor actualizado', detail:'El valor ha sido actualizado.' })
-              this.sharedService.cambiarEstado(true)
-              this.onChangeEmpleado({value: this.idEmpleado})
-            },
-            error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-          })
+            .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+            .subscribe({
+              next: (data) => {
+                this.messageService.add({ severity: 'success', summary: 'Valor actualizado', detail: 'El valor ha sido actualizado.' })
+                this.sharedService.cambiarEstado(true)
+                this.onChangeEmpleado({ value: this.idEmpleado })
+              },
+              error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+            })
         } else {
           objetivo.real = this.objetivoAModificar.real
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Campo Real debe ser menor o igual a 100' })
@@ -427,35 +449,35 @@ export class DorEvaluacionNuevoComponent implements OnInit {
   }
 
   onSelectFecha(event: any, esMes: boolean = true) {
-    if(esMes) {
+    if (esMes) {
       this.mes = event.value
     } else {
       this.anio = event.value
       this.cargarMeses(this.anio)
     }
-    this.onChangeEmpleado({value: this.idEmpleado})
+    this.onChangeEmpleado({ value: this.idEmpleado })
   }
 
   cargarAnios() {
     const fechaActual = new Date()
-    const anioActual  = +format(fechaActual, 'Y')
+    const anioActual = +format(fechaActual, 'Y')
 
     for (let i = anioActual - 10; i <= anioActual; i++) {
-      this.anios.unshift({value: i, label: i.toString()})
+      this.anios.unshift({ value: i, label: i.toString() })
     }
   }
 
   cargarMeses(anio: number) {
 
     const fechaActual = new Date()
-    const anioActual  = +format(fechaActual, 'Y')
-    const mesActual   = +format(fechaActual, 'M')
-    const diaActual   = +format(fechaActual, 'd')
-    const diaLimite   = 20// 31
-    let mesMaximo     = 0
+    const anioActual = +format(fechaActual, 'Y')
+    const mesActual = +format(fechaActual, 'M')
+    const diaActual = +format(fechaActual, 'd')
+    const diaLimite = 20// 31
+    let mesMaximo = 0
 
-    if(anio === anioActual) {
-      if(diaActual >= diaLimite && mesActual > 1) {
+    if (anio === anioActual) {
+      if (diaActual >= diaLimite && mesActual > 1) {
         mesMaximo = mesActual - 1
       } else {
         mesMaximo = mesActual - 2
@@ -463,9 +485,9 @@ export class DorEvaluacionNuevoComponent implements OnInit {
 
       this.meses = meses.filter(mes => +mes.value <= mesMaximo)
     } else {
-      if((anio + 1) == anioActual) {
+      if ((anio + 1) == anioActual) {
         mesMaximo = 12
-        if(mesActual == 1 && diaActual < diaLimite) {
+        if (mesActual == 1 && diaActual < diaLimite) {
           mesMaximo = mesMaximo - 1
         }
 
@@ -485,11 +507,11 @@ export class DorEvaluacionNuevoComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
-          this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El registro ha sido evaluado.'})
+          this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'El registro ha sido evaluado.' })
           this.aceptado = true
         },
         error: (err) => {
-          this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
         }
       })
   }

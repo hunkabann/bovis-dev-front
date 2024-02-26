@@ -1,492 +1,251 @@
-
-<p-toast></p-toast>
+<p-toast>
+</p-toast>
 
 <form [formGroup]="form" (ngSubmit)="guardar()">
-  <div class="main-container">
-    <div class="buttons-container">
-      <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Guardar</button>
-    </div>
-  
-    <div class="row">
-      <div class="col-6">
-          <label for="categoria">Categoría:</label>
-          <p-dropdown 
-            id="categoria" 
-            [options]="categorias" 
-            (onChange)="null"
-            placeholder="Seleccionar una categoría" 
-            optionLabel="name" 
-            [showClear]="true"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('categoria')}"
-            formControlName="categoria"
-            optionValue="code"
-            [filter]="true" 
-            filterBy="name"
-          ></p-dropdown>
-          <div *ngIf="esInvalido('categoria')">
-            <small
-              class="error-msg"
-            >
+    <div class="main-container">
+        <h1>Nuevo requerimiento</h1>
+        <p-toolbar styleClass="p-1 mb-4 d-flex justify-content-end gap-2 text-right">
+            <button type="button" class="btn btn-secondary" routerLink="/empleados/requerimientos"><i class="fas fa-arrow-left"></i> Regresar</button>
+            <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!form.valid"><i class="fas fa-save"></i> Guardar</button>
+        </p-toolbar>
+
+        <div class="row">
+            <div class="col-6">
+                <label for="categoria">Categoría:</label>
+                <p-dropdown id="categoria" [options]="categorias" (onChange)="null" placeholder="Seleccionar una categoría" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('categoria')}" formControlName="categoria"
+                    optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('categoria')">
+                    <small class="error-msg">
               {{ obtenerMensajeError('categoria') }}
             </small>
-          </div>
-      </div>
-      <div class="col-6">
-        <label for="puesto">Puesto sugerido:</label>
-        <p-dropdown 
-          id="puesto" 
-          [options]="puestos" 
-          (onChange)="setearSalarios($event)"
-          placeholder="Seleccionar un puesto" 
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('puesto')}"
-          formControlName="puesto"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-        <div *ngIf="esInvalido('puesto')">
-          <small
-            class="error-msg"
-          >
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="puesto">Puesto sugerido:</label>
+                <p-dropdown id="puesto" [options]="puestos" (onChange)="setearSalarios($event)" placeholder="Seleccionar un puesto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('puesto')}" formControlName="puesto"
+                    optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('puesto')">
+                    <small class="error-msg">
             {{ obtenerMensajeError('puesto') }}
           </small>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <label for="estudios">Nivel de estudios:</label>
-        <p-dropdown 
-          id="estudios" 
-          [options]="nivelEstudios" 
-          (onChange)="null"
-          placeholder="Seleccionar un nivel" 
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('nivelEstudios')}"
-          formControlName="nivelEstudios"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-        <div *ngIf="esInvalido('nivelEstudios')">
-          <small
-            class="error-msg"
-          >
+        <div class="row">
+            <div class="col-6">
+                <label for="estudios">Nivel de estudios:</label>
+                <p-dropdown id="estudios" [options]="nivelEstudios" (onChange)="null" placeholder="Seleccionar un nivel" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('nivelEstudios')}" formControlName="nivelEstudios"
+                    optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('nivelEstudios')">
+                    <small class="error-msg">
             {{ obtenerMensajeError('nivelEstudios') }}
           </small>
-        </div>
-      </div>
-      <div class="col-6">
-        <label for="profesion">Profesión:</label>
-        <p-dropdown 
-          id="profesion" 
-          [options]="profesiones" 
-          (onChange)="null"
-          placeholder="Seleccionar una profesión"
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('profesion')}"
-          formControlName="profesion"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-        <div *ngIf="esInvalido('profesion')">
-          <small
-            class="error-msg"
-          >
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="profesion">Profesión:</label>
+                <p-dropdown id="profesion" [options]="profesiones" (onChange)="null" placeholder="Seleccionar una profesión" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('profesion')}" formControlName="profesion"
+                    optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('profesion')">
+                    <small class="error-msg">
             {{ obtenerMensajeError('profesion') }}
           </small>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <label for="jornada">Jornada:</label>
-        <p-dropdown 
-          id="jornada" 
-          [options]="jornadas" 
-          (onChange)="null"
-          placeholder="Seleccionar una jornada" 
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('jornada')}"
-          formControlName="jornada"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-        <div *ngIf="esInvalido('jornada')">
-          <small
-            class="error-msg"
-          >
+        <div class="row">
+            <div class="col-6">
+                <label for="jornada">Jornada:</label>
+                <p-dropdown id="jornada" [options]="jornadas" (onChange)="null" placeholder="Seleccionar una jornada" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('jornada')}" formControlName="jornada"
+                    optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('jornada')">
+                    <small class="error-msg">
             {{ obtenerMensajeError('jornada') }}
           </small>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-6">
-        <label for="jornada">Sueldo:</label>
-        <div class="flex justify-content-between gap-3 p-fluid">
-          <div class="flex-auto">
-            <p-inputNumber 
-              inputId="sueldoMin" 
-              locale="es-MX" 
-              mode="decimal" 
-              [minFractionDigits]="2" 
-              [maxFractionDigits]="5"
-              [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoMin')}"
-              formControlName="sueldoMin"
-            ></p-inputNumber>
-            <div *ngIf="esInvalido('sueldoMin')">
-              <small
-                class="error-msg"
-              >
+        <div class="row">
+            <div class="col-6">
+                <label for="jornada">Sueldo:</label>
+                <div class="flex justify-content-between gap-3 p-fluid">
+                    <div class="flex-auto">
+                        <p-inputNumber inputId="sueldoMin" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoMin')}" formControlName="sueldoMin"></p-inputNumber>
+                        <div *ngIf="esInvalido('sueldoMin')">
+                            <small class="error-msg">
                 {{ obtenerMensajeError('sueldoMin') }}
               </small>
-            </div>
-          </div>
-          <div class="flex-auto">
-            <p-inputNumber 
-              inputId="sueldoMax" 
-              locale="es-MX" 
-              mode="decimal" 
-              [minFractionDigits]="2" 
-              [maxFractionDigits]="5"
-              [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoMax')}"
-              formControlName="sueldoMax"
-            ></p-inputNumber>
-            <div *ngIf="esInvalido('sueldoMax')">
-              <small
-                class="error-msg"
-              >
+                        </div>
+                    </div>
+                    <div class="flex-auto">
+                        <p-inputNumber inputId="sueldoMax" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoMax')}" formControlName="sueldoMax"></p-inputNumber>
+                        <div *ngIf="esInvalido('sueldoMax')">
+                            <small class="error-msg">
                 {{ obtenerMensajeError('sueldoMax') }}
               </small>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-6">
-        <label for="sueldoReal">Salario real:</label>
-        <div class="flex justify-content-between p-fluid">
-          <div class="flex-auto">
-            <p-inputNumber 
-              inputId="sueldoReal" 
-              locale="es-MX" 
-              mode="decimal"
-              [minFractionDigits]="2" 
-              [maxFractionDigits]="5"
-              [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoReal')}"
-              formControlName="sueldoReal"
-            ></p-inputNumber>
-            <div *ngIf="esInvalido('sueldoReal')">
-              <small
-                class="error-msg"
-              >
+            <div class="col-6">
+                <label for="sueldoReal">Salario real:</label>
+                <div class="flex justify-content-between p-fluid">
+                    <div class="flex-auto">
+                        <p-inputNumber inputId="sueldoReal" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoReal')}" formControlName="sueldoReal"></p-inputNumber>
+                        <div *ngIf="esInvalido('sueldoReal')">
+                            <small class="error-msg">
                 {{ obtenerMensajeError('sueldoReal') }}
               </small>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-6">
-          <label for="idDirectorEjecutivo">Director ejecutivo:</label>
-          <p-dropdown 
-            id="idDirectorEjecutivo" 
-            [options]="directores" 
-            (onChange)="getProyectos($event)"
-            placeholder="Seleccionar un director" 
-            optionLabel="name" 
-            [showClear]="true"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('idDirectorEjecutivo')}"
-            formControlName="idDirectorEjecutivo"
-            optionValue="code"
-            [filter]="true" 
-            filterBy="name"
-          ></p-dropdown>
-          <div *ngIf="esInvalido('idDirectorEjecutivo')">
-            <small
-              class="error-msg"
-            >
+        <div class="row">
+            <div class="col-6">
+                <label for="idDirectorEjecutivo">Director ejecutivo:</label>
+                <p-dropdown id="idDirectorEjecutivo" [options]="directores" (onChange)="getProyectos($event)" placeholder="Seleccionar un director" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idDirectorEjecutivo')}"
+                    formControlName="idDirectorEjecutivo" optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('idDirectorEjecutivo')">
+                    <small class="error-msg">
               {{ obtenerMensajeError('idDirectorEjecutivo') }}
             </small>
-          </div>
-      </div>
-      <div class="col-6">
-        <label for="idProyecto">Proyecto:</label>
-        <p-dropdown 
-          id="idProyecto" 
-          [options]="proyectos" 
-          (onChange)="setearSalarios($event)"
-          placeholder="Seleccionar un proyecto" 
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('idProyecto')}"
-          formControlName="idProyecto"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-        <div *ngIf="esInvalido('idProyecto')">
-          <small
-            class="error-msg"
-          >
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="idProyecto">Proyecto:</label>
+                <p-dropdown id="idProyecto" [options]="proyectos" (onChange)="setearSalarios($event)" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idProyecto')}"
+                    formControlName="idProyecto" optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('idProyecto')">
+                    <small class="error-msg">
             {{ obtenerMensajeError('idProyecto') }}
           </small>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-6">
-          <label for="idJefeInmediato">Jefe inmediato Bovis:</label>
-          <p-dropdown 
-            id="idJefeInmediato" 
-            [options]="jefes" 
-            placeholder="Seleccionar un jefe" 
-            optionLabel="name" 
-            [showClear]="true"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('idJefeInmediato')}"
-            formControlName="idJefeInmediato"
-            optionValue="code"
-            [filter]="true" 
-            filterBy="name"
-          ></p-dropdown>
-          <div *ngIf="esInvalido('idJefeInmediato')">
-            <small
-              class="error-msg"
-            >
+        <div class="row">
+            <div class="col-6">
+                <label for="idJefeInmediato">Jefe inmediato Bovis:</label>
+                <p-dropdown id="idJefeInmediato" [options]="jefes" placeholder="Seleccionar un jefe" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idJefeInmediato')}" formControlName="idJefeInmediato"
+                    optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('idJefeInmediato')">
+                    <small class="error-msg">
               {{ obtenerMensajeError('idJefeInmediato') }}
             </small>
-          </div>
-      </div>
-      <div class="col-6">
-        <label for="idTipoContrato">Tipo de contratación:</label>
-        <p-dropdown 
-          id="idTipoContrato" 
-          [options]="tiposContratacion" 
-          (onChange)="setearSalarios($event)"
-          placeholder="Seleccionar un tipo" 
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('idTipoContrato')}"
-          formControlName="idTipoContrato"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-        <div *ngIf="esInvalido('idTipoContrato')">
-          <small
-            class="error-msg"
-          >
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="idTipoContrato">Tipo de contratación:</label>
+                <p-dropdown id="idTipoContrato" [options]="tiposContratacion" (onChange)="setearSalarios($event)" placeholder="Seleccionar un tipo" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idTipoContrato')}"
+                    formControlName="idTipoContrato" optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('idTipoContrato')">
+                    <small class="error-msg">
             {{ obtenerMensajeError('idTipoContrato') }}
           </small>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-6">
-          <label for="idEstado">Estado:</label>
-          <p-dropdown 
-            id="idEstado" 
-            [options]="estados" 
-            placeholder="Seleccionar un estado" 
-            optionLabel="name" 
-            [showClear]="true"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('idEstado')}"
-            formControlName="idEstado"
-            (onChange)="buscarCiudades($event)"
-            optionValue="code"
-            [filter]="true" 
-            filterBy="name"
-          ></p-dropdown>
-          <div *ngIf="esInvalido('idEstado')">
-            <small
-              class="error-msg"
-            >
+        <div class="row">
+            <div class="col-6">
+                <label for="idEstado">Estado:</label>
+                <p-dropdown id="idEstado" [options]="estados" placeholder="Seleccionar un estado" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idEstado')}" formControlName="idEstado" (onChange)="buscarCiudades($event)"
+                    optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('idEstado')">
+                    <small class="error-msg">
               {{ obtenerMensajeError('idEstado') }}
             </small>
-          </div>
-      </div>
-      <div class="col-6">
-        <label for="idCiudad">Ciudad:</label>
-        <p-dropdown 
-          id="idCiudad" 
-          [options]="ciudades" 
-          placeholder="Seleccionar una ciudad" 
-          optionLabel="name" 
-          [showClear]="true"
-          [style]="{ width: '100%' }"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('idCiudad')}"
-          formControlName="idCiudad"
-          optionValue="code"
-          [filter]="true" 
-          filterBy="name"
-        ></p-dropdown>
-        <div *ngIf="esInvalido('idCiudad')">
-          <small
-            class="error-msg"
-          >
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="idCiudad">Ciudad:</label>
+                <p-dropdown id="idCiudad" [options]="ciudades" placeholder="Seleccionar una ciudad" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idCiudad')}" formControlName="idCiudad" optionValue="code"
+                    [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('idCiudad')">
+                    <small class="error-msg">
             {{ obtenerMensajeError('idCiudad') }}
           </small>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-6">
-          <label>Disponibilidad para viajar:</label>
-          <div class="flex flex-wrap gap-3">
-              <div class="flex align-items-center">
-                  <p-radioButton 
-                    name="disponibilidadViajar"
-                    value="SI" 
-                    formControlName="disponibilidadViajar" 
-                    inputId="disponibilidadViajar1"
-                  ></p-radioButton>
-                  <label for="disponibilidadViajar1" class="ml-2">Sí</label>
-              </div>
-              <div class="flex align-items-center">
-                  <p-radioButton 
-                    name="disponibilidadViajar"
-                    value="NO"
-                    formControlName="disponibilidadViajar"
-                    inputId="disponibilidadViajar2"
-                  ></p-radioButton>
-                  <label for="disponibilidadViajar2" class="ml-2">No</label>
-              </div>
-          </div>
-      </div>
-      <div class="col-6">
-        <label for="aniosExperiencia">Años de experiencia:</label>
-        <div class="flex justify-content-between p-fluid">
-          <div class="flex-auto">
-            <p-inputNumber 
-              inputId="aniosExperiencia" 
-              locale="es-MX" 
-              [useGrouping]="false"
-              [ngClass]="{'ng-invalid ng-dirty': esInvalido('aniosExperiencia')}"
-              formControlName="aniosExperiencia"
-            ></p-inputNumber>
-            <div *ngIf="esInvalido('aniosExperiencia')">
-              <small
-                class="error-msg"
-              >
+        <div class="row">
+            <div class="col-6">
+                <label>Disponibilidad para viajar:</label>
+                <div class="flex flex-wrap gap-3">
+                    <div class="flex align-items-center">
+                        <p-radioButton name="disponibilidadViajar" value="SI" formControlName="disponibilidadViajar" inputId="disponibilidadViajar1"></p-radioButton>
+                        <label for="disponibilidadViajar1" class="ml-2">Sí</label>
+                    </div>
+                    <div class="flex align-items-center">
+                        <p-radioButton name="disponibilidadViajar" value="NO" formControlName="disponibilidadViajar" inputId="disponibilidadViajar2"></p-radioButton>
+                        <label for="disponibilidadViajar2" class="ml-2">No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="aniosExperiencia">Años de experiencia:</label>
+                <div class="flex justify-content-between p-fluid">
+                    <div class="flex-auto">
+                        <p-inputNumber inputId="aniosExperiencia" locale="es-MX" [useGrouping]="false" [ngClass]="{'ng-invalid ng-dirty': esInvalido('aniosExperiencia')}" formControlName="aniosExperiencia"></p-inputNumber>
+                        <div *ngIf="esInvalido('aniosExperiencia')">
+                            <small class="error-msg">
                 {{ obtenerMensajeError('aniosExperiencia') }}
               </small>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-6">
-          <label for="nivelIngles">Nivel de inglés:</label>
-          <p-dropdown 
-            id="nivelIngles" 
-            [options]="niveles" 
-            placeholder="Seleccionar un nivel" 
-            optionLabel="name" 
-            [showClear]="true"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('nivelIngles')}"
-            formControlName="nivelIngles"
-            optionValue="code"
-          ></p-dropdown>
-          <div *ngIf="esInvalido('nivelIngles')">
-            <small
-              class="error-msg"
-            >
+        <div class="row">
+            <div class="col-6">
+                <label for="nivelIngles">Nivel de inglés:</label>
+                <p-dropdown id="nivelIngles" [options]="niveles" placeholder="Seleccionar un nivel" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('nivelIngles')}" formControlName="nivelIngles" optionValue="code"></p-dropdown>
+                <div *ngIf="esInvalido('nivelIngles')">
+                    <small class="error-msg">
               {{ obtenerMensajeError('nivelIngles') }}
             </small>
-          </div>
-      </div>
-      <div class="col-6">
-        <label for="comentarios">Comentarios adicionales:</label>
-        <textarea 
-          rows="5" 
-          cols="30" 
-          pInputTextarea 
-          class="form-control"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('comentarios')}"
-          formControlName="comentarios"
-        ></textarea>
-        <div *ngIf="esInvalido('comentarios')">
-          <small
-            class="error-msg"
-          >
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="comentarios">Comentarios adicionales:</label>
+                <textarea rows="5" cols="30" pInputTextarea class="form-control" [ngClass]="{'ng-invalid ng-dirty': esInvalido('comentarios')}" formControlName="comentarios"></textarea>
+                <div *ngIf="esInvalido('comentarios')">
+                    <small class="error-msg">
             {{ obtenerMensajeError('comentarios') }}
           </small>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-6">
-        <label for="habilidades">Habilidades:</label>
-        <div class="flex-auto">
-          <p-multiSelect 
-            [options]="habilidades" 
-            defaultLabel="Seleccionar al menos una habilidad" 
-            optionLabel="name" 
-            display="chip"
-            scrollHeight="250px"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('habilidades')}"
-            formControlName="habilidades"
-            optionValue="code"
-          ></p-multiSelect>
-          <div *ngIf="esInvalido('habilidades')">
-            <small
-              class="error-msg"
-            >
+        <div class="row">
+            <div class="col-6">
+                <label for="habilidades">Habilidades:</label>
+                <div class="flex-auto">
+                    <p-multiSelect [options]="habilidades" defaultLabel="Seleccionar al menos una habilidad" optionLabel="name" display="chip" scrollHeight="250px" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('habilidades')}" formControlName="habilidades"
+                        optionValue="code"></p-multiSelect>
+                    <div *ngIf="esInvalido('habilidades')">
+                        <small class="error-msg">
               {{ obtenerMensajeError('habilidades') }}
             </small>
-          </div>
-        </div>
-      </div>
-      <div class="col-6">
-        <label for="experiencias">Experiencias:</label>
-        <div class="flex-auto">
-          <p-multiSelect 
-            [options]="experiencias" 
-            defaultLabel="Seleccionar al menos una experiencia" 
-            optionLabel="name" 
-            display="chip"
-            scrollHeight="250px"
-            [style]="{ width: '100%' }"
-            [ngClass]="{'ng-invalid ng-dirty': esInvalido('experiencias')}"
-            formControlName="experiencias"
-            optionValue="code"
-          ></p-multiSelect>
-          <div *ngIf="esInvalido('experiencias')">
-            <small
-              class="error-msg"
-            >
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <label for="experiencias">Experiencias:</label>
+                <div class="flex-auto">
+                    <p-multiSelect [options]="experiencias" defaultLabel="Seleccionar al menos una experiencia" optionLabel="name" display="chip" scrollHeight="250px" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('experiencias')}" formControlName="experiencias"
+                        optionValue="code"></p-multiSelect>
+                    <div *ngIf="esInvalido('experiencias')">
+                        <small class="error-msg">
               {{ obtenerMensajeError('experiencias') }}
             </small>
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </form>

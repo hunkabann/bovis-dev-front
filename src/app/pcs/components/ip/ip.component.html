@@ -1,290 +1,238 @@
-
 <div class="text-center" *ngIf="cargando; else principal">
-  <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
-  <p>Cargando etapas...</p>
-  <p><strong>Un momento.</strong></p>
+    <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+    <p>Cargando etapas...</p>
+    <p><strong>Un momento.</strong></p>
 </div>
 
 <ng-template #principal>
-  <div class="content" style="margin: 2%">
-  
-    <form [formGroup]="form" (ngSubmit)="guardar()" *ngIf="mostrarFormulario">
-      <button 
-        type="submit" 
-        class="btn btn-info" 
-        [disabled]="!form.valid"
-      >
-        {{catalogosService.labelBotonPrincipal}}
-      </button>
-      <!--button 
-        type="button" 
-        class="btn btn-info ml-2"
-        (click)="form.reset"
-      >
-        Clear data
-    </button-->
-  
-      <br />
-      <br />
-  
-      <p-accordion [activeIndex]="0">
-        <p-accordionTab header="Finanzas">
-  
-          <div class="">
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Número de Proyecto: <span class="required"></span></label>
-                <input type="number" id="typeNumber" class="form-control" [disabled]="isConsulta" formControlName="num_proyecto"/>
-              </div>
-              <div class="col-4">
-                <label for="email">Nombre del Proyecto: <span class="required"></span></label>
-                <input type="text" class="form-control" maxlength="100" [disabled]="isConsulta" formControlName="nombre_proyecto"/>
-              </div>
-              <div class="col-4">
-                <label for="email">Director Ejecutivo: <span class="required"></span></label>
-                <p-dropdown optionLabel="name" 
-                [options]="catEmpleados" 
-                [showClear]="true" 
-                [style]="{ width: '100%' }" 
-                placeholder="Seleccionar un director" 
-                [disabled]="isConsulta" 
-                [filter]="true" 
-                filterBy="name" 
-                formControlName="id_director_ejecutivo" 
-                optionValue="code"></p-dropdown>
-              </div>
-            </div>
-  
-            <br />
-  
-            <div class="row">
-              <div class="col-4">
-                  <label>Empresa:</label>
-                  <p-dropdown  
-                      [options]="empresas"
-                      placeholder="Seleccionar una empresa" 
-                      optionLabel="name" 
-                      [showClear]="true"
-                      [style]="{ width: '100%' }"
-                      optionValue="code"
-                      formControlName="id_empresa"
-                      [filter]="true" 
-                      filterBy="name"
-                  ></p-dropdown>
-              </div>
-              <!-- <div class="col-4"></div> -->
-              <div class="col-8">
-                <label for="email">Nombre del Cliente:</label>
-                <div class="flex-auto">
-                  <p-multiSelect 
-                    [options]="catClientes" 
-                    defaultLabel="Seleccionar al menos un cliente" 
-                    optionLabel="name" 
-                    display="chip"
-                    scrollHeight="250px"
-                    [style]="{ width: '100%' }"
-                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('ids_clientes')}"
-                    formControlName="ids_clientes"
-                    optionValue="value"
-                    appendTo="body"
-                  ></p-multiSelect>
-                </div>
-              </div>
-            </div>
-  
-          </div>
-  
-        </p-accordionTab>
-      </p-accordion>
-      
-      <br>
-  
-      <p-accordion [activeIndex]="0">
-        <p-accordionTab header="Informacion del Proyecto">
-  
-          <div class="">
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Sector: </label>
-                <p-dropdown optionLabel="name" [options]="catSectores" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
-                  [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_sector" optionValue="value"></p-dropdown>
-              </div>
-              <div class="col-4">
-                <label for="email">Alcance Bovis: </label>
-                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="alcance"/>
-              </div>
-              <div class="col-4">
-                <label for="email">Estado del Proyecto: </label>
-                <p-dropdown optionLabel="name" [options]="catEstatusProyecto" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
-                [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_estatus" optionValue="value"></p-dropdown>
-              </div>
-            </div>
-  
-            <br />
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Código Postal: </label>
-                <input type="number" class="form-control" maxlength="5" [disabled]="isConsulta" formControlName="codigo_postal"/>
-              </div>
-              <div class="col-4">
-                <label for="email">Ciudad: </label>
-                <input type="text" class="form-control" maxlength="100" [disabled]="isConsulta" formControlName="ciudad"/>
-              </div>
-              <div class="col-4">
-                <label for="email">Pais: </label>
-                <p-dropdown optionLabel="name" [options]="catPaises" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
-                  [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_pais" optionValue="value"></p-dropdown>
-              </div>
-            </div>
-  
-          </div>
-  
-        </p-accordionTab>
-      </p-accordion>
-  
-      <br>
-  
-      <p-accordion [activeIndex]="0">
-        <p-accordionTab header="Personal Clave">
-  
-          <div class="">
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Responsable de proyecto para Preconstrucción:</label>
-                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
-                  [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_preconstruccion" optionValue="value"></p-dropdown>
-              </div>
-              <div class="col-4">
-                <label for="email">Responsable de proyecto para Construcción:</label>
-                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
-                  [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_construccion" optionValue="value"></p-dropdown>
-              </div>
-              <div class="col-4">
-                <label for="email">Responsable de proyecto para EHS:</label>
-                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
-                  [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_ehs" optionValue="value"></p-dropdown>
-              </div>
-            </div>
-  
-            <br />
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Responsable de proyecto para Supervision campo:</label>
-                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }"
-                  [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_supervisor" optionValue="value"></p-dropdown>
-              </div>
-              <div class="col-4">
-  
-              </div>
-            </div>
-  
-          </div>
-  
-        </p-accordionTab>
-      </p-accordion>
-  
-      <br>
-  
-      <p-accordion [activeIndex]="0">
-        <p-accordionTab header="Estimados de Construcción">
-  
-          <div class="">
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Costo de construcción:</label>
-                <input type="number" id="typeNumber" class="form-control" [disabled]="true" />
-              </div>
-              <div class="col-4">
-                <label for="email">Area del proyecto:</label>
-                <input type="number" id="typeNumber" class="form-control" [disabled]="true" />
-              </div>
-              <div class="col-4">
-                <label for="email">Costo promedio por m2:</label>
-                <input type="number" id="typeNumber" class="form-control" [disabled]="isConsulta" formControlName="costo_promedio_m2"/>
-              </div>
-            </div>
-  
-            <br />
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Inicio del proyecto: </label>
-                <p-calendar [showIcon]="true" [style]="{
+    <div class="content" style="margin: 2%">
+
+        <form [formGroup]="form" (ngSubmit)="guardar()" *ngIf="mostrarFormulario">
+            <p-toolbar styleClass="p-1 mb-5 d-flex justify-content-end gap-2 text-right">
+                <button type="submit" class="btn btn-info" [disabled]="!form.valid">{{catalogosService.labelBotonPrincipal}}</button>
+            </p-toolbar>
+
+            <p-accordion [activeIndex]="0">
+                <p-accordionTab header="Finanzas">
+
+                    <div class="">
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Número de Proyecto: <span class="required"></span></label>
+                                <input type="number" id="typeNumber" class="form-control" [disabled]="isConsulta" formControlName="num_proyecto" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Nombre del Proyecto: <span class="required"></span></label>
+                                <input type="text" class="form-control" maxlength="100" [disabled]="isConsulta" formControlName="nombre_proyecto" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Director Ejecutivo: <span class="required"></span></label>
+                                <p-dropdown optionLabel="name" [options]="catEmpleados" [showClear]="true" [style]="{ width: '100%' }" placeholder="Seleccionar un director" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_director_ejecutivo" optionValue="code"></p-dropdown>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label>Empresa:</label>
+                                <p-dropdown [options]="empresas" placeholder="Seleccionar una empresa" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" formControlName="id_empresa" [filter]="true" filterBy="name"></p-dropdown>
+                            </div>
+                            <!-- <div class="col-4"></div> -->
+                            <div class="col-8">
+                                <label for="email">Nombre del Cliente:</label>
+                                <div class="flex-auto">
+                                    <p-multiSelect [options]="catClientes" defaultLabel="Seleccionar al menos un cliente" optionLabel="name" display="chip" scrollHeight="250px" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('ids_clientes')}" formControlName="ids_clientes"
+                                        optionValue="value" appendTo="body"></p-multiSelect>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </p-accordionTab>
+            </p-accordion>
+
+            <br>
+
+            <p-accordion [activeIndex]="0">
+                <p-accordionTab header="Informacion del Proyecto">
+
+                    <div class="">
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Sector: </label>
+                                <p-dropdown optionLabel="name" [options]="catSectores" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_sector" optionValue="value"></p-dropdown>
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Alcance Bovis: </label>
+                                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="alcance" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Estado del Proyecto: </label>
+                                <p-dropdown optionLabel="name" [options]="catEstatusProyecto" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_estatus" optionValue="value"></p-dropdown>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Código Postal: </label>
+                                <input type="number" class="form-control" maxlength="5" [disabled]="isConsulta" formControlName="codigo_postal" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Ciudad: </label>
+                                <input type="text" class="form-control" maxlength="100" [disabled]="isConsulta" formControlName="ciudad" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Pais: </label>
+                                <p-dropdown optionLabel="name" [options]="catPaises" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_pais" optionValue="value"></p-dropdown>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </p-accordionTab>
+            </p-accordion>
+
+            <br>
+
+            <p-accordion [activeIndex]="0">
+                <p-accordionTab header="Personal Clave">
+
+                    <div class="">
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Responsable de proyecto para Preconstrucción:</label>
+                                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_preconstruccion" optionValue="value"></p-dropdown>
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Responsable de proyecto para Construcción:</label>
+                                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_construccion" optionValue="value"></p-dropdown>
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Responsable de proyecto para EHS:</label>
+                                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_ehs" optionValue="value"></p-dropdown>
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Responsable de proyecto para Supervision campo:</label>
+                                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_supervisor" optionValue="value"></p-dropdown>
+                            </div>
+                            <div class="col-4">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </p-accordionTab>
+            </p-accordion>
+
+            <br>
+
+            <p-accordion [activeIndex]="0">
+                <p-accordionTab header="Estimados de Construcción">
+
+                    <div class="">
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Costo de construcción:</label>
+                                <input type="number" id="typeNumber" class="form-control" [disabled]="true" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Area del proyecto:</label>
+                                <input type="number" id="typeNumber" class="form-control" [disabled]="true" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Costo promedio por m2:</label>
+                                <input type="number" id="typeNumber" class="form-control" [disabled]="isConsulta" formControlName="costo_promedio_m2" />
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Inicio del proyecto: </label>
+                                <p-calendar [showIcon]="true" [style]="{
                 width: '100%',
                 display: 'inline-flex',
                 height: '39px'
               }" dateFormat="dd/mm/yy" [disabled]="isConsulta" formControlName="fecha_inicio" (onSelect)="actualizarTotalMeses()"></p-calendar>
-              </div>
-              <div class="col-4">
-                <label for="email">Fin del proyecto: </label>
-                <p-calendar [showIcon]="true" [style]="{
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Fin del proyecto: </label>
+                                <p-calendar [showIcon]="true" [style]="{
                 width: '100%',
                 display: 'inline-flex',
                 height: '39px'
               }" dateFormat="dd/mm/yy" [disabled]="isConsulta" formControlName="fecha_fin" (onSelect)="actualizarTotalMeses()"></p-calendar>
-              </div>
-              <div class="col-4">
-                <label for="email">Total en meses:</label>
-                <input type="number" id="typeNumber" class="form-control" formControlName="total_meses" [readonly]="true" />
-              </div>
-            </div>
-  
-          </div>
-  
-        </p-accordionTab>
-      </p-accordion>
-  
-      <br />
-  
-      <p-accordion [activeIndex]="0">
-        <p-accordionTab header="Contacto">
-  
-          <div class="">
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Nombre del Contacto:</label>
-                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="nombre_contacto"/>
-              </div>
-              <div class="col-4">
-                <label for="email">Posicion del Contacto:</label>
-                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="posicion_contacto"/>
-              </div>
-              <div class="col-4">
-                <label for="email">Telefono del Contacto:</label>
-                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="telefono_contacto" />
-              </div>
-            </div>
-  
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Total en meses:</label>
+                                <input type="number" id="typeNumber" class="form-control" formControlName="total_meses" [readonly]="true" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                </p-accordionTab>
+            </p-accordion>
+
             <br />
-  
-            <div class="row">
-              <div class="col-4">
-                <label for="email">Correo del Contacto:</label>
-                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="correo_contacto"/>
-              </div>
-              <div class="col-4">
-  
-              </div>
-              <div class="col-4">
-  
-              </div>
-            </div>
-  
-          </div>
-  
-        </p-accordionTab>
-      </p-accordion>
-  
-  
-      <p-toast></p-toast>
-    </form>
-  
-  </div>
+
+            <p-accordion [activeIndex]="0">
+                <p-accordionTab header="Contacto">
+
+                    <div class="">
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Nombre del Contacto:</label>
+                                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="nombre_contacto" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Posicion del Contacto:</label>
+                                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="posicion_contacto" />
+                            </div>
+                            <div class="col-4">
+                                <label for="email">Telefono del Contacto:</label>
+                                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="telefono_contacto" />
+                            </div>
+                        </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="email">Correo del Contacto:</label>
+                                <input type="text" class="form-control" [disabled]="isConsulta" formControlName="correo_contacto" />
+                            </div>
+                            <div class="col-4">
+
+                            </div>
+                            <div class="col-4">
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </p-accordionTab>
+            </p-accordion>
+
+
+            <p-toast></p-toast>
+        </form>
+
+    </div>
 </ng-template>

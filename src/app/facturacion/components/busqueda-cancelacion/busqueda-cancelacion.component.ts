@@ -47,9 +47,9 @@ interface AssociativeArray {
 export class BusquedaCancelacionComponent implements OnInit {
 
   today: Date = new Date();
-      pipe = new DatePipe('en-US');
-      todayWithPipe = null;
-  
+  pipe = new DatePipe('en-US');
+  todayWithPipe = null;
+
   //objBusqueda: Busqueda = new Busqueda();
   listBusquedaCompleto: Array<BusquedaCancelacion> =
     new Array<BusquedaCancelacion>();
@@ -80,6 +80,8 @@ export class BusquedaCancelacionComponent implements OnInit {
   IDEmpresa: number;
   IDCliente: number;
 
+  totalRecords: number = 0;
+
   @ViewChild('dropDownProyecto') dropDownProyecto: Dropdown;
   @ViewChild('dropDownEmpresa') dropDownEmpresa: Dropdown;
   @ViewChild('dropDownCliente') dropDownCliente: Dropdown;
@@ -99,9 +101,9 @@ export class BusquedaCancelacionComponent implements OnInit {
   isTypeHeader: boolean = false;
   uuidPrincipal: string
   complementoInfo: any = {
-    esPago:     false,
-    titulo:     '',
-    showModal:  false
+    esPago: false,
+    titulo: '',
+    showModal: false
   }
 
   notaCreditoHeader = [
@@ -132,15 +134,15 @@ export class BusquedaCancelacionComponent implements OnInit {
   ]
 
   form = this.fb.group({
-    uuid:               [''],
-    fecha_cancelacion:  ['', Validators.required],
+    uuid: [''],
+    fecha_cancelacion: ['', Validators.required],
     motivo_cancelacion: ['', [Validators.required, Validators.minLength(20)]]
   })
 
   formGeneral = this.fb.group({
-    id:                 [''],
-    FechaCancelacion:   ['', Validators.required],
-    MotivoCancelacion:  ['', [Validators.required, Validators.minLength(20)]]
+    id: [''],
+    FechaCancelacion: ['', Validators.required],
+    MotivoCancelacion: ['', [Validators.required, Validators.minLength(20)]]
   })
 
   constructor(
@@ -149,7 +151,7 @@ export class BusquedaCancelacionComponent implements OnInit {
     private messageService: MessageService,
     private sharedService: SharedService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.maxDate = new Date();
@@ -206,7 +208,7 @@ export class BusquedaCancelacionComponent implements OnInit {
             });
           });
         }
-        else{
+        else {
           this.messageError(data.message, 'Información de Empresas');
         }
       },
@@ -229,7 +231,7 @@ export class BusquedaCancelacionComponent implements OnInit {
             });
           });
         }
-        else{
+        else {
           this.messageError(data.message, 'Información de Clientes');
         }
 
@@ -297,6 +299,7 @@ export class BusquedaCancelacionComponent implements OnInit {
   }
 
   busqueda() {
+    this.totalRecords = 0;
     this.sharedService.cambiarEstado(true)
     this.listBusquedaCompleto = new Array<BusquedaCancelacion>();
     this.listBusquedaUnique = new Array<BusquedaCancelacion>();
@@ -306,20 +309,20 @@ export class BusquedaCancelacionComponent implements OnInit {
       .subscribe((bus) => {
         //console.log(bus);
         this.listBusquedaCompleto = bus.data.map(factura => {
-          
+          this.totalRecords++;
           let importePendiente = 0
           let importeEnPesos = 0
-          
+
           importePendiente = factura.total
           importeEnPesos = factura.idMoneda === 'MXN' ? factura.importe : factura.importe * factura.tipoCambio
 
-          if(factura.notas.length > 0) {
+          if (factura.notas.length > 0) {
             factura.notas.forEach(nota => {
               importePendiente -= nota.nC_Total
             })
           }
 
-          if(factura.cobranzas.length > 0) {
+          if (factura.cobranzas.length > 0) {
             factura.cobranzas.forEach(cobranza => {
               //importePendiente -= +cobranza.c_ImportePagado
               importePendiente -= +cobranza.base
@@ -343,8 +346,8 @@ export class BusquedaCancelacionComponent implements OnInit {
 
   getFiltrosVaues() {
     let objBusqueda: Busqueda = new Busqueda();
-    
-    if(this.fechaFin != null) {
+
+    if (this.fechaFin != null) {
       let utcFin = this.fechaFin.toJSON().slice(0, 10).replace(/-/g, '-');
       objBusqueda.fechaFin = utcFin;
     } else {
@@ -383,28 +386,28 @@ export class BusquedaCancelacionComponent implements OnInit {
 
   getHeadersTabla() {
     return [
-      {key: 'uuid', label: 'UUID'},
-      {key: 'mes', label: 'MES'},
-      {key: 'numProyecto', label: 'No. Proyecto'},
-      {key: 'empresa', label: 'EMPRESA'},
-      {key: 'cliente', label: 'CLIENTE'},
-      {key: 'fechaEmision', label: 'FECHA DE EMISIÓN'},
-      {key: 'noFactura', label: 'NO. DE FACTURA'},
-      {key: 'idTipoFactura', label: 'Tipo'},
-      {key: 'idMoneda', label: 'MONEDA'},
-      {key: 'tipoCambio', label: 'TIPO DE CAMBIO'},
-      {key: 'importe', label: 'IMPORTE'},
-      {key: 'importeEnPesos', label: 'IMPORTE EN PESOS'},
-      {key: 'iva', label: 'I.V.A.'},
-      {key: 'ivaRet', label: 'IVA RET'},
-      {key: 'total', label: 'TOTAL'},
-      {key: 'concepto', label: 'CONCEPTO'},
-      {key: 'importePendientePorPagar', label: 'IMPORTE PENDIENTE POR PAGAR (saldo)'},
-      {key: 'importePendientePorPagar_dls', label: 'IMPORTE PENDIENTE POR PAGAR DLS (saldo)'},
+      { key: 'uuid', label: 'UUID' },
+      { key: 'mes', label: 'MES' },
+      { key: 'numProyecto', label: 'No. Proyecto' },
+      { key: 'empresa', label: 'EMPRESA' },
+      { key: 'cliente', label: 'CLIENTE' },
+      { key: 'fechaEmision', label: 'FECHA DE EMISIÓN' },
+      { key: 'noFactura', label: 'NO. DE FACTURA' },
+      { key: 'idTipoFactura', label: 'Tipo' },
+      { key: 'idMoneda', label: 'MONEDA' },
+      { key: 'tipoCambio', label: 'TIPO DE CAMBIO' },
+      { key: 'importe', label: 'IMPORTE' },
+      { key: 'importeEnPesos', label: 'IMPORTE EN PESOS' },
+      { key: 'iva', label: 'I.V.A.' },
+      { key: 'ivaRet', label: 'IVA RET' },
+      { key: 'total', label: 'TOTAL' },
+      { key: 'concepto', label: 'CONCEPTO' },
+      { key: 'importePendientePorPagar', label: 'IMPORTE PENDIENTE POR PAGAR (saldo)' },
+      { key: 'importePendientePorPagar_dls', label: 'IMPORTE PENDIENTE POR PAGAR DLS (saldo)' },
       // {key: 'anio', label: 'Año'},
       // {key: 'fechaPago', label: 'Fecha Pago'},
       // {key: 'fechaCancelacion', label: 'Fecha Cancelacion'},
-      {key: 'motivoCancelacion', label: 'Motivo Cancelacion'},
+      { key: 'motivoCancelacion', label: 'Motivo Cancelacion' },
       /* 'NC Uuid Nota Credito',
       'NC Id Moneda',
       'NC Id Tipo Relacion',
@@ -546,8 +549,8 @@ export class BusquedaCancelacionComponent implements OnInit {
   }
 
   changeCancelar() {
-    
-    if(!this.formGeneral.valid) {
+
+    if (!this.formGeneral.valid) {
       this.formGeneral.markAllAsTouched()
       return
     }
@@ -556,9 +559,9 @@ export class BusquedaCancelacionComponent implements OnInit {
     // cancelacion.id = this.idCancelacion;
     // cancelacion.MotivoCancelacion = this.motivoCancelacion;
     const body: facturaCancelacion = {
-      id:                 this.idCancelacion,
-      MotivoCancelacion:  this.formGeneral.value.MotivoCancelacion,
-      FechaCancelacion:   this.formGeneral.value.FechaCancelacion
+      id: this.idCancelacion,
+      MotivoCancelacion: this.formGeneral.value.MotivoCancelacion,
+      FechaCancelacion: this.formGeneral.value.FechaCancelacion
     }
 
     this.facturacionService
@@ -578,10 +581,10 @@ export class BusquedaCancelacionComponent implements OnInit {
 
   calcularNotasCreditoCobranzas(bus: BusquedaCancelacion, esNotaCredito = true) {
     let total = 0
-    
-    const registos = esNotaCredito 
-    ? bus.notas.filter(nota => nota.nC_FechaCancelacion == null)
-    : bus.cobranzas.filter(cobro => cobro.c_FechaCancelacion == null)
+
+    const registos = esNotaCredito
+      ? bus.notas.filter(nota => nota.nC_FechaCancelacion == null)
+      : bus.cobranzas.filter(cobro => cobro.c_FechaCancelacion == null)
 
     total = registos.length
 
@@ -591,7 +594,7 @@ export class BusquedaCancelacionComponent implements OnInit {
   show(tipoModal: boolean, uuid: string) {
 
     const facturaIndex = this.listBusquedaCompleto.findIndex(factura => factura.uuid === uuid)
-    if(facturaIndex < 0) return;
+    if (facturaIndex < 0) return;
 
     const factura = this.listBusquedaCompleto.at(facturaIndex)
 
@@ -600,7 +603,7 @@ export class BusquedaCancelacionComponent implements OnInit {
     this.headerModalCancelacion = this.isTypeHeader ? 'Notas de crédito' : 'Pagos';
 
     this.uuidPrincipal = uuid
-    
+
     this.listBusquedaModal = tipoModal ? factura.notas : factura.cobranzas
   }
 
@@ -611,7 +614,7 @@ export class BusquedaCancelacionComponent implements OnInit {
       showModal: true
     }
     this.form.reset()
-    this.form.patchValue({uuid})
+    this.form.patchValue({ uuid })
   }
 
   exportJsonToExcel(): void {
@@ -634,8 +637,8 @@ export class BusquedaCancelacionComponent implements OnInit {
 
       //saveAs(blob, `FacturacionCancelacion_${Date.now()}${EXCEL_EXTENSION}`)
       this.todayWithPipe = this.pipe.transform(Date.now(), 'dd_MM_yyyy');
-      
-      saveAs(blob, `FacturacionCancelacion_`+this.todayWithPipe+`${EXCEL_EXTENSION}`)
+
+      saveAs(blob, `FacturacionCancelacion_` + this.todayWithPipe + `${EXCEL_EXTENSION}`)
     });
 
   }
@@ -659,7 +662,7 @@ export class BusquedaCancelacionComponent implements OnInit {
   }
 
   _setXLSXHeader(worksheet: ExcelJS.Worksheet) {
-    
+
     const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
     const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
@@ -679,7 +682,7 @@ export class BusquedaCancelacionComponent implements OnInit {
     const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
 
     let inicio = 5
-   
+
 
     this.listBusquedaCompleto.forEach(factura => {
       const inicioFactura = inicio
@@ -687,69 +690,95 @@ export class BusquedaCancelacionComponent implements OnInit {
       let columnaImportePendiente_dls = 0
       let ImporteNotayPago = 0
       encabezados.forEach((encabezado, indexE) => {
-        if(encabezado.id == 'importePendientePorPagar') {
+        if (encabezado.id == 'importePendientePorPagar') {
           columnaImportePendiente = indexE + 1
         }
-        if(encabezado.id == 'importePendientePorPagar_dls') {
+        if (encabezado.id == 'importePendientePorPagar_dls') {
           columnaImportePendiente_dls = indexE + 1
         }
         let cell = worksheet.getCell(inicio, indexE + 1)
         cell.value = factura[encabezado.id]
         cell.fill = factura['fechaCancelacion'] ? fillNotaCancelada : fillFactura
-        const encabezadosRedondeados = ['total', 'importe', 'iva', 'ivaRet', 'importeEnPesos'] 
-        if(encabezadosRedondeados.includes(encabezado.id)) {
+        const encabezadosRedondeados = ['total', 'importe', 'ivaRet', 'importeEnPesos']
+        if (encabezadosRedondeados.includes(encabezado.id)) {
           //cell.value = this.formatCurrency(+cell.value)
           cell.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : +cell.value)
+        }
+
+        if (encabezado.id == 'iva') {
+
+          let IVA = 0
+
+          IVA = factura['idMoneda'] === 'MXN' ? +cell.value : +cell.value * +factura['tipoCambio']
+
+          cell.value = this.formatCurrency(factura['c_FechaCancelacion'] ? 0 : IVA)
+          //cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
+        }
+
+        if (encabezado.id == 'tipoCambio') {
+          if (factura['tipoCambio'] == "0") {
+            cell.value = ""
+          } else {
+            cell.value = factura['tipoCambio']
+          }
+
         }
 
       })
       inicio++
 
-      if(factura.notas.length > 0) {
+      if (factura.notas.length > 0) {
         factura.notas.forEach(nota => {
           encabezados.forEach((encabezado, indexE) => {
             let cell = worksheet.getCell(inicio, indexE + 1)
             const campo = this.equivalentesNotas[encabezado.id]
             cell.value = nota[campo]
             cell.fill = nota['nC_FechaCancelacion'] ? fillNotaCancelada : fillNota
-            if(encabezado.id == 'total') {
+            if (encabezado.id == 'total') {
               cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
             }
-            if(encabezado.id == 'importe') {
+            if (encabezado.id == 'importe') {
               cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
               console.log(" +cell.value " + nota['nC_Importe'])
-              ImporteNotayPago +=  nota['nC_Importe']
+              ImporteNotayPago += nota['nC_Importe']
               console.log(" ImporteNotayPago " + ImporteNotayPago)
             }
-            if(encabezado.id == 'iva') {
-              cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
-              //console.log(" +cell.value2 " + nota['nC_Iva'])
-              //ImporteNotayPago +=   nota['nC_Iva']
-              //console.log(" ImporteNotayPago2 " + ImporteNotayPago)
+            if (encabezado.id == 'iva') {
+              let IVA = 0
+              IVA = nota['nC_IdMoneda'] === 'MXN' ? +cell.value : +cell.value * +nota['nC_TipoCambio']
+              cell.value = this.formatCurrency(nota['c_FechaCancelacion'] ? 0 : IVA)
+              //cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
             }
-            if(encabezado.id == 'numProyecto') {
+            if (encabezado.id == 'numProyecto') {
               cell.value = factura['numProyecto']
-              
+
             }
-            if(encabezado.id == 'importeEnPesos') {
+            if (encabezado.id == 'importeEnPesos') {
               let importeEnPesos = 0
-              
+
               importeEnPesos = nota['nC_IdMoneda'] === 'MXN' ? nota['nC_Importe'] : nota['nC_Importe'] * +nota['nC_TipoCambio']
               cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : importeEnPesos)
             }
 
-            if(encabezado.id == 'mes') {
+            if (encabezado.id == 'mes') {
               cell.value = nota['nC_Mes']
             }
 
-           
+            if (encabezado.id == 'tipoCambio') {
+              if (nota['nC_TipoCambio'] == "0") {
+                cell.value = ""
+              } else {
+                cell.value = nota['nC_TipoCambio']
+              }
+
+            }
 
           })
           inicio++
         })
       }
 
-      if(factura.cobranzas.length > 0) {
+      if (factura.cobranzas.length > 0) {
         factura.cobranzas.forEach(cobranza => {
           encabezados.forEach((encabezado, indexE) => {
             let cell = worksheet.getCell(inicio, indexE + 1)
@@ -757,79 +786,97 @@ export class BusquedaCancelacionComponent implements OnInit {
             cell.value = cobranza[campo]
             cell.fill = cobranza['c_FechaCancelacion'] ? fillNotaCancelada : fillCobranza
             //cell.fill = fillCobranza
-            if(encabezado.id == 'total') {
+            if (encabezado.id == 'total') {
               //cell.value = this.formatCurrency(+cell.value)
               cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
             }
-            if(encabezado.id == 'importe') {
-             //cell.value = this.formatCurrency(+cell.value)
+            if (encabezado.id == 'importe') {
+              //cell.value = this.formatCurrency(+cell.value)
               cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
               //console.log(" +cell.value3 " + + cobranza['base'])
               ImporteNotayPago += cobranza['base']
               //console.log(" ImporteNotayPago3 " + ImporteNotayPago)
             }
-            if(encabezado.id == 'iva') {
-              //cell.value = this.formatCurrency(+cell.value)
-              cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
-              //console.log(" +cell.value4 " + + cobranza['c_IvaP'])
-              //ImporteNotayPago +=  cobranza['c_IvaP']
-              //console.log(" ImporteNotayPago4 " + ImporteNotayPago)
+            if (encabezado.id == 'iva') {
+              let IVA = 0
+              IVA = cobranza['c_IdMonedaP'] === 'MXN' ? +cell.value : +cell.value * +cobranza['c_TipoCambioP']
+              //cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
+              cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : IVA)
             }
-            if(encabezado.id == 'numProyecto') {
+            if (encabezado.id == 'numProyecto') {
               cell.value = factura['numProyecto']
             }
-            if(encabezado.id == 'importeEnPesos') {
+            if (encabezado.id == 'importeEnPesos') {
               let importeEnPesos = 0
-              
+
               //importeEnPesos = cobranza['c_IdMonedaP'] === 'MXN' ? cobranza['c_ImportePagado'] : cobranza['c_ImportePagado'] * +cobranza['c_TipoCambioP']
               importeEnPesos = cobranza['c_IdMonedaP'] === 'MXN' ? cobranza['base'] : cobranza['base'] * +cobranza['c_TipoCambioP']
-              cell.value = cobranza['c_FechaCancelacion'] ? 0 : importeEnPesos
+              //cell.value = cobranza['c_FechaCancelacion'] ? 0 : importeEnPesos
+              console.log("importeEnPesos " + importeEnPesos)
+              if (cobranza['c_FechaCancelacion'] == null || cobranza['c_FechaCancelacion'] == "") {
+                if (importeEnPesos == null) {
+                  cell.value = this.formatCurrency(0)
+                } else {
+                  cell.value = this.formatCurrency(importeEnPesos)
+                }
+              } else {
+                cell.value = this.formatCurrency(0)
+              }
+
             }
 
-            if(encabezado.id == 'mes') {
+            if (encabezado.id == 'mes') {
               cell.value = factura['mes']
             }
 
-            
+            if (encabezado.id == 'tipoCambio') {
+              if (cobranza['c_TipoCambioP'] == 0) {
+                cell.value = ""
+              } else {
+                cell.value = cobranza['c_TipoCambioP']
+              }
+
+            }
+
           })
           inicio++
         })
       }
 
 
-      if(factura['idMoneda'] === 'MXN'){
+      if (factura['idMoneda'] === 'MXN') {
 
-      let cell = worksheet.getCell(inicioFactura, columnaImportePendiente)
-
-      let importePorPagarPesos = 0
-
-      importePorPagarPesos = factura['importe']-ImporteNotayPago
-      
-
-      //cell.value = this.formatCurrency(importePorPagarPesos)
-      cell.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagarPesos)
-
-      let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
-      cell_dls.value =this.formatCurrency(0.0)
-
-      }else{
         let cell = worksheet.getCell(inicioFactura, columnaImportePendiente)
-      cell.value = this.formatCurrency(0.0)
 
-      let importePorPagar = 0
-     
+        let importePorPagarPesos = 0
 
-      //const myNumber = Number(factura['tipoCambio']);
-      importePorPagar = factura['importe']-ImporteNotayPago
+        importePorPagarPesos = factura['importe'] - ImporteNotayPago
 
-      console.log(" importePorPagar " + importePorPagar)
 
-      let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
-      //cell_dls.value = this.formatCurrency(importePorPagar)
-      cell_dls.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagar)
+        //cell.value = this.formatCurrency(importePorPagarPesos)
+        cell.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagarPesos)
+
+        let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
+        cell_dls.value = this.formatCurrency(0.0)
+
+      } else {
+        let cell = worksheet.getCell(inicioFactura, columnaImportePendiente)
+        cell.value = this.formatCurrency(0.0)
+
+        let importePorPagar = 0
+
+
+        //const myNumber = Number(factura['tipoCambio']);
+        importePorPagar = factura['importe'] - ImporteNotayPago
+
+        console.log(" importePorPagar " + importePorPagar)
+
+        let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
+        //cell_dls.value = this.formatCurrency(importePorPagar)
+        cell_dls.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagar)
       }
       // Cálculos
-      
+
 
     })
 
@@ -843,7 +890,7 @@ export class BusquedaCancelacionComponent implements OnInit {
     //     worksheet.getCell(row, 10 + index).numFmt = '0.00%';
     //     totalTimesheet += +proyecto.dedicacion
     //   })
-      
+
     //   worksheet.getCell(row, 1).value = 1
     //   worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
     //   worksheet.getCell(row, 3).value = record.timesheet.noi_empresa
@@ -858,16 +905,16 @@ export class BusquedaCancelacionComponent implements OnInit {
     // })
   }
 
-  formatCurrency (valor: number) {
+  formatCurrency(valor: number) {
     return valor.toLocaleString('es-MX', {
       style: 'currency',
       currency: 'MXN',
     })
   }
 
-  ejecutarCancelacion() {
-    
-    if(!this.form.valid) {
+  ejecutarCancelacion() {
+
+    if (!this.form.valid) {
       this.form.markAllAsTouched()
       return
     }
@@ -882,7 +929,7 @@ export class BusquedaCancelacionComponent implements OnInit {
           this.isCancelacionVisible = false
 
           const indexFactura = this.listBusquedaCompleto.findIndex(factura => factura.uuid === this.uuidPrincipal)
-          if(this.complementoInfo.esPago) {
+          if (this.complementoInfo.esPago) {
             this.listBusquedaCompleto.at(indexFactura).totalCobranzas--
           } else {
             this.listBusquedaCompleto.at(indexFactura).totalNotasCredito--
@@ -899,15 +946,15 @@ export class BusquedaCancelacionComponent implements OnInit {
   }
 
   esInvalido(campo: string): boolean {
-    return this.form.get(campo).invalid && 
-            (this.form.get(campo).dirty || this.form.get(campo).touched)
+    return this.form.get(campo).invalid &&
+      (this.form.get(campo).dirty || this.form.get(campo).touched)
   }
 
   obtenerMensajeError(campo: string): string {
     let mensaje = ''
 
     errorsArray.forEach((error) => {
-      if(this.form.get(campo).hasError(error.tipo))
+      if (this.form.get(campo).hasError(error.tipo))
         mensaje = error.mensaje.toString()
     })
 
@@ -915,15 +962,15 @@ export class BusquedaCancelacionComponent implements OnInit {
   }
 
   esInvalidoGeneral(campo: string): boolean {
-    return this.formGeneral.get(campo).invalid && 
-            (this.formGeneral.get(campo).dirty || this.formGeneral.get(campo).touched)
+    return this.formGeneral.get(campo).invalid &&
+      (this.formGeneral.get(campo).dirty || this.formGeneral.get(campo).touched)
   }
 
   obtenerMensajeErrorGeneral(campo: string): string {
     let mensaje = ''
 
     errorsArray.forEach((error) => {
-      if(this.formGeneral.get(campo).hasError(error.tipo))
+      if (this.formGeneral.get(campo).hasError(error.tipo))
         mensaje = error.mensaje.toString()
     })
 

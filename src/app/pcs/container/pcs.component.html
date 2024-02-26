@@ -1,51 +1,21 @@
-
-<p-tabMenu 
-  [model]="items" 
-  [activeItem]="activeItem" 
-  (activeItemChange)="onActiveItemChange($event)"
-></p-tabMenu>
+<p-tabMenu [model]="items" [activeItem]="activeItem" (activeItemChange)="onActiveItemChange($event)">
+</p-tabMenu>
 
 <div class="main-container">
+    <div class="row">
+        <p-toolbar styleClass="p-1 mb-4 d-flex justify-content-end gap-2 text-right" *ngIf="pcsService.botonNuevo">
+            <p-chip label="Para nuevos registros, no use el desplegable de los proyectos" icon="pi pi-info-circle"></p-chip>
+            <button type="button" class="btn btn-info ml-5" (click)="cargarProyecto()">Nuevo proyecto</button>
+        </p-toolbar>
 
-  <div class="row">
-    <div class="col-12 text-right">
-      <button 
-        type="button" 
-        class="btn btn-info" 
-        *ngIf="pcsService.botonNuevo"
-        (click)="cargarProyecto()"
-      >
-        Nuevo
-      </button>
+        <div class="col-12">
+            <label for="id_proyecto">Proyecto:</label>
+            <p-dropdown id="id_proyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="cargarProyecto(true)" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [(ngModel)]="proyectoId"></p-dropdown>
+        </div>
+        <!--<div class="col-12">
+            <button type="button" class="btn btn-info" (click)="cargarProyecto(true)" [disabled]="!proyectoId">Editar</button>
+        </div>-->
     </div>
-    <div class="col-12">
-      <label for="id_proyecto">Proyecto:</label>
-      <p-dropdown 
-        id="id_proyecto" 
-        [options]="proyectos" 
-        placeholder="Seleccionar un proyecto" 
-        optionLabel="name" 
-        [showClear]="true"
-        [style]="{ width: '100%' }"
-        optionValue="code"
-        [filter]="true" 
-        filterBy="name"
-        [(ngModel)]="proyectoId"
-      ></p-dropdown>
-    </div>
-    <div class="col-12">
-      <button 
-        type="button" 
-        class="btn btn-info" 
-        (click)="cargarProyecto(true)"
-        [disabled]="!proyectoId"
-      >
-        Editar
-      </button>
-    </div>
-  </div>
 
-  <hr>
-
-  <router-outlet ></router-outlet>
+    <router-outlet></router-outlet>
 </div>

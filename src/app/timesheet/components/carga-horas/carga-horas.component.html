@@ -1,122 +1,117 @@
 <div class="" style="margin: 2%">
 
-  <div class="" style="height: 100%;">
+    <div class="" style="height: 100%;">
 
-    <div class="row">
-      <div class="col-sm">
-        <label for="email">Empleado:</label>
-        <p-dropdown optionLabel="name" [showClear]="true" [style]="{ width: '100%' }"
-          [disabled]="isConsulta"></p-dropdown>
-      </div>
-      <div class="col-sm">
-        <label for="email">Mes:</label>
-        <p-calendar [showIcon]="true" [style]="{
-          width: '100%',
-          display: 'inline-flex',
-          height: '39px'
-        }" view="month" dateFormat="mm/yy" [disabled]="isConsulta"></p-calendar>
-      </div>
-      <div class="col-sm">
-        <label for="email">Responsable:</label>
-        <br>
-        <label for="email"><strong>Usuario</strong></label>
-      </div>
-    </div>
-
-    <br />
-
-    <div class="row">
-      <div class="col-sm">
-        <label for="email">Sábados:</label>
-        <br>
-        <br>
-        <div class="form-check form-check-inline">
-          <p-checkbox name="group1" value="New York" inputId="ny"></p-checkbox>
-          <label for="ny">Si</label>
+        <div class="row">
+            <div class="col-sm">
+                <label for="email">Empleado:</label>
+                <p-dropdown optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta"></p-dropdown>
+            </div>
+            <div class="col-sm">
+                <label for="email">Mes:</label>
+                <p-calendar [showIcon]="true" [style]="{width: '100%', display: 'inline-flex', height: '39px'}" view="month" dateFormat="mm/yy" [disabled]="isConsulta"></p-calendar>
+            </div>
+            <div class="col-sm">
+                <label for="email">Responsable:</label>
+                <br>
+                <label for="email"><strong>Usuario</strong></label>
+            </div>
         </div>
-        <div class="form-check form-check-inline">
-          <p-checkbox name="group1" value="New York" inputId="ny"></p-checkbox>
-          <label for="ny">No</label>
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm">
+                <label for="email">Sábados:</label>
+                <br>
+                <br>
+                <div class="form-check form-check-inline">
+                    <p-checkbox name="group1" value="New York" inputId="ny"></p-checkbox>
+                    <label for="ny">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <p-checkbox name="group1" value="New York" inputId="ny"></p-checkbox>
+                    <label for="ny">No</label>
+                </div>
+            </div>
+            <div class="col-sm">
+                <label for="email">Días Trabajo / Mes:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">Operaciones:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
         </div>
-      </div>
-      <div class="col-sm">
-        <label for="email">Días Trabajo / Mes:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">Operaciones:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm">
+                <label for="email">Finanzas:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">RH:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">IT:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm">
+                <label for="email">Marketing:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">La Nube Construcción:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">Feriado:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm">
+                <label for="email">Vacaciones:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">Permiso:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">Incapacidad:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+        </div>
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm">
+                <label for="email">Inasistencia:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">Capacitación:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+            <div class="col-sm">
+                <label for="email">Total:</label>
+                <input type="text" class="form-control" [disabled]="isConsulta" />
+            </div>
+        </div>
+
+
     </div>
-
-    <br />
-
-    <div class="row">
-      <div class="col-sm">
-        <label for="email">Finanzas:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">RH:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">IT:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-    </div>
-
-    <br />
-
-    <div class="row">
-      <div class="col-sm">
-        <label for="email">Marketing:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">La Nube Construcción:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">Feriado:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-    </div>
-
-    <br />
-
-    <div class="row">
-      <div class="col-sm">
-        <label for="email">Vacaciones:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">Permiso:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">Incapacidad:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-    </div>
-
-    <br />
-
-    <div class="row">
-      <div class="col-sm">
-        <label for="email">Inasistencia:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">Capacitación:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-      <div class="col-sm">
-        <label for="email">Total:</label>
-        <input type="text" class="form-control" [disabled]="isConsulta" />
-      </div>
-    </div>
-
-
-  </div>
 </div>

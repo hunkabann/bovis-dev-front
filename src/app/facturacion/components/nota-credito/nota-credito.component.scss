@@ -1,0 +1,10 @@
+::ng-deep .p-fileupload .p-button {
+    background-color: #007bff !important;
+    color: #fff !important;
+    border-color: #007bff !important;
+}
+
+::ng-deep .p-fileupload .p-button:hover {
+    background-color: #003b7a;
+    border-color: #003b7a;
+}

@@ -1,58 +1,42 @@
 <form [formGroup]="formDocumentos">
-  <div class="card">
-    <ng-container formArrayName="data">
-      <p-table [value]="documentos.controls" [tableStyle]="{ 'min-width': '100%' }" >
-          <ng-template pTemplate="header">
-              <tr>
-                  <th>Documento</th>
-                  <th>Archivo</th>
-                  <th class="text-center">Válido</th>
-              </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-documento let-i="rowIndex">
-              <tr [formGroupName]="i">
-                  <td>
-                    <a 
-                      class="text-success font-bold pointer"
-                      (click)="descargarDocumento(documento.value.id_documento)"
-                    >
-                      {{documento.value.fecha + '_' + documento.value.id_documento.toString()}}
-                    </a>
-                  </td>
-                  <td>
-                    <a 
-                      class="text-success font-bold pointer"
-                      (click)="descargarDocumento(documento.value.id_documento)"
-                    >
-                      {{documento.value.nombre_documento || '-'}}
-                    </a>
-                  </td>
-                  <td class="text-center">
-                    <p-inputSwitch
-                      formControlName="valido"
-                      (onChange)="cambiarValorComentario(i, $event)"
-                      *ngIf="esEdicion"
-                    ></p-inputSwitch>
-                    <textarea 
-                      id="comentario_rechazo"
-                      rows="5" 
-                      cols="30" 
-                      pInputTextarea 
-                      formControlName="comentario_rechazo"
-                      class="form-control"
-                      *ngIf="!documento.value.valido && esEdicion"
-                    ></textarea>
-                    <div *ngIf="!esEdicion">
-                      <p><strong>{{documento.value.valido ? 'Sí' : 'No: '}}</strong>{{documento.value.comentario_rechazo}}</p>
-                    </div>
-                  </td>
-              </tr>
-          </ng-template>
-      </p-table>
-    </ng-container>
-  </div>
-  
-  <div class="d-flex justify-content-center mt-4" *ngIf="esEdicion">
-    <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!formDocumentos.valid">Guardar</button>
-  </div>
+    <div class="card">
+        <ng-container formArrayName="data">
+            <p-table [value]="documentos.controls" [tableStyle]="{ 'min-width': '100%' }">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Documento</th>
+                        <th class="text-center">Fecha de carga</th>
+                        <th class="text-center">Válido</th>
+                        <th>Comentario de rechazo</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-documento let-i="rowIndex">
+                    <tr [formGroupName]="i">
+                        <td>
+                            <a class="text-success font-bold pointer" (click)="descargarDocumento(documento.value.id_documento)">{{documento.value.nombre_documento || '-'}}</a>
+                        </td>
+                        <td class="text-center">
+                            {{documento.value.fecha | date:'dd-MMM-yyyy'}}
+                        </td>
+                        <td class="text-center">
+                            <p-inputSwitch formControlName="valido" (onChange)="cambiarValorComentario(i, $event)" *ngIf="esEdicion && !documento.value.read_only"></p-inputSwitch>
+                            <div *ngIf="!esEdicion || documento.value.read_only">
+                                <p><strong>{{documento.value.valido ? 'Sí' : 'No'}}</strong></p>
+                            </div>
+                        </td>
+                        <td>
+                            <textarea id="comentario_rechazo" rows="3" cols="30" style="resize:  none;" pInputTextarea formControlName="comentario_rechazo" class="form-control" *ngIf="!documento.value.valido && esEdicion && !documento.value.read_only"></textarea>
+                            <div *ngIf="!esEdicion || documento.value.read_only">
+                                <p>{{documento.value.comentario_rechazo}}</p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-container>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4" *ngIf="esEdicion">
+        <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!formDocumentos.valid"><i class="fas fa-save"></i> Guardar</button>
+    </div>
 </form>
