@@ -740,7 +740,8 @@ export class BusquedaCancelacionComponent implements OnInit {
             if (encabezado.id == 'importe') {
               cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
               console.log(" +cell.value " + nota['nC_Importe'])
-              ImporteNotayPago += nota['nC_Importe']
+              //ImporteNotayPago += nota['nC_Importe']
+              ImporteNotayPago += nota['nC_FechaCancelacion'] ? 0 : nota['nC_Importe']
               console.log(" ImporteNotayPago " + ImporteNotayPago)
             }
             if (encabezado.id == 'iva') {
@@ -794,7 +795,8 @@ export class BusquedaCancelacionComponent implements OnInit {
               //cell.value = this.formatCurrency(+cell.value)
               cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
               //console.log(" +cell.value3 " + + cobranza['base'])
-              ImporteNotayPago += cobranza['base']
+              //ImporteNotayPago += cobranza['base']
+              ImporteNotayPago += cobranza['c_FechaCancelacion'] ? 0 : cobranza['base']
               //console.log(" ImporteNotayPago3 " + ImporteNotayPago)
             }
             if (encabezado.id == 'iva') {
