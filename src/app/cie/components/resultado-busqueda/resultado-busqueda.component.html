@@ -102,7 +102,7 @@
                     <!--td>{{record.haber | currency}}</td-->
                     <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion) ; then thenmovimiento else elsemovimiento"> </td>
                     <ng-template #thenmovimiento>
-                        <td>{{record.movimiento|currency}}</td>
+                        <td>{{regresaValorPositivo(record.debe, record.movimiento)|currency}}</td>
                     </ng-template>
                     <ng-template #elsemovimiento>
                         <td>{{0.0|currency}}</td>
