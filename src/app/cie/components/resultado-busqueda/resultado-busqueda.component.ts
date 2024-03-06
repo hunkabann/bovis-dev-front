@@ -339,6 +339,26 @@ export class ResultadoBusquedaComponent implements OnInit {
     
   }
 
+
+   regresaValorPositivo(RecordDebe: string,RecordMovimiento: string): string {
+
+    console.log("RecordDebe: " + RecordDebe);
+
+    //console.log("RecordMovimiento: " + RecordMovimiento.replace("-", ''));
+
+    if(RecordDebe == null || RecordDebe == ""   ){
+
+      //let mdy: String[] = RecordMovimiento.split('-');
+
+      console.log("Number(mdy[0]): " +  -RecordMovimiento);
+      return RecordMovimiento+""
+
+    }else{
+      return -RecordMovimiento+""
+    }
+    
+  }
+
   getHeadersTabla() {
     return [
       {key: 'NombreCuenta', label: 'NOMBRE CUENTA'},
