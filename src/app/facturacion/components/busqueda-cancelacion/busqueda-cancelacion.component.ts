@@ -741,7 +741,7 @@ export class BusquedaCancelacionComponent implements OnInit {
               cell.value = this.formatCurrency(nota['nC_FechaCancelacion'] ? 0 : +cell.value)
               console.log(" +cell.value " + nota['nC_Importe'])
               //ImporteNotayPago += nota['nC_Importe']
-              ImporteNotayPago += nota['nC_FechaCancelacion'] ? 0 : nota['nC_Importe']
+              ImporteNotayPago += nota['nC_FechaCancelacion'] ? 0 : nota['nC_Importe'] + nota['nC_Iva']
               console.log(" ImporteNotayPago " + ImporteNotayPago)
             }
             if (encabezado.id == 'iva') {
@@ -796,7 +796,7 @@ export class BusquedaCancelacionComponent implements OnInit {
               cell.value = this.formatCurrency(cobranza['c_FechaCancelacion'] ? 0 : +cell.value)
               //console.log(" +cell.value3 " + + cobranza['base'])
               //ImporteNotayPago += cobranza['base']
-              ImporteNotayPago += cobranza['c_FechaCancelacion'] ? 0 : cobranza['base']
+              ImporteNotayPago += cobranza['c_FechaCancelacion'] ? 0 : cobranza['base'] + cobranza['c_IvaP']
               //console.log(" ImporteNotayPago3 " + ImporteNotayPago)
             }
             if (encabezado.id == 'iva') {
@@ -852,7 +852,8 @@ export class BusquedaCancelacionComponent implements OnInit {
 
         let importePorPagarPesos = 0
 
-        importePorPagarPesos = factura['importe'] - ImporteNotayPago
+       //importePorPagarPesos = factura['importe'] - ImporteNotayPago
+        importePorPagarPesos = factura['total'] - ImporteNotayPago
 
 
         //cell.value = this.formatCurrency(importePorPagarPesos)
@@ -869,8 +870,8 @@ export class BusquedaCancelacionComponent implements OnInit {
 
 
         //const myNumber = Number(factura['tipoCambio']);
-        importePorPagar = factura['importe'] - ImporteNotayPago
-
+        //importePorPagar = factura['importe'] - ImporteNotayPago
+        importePorPagar = factura['total'] - ImporteNotayPago
         console.log(" importePorPagar " + importePorPagar)
 
         let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
