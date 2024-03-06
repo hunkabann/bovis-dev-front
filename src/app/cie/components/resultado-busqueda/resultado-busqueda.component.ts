@@ -341,10 +341,15 @@ export class ResultadoBusquedaComponent implements OnInit {
 
 
    regresaValorPositivo(RecordDebe: string,RecordMovimiento: string): string {
-
-    console.log("RecordDebe: " + RecordDebe);
+ 
+     console.log("RecordDebe: " + RecordDebe);
 
     //console.log("RecordMovimiento: " + RecordMovimiento.replace("-", ''));
+
+    var numberValue = Number(RecordMovimiento);
+    if(Math.sign(numberValue) == 1){
+      RecordMovimiento = -Number(RecordMovimiento)+""
+    }
 
     if(RecordDebe == null || RecordDebe == ""   ){
 
