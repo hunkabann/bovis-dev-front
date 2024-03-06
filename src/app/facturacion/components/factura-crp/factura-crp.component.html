@@ -21,7 +21,7 @@
     <br>
 
     <div *ngIf="listResponse && listResponse.length > 0">
-        <p-table [value]="listResponse" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" currentPageReportTemplate="Total: { listResponse.length}" [scrollable]="true" paginatorPosition="both" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
+        <p-table [value]="listResponse" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" currentPageReportTemplate="Total: {totalRecords}" [scrollable]="true" paginatorPosition="both" styleClass="p-datatable-striped" [tableStyle]="{'min-width': '50rem'}">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Conceptos</th>

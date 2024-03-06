@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 })
 export class FacturaCrpComponent implements OnInit {
 
+
   isLoadingFacturas: boolean = false;
   fileSizeMax = 1000000;
   isClear: boolean = false;
@@ -19,6 +20,7 @@ export class FacturaCrpComponent implements OnInit {
   @ViewChild('fileUpload') fileUpload: any;
   listResponse: Array<ResponseXML>;
   errorMEssageFile: string = '';
+  totalRecords: number = 0;
 
   constructor(private cargaFileServ: FacturacionService,
     private messageService: MessageService) { }
@@ -79,6 +81,7 @@ export class FacturaCrpComponent implements OnInit {
         next: (data) => {
           //console.log(data);
           if (data.success) {
+            this.totalRecords = data.data.length;
             this.listResponse = data.data;
             //console.log(this.listResponse);
             this.messageService.add({
