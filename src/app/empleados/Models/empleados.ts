@@ -480,6 +480,7 @@ export interface CostoEmpleadoResponse {
 }
 
 export interface CostoEmpleado {
+  idCostoEmpleado:                number;
   idCosto:                        number;
   numEmpleadoRrHh:                string;
   nuAnno:                         number;
