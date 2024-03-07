@@ -731,7 +731,7 @@ export class BusquedaCancelacionComponent implements OnInit {
       })
       inicio++
 
-      if (factura.notas.length > 0) {
+      if (factura.notas != null && factura.notas.length > 0) {
         factura.notas.forEach(nota => {
           encabezados.forEach((encabezado, indexE) => {
             let cell = worksheet.getCell(inicio, indexE + 1)
@@ -783,7 +783,7 @@ export class BusquedaCancelacionComponent implements OnInit {
         })
       }
 
-      if (factura.cobranzas.length > 0) {
+      if (factura.cobranzas != null && factura.cobranzas.length > 0) {
         factura.cobranzas.forEach(cobranza => {
           encabezados.forEach((encabezado, indexE) => {
             let cell = worksheet.getCell(inicio, indexE + 1)
