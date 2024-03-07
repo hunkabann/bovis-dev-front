@@ -316,13 +316,13 @@ export class BusquedaCancelacionComponent implements OnInit {
           importePendiente = factura.total
           importeEnPesos = factura.idMoneda === 'MXN' ? factura.importe : factura.importe * factura.tipoCambio
 
-          if (factura.notas.length > 0) {
+          if (factura.notas != null && factura.notas.length > 0) {
             factura.notas.forEach(nota => {
               importePendiente -= nota.nC_Total
             })
           }
 
-          if (factura.cobranzas.length > 0) {
+          if (factura.cobranzas != null && factura.cobranzas.length > 0) {
             factura.cobranzas.forEach(cobranza => {
               //importePendiente -= +cobranza.c_ImportePagado
               importePendiente -= +cobranza.base
@@ -579,17 +579,21 @@ export class BusquedaCancelacionComponent implements OnInit {
     this.displayModal = false;
   }
 
-  calcularNotasCreditoCobranzas(bus: BusquedaCancelacion, esNotaCredito = true) {
+ calcularNotasCreditoCobranzas(bus: BusquedaCancelacion, esNotaCredito = true) {
     let total = 0
 
-    const registos = esNotaCredito
+    if(bus.notas != null){
+      const registos = esNotaCredito
       ? bus.notas.filter(nota => nota.nC_FechaCancelacion == null)
       : bus.cobranzas.filter(cobro => cobro.c_FechaCancelacion == null)
 
     total = registos.length
-
+   
+    }
     return total;
+
   }
+
 
   show(tipoModal: boolean, uuid: string) {
 
