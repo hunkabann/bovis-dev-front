@@ -428,10 +428,10 @@ export class EmpleadosRegistroComponent implements OnInit {
           if(data.data.length > 0){
             bodyCostoEmpleadoactualiza = {
               ...bodyCostoEmpleadoactualiza,
-               idCosto: data.data[0].idCosto               
+               idCosto: data.data[0].idCostoEmpleado               
             }
 
-            this.empleadosServ.guardarCostoEmpleadoActualiza(bodyCostoEmpleadoactualiza, this.esActualizacion,"api/Costo/"+data.data[0].idCosto)
+            this.empleadosServ.guardarCostoEmpleadoActualiza(bodyCostoEmpleadoactualiza, this.esActualizacion,"api/Costo/"+data.data[0].idCostoEmpleado)
             .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
             .subscribe({
               next: (data) => {
