@@ -49,6 +49,7 @@ export class CargarHorasComponent implements OnInit {
     responsable:    ['', Validators.required],
     id_responsable: [0],
     dias:           [this.diasHabiles, [Validators.min(1)]],
+    dedicacion: [0],
     sabados:        ['NO'],
     proyectos:      this.fb.array([]),
     otros:          this.fb.array([
@@ -114,7 +115,7 @@ export class CargarHorasComponent implements OnInit {
       totalOtros += +this.otros.value[i].dias
     }
 
-    this.formateaValor((totalProyectos + totalOtros))
+    return this.formateaValor((totalProyectos + totalOtros))
   }
 
   get sumaOtros() {
@@ -204,8 +205,9 @@ export class CargarHorasComponent implements OnInit {
     if(seccion === 'proyectos') {
       this.proyectos.at(i).patchValue({
         dedicacion:  this.formateaValor((valor / this.form.value.dias) * 100) ,
-        costo:      this.formateaValor((valor / (this.form.value.dias - this.sumaOtros)) * 100 )
+        costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 )
       })
+      console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
     } else {
       this.otros.at(i).patchValue({
         dedicacion: Math.round( (valor / this.form.value.dias) * 100 )
@@ -218,6 +220,8 @@ export class CargarHorasComponent implements OnInit {
       })
     }
   }
+
+  
 
   guardar() {
     if(!this.form.valid) {
