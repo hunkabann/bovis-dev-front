@@ -1,0 +1,11 @@
+::ng-deep .customProgress .p-progressbar .p-progressbar-value {
+    background: #ef5439;
+    background-color: #ef5439;
+    color: #fff;
+  } 
+
+  ::ng-deep .customProgressCompleto .p-progressbar .p-progressbar-value {
+    background: #39ef60;
+    background-color: #39ef60;
+    color: #fff;
+  } 
