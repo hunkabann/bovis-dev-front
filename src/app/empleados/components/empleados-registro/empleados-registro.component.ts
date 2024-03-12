@@ -379,6 +379,7 @@ export class EmpleadosRegistroComponent implements OnInit {
         },
         error: (err) => {
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+          return
         }
       })
 
