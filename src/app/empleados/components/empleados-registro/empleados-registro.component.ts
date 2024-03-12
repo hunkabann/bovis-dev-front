@@ -413,6 +413,7 @@ export class EmpleadosRegistroComponent implements OnInit {
 
         let bodyCostoEmpleadoactualiza = {      
           idCosto: null,
+          idCostoEmpleado:null,
           numEmpleadoRrHh:      this.form.value.num_empleado_rr_hh,
           nuAnno: 2023,
           nuMes: 12,
@@ -428,7 +429,7 @@ export class EmpleadosRegistroComponent implements OnInit {
           if(data.data.length > 0){
             bodyCostoEmpleadoactualiza = {
               ...bodyCostoEmpleadoactualiza,
-               idCosto: data.data[0].idCostoEmpleado               
+               idCostoEmpleado: data.data[0].idCostoEmpleado               
             }
 
             this.empleadosServ.guardarCostoEmpleadoActualiza(bodyCostoEmpleadoactualiza, this.esActualizacion,"api/Costo/"+data.data[0].idCostoEmpleado)
