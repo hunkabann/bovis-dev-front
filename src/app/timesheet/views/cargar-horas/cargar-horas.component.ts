@@ -114,7 +114,7 @@ export class CargarHorasComponent implements OnInit {
       totalOtros += +this.otros.value[i].dias
     }
 
-    return (totalProyectos + totalOtros)
+    this.formateaValor((totalProyectos + totalOtros))
   }
 
   get sumaOtros() {
@@ -203,8 +203,8 @@ export class CargarHorasComponent implements OnInit {
     const valor = +event
     if(seccion === 'proyectos') {
       this.proyectos.at(i).patchValue({
-        dedicacion: Math.round( (valor / this.form.value.dias) * 100 ),
-        costo:      Math.round( (valor / (this.form.value.dias - this.sumaOtros)) * 100 )
+        dedicacion:  this.formateaValor((valor / this.form.value.dias) * 100) ,
+        costo:      this.formateaValor((valor / (this.form.value.dias - this.sumaOtros)) * 100 )
       })
     } else {
       this.otros.at(i).patchValue({
@@ -321,5 +321,10 @@ export class CargarHorasComponent implements OnInit {
         next: (data) => this.proyectos.removeAt(i),
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
+  }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 }
