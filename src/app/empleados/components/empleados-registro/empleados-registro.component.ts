@@ -411,8 +411,7 @@ export class EmpleadosRegistroComponent implements OnInit {
         //let idCons:string = this.empleadosServ.getCostoID(this.form.value.num_empleado_rr_hh);
         
 
-        let bodyCostoEmpleadoactualiza = {      
-          idCosto: null,
+        let bodyCostoEmpleadoactualiza = {
           idCostoEmpleado:null,
           numEmpleadoRrHh:      this.form.value.num_empleado_rr_hh,
           nuAnno: 2023,
