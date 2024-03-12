@@ -748,7 +748,7 @@ this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
 
   formateaValor(valor) {
     // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
-    return isNaN(valor) ? valor : parseFloat(valor).toFixed(4);
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 
 }
