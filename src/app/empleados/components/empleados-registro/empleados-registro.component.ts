@@ -384,24 +384,23 @@ export class EmpleadosRegistroComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
-          this.form.reset()
-          this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
+          //this.form.reset()
+          //this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
           this.EmpleadoTieneerror = false
 
 
 
-
-
-          let bodyCostoEmpleado = {
-            numEmpleadoRrHh: this.form.value.num_empleado_rr_hh,
-            sueldoBruto: this.form.value.salario// 1,
-          }
-
           if (!this.esActualizacion) {
+            const bodyCostoEmpleado = {
+              numEmpleadoRrHh: this.form.value.num_empleado_rr_hh,
+              sueldoBruto: this.form.value.salario// 1,
+            }
+
             this.empleadosServ.guardarCostoEmpleado(bodyCostoEmpleado, this.esActualizacion)
               .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
               .subscribe({
                 next: (data) => {
+                  this.form.reset()
                   this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                 },
                 error: (err) => {
@@ -432,6 +431,7 @@ export class EmpleadosRegistroComponent implements OnInit {
                       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
                       .subscribe({
                         next: (data) => {
+                          this.form.reset()
                           this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                         },
                         error: (err) => {
