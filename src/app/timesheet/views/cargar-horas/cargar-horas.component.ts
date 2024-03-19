@@ -49,7 +49,9 @@ export class CargarHorasComponent implements OnInit {
     responsable:    ['', Validators.required],
     id_responsable: [0],
     dias:           [this.diasHabiles, [Validators.min(1)]],
+    diasCalc:           [this.diasHabiles, [Validators.min(1)]],
     dedicacion: [0],
+    dedicacionCacl: [0],
     sabados:        ['NO'],
     proyectos:      this.fb.array([]),
     otros:          this.fb.array([
@@ -118,6 +120,20 @@ export class CargarHorasComponent implements OnInit {
     return this.formateaValor((totalProyectos + totalOtros))
   }
 
+  get Dedicacion() {
+    let totalProyectos = 0
+    let totalOtros = 0
+    for (let i = 0; i < this.proyectos.value.length; i++) {
+      totalProyectos += +this.proyectos.value[i].dias
+    }
+
+    for (let i = 0; i < this.otros.value.length; i++) {
+      totalOtros += +this.otros.value[i].dias
+    }
+
+    return this.formateaValor(((totalProyectos + totalOtros) * 100)/ (this.form.value.dias))
+  }
+
   get sumaOtros() {
     let total = 0
     this.otros.controls.forEach(control => {
@@ -179,7 +195,9 @@ export class CargarHorasComponent implements OnInit {
           nombre:     [proyecto.chproyecto],
           dias:       [0, Validators.required],
           dedicacion: [0],
-          costo:      [0]
+          costo:      [0],
+          diasCalc:      [0],
+          dedicacionCalc:      [0]
         }))
       )
       this.sharedService.cambiarEstado(false)
@@ -205,9 +223,11 @@ export class CargarHorasComponent implements OnInit {
     if(seccion === 'proyectos') {
       this.proyectos.at(i).patchValue({
         dedicacion:  this.formateaValor((valor / this.form.value.dias) * 100) ,
-        costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 )
+        costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ),
+        diasCalc: valor,
+        dedicacionCalc: this.formateaValor((valor / this.form.value.dias) * 100) 
       })
-      console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
     } else {
       this.otros.at(i).patchValue({
         dedicacion: Math.round( (valor / this.form.value.dias) * 100 )
@@ -220,6 +240,23 @@ export class CargarHorasComponent implements OnInit {
       })
     }
   }
+
+  calcularDiasdedica(event: any, i: number, seccion: string) {
+    const valor = +event
+      this.proyectos.at(i).patchValue({
+        diasCalc:  this.formateaValor((valor * this.form.value.dias) / 100) ,
+        costo:      this.formateaValor( (valor * (this.form.value.dias + this.sumaOtros)) / 100 ),
+        dedicacion: valor,
+        dias:        this.formateaValor((valor * this.form.value.dias) / 100)
+
+      })
+      //console.log("Dedicacion1: Valor: "+  valor +" Dias: " + this.form.value.dias +" Formula: "+ this.formateaValor((valor * this.form.value.dias) / 100))
+      //console.log("Dedicacion2: "+ this.formateaValor( (valor * (this.form.value.dias - this.sumaOtros)) / 100 ))
+      //console.log("Dedicacion3: "+ valor)
+      //console.log("Dedicacion4: "+ this.form.value.dias)
+  }
+
+  
 
   
 
