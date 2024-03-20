@@ -79,7 +79,8 @@ export class BusquedaCancelacionComponent implements OnInit {
   IDProyecto: number;
   IDEmpresa: number;
   IDCliente: number;
-
+  
+  tipoCambio: number;
   totalRecords: number = 0;
 
   @ViewChild('dropDownProyecto') dropDownProyecto: Dropdown;
@@ -315,6 +316,8 @@ export class BusquedaCancelacionComponent implements OnInit {
 
           importePendiente = factura.total
           importeEnPesos = factura.idMoneda === 'MXN' ? factura.importe : factura.importe * factura.tipoCambio
+
+          
 
           if (factura.notas != null && factura.notas.length > 0) {
             factura.notas.forEach(nota => {
@@ -579,7 +582,7 @@ export class BusquedaCancelacionComponent implements OnInit {
     this.displayModal = false;
   }
 
- calcularNotasCreditoCobranzas(bus: BusquedaCancelacion, esNotaCredito = true) {
+  calcularNotasCreditoCobranzas(bus: BusquedaCancelacion, esNotaCredito = true) {
     let total = 0
 
     if(bus.notas != null){
@@ -593,7 +596,6 @@ export class BusquedaCancelacionComponent implements OnInit {
     return total;
 
   }
-
 
   show(tipoModal: boolean, uuid: string) {
 
@@ -693,6 +695,7 @@ export class BusquedaCancelacionComponent implements OnInit {
       let columnaImportePendiente = 0
       let columnaImportePendiente_dls = 0
       let ImporteNotayPago = 0
+      let ImporteNotayPago_dlls = 0
       encabezados.forEach((encabezado, indexE) => {
         if (encabezado.id == 'importePendientePorPagar') {
           columnaImportePendiente = indexE + 1
@@ -746,7 +749,10 @@ export class BusquedaCancelacionComponent implements OnInit {
               console.log(" +cell.value " + nota['nC_Importe'])
               //ImporteNotayPago += nota['nC_Importe']
               ImporteNotayPago += nota['nC_FechaCancelacion'] ? 0 : nota['nC_Importe'] + nota['nC_Iva']
+              ImporteNotayPago_dlls += nota['nC_FechaCancelacion'] ? 0 : nota['nC_Importe']
+
               console.log(" ImporteNotayPago " + ImporteNotayPago)
+              console.log(" ImporteNotayPago_dlls " + ImporteNotayPago_dlls)
             }
             if (encabezado.id == 'iva') {
               let IVA = 0
@@ -801,6 +807,7 @@ export class BusquedaCancelacionComponent implements OnInit {
               //console.log(" +cell.value3 " + + cobranza['base'])
               //ImporteNotayPago += cobranza['base']
               ImporteNotayPago += cobranza['c_FechaCancelacion'] ? 0 : cobranza['base'] + cobranza['c_IvaP']
+              ImporteNotayPago_dlls += cobranza['c_FechaCancelacion'] ? 0 : cobranza['base']
               //console.log(" ImporteNotayPago3 " + ImporteNotayPago)
             }
             if (encabezado.id == 'iva') {
@@ -856,12 +863,14 @@ export class BusquedaCancelacionComponent implements OnInit {
 
         let importePorPagarPesos = 0
 
-       //importePorPagarPesos = factura['importe'] - ImporteNotayPago
+        //importePorPagarPesos = factura['importe'] - ImporteNotayPago
         importePorPagarPesos = factura['total'] - ImporteNotayPago
 
 
         //cell.value = this.formatCurrency(importePorPagarPesos)
-        cell.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagarPesos)
+        
+        //cell.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagarPesos)
+        cell.value = this.formatCurrency(importePorPagarPesos)
 
         let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
         cell_dls.value = this.formatCurrency(0.0)
@@ -870,17 +879,23 @@ export class BusquedaCancelacionComponent implements OnInit {
         let cell = worksheet.getCell(inicioFactura, columnaImportePendiente)
         cell.value = this.formatCurrency(0.0)
 
-        let importePorPagar = 0
+        let importePorPagar_dlls = 0
+        this.tipoCambio = ImporteNotayPago_dlls * +factura['tipoCambio']
 
 
         //const myNumber = Number(factura['tipoCambio']);
         //importePorPagar = factura['importe'] - ImporteNotayPago
-        importePorPagar = factura['total'] - ImporteNotayPago
-        console.log(" importePorPagar " + importePorPagar)
+        importePorPagar_dlls = factura['importeEnPesos']  - this.tipoCambio
+        
+        console.log(" factura['total'] - ImporteNotayPago " + (factura['total'] - this.tipoCambio))
+        console.log(" ImporteNotayPago " + this.tipoCambio)
+        console.log(" factura['total'] " + factura['total'])
+        console.log(" importePorPagar_dlls " + importePorPagar_dlls)
 
         let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
         //cell_dls.value = this.formatCurrency(importePorPagar)
-        cell_dls.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagar)
+        //cell_dls.value = this.formatCurrency(factura['fechaCancelacion'] ? 0 : importePorPagar)
+        cell_dls.value = this.formatCurrency(importePorPagar_dlls)
       }
       // Cálculos
 
