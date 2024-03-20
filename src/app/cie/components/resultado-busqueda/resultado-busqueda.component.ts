@@ -3,7 +3,7 @@ import { LazyLoadEvent, MessageService, PrimeNGConfig } from 'primeng/api';
 import { CieService } from '../../services/cie.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { CALENDAR, EXCEL_EXTENSION, TITLES, cieHeaders, cieHeadersFieldsLazy } from 'src/utils/constants';
-import { CieRegistro } from '../../models/cie.models';
+import { CieRegistro, encabezados } from '../../models/cie.models';
 import { finalize, forkJoin } from 'rxjs';
 import { Opcion } from 'src/models/general.model';
 import { format } from 'date-fns';
@@ -11,6 +11,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import * as XLSX from 'xlsx';
 import { formatCurrency } from 'src/helpers/helpers';
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+import { DatePipe } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-resultado-busqueda',
@@ -19,6 +24,9 @@ import { formatCurrency } from 'src/helpers/helpers';
   providers: [MessageService]
 })
 export class ResultadoBusquedaComponent implements OnInit {
+
+  todayWithPipe = null;
+  pipe = new DatePipe('en-US');
   
   cieService      = inject(CieService)
   config          = inject(PrimeNGConfig)
@@ -46,11 +54,15 @@ export class ResultadoBusquedaComponent implements OnInit {
   clasificacionPY:  string
   fechas:           Date[] = [new Date(), null]
 
+  fechacancela:  string
+
   firstLoading:     boolean = true
 
   noRegistros = 10
   totalRegistros = 0
   loading: boolean = false
+
+
 
   constructor() { }
 
@@ -61,6 +73,7 @@ export class ResultadoBusquedaComponent implements OnInit {
     this.cargarCatalogos()
     
     this.verificarEstado()
+
 
     // this.loadData({ first: 0, rows: this.noRegistros })
   }
@@ -164,6 +177,104 @@ export class ResultadoBusquedaComponent implements OnInit {
       error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
     })
   }
+
+  exportJsonToExcelRest(): void {
+
+    const workbook = new ExcelJS.Workbook();
+
+    const worksheet = workbook.addWorksheet('Detalle');
+    
+    // Tìtulos
+    this._setXLSXTitles(worksheet)
+
+    this._setXLSXHeader(worksheet)
+    
+    let row = 5
+
+    row = this._setXLSXContent(worksheet, row)
+
+    //this._setXSLXFooter(worksheet, row)
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+      saveAs(blob, `CIE_${Date.now()}${EXCEL_EXTENSION}`);
+    });
+
+  }
+
+  _setXLSXTitles(worksheet: ExcelJS.Worksheet) {
+
+
+  }
+
+  _setXLSXHeader(worksheet: ExcelJS.Worksheet) {
+
+    const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
+    const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
+
+    encabezados.forEach((encabezado, index) => {
+      let cell = worksheet.getCell(4, index + 1)
+      cell.value = encabezado.label
+      cell.fill = fill
+      cell.alignment = alignment
+    })
+  }
+
+  _setXLSXContent(worksheet: ExcelJS.Worksheet, row: number): number {
+
+    const fillCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
+    const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
+
+    this.data.forEach(record => {
+      
+      //worksheet.getCell(row).fill = record.fechaCancelacion ? fillCancelada : fillFactura
+      //const col = row.getCell(row);
+      
+      worksheet.getCell(row, 1).value = record.nombreCuenta
+      worksheet.getCell(row, 2).value = record.cuenta
+      worksheet.getCell(row, 3).value = record.tipoPoliza
+      worksheet.getCell(row, 4).value = record.numero
+      worksheet.getCell(row, 5).value = record.fecha
+      if(record.fechaCancelacion == null || record.fechaCancelacion == ''){
+        worksheet.getCell(row, 6).value = record.mes   
+      }else{        
+        worksheet.getCell(row, 6).value = this.regresames(record.fechaCancelacion)     
+      }
+      
+      worksheet.getCell(row, 7).value = record.concepto
+      worksheet.getCell(row, 8).value = record.centroCostos
+      worksheet.getCell(row, 9).value = record.proyecto
+      worksheet.getCell(row, 10).value =  formatCurrency(record.saldoInicial || 0)
+      worksheet.getCell(row, 11).value = formatCurrency(record.debe || 0)
+      worksheet.getCell(row, 12).value = formatCurrency(record.haber || 0)
+
+      if(record.debe == null || ""+record.debe == ''){
+        worksheet.getCell(row, 13).value =  formatCurrency(record.movimiento)
+      }else{
+        worksheet.getCell(row, 13).value =  formatCurrency(record.movimiento*-1)
+      }
+      
+      worksheet.getCell(row, 14).value = record.empresa
+      worksheet.getCell(row, 15).value = record.proyecto
+      worksheet.getCell(row, 16).value = record.tipoCuenta
+      worksheet.getCell(row, 17).value = record.edoResultados
+      worksheet.getCell(row, 18).value = record.responsable
+      worksheet.getCell(row, 19).value = record.tipoProyecto
+      worksheet.getCell(row, 20).value = record.tipoPy
+      worksheet.getCell(row, 21).value = record.clasificacionPy
+      //worksheet.getCell(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'FFC000':  '70AD47'}};
+      worksheet.getRow(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'ea899a':  'ffffff'}};
+      row++
+    });
+
+   
+
+    return row
+    
+  }
+
+
 
   exportJsonToExcel(fileName: string = 'CIE'): void {
 
@@ -280,13 +391,13 @@ export class ResultadoBusquedaComponent implements OnInit {
 
   esElmismomes(fechaemi: string, fechacancela: string): boolean {
 
-    console.log("fechaemi: " + fechaemi);
+    //console.log("fechaemi: " + fechaemi);
 
-    console.log("fechacancela: " + fechacancela);
+    //console.log("fechacancela: " + fechacancela);
 
     let mdyEmi: String[] = fechaemi.split('-');
 
-      console.log("Number(mdy[1]) - 1: " + (Number(mdyEmi[1])));
+     //console.log("Number(mdy[1]) - 1: " + (Number(mdyEmi[1])));
 
     //let fIni: Date = this.parseDate(fechaemi);
      
@@ -304,7 +415,7 @@ export class ResultadoBusquedaComponent implements OnInit {
       
       let mdyCancela: String[] = fechacancela.split('-');
 
-      console.log("Number(mdy[1]) - 1: " + (Number(mdyCancela[1])));
+     // console.log("Number(mdy[1]) - 1: " + (Number(mdyCancela[1])));
       let fFin: Date = this.parseDate(fechacancela);
       if((Number(mdyEmi[1])) == (Number(mdyCancela[1]))){
         return false;
@@ -313,6 +424,8 @@ export class ResultadoBusquedaComponent implements OnInit {
       }
 
     }
+
+    
     
     
 
@@ -324,13 +437,13 @@ export class ResultadoBusquedaComponent implements OnInit {
 
     //console.log("fechaemi: " + fechaemi);
 
-    console.log("fechacancela: " + fechacancela);
+    //console.log("fechacancela: " + fechacancela);
 
     if(fechacancela != null || fechacancela != ""){
 
       let mdy: String[] = fechacancela.split('-');
 
-      console.log("Number(mdy[1]) - 1: " + (Number(mdy[1])));
+      //console.log("Number(mdy[1]) - 1: " + (Number(mdy[1])));
       return Number(mdy[1])+""
 
     }else{
@@ -339,10 +452,9 @@ export class ResultadoBusquedaComponent implements OnInit {
     
   }
 
+  regresaValorPositivo(RecordDebe: string,RecordMovimiento: String): string {
 
-   regresaValorPositivo(RecordDebe: string,RecordMovimiento: string): string {
- 
-     console.log("RecordDebe: " + RecordDebe);
+    console.log("RecordDebe: " + RecordDebe);
 
     //console.log("RecordMovimiento: " + RecordMovimiento.replace("-", ''));
 
