@@ -7,7 +7,7 @@
     <p-toolbar styleClass="p-1 mt-5 mb-4 d-flex justify-content-end gap-2 text-right">
         <button type="button" class="btn btn-secondary" [routerLink]="['/reportes/lista']"><i class="fas fa-arrow-left"></i> Regresar</button>
     </p-toolbar>
-    <p-toolbar styleClass="p-2 mb-0 d-flex justify-content-end gap-2 text-right border-none">
+    <p-toolbar styleClass="p-2 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="datos !== undefined">
         <p-button icon="pi pi-file-excel" pTooltip="Exportar Excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportToExcel()"></p-button>
     </p-toolbar>
 
