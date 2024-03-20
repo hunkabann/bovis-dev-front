@@ -13,7 +13,7 @@
 
     <p-messages severity="warn" *ngIf="totalNoAlcanzado">
         <ng-template pTemplate>
-            <div class="ml-2">Aún falta días por cubrir ({{diasAcumulados}} / {{form.value.dias}})    -     % de Dedicación: {{Dedicacion}}</div>
+            <div class="ml-2">Aún falta días por cubrir ({{diasAcumulados}} / {{form.value.dias}})    -     % de Dedicación: {{Dedicacion}}% de 100% falta {{DedicacionFaltante}}%</div>
         </ng-template>
     </p-messages>
 
@@ -88,17 +88,20 @@
                             <small class="error-msg">{{ obtenerMensajeErrorEnArreglo(proyectos, 'dias', i) }}</small>
                         </div>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2" hidden="true">
                         <label for="diasCalc{{i}}">Días:</label>
                         <input id="diasCalc{{i}}"  pInputText class="form-control" formControlName="diasCalc"  mode="decimal"  readonly [placeholder]="0.00" >
                         
                     </div>
                     <div class="col-2 d-flex flex-column">
                         <label for="dedicacionCalc{{i}}">% Dedicación:</label>
-                        <p-inputNumber id="dedicacionCalc{{i}}" placeholder="0" formControlName="dedicacionCalc" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dias', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularDiasdedica($event, i, 'dedicacionCalc')"></p-inputNumber>
+                        <p-inputNumber id="dedicacionCalc{{i}}" placeholder="0" formControlName="dedicacionCalc" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dedicacionCalc', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularDiasdedica($event, i, 'proyectos')"></p-inputNumber>
+                        <div *ngIf="esInvalidoEnArreglo(proyectos, 'dias', i)">
+                            <small class="error-msg">{{ obtenerMensajeErrorEnArreglo(proyectos, 'dias', i) }}</small>
+                        </div>
                         
                     </div>
-                    <div class="col-2">
+                    <div class="col-2"  hidden="true">
                         <label for="dedicacion{{i}}">% Dedicación:</label>
                         <input id="dedicacion{{i}}"   pInputText class="form-control" formControlName="dedicacion" mode="decimal" readonly [placeholder]="0.00" >
                     </div>
