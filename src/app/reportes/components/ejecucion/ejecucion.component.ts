@@ -6,7 +6,8 @@ import { ReportesService } from '../../services/reportes.service';
 import { finalize } from 'rxjs';
 import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { Reporte } from '../../models/reportes.model';
-
+import * as XLSX from 'xlsx';
+import { EXCEL_EXTENSION } from 'src/utils/constants';
 @Component({
   selector: 'app-ejecucion',
   templateUrl: './ejecucion.component.html',
@@ -75,6 +76,23 @@ export class EjecucionComponent implements OnInit {
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
       })
+  }
+
+  exportToExcel(fileName: string = 'Reporte'): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet([]);
+
+    const workbook: XLSX.WorkBook = {
+      Sheets: {
+        'Detalle': worksheet
+      },
+      SheetNames: ['Detalle'],
+    };
+    const jsonConFormato = this?.datos;
+    XLSX.utils.sheet_add_json(worksheet, jsonConFormato, { origin: 'A2', skipHeader: true })
+    XLSX.utils.sheet_add_aoa(worksheet, [this?.encabezados]);
+
+    // save to file
+    XLSX.writeFile(workbook, `${fileName + '_' + Date.now()}${EXCEL_EXTENSION}`);
   }
 
 
