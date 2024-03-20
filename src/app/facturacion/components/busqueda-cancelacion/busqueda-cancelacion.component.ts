@@ -882,15 +882,20 @@ export class BusquedaCancelacionComponent implements OnInit {
         let importePorPagar_dlls = 0
         this.tipoCambio = ImporteNotayPago_dlls * +factura['tipoCambio']
 
+        if(this.tipoCambio == 0){
+          importePorPagar_dlls = factura['importeEnPesos'] / +factura['tipoCambio']
+        }else{
+          importePorPagar_dlls = factura['importeEnPesos']  - this.tipoCambio
+        
+          console.log(" factura['total'] - ImporteNotayPago " + (factura['total'] - this.tipoCambio))
+          console.log(" ImporteNotayPago " + this.tipoCambio)
+          console.log(" factura['total'] " + factura['total'])
+          console.log(" importePorPagar_dlls " + importePorPagar_dlls)
+        }
 
         //const myNumber = Number(factura['tipoCambio']);
         //importePorPagar = factura['importe'] - ImporteNotayPago
-        importePorPagar_dlls = factura['importeEnPesos']  - this.tipoCambio
-        
-        console.log(" factura['total'] - ImporteNotayPago " + (factura['total'] - this.tipoCambio))
-        console.log(" ImporteNotayPago " + this.tipoCambio)
-        console.log(" factura['total'] " + factura['total'])
-        console.log(" importePorPagar_dlls " + importePorPagar_dlls)
+       
 
         let cell_dls = worksheet.getCell(inicioFactura, columnaImportePendiente_dls)
         //cell_dls.value = this.formatCurrency(importePorPagar)
