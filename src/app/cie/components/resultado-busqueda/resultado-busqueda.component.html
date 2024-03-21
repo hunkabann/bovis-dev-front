@@ -35,7 +35,7 @@
             <p-dropdown [options]="clasificacionesPY" placeholder="Seleccionar una clasificación" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [(ngModel)]="clasificacionPY" [filter]="true" filterBy="name"></p-dropdown>
         </div>
         <div class="col-12 d-flex justify-content-center align-items-center gap-2">
-            <p-button label="Exportar Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+            <p-button label="Exportar Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportJsonToExcelRest()"></p-button>
             <button type="button" class="btn btn-info" (click)="filtrar()">Buscar</button>
             <button type="button" class="btn btn-info" (click)="limpiar()">Limpiar filtros</button>
         </div>
