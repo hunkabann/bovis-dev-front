@@ -242,19 +242,27 @@ export class ResultadoBusquedaComponent implements OnInit {
         worksheet.getCell(row, 6).value = this.regresames(record.fechaCancelacion)     
       }
       
-      worksheet.getCell(row, 7).value = record.concepto
+       worksheet.getCell(row, 7).value = record.concepto
       worksheet.getCell(row, 8).value = record.centroCostos
       worksheet.getCell(row, 9).value = record.proyecto
-      worksheet.getCell(row, 10).value =  formatCurrency(record.saldoInicial || 0)
-      worksheet.getCell(row, 11).value = formatCurrency(record.debe || 0)
-      worksheet.getCell(row, 12).value = formatCurrency(record.haber || 0)
-
-      if(record.debe == null || ""+record.debe == ''){
-        worksheet.getCell(row, 13).value =  formatCurrency(record.movimiento)
+      if(!this.esElmismomes(record.fecha,record.fechaCancelacion)){
+        worksheet.getCell(row, 10).value =  formatCurrency(0)
+        worksheet.getCell(row, 11).value = formatCurrency(0)
+        worksheet.getCell(row, 12).value = formatCurrency(0)
+        worksheet.getCell(row, 13).value =  formatCurrency(0)
       }else{
-        worksheet.getCell(row, 13).value =  formatCurrency(record.movimiento*-1)
+        worksheet.getCell(row, 10).value =  formatCurrency(record.saldoInicial || 0)
+        worksheet.getCell(row, 11).value = formatCurrency(record.debe  || 0)
+        worksheet.getCell(row, 12).value = formatCurrency(record.haber  || 0)
+  
+        if(record.debe == null || ""+record.debe == ''){
+          worksheet.getCell(row, 13).value =  formatCurrency(record.movimiento  || 0)
+        }else{
+          worksheet.getCell(row, 13).value =  formatCurrency(record.movimiento*-1)
+        }
+        
       }
-      
+     
       worksheet.getCell(row, 14).value = record.empresa
       worksheet.getCell(row, 15).value = record.proyecto
       worksheet.getCell(row, 16).value = record.tipoCuenta
