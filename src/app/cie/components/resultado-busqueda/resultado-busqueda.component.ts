@@ -63,19 +63,12 @@ export class ResultadoBusquedaComponent implements OnInit {
   totalRegistros = 0
   loading: boolean = false
 
-
-
   constructor() { }
 
   ngOnInit(): void {
-
     this.getConfigCalendar()
-
     this.cargarCatalogos()
-
     this.verificarEstado()
-
-
     // this.loadData({ first: 0, rows: this.noRegistros })
   }
 
@@ -96,12 +89,9 @@ export class ResultadoBusquedaComponent implements OnInit {
 
   loadData(event: LazyLoadEvent) {
     if (!this.firstLoading) {
-
       this.noRegistros = event.rows
       const page = (event.first / this.noRegistros) + 1;
-
       this.loading = true
-
       let mes = null
       let anio = null
       let mesFin = null
@@ -153,7 +143,6 @@ export class ResultadoBusquedaComponent implements OnInit {
   }
 
   cargarCatalogos() {
-
     this.sharedService.cambiarEstado(true)
 
     forkJoin([
@@ -180,12 +169,9 @@ export class ResultadoBusquedaComponent implements OnInit {
   }
 
   _setXLSXTitles(worksheet: ExcelJS.Worksheet) {
-
-
   }
 
   _setXLSXHeader(worksheet: ExcelJS.Worksheet) {
-
     const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
     const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
@@ -203,7 +189,6 @@ export class ResultadoBusquedaComponent implements OnInit {
     const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
 
     this.allData.forEach(record => {
-
       //worksheet.getCell(row).fill = record.fechaCancelacion ? fillCancelada : fillFactura
       //const col = row.getCell(row);
 
@@ -236,7 +221,6 @@ export class ResultadoBusquedaComponent implements OnInit {
         } else {
           worksheet.getCell(row, 13).value = formatCurrency(record.movimiento * -1)
         }
-
       }
 
       worksheet.getCell(row, 14).value = record.empresa
@@ -252,8 +236,6 @@ export class ResultadoBusquedaComponent implements OnInit {
       row++
     });
 
-
-
     return row
 
   }
@@ -261,7 +243,6 @@ export class ResultadoBusquedaComponent implements OnInit {
 
 
   exportJsonToExcel(fileName: string = 'CIE'): void {
-
     this.sharedService.cambiarEstado(true)
 
     let mes = null
@@ -391,15 +372,12 @@ export class ResultadoBusquedaComponent implements OnInit {
   }
 
   esElmismomes(fechaemi: string, fechacancela: string): boolean {
-
     //console.log("fechaemi: " + fechaemi);
     //console.log("fechacancela: " + fechacancela);
-
     let mdyEmi: String[] = fechaemi.split('-');
 
     //console.log("Number(mdy[1]) - 1: " + (Number(mdyEmi[1])));
     //let fIni: Date = this.parseDate(fechaemi);
-
 
     if (fechacancela == null || fechacancela == "") {
       // return true;
@@ -424,27 +402,18 @@ export class ResultadoBusquedaComponent implements OnInit {
 
     }
 
-
-
-
-
     //return this.form.get(campo).invalid &&
     //      (this.form.get(campo).dirty || this.form.get(campo).touched)
   }
 
   regresames(fechacancela: string): string {
-
     //console.log("fechaemi: " + fechaemi);
-
     //console.log("fechacancela: " + fechacancela);
 
     if (fechacancela != null || fechacancela != "") {
-
       let mdy: String[] = fechacancela.split('-');
-
       //console.log("Number(mdy[1]) - 1: " + (Number(mdy[1])));
       return Number(mdy[1]) + ""
-
     } else {
       return "0"
     }
@@ -452,10 +421,8 @@ export class ResultadoBusquedaComponent implements OnInit {
   }
 
   regresaValorPositivo(RecordDebe: string, RecordMovimiento: String): string {
-
     //console.log("RecordDebe: " + RecordDebe);
     //console.log("RecordMovimiento: " + RecordMovimiento.replace("-", ''));
-
     var numberValue = Number(RecordMovimiento);
     if (Math.sign(numberValue) == 1) {
       RecordMovimiento = -Number(RecordMovimiento) + ""
