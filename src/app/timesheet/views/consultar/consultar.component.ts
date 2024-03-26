@@ -44,6 +44,9 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   idEmpresa: number = null
   mes: number = null
 
+  CalculaDias: number = null
+  CalculaDedica: number = null
+
   constructor() { }
 
   //ngAfterViewInit(): void {
@@ -143,7 +146,14 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
       const proyectoIndex = selectedTimesheet.proyectos.findIndex(proyecto => proyecto.idTimesheet_Proyecto === idTimesheetProyecto)
       if (proyectoIndex >= 0) {
         selectedTimesheet.proyectos.at(proyectoIndex).dias = +event.target.value
+        selectedTimesheet.proyectos.at(proyectoIndex).tDedicacion = this.formateaValor((+event.target.value / timesheet.dias_trabajo) * 100)
         const totalDias = this.calcularTotalDias(selectedTimesheet)
+        const totalDedica = this.calcularTotalDedica(selectedTimesheet)
+        console.log("totalDias: "+ totalDias)
+        console.log("totalDedica: "+ totalDedica)
+
+        this.CalculaDias = this.formateaValor(this.calcularTotalDiasProy(selectedTimesheet))
+        this.CalculaDedica = this.formateaValor((this.calcularTotalDiasProy(selectedTimesheet)*100)/timesheet.dias_trabajo)
         if (totalDias > timesheet.dias_trabajo) {
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: `El número de días no puede ser mayor a ${timesheet.dias_trabajo}` })
         } else if (totalDias >= 0) {
@@ -153,10 +163,15 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
           const proyectoActualizado = timesheet.proyectos.at(proyectoIndex);
 
           this.sharedService.cambiarEstado(true)
+
+          console.log("proyectoActualizado.dias: "+ proyectoActualizado.dias)
+          console.log("proyectoActualizado.tDedicacion: "+ proyectoActualizado.tDedicacion)
+
           this.timesheetService.cambiarDiasDedicacion({
             id_timesheet_proyecto: idTimesheetProyecto,
             num_dias: proyectoActualizado.dias,
             num_dedicacion: proyectoActualizado.tDedicacion
+
           })
             .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
             .subscribe({
@@ -187,6 +202,13 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
         selectedTimesheet.proyectos.at(proyectoIndex).tDedicacion = +event.target.value
         selectedTimesheet.proyectos.at(proyectoIndex).dias = this.formateaValor((+event.target.value * timesheet.dias_trabajo) / 100) 
         const totalDias = this.calcularTotalDias(selectedTimesheet)
+        const totalDedica = this.calcularTotalDedica(selectedTimesheet)
+        console.log("cambiarParticipacionDedica -  totalDias: "+ totalDias)
+        console.log("cambiarParticipacionDedica -  totalDedica: "+ totalDedica)
+          //selectedTimesheet.  = timesheet.proyectos.map(proyecto => ({ ...proyecto, dias: this.formateaValor((+event.target.value * timesheet.dias_trabajo) / 100) }))
+          this.CalculaDias = this.formateaValor(this.calcularTotalDiasProy(selectedTimesheet))
+          this.CalculaDedica = this.formateaValor((this.calcularTotalDiasProy(selectedTimesheet)*100)/timesheet.dias_trabajo)
+
         if (totalDias > timesheet.dias_trabajo) {
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: `La Dedicación no puede ser mayor a 100%` })
         } else if (totalDias >= 0) {
@@ -196,6 +218,8 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
           const proyectoActualizado = timesheet.proyectos.at(proyectoIndex);
 
           this.sharedService.cambiarEstado(true)
+          console.log("cambiarParticipacionDedica - proyectoActualizado.dias: "+ proyectoActualizado.dias)
+          console.log("cambiarParticipacionDedica - proyectoActualizado.tDedicacion: "+ proyectoActualizado.tDedicacion)
           this.timesheetService.cambiarDiasDedicacion({
             id_timesheet_proyecto: idTimesheetProyecto,
             num_dias: proyectoActualizado.dias,
@@ -224,6 +248,23 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
     let total = 0
     timesheet.proyectos.forEach(proyecto => total += proyecto.dias)
     timesheet.otros.forEach(otro => total += otro.dias)
+    return total
+  }
+
+
+  calcularTotalDiasProy(timesheet: Timesheet) {
+
+    let total = 0
+    timesheet.proyectos.forEach(proyecto => total += proyecto.dias)
+    //timesheet.otros.forEach(otro => total += otro.dias)
+    return total
+  }
+
+  calcularTotalDedica(timesheet: Timesheet) {
+
+    let total = 0
+    timesheet.proyectos.forEach(proyecto => total += proyecto.tDedicacion)
+    timesheet.otros.forEach(otro => total += otro.tDedicacion)
     return total
   }
 
