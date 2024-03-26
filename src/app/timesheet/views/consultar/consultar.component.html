@@ -77,12 +77,27 @@
                 <td>
                     <div class="form-group" *ngFor="let proyecto of ts.proyectos">
                         <label><strong>{{proyecto.descripcion}}: {{proyecto.tDedicacion}} %</strong></label>
-                        <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}" />
+                        <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}" [style]="{ width: '100%' }" mode="decimal" />
+                         
                     </div>
+                    
                     <hr>
                     <label><strong>Total: {{ts.proyectosJoin}} % - Días: {{ts.proyectosDiasJoin}}</strong></label>
                     <br>
                     <label><strong>Otros: {{ts.otrosJoin}} % - Días: {{ts.otrosDiasJoin}}</strong></label>
+                </td>
+                <td>
+                    
+                    <div class="form-group" *ngFor="let proyecto of ts.proyectos">
+                        <label><strong>% Dedicación</strong></label>
+                        <input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }" mode="decimal" />
+                    </div>
+
+                    <hr>
+                    <label><strong></strong></label>
+                    <br>
+                    <label><strong></strong></label>
+
                 </td>
                 <td>
                     <button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/timesheet/cargar-horas', ts.id]"></button>
