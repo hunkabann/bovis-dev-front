@@ -14,6 +14,7 @@ import { DividerModule } from 'primeng/divider';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputTextModule } from 'primeng/inputtext';
 import { FileUploadModule } from 'primeng/fileupload';
 import { SubirArchivoComponent } from './components/auditoria-calidad/subir-archivo/subir-archivo.component';
 import { VerDocumentosComponent } from './components/ver-documentos/ver-documentos.component';
@@ -26,6 +27,7 @@ import { ComentariosModalComponent } from './components/comentarios-modal/coment
 import { BadgeModule } from 'primeng/badge';
 import { AccordionModule } from 'primeng/accordion';
 import { PrimengModule } from '../shared/primeng.module';
+import { FinalizarAuditoriaModalComponent } from './components/finalizar-auditoria-modal/finalizar-auditoria-modal.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { PrimengModule } from '../shared/primeng.module';
     SubirArchivoComponent,
     VerDocumentosComponent,
     ProgresoComponent,
-    ComentariosModalComponent
+    ComentariosModalComponent,
+    FinalizarAuditoriaModalComponent
   ],
   imports: [
     CommonModule,
@@ -50,6 +53,7 @@ import { PrimengModule } from '../shared/primeng.module';
     CheckboxModule,
     DropdownModule,
     InputSwitchModule,
+    InputTextModule,
     FileUploadModule,
     TableModule,
     SharedModule,

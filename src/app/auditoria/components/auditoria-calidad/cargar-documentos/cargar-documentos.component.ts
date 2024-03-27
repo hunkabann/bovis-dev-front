@@ -101,7 +101,9 @@ export class CargarDocumentosComponent implements OnInit {
 
     this.totalDocumentos = 0
     this.totalDocumentosValidados = 0
-    this.auditoriaService.getProyectoCumplimiento(id)
+    let fechaInicio = '01-01-1600';
+    let fechaFin = '01-01-1600'
+    this.auditoriaService.getProyectoCumplimiento(id, fechaInicio, fechaFin )
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({ data }) => {

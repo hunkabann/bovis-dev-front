@@ -45,6 +45,18 @@ export interface Auditoria {
   cantidadDocumentosValidados:  number;
 }
 
+export interface PeriodosAuditoritaResponse {
+  data: SeccionPeriodos[];
+  success: boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface SeccionPeriodos {
+  idProyecto: number;
+  fechaInicio: string;
+  fechaFin: string;
+}
 export interface DocumentoResponse {
   data:          Documento;
   success:       boolean;
