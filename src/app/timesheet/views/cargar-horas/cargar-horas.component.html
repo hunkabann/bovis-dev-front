@@ -13,7 +13,7 @@
 
     <p-messages severity="warn" *ngIf="totalNoAlcanzado">
         <ng-template pTemplate>
-            <div class="ml-2">Aún falta días por cubrir ({{diasAcumulados}} / {{form.value.dias}}).</div>
+            <div class="ml-2">Aún falta días por cubrir ({{diasAcumulados}} / {{form.value.dias}})    -     % de Dedicación: {{Dedicacion}}% de 100% falta {{DedicacionFaltante}}%</div>
         </ng-template>
     </p-messages>
 
@@ -78,20 +78,32 @@
 
             <div formArrayName="proyectos">
                 <div class="grid" *ngFor="let proyecto of proyectos.controls; let i = index" [formGroupName]="i">
-                    <div class="col-5 d-flex align-items-center">
+                    <div class="col-2 d-flex align-items-center">
                         <label><b>{{proyecto.get('nombre').value}}</b></label>
                     </div>
-                    <div class="col-2 d-flex flex-column">
+                    <div class="col-1 d-flex flex-column">
                         <label for="dias{{i}}">Días:</label>
-                        <!--p-inputNumber id="dias{{i}}" placeholder="0" formControlName="dias" locale="es-MX" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dias', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularPorcentajes($event, i, 'proyectos')"></p-inputNumber-->
-                      <p-inputNumber id="dias{{i}}" placeholder="0" formControlName="dias" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dias', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularPorcentajes($event, i, 'proyectos')"></p-inputNumber>
+                        <p-inputNumber id="dias{{i}}" placeholder="0" formControlName="dias" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dias', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularPorcentajes($event, i, 'proyectos')"></p-inputNumber>
                         <div *ngIf="esInvalidoEnArreglo(proyectos, 'dias', i)">
                             <small class="error-msg">{{ obtenerMensajeErrorEnArreglo(proyectos, 'dias', i) }}</small>
                         </div>
                     </div>
-                    <div class="col-2">
+                    <div class="col-2" hidden="true">
+                        <label for="diasCalc{{i}}">Días:</label>
+                        <input id="diasCalc{{i}}"  pInputText class="form-control" formControlName="diasCalc"  mode="decimal"  readonly [placeholder]="0.00" >
+                        
+                    </div>
+                    <div class="col-2 d-flex flex-column">
+                        <label for="dedicacionCalc{{i}}">% Dedicación:</label>
+                        <p-inputNumber id="dedicacionCalc{{i}}" placeholder="0" formControlName="dedicacionCalc" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dedicacionCalc', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularDiasdedica($event, i, 'proyectos')"></p-inputNumber>
+                        <div *ngIf="esInvalidoEnArreglo(proyectos, 'dias', i)">
+                            <small class="error-msg">{{ obtenerMensajeErrorEnArreglo(proyectos, 'dias', i) }}</small>
+                        </div>
+                        
+                    </div>
+                    <div class="col-2"  hidden="true">
                         <label for="dedicacion{{i}}">% Dedicación:</label>
-                        <input id="dedicacion{{i}}" type="text" pInputText class="form-control" formControlName="dedicacion" mode="decimal" readonly [placeholder]="0.00">
+                        <input id="dedicacion{{i}}"   pInputText class="form-control" formControlName="dedicacion" mode="decimal" readonly [placeholder]="0.00" >
                     </div>
                     <div class="col-2">
                         <label for="costo{{i}}">% Costo:</label>

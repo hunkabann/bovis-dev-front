@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
-import { CargaCuentasResponse, CieClasificacionesPYResponse, CieConceptosResponse, CieCuentasListaResponse, CieCuentasResponse, CieElementPost, CieEmpresasResponse, CieNumsProyectoResponse, CieProyectosResponse, CieRegistroUResponse, CieRegistrosPaginadosResponse, CieResponsablesResponse,CieCuentasDeleteResponse,CieCuentaDelete } from '../models/cie.models';
+import { CargaCuentasResponse, CieClasificacionesPYResponse, CieConceptosResponse, CieCuentasListaResponse, CieCuentasResponse, CieElementPost, CieEmpresasResponse, CieNumsProyectoResponse, CieProyectosResponse, CieRegistroUResponse, CieRegistrosPaginadosResponse, CieResponsablesResponse,CieCuentasDeleteResponse,CieCuentaDelete, CieRegistro } from '../models/cie.models';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 import { ListaStringResponse } from 'src/models/general.model';
 
@@ -42,6 +42,26 @@ export class CieService {
 
   getRegistros(nombre_cuenta: string, mes_inicio: number, anio_inicio: number,  mes_fin: number, anio_fin: number, concepto: string, empresa: string, num_proyecto: number, responsable: string, clasificacion_py: string, offset: number, limit: number, sort_field: string, sort_order: string) {
     return this.http.post<CieRegistrosPaginadosResponse>(`${this.baseUrl}api/Cie/Registros`, {
+        nombre_cuenta,
+        mes_inicio,
+        anio_inicio,
+        mes_fin,
+        anio_fin,
+        concepto,
+        empresa,
+        num_proyecto,
+        responsable,
+        clasificacion_py,
+        limit,
+        offset,
+        sort_field,
+        sort_order
+      //true/${nombre_cuenta}/${mes}/${anio}/${mesFin}/${anioFin}/${concepto}/${empresa}/${num_proyecto}/${responsable}/${clasificacionPY}/${offset}/${limit}
+    })
+  }
+
+  getAllRegistros(nombre_cuenta: string, mes_inicio: number, anio_inicio: number,  mes_fin: number, anio_fin: number, concepto: string, empresa: string, num_proyecto: number, responsable: string, clasificacion_py: string, offset: number, limit: number, sort_field: string, sort_order: string) {
+    return this.http.post<CieRegistro[]>(`${this.baseUrl}api/Cie/Registros`, {
         nombre_cuenta,
         mes_inicio,
         anio_inicio,
