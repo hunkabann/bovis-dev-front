@@ -84,15 +84,16 @@
                     </div>
                     
                     <hr>
-                    <!--label><strong>Total: {{ts.proyectosJoin}} % - Días: {{ts.proyectosDiasJoin}}</strong></label-->
+                    <label><strong>Total: {{ts.proyectosJoin}} % - Días: {{ts.proyectosDiasJoin}}</strong></label>
                     <!--label><strong>Total: {{ts.proyectosJoin}} % - Días: {{CalculaDias-ts.otrosDiasJoin}}</strong></label-->
-                    <label *ngIf="CalculaDias == null || CalculaDias < 0 ; then thenimportePesos else elseimportePesos"> </label>
+                    <!--label *ngIf="CalculaDias == null || CalculaDias < 0 ; then thenimportePesos else elseimportePesos"> </label>
                     <ng-template #thenimportePesos>
                         <strong>Total: {{ts.proyectosJoin | number: '1.2-2' }} % - Días: {{ts.proyectosDiasJoin | number: '1.2-2' }}</strong>
                     </ng-template>
-                    <ng-template #elseimportePesos>
-                        <strong>Total: {{CalculaDedica}} % - Días: {{CalculaDias}}</strong>
-                    </ng-template>
+                    <ng-template #elseimportePesos-->
+                        <!--strong>Total: {{CalculaDedica}} % - Días: {{CalculaDias}}</strong-->
+                        <!--strong>Total: {{ts.proyectosJoin | number: '1.2-2' }} % - Días: {{ts.proyectosDiasJoin | number: '1.2-2' }}</strong>
+                    </ng-template-->
                     <br>
                     <label><strong>Otros: {{ts.otrosJoin | number: '1.2-2' }} % - Días: {{ts.otrosDiasJoin | number: '1.2-2' }}</strong></label>
                 </td>
@@ -100,7 +101,7 @@
                     
                     <div class="form-group" *ngFor="let proyecto of ts.proyectos">
                         <label><strong>% Dedicación</strong></label>
-                        <input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }" mode="decimal" />
+                        <input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion| number: '1.2-2' }}" [style]="{ width: '100%' }" mode="decimal" />
                     </div>
 
                     <hr>
