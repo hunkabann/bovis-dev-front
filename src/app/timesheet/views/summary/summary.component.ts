@@ -54,9 +54,22 @@ export class SummaryComponent implements OnInit {
     this.data.forEach(({timesheet}) => {
       timesheet.proyectos.forEach(proyecto => {
         total += proyecto.tDedicacion
-      })
+        console.log("proyecto.tDedicacion: " +proyecto.tDedicacion)
+      }
+      
+      )
     })
-    return total
+
+    this.data.forEach(({timesheet}) => {
+      timesheet.otros.forEach(otros => {
+        total += otros.tDedicacion
+        console.log("otros.tDedicacion: " +otros.tDedicacion)
+      }
+      
+      )
+    })
+
+    return this.formateaValor(total)
   }
 
   onSelectFecha(event: any) {
@@ -78,9 +91,14 @@ export class SummaryComponent implements OnInit {
             const key = timesheet.proyectos.findIndex(({idProyecto}) => idProyecto === proyecto.id)
             let dedicacion = 0
             if(key >= 0) {
-              // console.log(timesheet.proyectos[key].tDedicacion)
-              dedicacion = timesheet.proyectos[key].tDedicacion
+              console.log("timesheet.proyectos[key].tDedicacion: "+timesheet.proyectos[key].tDedicacion)
+              dedicacion += timesheet.proyectos[key].tDedicacion
+              //console.log("timesheet.otros[key].tDedicacion: "+timesheet.otros[key].tDedicacion)
+              //dedicacion += timesheet.otros[key].tDedicacion
               this.proyectos[index].dedicacion += dedicacion
+
+                
+
             }
             return {
               id:         proyecto.id,
@@ -229,6 +247,11 @@ export class SummaryComponent implements OnInit {
     
     cell.t = 'n';
     cell.z = PERCENTAGE_FORMAT;
+  }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 
 }
