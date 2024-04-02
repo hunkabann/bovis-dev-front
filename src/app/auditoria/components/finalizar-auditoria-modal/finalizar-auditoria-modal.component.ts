@@ -30,25 +30,19 @@ export class FinalizarAuditoriaModalComponent implements OnInit {
       this.numProyecto = JSON.parse(localStorage.getItem('numProyecto'));
       this.fechaI = JSON.parse(localStorage.getItem('fecha'))
       console.log(this.numProyecto);
-      
-    }
+    };
 
     onFinish() {
       this.sharedService.cambiarEstado(true);
-      console.log(this.fechaI)
-      console.log(Date.parse(this.fechaI));
-      let date = new Date(this.fechaI.toString());
       const request = {
         num_proyecto: this.numProyecto,
         fecha_inicio: this.fechaI
       }
-      console.log(date);
       this.auditoriaService.getClosePeriodoAuditoria(request)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
           console.log(data);
-          window.location.reload()
           this.ref.close(true);
           if(data){
             localStorage.removeItem('numProyecto');
