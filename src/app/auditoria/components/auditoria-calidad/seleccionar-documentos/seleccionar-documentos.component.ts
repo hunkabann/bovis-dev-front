@@ -5,8 +5,8 @@ import { AuditoriaService } from 'src/app/auditoria/services/auditoria.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { TITLES, SUBJECTS, errorsArray } from '../../../../../utils/constants';
 import { FormArray, FormBuilder, Validators } from '@angular/forms';
-import { PeriodosAuditoritaResponse, Seccion, SeccionPeriodos } from 'src/app/auditoria/models/auditoria.model';
-import { Opcion } from 'src/models/general.model';
+import { SeccPrueba, Seccion, SeccionPeriodos } from 'src/app/auditoria/models/auditoria.model';
+import { Opcion, OpcionDos } from 'src/models/general.model';
 import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
 import { Router } from '@angular/router';
 
@@ -35,13 +35,13 @@ export class SeleccionarDocumentosComponent implements OnInit {
 
   proyectos:  Opcion[] = []
   secciones:  Seccion[] = []
-  periodos: Opcion[] = []
   dataPeriodosAuditoria: SeccionPeriodos[] = [];
+  dtaPAuditoria: OpcionDos[] = [];
   fechaInicio: any;
   fechaFin: any;
-  selectP : any;
   numeroProyecto: any;
   Label_cumplimiento: string;
+  disabledAuditoria = false;
   
   constructor() { }
 
@@ -50,7 +50,6 @@ export class SeleccionarDocumentosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.onPeriodos();
     this.sharedService.cambiarEstado(true)
 
     if(this.auditoriaService.esLegal){
@@ -68,10 +67,13 @@ export class SeleccionarDocumentosComponent implements OnInit {
       next: (value) => {
         console.log('esta informacion es de forkjoin', value);
         const [auditoriaR, proyectosR] = value
+        console.log(proyectosR.data);
+        console.log(proyectosR);
+        console.log(auditoriaR);
         // const [periodoR, periodosR] = value
         this.secciones = auditoriaR.data
         this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}`}))
-        // this.periodos = periodosR.data.map(periodo => ({code: periodo.numProyecto.toString(), name: `${this.fechaInicio} - ${this.fechaFin}`}))
+        console.log(this.proyectos);
         this.secciones.forEach(seccion => {
           seccion.auditorias.forEach(auditoria => {
             this.auditorias.push(this.fb.group({
@@ -89,6 +91,10 @@ export class SeleccionarDocumentosComponent implements OnInit {
       },
       error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
     })
+
+    this.form.get('id_periodo').valueChanges.subscribe( value => {
+      console.log(value);
+    })
   }
 
   guardar() {
@@ -104,17 +110,26 @@ export class SeleccionarDocumentosComponent implements OnInit {
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
   }
+
   getCumplimientos(event: any) {
-    console.log(this.fechaInicio, this.fechaFin);
+
+    let targetFechas = event?.originalEvent?.target?.innerText
+    console.log(targetFechas[0]);
+    if(targetFechas.substr(-1) === '-' || targetFechas[0]===''){
+      // console.log("no hay fecha fin");
+      this.disabledAuditoria = true;
+    }else{
+      this.disabledAuditoria = false;
+      // console.log("si hay fecha fin");
+    }
     
     this.sharedService.cambiarEstado(true)
     const {value: id} = event
-    this.auditoriaService.getProyectoCumplimiento(id, this.fechaInicio, this.fechaFin)
+    this.auditoriaService.getProyectoCumplimiento(id, this.fechaInicio, this.fechaFin ? '01-01-1600' : '01-01-1600')
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
           console.log(data,'mi data');
-          
           let auditoriasLista: number[] = []
           data.forEach(cumplimiento => {
             cumplimiento.auditorias.forEach(auditoria => {
@@ -130,35 +145,10 @@ export class SeleccionarDocumentosComponent implements OnInit {
               aplica: auditoriasLista.includes(control.value.id_auditoria)
             })
           })
-          // this.secciones = data
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
       })
   }
-  // onPeriodos(){
-  //   console.log('onPeriodos');
-  //   this.getPeriodosAuditorita;
-  // };
-  // next: (respuesta: any) => {
-  //   if (respuesta && respuesta.length > 0) {
-  //     this.dataCp = respuesta;
-  //     if (this.dataCp.length > 0) {
-  //       this.formSaveAddInstall
-  //         .get('insEntidadFederativa')
-  //         .setValue(this.dataCp[0].estado);
-  //       this.formSaveAddInstall
-  //         .get('insMunicipio')
-  //         .setValue(this.dataCp[0].municipio);
-  //       this.formSaveAddInstall
-  //         .get('insColonia')
-  //         .setValue(this.dataCp.colonia);
-  //     } else {
-  //       this.formSaveAddInstall.get('insEntidadFederativa').setValue('');
-  //       this.formSaveAddInstall.get('insMunicipio').setValue('');
-  //       this.formSaveAddInstall.get('insColonia').setValue('');
-  //     }
-  //   }
-  // },
 
   getPeriodosAuditorita(event: any) {
     this.sharedService.cambiarEstado(true)
@@ -167,19 +157,16 @@ export class SeleccionarDocumentosComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
-          const [periodoR, periodosR] = data
-          this.secciones = periodoR.data
-          this.periodos = periodosR?.data.map(periodo => ({code: periodo?.numProyecto.toString(), fecha: `${periodo?.this.fechaInicio} - ${periodo?.this.fechaFin}`}))
+        
+          this.dtaPAuditoria = data?.map( prueba => ({proyectoid: prueba?.idProyecto.toString(), fechas: `${prueba.fechaInicio} - ${prueba.fechaFin}` }))
+          if(this.dtaPAuditoria.length <= 0){
+            this.disabledAuditoria = true;
+          }
           this.dataPeriodosAuditoria = data;
-          this.dataPeriodosAuditoria.forEach(periodoAudit => {
+          this.dataPeriodosAuditoria?.forEach(periodoAudit => {
             this.fechaInicio = periodoAudit?.fechaInicio
-           this.fechaFin = periodoAudit?.fechaFin
-           this.numeroProyecto = periodoAudit?.idProyecto;
-           console.log(this.fechaInicio, this.fechaFin);
-           this.form.get('id_periodo').setValue(this.fechaInicio + ' / ' + this.fechaFin);
-           this.form.get('id_periodo').patchValue(this.fechaInicio + ' / ' + this.fechaFin);
-           this.selectP = this.fechaInicio + this.fechaFin;
-           console.log(this.selectP);
+            this.fechaFin = periodoAudit?.fechaFin
+            this.numeroProyecto = periodoAudit?.idProyecto;
         })
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
@@ -187,8 +174,6 @@ export class SeleccionarDocumentosComponent implements OnInit {
   }
 
   startAuditoria(){
-    console.log('inicio la auditoria');
-    console.log(this.numeroProyecto);
     this.sharedService.cambiarEstado(true)
     const numProyecto = {
       num_proyecto: this.numeroProyecto
@@ -197,7 +182,9 @@ export class SeleccionarDocumentosComponent implements OnInit {
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: ({data}) => {
-
+        if(data) {
+          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Se inicio la auditoria', detail: 'El registro ha sido guardado.' }))
+        }
       },
       error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
     })

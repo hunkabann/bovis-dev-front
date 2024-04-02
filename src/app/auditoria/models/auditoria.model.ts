@@ -17,6 +17,7 @@ export interface ProyectoCumplimientoResponse {
 }
 
 export interface Seccion {
+  data: any;
   idSeccion:    number;
   chSeccion:    string;
   nuProcentaje: number;
@@ -56,6 +57,11 @@ export interface SeccionPeriodos {
   idProyecto: number;
   fechaInicio: string;
   fechaFin: string;
+}
+
+export interface SeccPrueba {
+  proyectoid: string,
+  fechas: string
 }
 export interface DocumentoResponse {
   data:          Documento;

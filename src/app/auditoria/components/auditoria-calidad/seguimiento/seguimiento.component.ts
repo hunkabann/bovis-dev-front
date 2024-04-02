@@ -9,7 +9,7 @@ import { AuditoriaService } from 'src/app/auditoria/services/auditoria.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
 import { descargarArchivo } from 'src/helpers/helpers';
-import { Opcion } from 'src/models/general.model';
+import { Opcion, OpcionDos } from 'src/models/general.model';
 import { SUBJECTS, TITLES, errorsArray } from 'src/utils/constants';
 import { VerDocumentosComponent } from '../../ver-documentos/ver-documentos.component';
 import { ComentariosModalComponent } from '../../comentarios-modal/comentarios-modal.component';
@@ -42,14 +42,15 @@ export class SeguimientoComponent implements OnInit {
   proyectos: Opcion[] = []
   secciones: Seccion[] = []
   dataPeriodosAuditoria: SeccionPeriodos[] = [];
+  dtaPAuditoria: OpcionDos[] = [];
 
   totalDocumentos: number = 0
   totalDocumentosValidados: number = 0
   numProyecto: number;
   fechaInicio: any;
   fechaFin: any;
-  selectP: any;
   Label_cumplimiento: string;
+  disabledAuditoria = true;
 
 
   constructor() { }
@@ -66,9 +67,14 @@ export class SeguimientoComponent implements OnInit {
       this.Label_cumplimiento = "Cumplimiento"
     }
 
-
     this.sharedService.cambiarEstado(true)
+    this.functForJoin()
 
+      this.form.get('id_periodo').valueChanges.subscribe( value => {
+      })
+  }
+
+  functForJoin() {
     forkJoin([
       this.timesheetService.getCatProyectos()
     ])
@@ -80,6 +86,7 @@ export class SeguimientoComponent implements OnInit {
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
       })
+
   }
 
   guardar() {
@@ -90,7 +97,8 @@ export class SeguimientoComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.messageService.add({ severity: 'success', summary: 'Validación guardada', detail: 'La validación ha sido guardada.' })
-          this.getSeccionesPorId(+this.form.value.id_proyecto)
+          // this.getSeccionesPorId(+this.form.value.id_proyecto)
+          this.getPeriodosAudit(+this.form.value.id_proyecto)
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
@@ -142,58 +150,93 @@ export class SeguimientoComponent implements OnInit {
   }
 
   getPeriodosAudit(event: any) {
-    this.sharedService.cambiarEstado(true)
     const {value: id} = event
+    this.numProyecto = id;
+    this.sharedService.cambiarEstado(true)
+    
+    this.totalDocumentos = 0
+    this.totalDocumentosValidados = 0
+    this.auditorias.clear()
     this.auditoriaService.getProyectoPeriodosAuditoria(id)
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: ({data}) => {
         this.dataPeriodosAuditoria = data;
+        
+        this.dtaPAuditoria = data?.map( prueba => ({proyectoid: prueba?.idProyecto.toString(), fechas: `${prueba.fechaInicio} - ${prueba.fechaFin}` }))
         this.dataPeriodosAuditoria.forEach(periodoAudit => {
           this.fechaInicio = periodoAudit?.fechaInicio
           this.fechaFin = periodoAudit?.fechaFin
           this.numProyecto = periodoAudit?.idProyecto
-          console.log(this.fechaInicio, this.fechaFin, this.numProyecto);
         })
         this.fechaInicio = data[0]?.fechaInicio ? data[0]?.fechaInicio : '01-01-1600'
         this.fechaFin = data[0]?.fechaFin ? '01-01-1600' : '01-01-1600'
-        this.form.get('id_periodo').setValue(this.fechaInicio + ' / ' + this.fechaFin);
-        this.form.get('id_periodo').patchValue(this.fechaInicio + ' / ' + this.fechaFin);
 
-        this.selectP = this.fechaInicio + this.fechaFin;
-        this.totalDocumentos = 0
-        this.totalDocumentosValidados = 0
-        this.auditorias.clear()
-        this.auditoriaService.getProyectoCumplimiento(id, this.fechaInicio ? this.fechaInicio : '01-01-1600', this.fechaFin ? this.fechaFin : '01-01-1600')
-        .subscribe({
-          next: ({ data }) => {
-            data.forEach(seccion => {
-              seccion.auditorias.forEach(auditoria => {
-                this.auditorias.push(this.fb.group({
-                  id_auditoria_cumplimiento: [auditoria['idAuditoriaProyecto']],
-                  id_auditoria: [auditoria.idAuditoria],
-                  aplica: [auditoria.aplica],
-                  motivo: [auditoria.motivo],
-                  punto: [auditoria.punto],
-                  cumplimiento: [auditoria.cumplimiento],
-                  documentoRef: [auditoria.documentoRef],
-                  id_seccion: [auditoria.idSeccion],
-                  tieneDocumento: [auditoria.tieneDocumento],
-                  ultimoDocumentoValido: [auditoria.ultimoDocumentoValido],
-                  valido: [auditoria.ultimoDocumentoValido],
-                  id_documento: [auditoria.idDocumento],
-                  seccion: [seccion.chSeccion],
-                }))
-                this.totalDocumentos += +auditoria.aplica
-                this.totalDocumentosValidados += (auditoria.aplica && auditoria.tieneDocumento) ? +auditoria.ultimoDocumentoValido : 0
-              })
-            })
-          },
-          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
-        })
+        // this.auditoriaService.getProyectoCumplimiento(id, this.fechaInicio ? this.fechaInicio : '01-01-1600', this.fechaFin ? this.fechaFin : '01-01-1600')
+        // .subscribe({
+        //   next: ({ data }) => {
+        //     data.forEach(seccion => {
+        //       seccion.auditorias.forEach(auditoria => {
+        //         this.auditorias.push(this.fb.group({
+        //           id_auditoria_cumplimiento: [auditoria['idAuditoriaProyecto']],
+        //           id_auditoria: [auditoria.idAuditoria],
+        //           aplica: [auditoria.aplica],
+        //           motivo: [auditoria.motivo],
+        //           punto: [auditoria.punto],
+        //           cumplimiento: [auditoria.cumplimiento],
+        //           documentoRef: [auditoria.documentoRef],
+        //           id_seccion: [auditoria.idSeccion],
+        //           tieneDocumento: [auditoria.tieneDocumento],
+        //           ultimoDocumentoValido: [auditoria.ultimoDocumentoValido],
+        //           valido: [auditoria.ultimoDocumentoValido],
+        //           id_documento: [auditoria.idDocumento],
+        //           seccion: [seccion.chSeccion],
+        //         }))
+        //         this.totalDocumentos += +auditoria.aplica
+        //         this.totalDocumentosValidados += (auditoria.aplica && auditoria.tieneDocumento) ? +auditoria.ultimoDocumentoValido : 0
+        //       })
+        //     })
+        //   },
+        //   error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+        // })
         
       }
     })
+  }
+
+  getPeriodos(event: any) {
+    this.sharedService.cambiarEstado(true)
+    const {value: id} = event
+    
+    this.auditoriaService.getProyectoCumplimiento(id, this.fechaInicio ? this.fechaInicio : '01-01-1600', this.fechaFin ? this.fechaFin : '01-01-1600')
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: ({ data }) => {
+        data.forEach(seccion => {
+          seccion.auditorias.forEach(auditoria => {
+            this.auditorias.push(this.fb.group({
+              id_auditoria_cumplimiento: [auditoria['idAuditoriaProyecto']],
+              id_auditoria: [auditoria.idAuditoria],
+              aplica: [auditoria.aplica],
+              motivo: [auditoria.motivo],
+              punto: [auditoria.punto],
+              cumplimiento: [auditoria.cumplimiento],
+              documentoRef: [auditoria.documentoRef],
+              id_seccion: [auditoria.idSeccion],
+              tieneDocumento: [auditoria.tieneDocumento],
+              ultimoDocumentoValido: [auditoria.ultimoDocumentoValido],
+              valido: [auditoria.ultimoDocumentoValido],
+              id_documento: [auditoria.idDocumento],
+              seccion: [seccion.chSeccion],
+            }))
+            this.totalDocumentos += +auditoria.aplica
+            this.totalDocumentosValidados += (auditoria.aplica && auditoria.tieneDocumento) ? +auditoria.ultimoDocumentoValido : 0
+          })
+        })
+      },
+      error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+    })
+
   }
 
   descargarDocumento(id: number) {
@@ -279,10 +322,10 @@ export class SeguimientoComponent implements OnInit {
     })
       .onClose.subscribe(data => {
         if (data) {
-          console.log(data)
         }
       })
   }
+
   finalizarAuditoria() {
     this.dialogService.open(FinalizarAuditoriaModalComponent, {
       header: 'Finalizar auditoria',
@@ -296,12 +339,11 @@ export class SeguimientoComponent implements OnInit {
     })
     .onClose.subscribe(data => {
       if (data) {
-        // console.log(data)
+        this.functForJoin();
       }
     })
     localStorage.setItem('numProyecto', JSON.stringify(this.numProyecto));
     localStorage.setItem('fecha', JSON.stringify(this.fechaInicio));
-
   }
 
 }

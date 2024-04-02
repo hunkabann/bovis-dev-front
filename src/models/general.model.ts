@@ -4,6 +4,11 @@ export interface Opcion {
   code: string
 }
 
+export interface OpcionDos {
+  proyectoid: string,
+  fechas: string
+}
+
 export interface Item {
   value: string | number | boolean,
   label: string
