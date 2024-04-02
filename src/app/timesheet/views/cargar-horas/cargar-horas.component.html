@@ -7,7 +7,8 @@
 
     <p-messages severity="error" *ngIf="totalSuperado">
         <ng-template pTemplate>
-            <div class="ml-2">No puedes superar el total de Días Trabajo / Mes</div>
+            <!--div class="ml-2">No puedes superar el total de Días Trabajo / Mes</div-->
+          <div class="ml-2">No puedes superar el total de Días Trabajo / Mes, Excedio ({{diasAcumulados}} / {{form.value.dias}})    -     % de Dedicación: {{Dedicacion}}% de 100% Se paso {{DedicacionFaltante}}%</div>
         </ng-template>
     </p-messages>
 

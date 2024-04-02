@@ -63,7 +63,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
     this.userService.getRolesRealTime()
       .subscribe(data => {
 
-        console.log(data)
+        //console.log(data)
         forkJoin([
           this.userService.verificarRol(MODULOS.TIMESHEET_CONSULTA_MODIFICACION)?.administrador ? this.empleadosService.getEmpleados() : this.timesheetService.getEmpleadosByJefeEmail(localStorage.getItem('userMail') || ''),
           this.userService.verificarRol(MODULOS.TIMESHEET_CONSULTA_MODIFICACION)?.administrador ? this.facturacionService.getProyectos() : this.timesheetService.getCatProyectosByJefeEmail(localStorage.getItem('userMail') || ''),
@@ -149,8 +149,8 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
         selectedTimesheet.proyectos.at(proyectoIndex).tDedicacion = this.formateaValor((+event.target.value / timesheet.dias_trabajo) * 100)
         const totalDias = this.calcularTotalDias(selectedTimesheet)
         const totalDedica = this.calcularTotalDedica(selectedTimesheet)
-        console.log("totalDias: "+ totalDias)
-        console.log("totalDedica: "+ totalDedica)
+        //console.log("totalDias: "+ totalDias)
+        //console.log("totalDedica: "+ totalDedica)
 
         this.CalculaDias = this.formateaValor(this.calcularTotalDiasProy(selectedTimesheet))
         this.CalculaDedica = this.formateaValor((this.calcularTotalDiasProy(selectedTimesheet)*100)/timesheet.dias_trabajo)
@@ -164,8 +164,8 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
 
           this.sharedService.cambiarEstado(true)
 
-          console.log("proyectoActualizado.dias: "+ proyectoActualizado.dias)
-          console.log("proyectoActualizado.tDedicacion: "+ proyectoActualizado.tDedicacion)
+          //console.log("proyectoActualizado.dias: "+ proyectoActualizado.dias)
+          //console.log("proyectoActualizado.tDedicacion: "+ proyectoActualizado.tDedicacion)
 
           this.timesheetService.cambiarDiasDedicacion({
             id_timesheet_proyecto: idTimesheetProyecto,
@@ -177,6 +177,35 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
             .subscribe({
               next: (data) => {
                 if (totalDias < timesheet.dias_trabajo) {
+                  const mesFormateado = this.mes ? +format(this.mes, 'M') : 0
+                  const anioFormateado = this.mes ? +format(this.mes, 'Y') : 0
+              
+                  this.timesheetService.getTimeSheetsPorEmpleado(this.idEmpleado || 0, this.idProyecto || 0, this.idUnidad || 0, this.idEmpresa || 0, mesFormateado, anioFormateado)
+                    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                    .subscribe({
+                      next: ({ data }) => {
+                        this.timesheets = []
+                        this.timesheets = data.map(ts => ({
+                          ...ts,
+                          proyectosJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
+                          proyectosDiasJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectosDias'),
+                          otrosJoin: this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
+                          otrosDiasJoin: this.proyectoJoin.transform(ts.otros, 'otrosDias'),
+                          completado: ((this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo))) < 100
+                        })).sort((a, b) => {
+                          if (a.completado === b.completado) {
+                            return 0
+                          } else if (a.completado === true) {
+                            return -1
+                          } else {
+                            return 1
+                          }
+                        })
+                        this.sharedService.cambiarEstado(false)
+                      },
+                      error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                    })
+
                   this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'Se ha guardardo el registro con éxito.' })
                   this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: `El número de días es menor a ${timesheet.dias_trabajo}.`, life: 5000 })
                 } else if (totalDias == timesheet.dias_trabajo) {
@@ -193,7 +222,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
 
   cambiarParticipacionDedica(timesheet: Timesheet, idTimesheetProyecto: number, event: any) {
 
-    console.log("Valor de dedicación: " + +event.target.value)
+    //console.log("Valor de dedicación: " + +event.target.value)
     const tsIndex = this.timesheets.findIndex(ts => ts.id === timesheet.id)
     if (tsIndex >= 0) {
       let selectedTimesheet = this.timesheets.at(tsIndex)
@@ -203,23 +232,24 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
         selectedTimesheet.proyectos.at(proyectoIndex).dias = this.formateaValor((+event.target.value * timesheet.dias_trabajo) / 100) 
         const totalDias = this.calcularTotalDias(selectedTimesheet)
         const totalDedica = this.calcularTotalDedica(selectedTimesheet)
-        console.log("cambiarParticipacionDedica -  totalDias: "+ totalDias)
-        console.log("cambiarParticipacionDedica -  totalDedica: "+ totalDedica)
+       //console.log("cambiarParticipacionDedica -  totalDias: "+ totalDias)
+        //console.log("cambiarParticipacionDedica -  totalDedica: "+ totalDedica)
           //selectedTimesheet.  = timesheet.proyectos.map(proyecto => ({ ...proyecto, dias: this.formateaValor((+event.target.value * timesheet.dias_trabajo) / 100) }))
           this.CalculaDias = this.formateaValor(this.calcularTotalDiasProy(selectedTimesheet))
           this.CalculaDedica = this.formateaValor((this.calcularTotalDiasProy(selectedTimesheet)*100)/timesheet.dias_trabajo)
 
-        if (totalDias > timesheet.dias_trabajo) {
+        //if (totalDias > timesheet.dias_trabajo) {
+          if (totalDedica > 100) {
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: `La Dedicación no puede ser mayor a 100%` })
-        } else if (totalDias >= 0) {
+        } else if (totalDedica >= 0) {
 
           //selectedTimesheet.proyectos = timesheet.proyectos.map(proyecto => ({ ...proyecto, dias: this.formateaValor((+event.target.value * timesheet.dias_trabajo) / 100) }))
 
           const proyectoActualizado = timesheet.proyectos.at(proyectoIndex);
 
           this.sharedService.cambiarEstado(true)
-          console.log("cambiarParticipacionDedica - proyectoActualizado.dias: "+ proyectoActualizado.dias)
-          console.log("cambiarParticipacionDedica - proyectoActualizado.tDedicacion: "+ proyectoActualizado.tDedicacion)
+          //console.log("cambiarParticipacionDedica - proyectoActualizado.dias: "+ proyectoActualizado.dias)
+          //console.log("cambiarParticipacionDedica - proyectoActualizado.tDedicacion: "+ proyectoActualizado.tDedicacion)
           this.timesheetService.cambiarDiasDedicacion({
             id_timesheet_proyecto: idTimesheetProyecto,
             num_dias: proyectoActualizado.dias,
@@ -228,10 +258,38 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
             .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
             .subscribe({
               next: (data) => {
-                if (totalDias < timesheet.dias_trabajo) {
+                if (totalDedica < 100) {
+                  const mesFormateado = this.mes ? +format(this.mes, 'M') : 0
+                  const anioFormateado = this.mes ? +format(this.mes, 'Y') : 0
+              
+                  this.timesheetService.getTimeSheetsPorEmpleado(this.idEmpleado || 0, this.idProyecto || 0, this.idUnidad || 0, this.idEmpresa || 0, mesFormateado, anioFormateado)
+                    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                    .subscribe({
+                      next: ({ data }) => {
+                        this.timesheets = []
+                        this.timesheets = data.map(ts => ({
+                          ...ts,
+                          proyectosJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
+                          proyectosDiasJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectosDias'),
+                          otrosJoin: this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
+                          otrosDiasJoin: this.proyectoJoin.transform(ts.otros, 'otrosDias'),
+                          completado: ((this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo))) < 100
+                        })).sort((a, b) => {
+                          if (a.completado === b.completado) {
+                            return 0
+                          } else if (a.completado === true) {
+                            return -1
+                          } else {
+                            return 1
+                          }
+                        })
+                        this.sharedService.cambiarEstado(false)
+                      },
+                      error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                    })
                   this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'Se ha guardardo el registro con éxito.' })
                   this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: `dedicación es menor a 100%.`, life: 5000 })
-                } else if (totalDias == timesheet.dias_trabajo) {
+                } else if (totalDedica == 100) {
                   this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'Se ha guardardo el registro con éxito.' })
                 }
               },
