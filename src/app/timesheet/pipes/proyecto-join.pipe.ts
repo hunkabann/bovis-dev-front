@@ -15,7 +15,7 @@ export class ProyectoJoinPipe implements PipeTransform {
       case 'proyectos':
         // proyectos.forEach(proyecto => total += proyecto.tDedicacion)
         proyectos.forEach(proyecto => total += proyecto.dias)
-        total = Math.round((total / +totalDias) * 100)
+        total = this.formateaValor((total / +totalDias) * 100)
         break
       case 'proyectosDias':
         proyectos.forEach(proyecto => total += proyecto.dias)
@@ -23,7 +23,7 @@ export class ProyectoJoinPipe implements PipeTransform {
       case 'otros':
         // proyectos.forEach(otro => total += otro.tDedicacion)
         proyectos.forEach(otro => total += otro.dias)
-        total = Math.round((total / +totalDias) * 100)
+        total = this.formateaValor((total / +totalDias) * 100)
         break
       case 'otrosDias':
         proyectos.forEach(otro => total += otro.dias)
@@ -36,5 +36,11 @@ export class ProyectoJoinPipe implements PipeTransform {
     // const arr = proyectos.map(proyecto => `${proyecto.descripcion}: ${proyecto.tDedicacion} %`)
     // return arr.join(" | ");
   }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
+  }
+
 
 }
