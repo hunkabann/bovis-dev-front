@@ -62,7 +62,7 @@
                     <th [colSpan]="8"></th>
                     <th>{{totalPorcentaje}}%</th>
                     <th *ngFor="let proyecto of proyectos" [pTooltip]="proyecto.nombre">
-                        {{proyecto.dedicacion}}%
+                        {{proyecto.dedicacion | number: '1.2-2' }}%
                     </th>
                 </tr>
             </ng-template>
@@ -76,9 +76,10 @@
                     <td>1</td>
                     <td>{{record.timesheet.empleado}}</td>
                     <td>{{record.timesheet.responsable}}</td>
-                    <td>{{record.timesheet.proyectos | sumaPorcentajes}}</td>
+                    <td>{{record.timesheet | sumaPorcentajes}}</td>
                     <td *ngFor="let proyecto of record.participacion">
-                        {{proyecto.dedicacion > 0 ? proyecto.dedicacion + '%' : ''}}
+                        {{proyecto.dedicacion <= 0 ? ''  : proyecto.dedicacion | number: '1.2-2' }}
+                        
                     </td>
                 </tr>
             </ng-template>
