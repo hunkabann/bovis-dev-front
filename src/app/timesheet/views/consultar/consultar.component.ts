@@ -111,7 +111,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
           this.timesheets = data.map(ts => ({
             ...ts,
             proyectosJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
-            proyectosDiasJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectosDias'),
+            proyectosDiasJoin: Math.round(this.proyectoJoin.transform(ts.proyectos, 'proyectosDias')),
             otrosJoin: this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
             otrosDiasJoin: this.proyectoJoin.transform(ts.otros, 'otrosDias'),
             completado: ((this.proyectoJoin.transformCalcula(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transformCalcula(ts.otros, 'otros', ts.dias_trabajo))) < 100
@@ -188,7 +188,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
                         this.timesheets = data.map(ts => ({
                           ...ts,
                           proyectosJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
-                          proyectosDiasJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectosDias'),
+                          proyectosDiasJoin: Math.round(this.proyectoJoin.transform(ts.proyectos, 'proyectosDias')),
                           otrosJoin: this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
                           otrosDiasJoin: this.proyectoJoin.transform(ts.otros, 'otrosDias'),
                           completado: ((this.proyectoJoin.transformCalcula(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transformCalcula(ts.otros, 'otros', ts.dias_trabajo))) < 100
@@ -220,7 +220,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
                         this.timesheets = data.map(ts => ({
                           ...ts,
                           proyectosJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
-                          proyectosDiasJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectosDias'),
+                          proyectosDiasJoin: Math.round(this.proyectoJoin.transform(ts.proyectos, 'proyectosDias')),
                           otrosJoin: this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
                           otrosDiasJoin: this.proyectoJoin.transform(ts.otros, 'otrosDias'),
                           completado: ((this.proyectoJoin.transformCalcula(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transformCalcula(ts.otros, 'otros', ts.dias_trabajo))) < 100
@@ -298,7 +298,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
                         this.timesheets = data.map(ts => ({
                           ...ts,
                           proyectosJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
-                          proyectosDiasJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectosDias'),
+                          proyectosDiasJoin: Math.round(this.proyectoJoin.transform(ts.proyectos, 'proyectosDias')),
                           otrosJoin: this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
                           otrosDiasJoin: this.proyectoJoin.transform(ts.otros, 'otrosDias'),
                           completado: ((this.proyectoJoin.transformCalcula(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transformCalcula(ts.otros, 'otros', ts.dias_trabajo))) < 100
@@ -329,7 +329,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
                         this.timesheets = data.map(ts => ({
                           ...ts,
                           proyectosJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
-                          proyectosDiasJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectosDias'),
+                          proyectosDiasJoin: Math.round(this.proyectoJoin.transform(ts.proyectos, 'proyectosDias')),
                           otrosJoin: this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
                           otrosDiasJoin: this.proyectoJoin.transform(ts.otros, 'otrosDias'),
                           completado: ((this.proyectoJoin.transformCalcula(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transformCalcula(ts.otros, 'otros', ts.dias_trabajo))) < 100
