@@ -101,6 +101,9 @@ export interface EmpleadoProyecto {
   nuporcantaje_participacion:       number;
   chalias_puesto:                   string;
   chgrupo_proyecto:                 string;
+  nudias:                           string;
+  nudedicacion:                     string;
+  nucosto:                          string;
 }
 
 export interface CargarHorasResponse {
