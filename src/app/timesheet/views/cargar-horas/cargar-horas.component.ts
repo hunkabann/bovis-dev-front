@@ -209,7 +209,7 @@ export class CargarHorasComponent implements OnInit {
           dedicacion: [proyecto.nudedicacion],
           costo:      [proyecto.nucosto], 
           diasCalc:      [0],
-          dedicacionCalc:      [0]
+          dedicacionCalc:      [proyecto.nudedicacion]
         }))
       )
       this.sharedService.cambiarEstado(false)
