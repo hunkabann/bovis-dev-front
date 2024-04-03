@@ -16,7 +16,7 @@ export class SumaPorcentajesPipe implements PipeTransform {
       total += proyecto.tDedicacion
     })
 
-    return `${this.formateaValor(total)}%`;
+    return `${Math.round(total)}%`;
   }
 
   formateaValor(valor) {
