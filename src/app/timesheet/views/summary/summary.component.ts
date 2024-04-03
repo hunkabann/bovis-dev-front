@@ -209,6 +209,24 @@ export class SummaryComponent implements OnInit {
         worksheet.getCell(row, 10 + index).numFmt = '0.00%';
         totalTimesheet += +proyecto.dedicacion
       })
+      let total = 0
+      record.timesheet.proyectos.forEach(proyecto => {
+        total += proyecto.tDedicacion
+      })
+  
+      record.timesheet.otros.forEach(proyecto => {
+        total += proyecto.tDedicacion
+      })
+  
+      console.log("Valor de suma porcentajes: " + total)
+    
+
+      /*record.participacion.forEach((otros) => {
+        console.log("+otros.dedicacion: "+ this.totalPorcentaje())
+        totalTimesheet += +otros.dedicacion
+        
+      })*/
+
       
       worksheet.getCell(row, 1).value = 1
       worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
@@ -218,7 +236,8 @@ export class SummaryComponent implements OnInit {
       worksheet.getCell(row, 6).value = 1
       worksheet.getCell(row, 7).value = record.timesheet.empleado
       worksheet.getCell(row, 8).value = record.timesheet.responsable
-      worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+     // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+      worksheet.getCell(row, 9).value = this.getDecimal(total)
       worksheet.getCell(row, 9).numFmt = '0.00%';
       row++
     });
