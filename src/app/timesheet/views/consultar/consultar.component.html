@@ -69,6 +69,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-ts>
             <tr [ngStyle]="{'background-color': ts.completado ? '#ffa4a4' : ''}">
+           
 
                 <td>{{ts.mes}}</td>
                 <td>{{ts.anio}}</td>
@@ -101,7 +102,8 @@
                     
                     <div class="form-group" *ngFor="let proyecto of ts.proyectos">
                         <label><strong>% Dedicación</strong></label>
-                        <input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion| number: '1.2-2' }}" [style]="{ width: '100%' }" mode="decimal" />
+                        <!--input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion| number: '1.2-2' }}" [style]="{ width: '100%' }" mode="decimal" /-->
+                        <input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }"  />
                     </div>
 
                     <hr>
@@ -112,7 +114,7 @@
                 </td>
                 <!--td>
                     <button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/timesheet/cargar-horas', ts.id]"></button>
-            </td-->
+                </td-->
 
             </tr>
         </ng-template>
