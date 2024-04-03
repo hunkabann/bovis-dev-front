@@ -19,6 +19,8 @@ interface ProyectoShort {
   dedicacion?:  number
 }
 
+
+
 interface Informacion {
   timesheet: Timesheet,
   participacion: ProyectoShort[]
@@ -37,6 +39,8 @@ export class SummaryComponent implements OnInit {
 
   proyectos:  ProyectoShort[] = []
   data: Informacion[] = []
+
+  TotalTimeSheet: number = 0
 
   constructor() { }
 
@@ -69,7 +73,9 @@ export class SummaryComponent implements OnInit {
       )
     })
 
-    return this.formateaValor(total)
+    this.TotalTimeSheet = Math.round(total)
+
+    return Math.round(total)
   }
 
   onSelectFecha(event: any) {
@@ -207,15 +213,17 @@ export class SummaryComponent implements OnInit {
         worksheet.getColumn(10 + index).width = 15
         worksheet.getCell(row, 10 + index).value = this.getDecimal(proyecto.dedicacion) || ''
         worksheet.getCell(row, 10 + index).numFmt = '0.00%';
-        totalTimesheet += +proyecto.dedicacion
+        totalTimesheet += +proyecto.dedicacion 
+        
       })
+
       let total = 0
       record.timesheet.proyectos.forEach(proyecto => {
-        total += proyecto.tDedicacion
+        total += Math.round(proyecto.tDedicacion)
       })
   
       record.timesheet.otros.forEach(proyecto => {
-        total += proyecto.tDedicacion
+        total += Math.round(proyecto.tDedicacion)
       })
   
       console.log("Valor de suma porcentajes: " + total)
