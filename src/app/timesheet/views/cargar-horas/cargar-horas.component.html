@@ -7,8 +7,7 @@
 
     <p-messages severity="error" *ngIf="totalSuperado">
         <ng-template pTemplate>
-            <!--div class="ml-2">No puedes superar el total de Días Trabajo / Mes</div-->
-          <div class="ml-2">No puedes superar el total de Días Trabajo / Mes, Excedio ({{diasAcumulados}} / {{form.value.dias}})    -     % de Dedicación: {{Dedicacion}}% de 100% Se paso {{DedicacionFaltante}}%</div>
+            <div class="ml-2">No puedes superar el total de Días Trabajo / Mes, Excedio ({{diasAcumulados}} / {{form.value.dias}})    -     % de Dedicación: {{Dedicacion}}% de 100% Se paso {{DedicacionFaltante}}%</div>
         </ng-template>
     </p-messages>
 
@@ -75,14 +74,13 @@
                     <a title="Agregar proyecto" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" style="text-decoration: none;" (click)="agregarProyectoModal()"></a>
                 </div>
             </div>
-            <hr>
 
             <div formArrayName="proyectos">
                 <div class="grid" *ngFor="let proyecto of proyectos.controls; let i = index" [formGroupName]="i">
                     <div class="col-2 d-flex align-items-center">
                         <label><b>{{proyecto.get('nombre').value}}</b></label>
                     </div>
-                    <div class="col-1 d-flex flex-column">
+                    <div class="col-2 d-flex flex-column">
                         <label for="dias{{i}}">Días:</label>
                         <p-inputNumber id="dias{{i}}" placeholder="0" formControlName="dias" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dias', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularPorcentajes($event, i, 'proyectos')"></p-inputNumber>
                         <div *ngIf="esInvalidoEnArreglo(proyectos, 'dias', i)">
