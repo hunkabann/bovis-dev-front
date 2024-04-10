@@ -121,7 +121,7 @@ export class CapturaBeneficiosComponent implements OnInit {
     this.form.controls['timesheet'].disable();                    
     this.form.controls['nombreJefe'].disable();                   
     this.form.controls['antiguedad'].disable();                   
-    //this.form.controls['sueldoBrutoInflacion'].disable();         
+    this.form.controls['sueldoBrutoInflacion'].disable();         
     this.form.controls['anual'].disable();                        
     this.form.controls['ptuProvision'].disable();                 
     this.form.controls['costoMensualEmpleado'].disable();        
@@ -319,7 +319,7 @@ export class CapturaBeneficiosComponent implements OnInit {
     const body = {
      //...this.form.value
      NumEmpleadoRrHh: this.form.value.num_empleado,
-     sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
+     //sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
      vaidCostoMensual: this.form.value.vaidCostoMensual,
      svCostoTotalAnual: this.form.value.svCostoTotalAnual,
      sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual,
