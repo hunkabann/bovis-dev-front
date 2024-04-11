@@ -207,7 +207,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
                     })
 
                   this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'Se ha guardardo el registro con éxito.' })
-                  this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: `El número de días es menor a ${timesheet.dias_trabajo}.`, life: 5000 })
+                  //this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: `El número de días es menor a ${timesheet.dias_trabajo}.`, life: 5000 })
                 } else if (totalDias == timesheet.dias_trabajo) {
                   const mesFormateado = this.mes ? +format(this.mes, 'M') : 0
                   const anioFormateado = this.mes ? +format(this.mes, 'Y') : 0
@@ -316,7 +316,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
                       error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
                     })
                   this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'Se ha guardardo el registro con éxito.' })
-                  this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: `dedicación es menor a 100%.`, life: 5000 })
+                  //this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: `dedicación es menor a 100%.`, life: 5000 })
                 } else if (totalDedica == 100) {
                   const mesFormateado = this.mes ? +format(this.mes, 'M') : 0
                   const anioFormateado = this.mes ? +format(this.mes, 'Y') : 0
