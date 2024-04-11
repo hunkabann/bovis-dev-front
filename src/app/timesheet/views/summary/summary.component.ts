@@ -212,7 +212,7 @@ export class SummaryComponent implements OnInit {
       record.participacion.forEach((proyecto, index) => {
         worksheet.getColumn(10 + index).width = 15
         worksheet.getCell(row, 10 + index).value = this.getDecimal(proyecto.dedicacion) || ''
-        worksheet.getCell(row, 10 + index).numFmt = '0.00%';
+        worksheet.getCell(row, 10 + index).numFmt = '0%';
         totalTimesheet += +proyecto.dedicacion 
         
       })
@@ -246,7 +246,7 @@ export class SummaryComponent implements OnInit {
       worksheet.getCell(row, 8).value = record.timesheet.responsable
      // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
       worksheet.getCell(row, 9).value = this.getDecimal(total)
-      worksheet.getCell(row, 9).numFmt = '0.00%';
+      worksheet.getCell(row, 9).numFmt = '0%';
       row++
     });
 
@@ -258,7 +258,7 @@ export class SummaryComponent implements OnInit {
     this.proyectos.forEach((proyecto, index) => {
 
       worksheet.getCell(row, indice).value = this.getDecimal(proyecto.dedicacion)
-      worksheet.getCell(row, indice).numFmt = '0.00%';
+      worksheet.getCell(row, indice).numFmt = '0%';
       
       indice++
     })
