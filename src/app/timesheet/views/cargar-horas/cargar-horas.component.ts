@@ -355,7 +355,7 @@ export class CargarHorasComponent implements OnInit {
             id:         [registro.proyectoId],
             nombre:     [registro.proyectoNombre],
             dias:       ['', Validators.required],
-            dedicacion: [0],
+            dedicacionCalc: [0],
             costo:      [0]
           })
         )
