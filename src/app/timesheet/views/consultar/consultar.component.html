@@ -103,7 +103,7 @@
                     <div class="form-group" *ngFor="let proyecto of ts.proyectos">
                         <label><strong>% Dedicación</strong></label>
                         <!--input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion| number: '1.2-2' }}" [style]="{ width: '100%' }" mode="decimal" /-->
-                        <input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }"  />
+                        <input type="number" class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }"  />
                     </div>
 
                     <hr>
