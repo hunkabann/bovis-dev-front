@@ -8,9 +8,59 @@
     <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-end gap-2">
         <button type="submit" class="btn btn-primary" routerLink="/empleados/registro-empleado"><i class="fas fa-plus"></i> Nuevo empleado</button>
     </p-toolbar>
-    <div class="table-container">
+    <div class="table-container" >
+
+        <div class="row" style="margin-left: 5px;">
+           
+            <div class="col-3">
+                <label for="concepto">Proyecto:</label>
+                <div class="">
+                    <p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="tablaPrincipal.filter(listaProyecto.value, 'chproyecto_principal', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                        <ng-template let-option pTemplate="item">
+                            <p-tag [value]="option.value" severity="success"></p-tag>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="col-3">
+                <label for="descripcion">Empresa:</label>
+                <div class="">
+                    <p-dropdown #listaEmpresa [options]="empresas" placeholder="Seleccionar una empresa" (onChange)="tablaPrincipal.filter(listaEmpresa.value, 'chempresa', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                    <ng-template let-option pTemplate="item">
+                        <p-tag [value]="option.value" severity="success"></p-tag>
+                    </ng-template>
+                </p-dropdown>
+                </div>
+            </div>
+                <div class="col-3">
+                    <label for="puesto">Puesto:</label>
+                    <div class="">
+                        <p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'chpuesto', 'equals')" placeholder="Puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                            <ng-template let-option pTemplate="item">
+                                <p-tag [value]="option.value" severity="success"></p-tag>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>                
+                </div>
+                <div class="col-1">
+                    <label for="activo">Estado:</label>
+                    <div class="">
+                        <p-dropdown #listaEstados [options]="estados" (onChange)="tablaPrincipal.filter(listaEstados.value, 'boactivo', 'equals')" placeholder="Estatus" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                            <ng-template let-option pTemplate="item">
+                                <p-tag [value]="option.label" severity="success"></p-tag>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>                
+                </div>
+
+
+            
+        </div>
+        
+
+
         <p-table #tablaPrincipal class="tabla-filtro" [value]="empleados" [paginator]="true" paginatorPosition="both" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]"
-            [rows]="10" [globalFilterFields]="['nunum_empleado_rr_hh', 'nombre_persona', 'chpuesto', 'boactivo']" styleClass="p-datatable-striped">
+            [rows]="10" [globalFilterFields]="['nunum_empleado_rr_hh', 'nombre_persona', 'chpuesto', 'boactivo','chempresa']" styleClass="p-datatable-striped">
             <ng-template pTemplate="caption">
                 <div class="flex">
                     <span class="p-input-icon-left ml-auto">
@@ -135,7 +185,7 @@
                 </tr>
                 <tr>
                     <th colspan="5"></th>
-                    <th>
+                    <!--th>
                         <p-columnFilter field="puesto" matchMode="equals" [showMenu]="false">
                             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                 <p-dropdown #lista [ngModel]="value" [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'chpuesto', 'equals')" placeholder="Puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
@@ -145,9 +195,9 @@
                                 </p-dropdown>
                             </ng-template>
                         </p-columnFilter>
-                    </th>
+                    </th-->
                     <th colspan="11"></th>
-                    <th>
+                    <!--th>
                         <p-columnFilter field="activo" matchMode="equals" [showMenu]="false">
                             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                 <p-dropdown #listaEstados [ngModel]="value" [options]="estados" (onChange)="tablaPrincipal.filter(listaEstados.value, 'boactivo', 'equals')" placeholder="Estatus" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
@@ -157,7 +207,7 @@
                                 </p-dropdown>
                             </ng-template>
                         </p-columnFilter>
-                    </th>
+                    </th-->
                     <th></th>
                 </tr>
             </ng-template>
