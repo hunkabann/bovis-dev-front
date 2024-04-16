@@ -227,4 +227,12 @@ export class EmpleadosService {
     return this.http.put(`${this.baseUrl}api/empleado/Agregar`, empleado, { headers: this.httpHeaders });
   }
 
+   getProyectos() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/proyectos/true`);
+  }
+
+  getEmpresas() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/empresas`);
+  }
+
 }
