@@ -153,6 +153,9 @@ export class SeleccionarDocumentosComponent implements OnInit {
   getPeriodosAuditorita(event: any) {
     this.sharedService.cambiarEstado(true)
     const {value: id} = event
+    console.log("------------------>> id: "+ id)
+    this.numeroProyecto = id
+    console.log("------------------>> this.numeroProyecto: "+ this.numeroProyecto)
     this.auditoriaService.getProyectoPeriodosAuditoria(id)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
