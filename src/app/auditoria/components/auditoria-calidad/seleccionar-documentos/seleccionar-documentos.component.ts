@@ -8,7 +8,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { SeccPrueba, Seccion, SeccionPeriodos } from 'src/app/auditoria/models/auditoria.model';
 import { Opcion, OpcionDos } from 'src/models/general.model';
 import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-seleccionar-documentos',
@@ -42,7 +42,7 @@ export class SeleccionarDocumentosComponent implements OnInit {
   numeroProyecto: any;
   Label_cumplimiento: string;
   disabledAuditoria = false;
-  
+  letstartAuditoria: any;
   constructor() { }
 
   get auditorias() {
@@ -65,15 +65,9 @@ export class SeleccionarDocumentosComponent implements OnInit {
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: (value) => {
-        console.log('esta informacion es de forkjoin', value);
         const [auditoriaR, proyectosR] = value
-        console.log(proyectosR.data);
-        console.log(proyectosR);
-        console.log(auditoriaR);
-        // const [periodoR, periodosR] = value
-        this.secciones = auditoriaR.data
+          this.secciones = auditoriaR.data
         this.proyectos = proyectosR.data.map(proyecto => ({code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}`}))
-        console.log(this.proyectos);
         this.secciones.forEach(seccion => {
           seccion.auditorias.forEach(auditoria => {
             this.auditorias.push(this.fb.group({
@@ -93,7 +87,6 @@ export class SeleccionarDocumentosComponent implements OnInit {
     })
 
     this.form.get('id_periodo').valueChanges.subscribe( value => {
-      console.log(value);
     })
   }
 
@@ -111,15 +104,40 @@ export class SeleccionarDocumentosComponent implements OnInit {
       })
   }
 
+  getProyectoCalidad(event: any){
+    const {value: id} = event
+    this.auditoriaService.getProyectoCumplimiento(id,'27_03_2024', '01_01_1600')
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: ({data}) => {
+        let auditoriasLista: number[] = []
+        data.forEach(cumplimiento => {
+          cumplimiento.auditorias.forEach(auditoria => {
+            if(auditoria.aplica) {
+              auditoriasLista.push(auditoria.idAuditoria)
+            }
+          })
+        })
+        
+        this.auditorias.controls.forEach(control => {
+          control.patchValue({
+            aplica: auditoriasLista.includes(control.value.id_auditoria)
+          })
+        })
+      },
+      error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
+    })
+
+  }
+
   getCumplimientos(event: any) {
 
     let targetFechas = event?.originalEvent?.target?.innerText
-    console.log(targetFechas[0]);
     if(targetFechas.substr(-1) === '-' || targetFechas[0]===''){
       // console.log("no hay fecha fin");
-      this.disabledAuditoria = true;
-    }else{
       this.disabledAuditoria = false;
+    }else{
+      this.disabledAuditoria = true;
       // console.log("si hay fecha fin");
     }
     
@@ -129,13 +147,11 @@ export class SeleccionarDocumentosComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
-          console.log(data,'mi data');
           let auditoriasLista: number[] = []
           data.forEach(cumplimiento => {
             cumplimiento.auditorias.forEach(auditoria => {
               if(auditoria.aplica) {
                 auditoriasLista.push(auditoria.idAuditoria)
-                console.log(auditoriasLista, 'Auditoria Lista');
               }
             })
           })
@@ -153,6 +169,7 @@ export class SeleccionarDocumentosComponent implements OnInit {
   getPeriodosAuditorita(event: any) {
     this.sharedService.cambiarEstado(true)
     const {value: id} = event
+    localStorage.setItem('numProyecto', JSON.stringify(id));
     this.auditoriaService.getProyectoPeriodosAuditoria(id)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
@@ -174,19 +191,19 @@ export class SeleccionarDocumentosComponent implements OnInit {
   }
 
   startAuditoria(){
+    this.letstartAuditoria = JSON.parse(localStorage.getItem('numProyecto'));
     this.sharedService.cambiarEstado(true)
     const numProyecto = {
-      num_proyecto: this.numeroProyecto
+      num_proyecto: this.letstartAuditoria
     }
     this.auditoriaService.getOpenPeriodoAuditoria(numProyecto)
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-    .subscribe({
-      next: ({data}) => {
-        if(data) {
-          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Se inicio la auditoria', detail: 'El registro ha sido guardado.' }))
-        }
-      },
-      error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
+    .subscribe(result => {
+      const success = result['success']
+      if(success) {
+        Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Se inicio la auditoria', detail: 'El registro ha sido guardado.' }))
+      }
+      location.reload();
     })
   }
 

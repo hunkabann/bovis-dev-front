@@ -51,6 +51,8 @@ export class SeguimientoComponent implements OnInit {
   fechaFin: any;
   Label_cumplimiento: string;
   disabledAuditoria = true;
+  disabledBtns: boolean = false;
+  disabledEndAuditoria = false;
 
 
   constructor() { }
@@ -171,40 +173,18 @@ export class SeguimientoComponent implements OnInit {
         })
         this.fechaInicio = data[0]?.fechaInicio ? data[0]?.fechaInicio : '01-01-1600'
         this.fechaFin = data[0]?.fechaFin ? '01-01-1600' : '01-01-1600'
-
-        // this.auditoriaService.getProyectoCumplimiento(id, this.fechaInicio ? this.fechaInicio : '01-01-1600', this.fechaFin ? this.fechaFin : '01-01-1600')
-        // .subscribe({
-        //   next: ({ data }) => {
-        //     data.forEach(seccion => {
-        //       seccion.auditorias.forEach(auditoria => {
-        //         this.auditorias.push(this.fb.group({
-        //           id_auditoria_cumplimiento: [auditoria['idAuditoriaProyecto']],
-        //           id_auditoria: [auditoria.idAuditoria],
-        //           aplica: [auditoria.aplica],
-        //           motivo: [auditoria.motivo],
-        //           punto: [auditoria.punto],
-        //           cumplimiento: [auditoria.cumplimiento],
-        //           documentoRef: [auditoria.documentoRef],
-        //           id_seccion: [auditoria.idSeccion],
-        //           tieneDocumento: [auditoria.tieneDocumento],
-        //           ultimoDocumentoValido: [auditoria.ultimoDocumentoValido],
-        //           valido: [auditoria.ultimoDocumentoValido],
-        //           id_documento: [auditoria.idDocumento],
-        //           seccion: [seccion.chSeccion],
-        //         }))
-        //         this.totalDocumentos += +auditoria.aplica
-        //         this.totalDocumentosValidados += (auditoria.aplica && auditoria.tieneDocumento) ? +auditoria.ultimoDocumentoValido : 0
-        //       })
-        //     })
-        //   },
-        //   error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
-        // })
-        
       }
     })
   }
 
   getPeriodos(event: any) {
+
+    let targetFechas = event?.originalEvent?.target?.innerText
+    if(targetFechas.substr(-1) === '-' || targetFechas[0] === ''){
+      this.disabledEndAuditoria = true
+    }else {
+      this.disabledEndAuditoria = false;
+    }
     this.sharedService.cambiarEstado(true)
     const {value: id} = event
     
@@ -233,12 +213,49 @@ export class SeguimientoComponent implements OnInit {
             this.totalDocumentosValidados += (auditoria.aplica && auditoria.tieneDocumento) ? +auditoria.ultimoDocumentoValido : 0
           })
         })
+        if(data){
+          this.disabledBtns = true;
+        }else {
+          this.disabledBtns = false;
+
+        }
       },
       error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
     })
 
   }
 
+  getProyectoCalidad(event: any){
+    const {value: id} = event
+    this.auditoriaService.getProyectoCumplimiento(id,'27_03_2024', '01_01_1600')
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: ({data}) => {
+        data.forEach(seccion => {
+          seccion.auditorias.forEach(auditoria => {
+            this.auditorias.push(this.fb.group({
+              id_auditoria_cumplimiento: [auditoria['idAuditoriaProyecto']],
+              id_auditoria: [auditoria.idAuditoria],
+              aplica: [auditoria.aplica],
+              motivo: [auditoria.motivo],
+              punto: [auditoria.punto],
+              cumplimiento: [auditoria.cumplimiento],
+              documentoRef: [auditoria.documentoRef],
+              id_seccion: [auditoria.idSeccion],
+              tieneDocumento: [auditoria.tieneDocumento],
+              ultimoDocumentoValido: [auditoria.ultimoDocumentoValido],
+              valido: [auditoria.ultimoDocumentoValido],
+              id_documento: [auditoria.idDocumento],
+              seccion: [seccion.chSeccion],
+            }))
+            this.totalDocumentos += +auditoria.aplica
+            this.totalDocumentosValidados += (auditoria.aplica && auditoria.tieneDocumento) ? +auditoria.ultimoDocumentoValido : 0
+          })
+        })
+      },
+      error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+    })    
+  }
   descargarDocumento(id: number) {
     if (id != 0) {
       this.auditoriaService.getDocumento(id)
