@@ -532,3 +532,25 @@ export interface CostoEmpleado {
   fechaActualizacion:             string;
   regHistorico:                   boolean;
 }
+
+
+export class Proyectos{
+  numProyecto: number;
+  nombre: string;
+  alcance: string;
+}
+
+export class Empresas{
+  idEmpresa: number;
+  empresa: string;
+  rfc: string;
+}
+
+export class Busqueda{
+  idProyecto: any = null;
+  //idCliente: any = null;
+  idEmpresa: any = null;
+  //fechaIni: string = null;
+  //fechaFin: string = null;
+  //noFactura: string = null;
+}

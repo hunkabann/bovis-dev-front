@@ -121,7 +121,7 @@ export class CapturaBeneficiosComponent implements OnInit {
     this.form.controls['timesheet'].disable();                    
     this.form.controls['nombreJefe'].disable();                   
     this.form.controls['antiguedad'].disable();                   
-    //this.form.controls['sueldoBrutoInflacion'].disable();         
+    this.form.controls['sueldoBrutoInflacion'].disable();         
     this.form.controls['anual'].disable();                        
     this.form.controls['ptuProvision'].disable();                 
     this.form.controls['costoMensualEmpleado'].disable();        
@@ -154,7 +154,8 @@ export class CapturaBeneficiosComponent implements OnInit {
     this.form.controls['cesantesVejez'].disable();                
     this.form.controls['infonavit'].disable();                    
     this.form.controls['cargasSociales'].disable();
-                   
+                  
+   
 
 
     this.sharedService.cambiarEstado(true)
@@ -316,12 +317,30 @@ export class CapturaBeneficiosComponent implements OnInit {
     console.log(this.form.value);
 
     const body = {
-     ...this.form.value
+     //...this.form.value
+     NumEmpleadoRrHh: this.form.value.num_empleado,
+     //sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
+     vaidCostoMensual: this.form.value.vaidCostoMensual,
+     svCostoTotalAnual: this.form.value.svCostoTotalAnual,
+     sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual,
+     avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado
       //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
       //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
       //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
 
     }
+
+    this.empleadosService.guardarCostoEmpleadoActualiza(body,true,this.form.value.num_empleado)
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: (data) => {
+        this.form.reset()
+        this.router.navigate(['/costos/captura-beneficios'], {queryParams: {success: true}});
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      }
+    })
     // console.log(body)
     
     const bodyVivienda = {

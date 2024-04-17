@@ -236,6 +236,11 @@ export class EmpleadosRegistroComponent implements OnInit {
             .subscribe({
               next: ({ data }) => {
                 // console.log(data)
+
+                 const newFecha_Ingreso = data.dtfecha_ingreso.replace('-', ' ') // Importante reemplazarlo por un espacio
+                 const newFecha_Salida = data.dtfecha_salida.replace('-', ' ') // Importante reemplazarlo por un espacio
+                 const newFecha_UltimoRegis = data.dtfecha_ultimo_reingreso.replace('-', ' ') // Importante reemplazarlo por un espacio
+                
                 const habilidades = data.habilidades.map(habilidad => habilidad.idHabilidad.toString())
                 const experiencias = data.experiencias.map(experiencia => experiencia.idExperiencia.toString())
                 this.form.patchValue({
@@ -265,9 +270,9 @@ export class EmpleadosRegistroComponent implements OnInit {
                   id_unidad_negocio: data.nukidunidad_negocio?.toString(),
                   // id_tipo_contrato_sat:   data.nukidtipo_contrato_sat?.toString(),
                   // num_empleado:           data.nunum_empleado?.toString(),
-                  fecha_ingreso: new Date(data.dtfecha_ingreso) as any,
-                  fecha_salida: data.dtfecha_salida != '' ? new Date(data.dtfecha_salida) as any : null,
-                  fecha_ultimo_reingreso: data.dtfecha_ultimo_reingreso != '' ? new Date(data.dtfecha_ultimo_reingreso) as any : null,
+                  fecha_ingreso: new Date(newFecha_Ingreso) as any,
+                  fecha_salida: data.dtfecha_salida != '' ? new Date(newFecha_Salida) as any : null,
+                  fecha_ultimo_reingreso: data.dtfecha_ultimo_reingreso != '' ? new Date(newFecha_UltimoRegis) as any : null,
                   nss: data.chnss?.toString(),
                   email_bovis: data.chemail_bovis,
                   url_repo: data.churl_repositorio,

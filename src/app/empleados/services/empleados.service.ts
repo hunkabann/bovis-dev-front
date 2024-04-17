@@ -211,7 +211,7 @@ export class EmpleadosService {
 
   guardarCostoEmpleadoActualiza(body: any , esActualizacion: boolean,id: string) {
     
-    return this.http.put<GenericResponse>(`${this.baseUrl}${id}`, body)
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Costo/Empleado`, body)
   }
 
   guardarContrato(body: any, esActualizacion: boolean) {
@@ -225,6 +225,14 @@ export class EmpleadosService {
   saveEmpleado(empleado: CatEmpleado): Observable<any> {
     console.log(empleado);
     return this.http.put(`${this.baseUrl}api/empleado/Agregar`, empleado, { headers: this.httpHeaders });
+  }
+
+   getProyectos() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/proyectos/true`);
+  }
+
+  getEmpresas() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/empresas`);
   }
 
 }

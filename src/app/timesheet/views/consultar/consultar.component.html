@@ -64,11 +64,12 @@
                 </th>
                 <th>Proyectos</th>
                 <th>Dedicación</th>
-                <th>Opciones</th>
+                <!--th>Opciones</th-->
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-ts>
             <tr [ngStyle]="{'background-color': ts.completado ? '#ffa4a4' : ''}">
+           
 
                 <td>{{ts.mes}}</td>
                 <td>{{ts.anio}}</td>
@@ -101,18 +102,19 @@
                     
                     <div class="form-group" *ngFor="let proyecto of ts.proyectos">
                         <label><strong>% Dedicación</strong></label>
-                        <input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion| number: '1.2-2' }}" [style]="{ width: '100%' }" mode="decimal" />
+                        <!--input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion| number: '1.2-2' }}" [style]="{ width: '100%' }" mode="decimal" /-->
+                        <input type="number" class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }"  />
                     </div>
 
                     <hr>
-                    <label><strong></strong></label>
+                    <label><strong>Días Registrados: {{ts.proyectosDiasJoin + ts.otrosDiasJoin | number: '1.2-2'}} - Total Dias: {{ts.dias_trabajo| number: '1.2-2'}}</strong></label>
                     <br>
-                    <label><strong></strong></label>
+                    <label><strong>Dedicación Registrado: {{ts.proyectosJoin + ts.otrosJoin}}% - Total Dedicación: 100%</strong></label>
 
                 </td>
-                <td>
+                <!--td>
                     <button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/timesheet/cargar-horas', ts.id]"></button>
-                </td>
+                </td-->
 
             </tr>
         </ng-template>

@@ -19,6 +19,8 @@ interface ProyectoShort {
   dedicacion?:  number
 }
 
+
+
 interface Informacion {
   timesheet: Timesheet,
   participacion: ProyectoShort[]
@@ -38,6 +40,8 @@ export class SummaryComponent implements OnInit {
   proyectos:  ProyectoShort[] = []
   data: Informacion[] = []
 
+  TotalTimeSheet: number = 0
+
   constructor() { }
 
   ngOnInit(): void {
@@ -54,9 +58,24 @@ export class SummaryComponent implements OnInit {
     this.data.forEach(({timesheet}) => {
       timesheet.proyectos.forEach(proyecto => {
         total += proyecto.tDedicacion
-      })
+        console.log("proyecto.tDedicacion: " +proyecto.tDedicacion)
+      }
+      
+      )
     })
-    return total
+
+    this.data.forEach(({timesheet}) => {
+      timesheet.otros.forEach(otros => {
+        total += otros.tDedicacion
+        console.log("otros.tDedicacion: " +otros.tDedicacion)
+      }
+      
+      )
+    })
+
+    this.TotalTimeSheet = Math.round(total)
+
+    return Math.round(total)
   }
 
   onSelectFecha(event: any) {
@@ -78,9 +97,14 @@ export class SummaryComponent implements OnInit {
             const key = timesheet.proyectos.findIndex(({idProyecto}) => idProyecto === proyecto.id)
             let dedicacion = 0
             if(key >= 0) {
-              // console.log(timesheet.proyectos[key].tDedicacion)
-              dedicacion = timesheet.proyectos[key].tDedicacion
+              console.log("timesheet.proyectos[key].tDedicacion: "+timesheet.proyectos[key].tDedicacion)
+              dedicacion += timesheet.proyectos[key].tDedicacion
+              //console.log("timesheet.otros[key].tDedicacion: "+timesheet.otros[key].tDedicacion)
+              //dedicacion += timesheet.otros[key].tDedicacion
               this.proyectos[index].dedicacion += dedicacion
+
+                
+
             }
             return {
               id:         proyecto.id,
@@ -188,9 +212,29 @@ export class SummaryComponent implements OnInit {
       record.participacion.forEach((proyecto, index) => {
         worksheet.getColumn(10 + index).width = 15
         worksheet.getCell(row, 10 + index).value = this.getDecimal(proyecto.dedicacion) || ''
-        worksheet.getCell(row, 10 + index).numFmt = '0.00%';
-        totalTimesheet += +proyecto.dedicacion
+        worksheet.getCell(row, 10 + index).numFmt = '0%';
+        totalTimesheet += +proyecto.dedicacion 
+        
       })
+
+      let total = 0
+      record.timesheet.proyectos.forEach(proyecto => {
+        total += Math.round(proyecto.tDedicacion)
+      })
+  
+      record.timesheet.otros.forEach(proyecto => {
+        total += Math.round(proyecto.tDedicacion)
+      })
+  
+      console.log("Valor de suma porcentajes: " + total)
+    
+
+      /*record.participacion.forEach((otros) => {
+        console.log("+otros.dedicacion: "+ this.totalPorcentaje())
+        totalTimesheet += +otros.dedicacion
+        
+      })*/
+
       
       worksheet.getCell(row, 1).value = 1
       worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
@@ -200,8 +244,9 @@ export class SummaryComponent implements OnInit {
       worksheet.getCell(row, 6).value = 1
       worksheet.getCell(row, 7).value = record.timesheet.empleado
       worksheet.getCell(row, 8).value = record.timesheet.responsable
-      worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
-      worksheet.getCell(row, 9).numFmt = '0.00%';
+     // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+      worksheet.getCell(row, 9).value = this.getDecimal(total)
+      worksheet.getCell(row, 9).numFmt = '0%';
       row++
     });
 
@@ -213,7 +258,7 @@ export class SummaryComponent implements OnInit {
     this.proyectos.forEach((proyecto, index) => {
 
       worksheet.getCell(row, indice).value = this.getDecimal(proyecto.dedicacion)
-      worksheet.getCell(row, indice).numFmt = '0.00%';
+      worksheet.getCell(row, indice).numFmt = '0%';
       
       indice++
     })
@@ -229,6 +274,11 @@ export class SummaryComponent implements OnInit {
     
     cell.t = 'n';
     cell.z = PERCENTAGE_FORMAT;
+  }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 
 }

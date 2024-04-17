@@ -205,11 +205,11 @@ export class CargarHorasComponent implements OnInit {
         this.fb.group({
           id:         [proyecto.nunum_proyecto],
           nombre:     [proyecto.chproyecto],
-          dias:       [0, Validators.required],
-          dedicacion: [0],
-          costo:      [0],
+           dias:       [proyecto.nudias, Validators.required],
+          dedicacion: [proyecto.nudedicacion],
+          costo:      [proyecto.nucosto], 
           diasCalc:      [0],
-          dedicacionCalc:      [0]
+          dedicacionCalc:      [proyecto.nudedicacion]
         }))
       )
       this.sharedService.cambiarEstado(false)
@@ -355,7 +355,7 @@ export class CargarHorasComponent implements OnInit {
             id:         [registro.proyectoId],
             nombre:     [registro.proyectoNombre],
             dias:       ['', Validators.required],
-            dedicacion: [0],
+            dedicacionCalc: [0],
             costo:      [0]
           })
         )
