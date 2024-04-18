@@ -211,7 +211,8 @@ export class EmpleadosService {
 
   guardarCostoEmpleadoActualiza(body: any , esActualizacion: boolean,id: string) {
     
-    return this.http.put<GenericResponse>(`${this.baseUrl}api/Costo/Empleado`, body)
+    //return this.http.put<GenericResponse>(`${this.baseUrl}api/Costo/Empleado`, body)
+     return this.http.put<GenericResponse>(`${this.baseUrl}`+id, body)
   }
 
   guardarContrato(body: any, esActualizacion: boolean) {
