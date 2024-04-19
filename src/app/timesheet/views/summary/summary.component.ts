@@ -57,7 +57,7 @@ export class SummaryComponent implements OnInit {
     let total = 0
     this.data.forEach(({timesheet}) => {
       timesheet.proyectos.forEach(proyecto => {
-        total += proyecto.tDedicacion
+        total += Math.round(proyecto.tDedicacion)
         console.log("proyecto.tDedicacion: " +proyecto.tDedicacion)
       }
       
@@ -66,7 +66,7 @@ export class SummaryComponent implements OnInit {
 
     this.data.forEach(({timesheet}) => {
       timesheet.otros.forEach(otros => {
-        total += otros.tDedicacion
+        total += Math.round(otros.tDedicacion)
         console.log("otros.tDedicacion: " +otros.tDedicacion)
       }
       
