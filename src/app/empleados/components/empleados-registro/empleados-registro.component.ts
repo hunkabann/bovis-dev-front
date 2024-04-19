@@ -420,7 +420,8 @@ export class EmpleadosRegistroComponent implements OnInit {
               nuAnno: 2023,
               nuMes: 12,
               fechaIngreso: this.form.value.fecha_ingreso,
-              sueldoBruto: this.form.value.salario
+              sueldoBruto: this.form.value.salario,
+              num_proyecto_principal: this.form.value.num_proyecto_principal
             }
 
             this.empleadosServ.getCostoID(this.form.value.num_empleado_rr_hh)
