@@ -10,6 +10,8 @@
     </p-toolbar>
     <div class="table-container" >
 
+        
+
         <div class="row" style="margin-left: 5px;">
            
             <div class="col-3">
@@ -57,7 +59,10 @@
             
         </div>
         
-
+        <!--p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="{{totalRecords}} > 0"-->
+        <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
+            <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+        </p-toolbar>
 
         <p-table #tablaPrincipal class="tabla-filtro" [value]="empleados" [paginator]="true" paginatorPosition="both" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]"
             [rows]="10" [globalFilterFields]="['nunum_empleado_rr_hh', 'nombre_persona', 'chpuesto', 'boactivo','chempresa']" styleClass="p-datatable-striped">
