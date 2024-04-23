@@ -133,13 +133,13 @@ export class SeleccionarDocumentosComponent implements OnInit {
   getCumplimientos(event: any) {
 
     let targetFechas = event?.originalEvent?.target?.innerText
-    if(targetFechas.substr(-1) === '-' || targetFechas[0]===''){
-      // console.log("no hay fecha fin");
-      this.disabledAuditoria = false;
-    }else{
-      this.disabledAuditoria = true;
-      // console.log("si hay fecha fin");
-    }
+    // if(targetFechas.substr(-1) === '-' || targetFechas[0]===''){
+    //   // console.log("no hay fecha fin");
+    //   this.disabledAuditoria = false;
+    // }else{
+    //   this.disabledAuditoria = true;
+    //   // console.log("si hay fecha fin");
+    // }
     
     this.sharedService.cambiarEstado(true)
     const {value: id} = event
@@ -179,6 +179,7 @@ export class SeleccionarDocumentosComponent implements OnInit {
         next: ({data}) => {
         
           this.dtaPAuditoria = data?.map( prueba => ({proyectoid: prueba?.idProyecto.toString(), fechas: `${prueba.fechaInicio} - ${prueba.fechaFin}` }))
+          
           if(this.dtaPAuditoria.length <= 0){
             this.disabledAuditoria = true;
           }
@@ -187,6 +188,11 @@ export class SeleccionarDocumentosComponent implements OnInit {
             this.fechaInicio = periodoAudit?.fechaInicio
             this.fechaFin = periodoAudit?.fechaFin
             this.numeroProyecto = periodoAudit?.idProyecto;
+             if(this.fechaFin === '--'){
+                this.disabledAuditoria = false;
+              }else{
+                this.disabledAuditoria = true;
+              }
         })
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})

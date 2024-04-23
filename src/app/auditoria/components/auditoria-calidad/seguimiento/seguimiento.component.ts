@@ -185,6 +185,8 @@ export class SeguimientoComponent implements OnInit {
     }else {
       this.disabledEndAuditoria = false;
     }
+    localStorage.setItem('fecha', JSON.stringify(targetFechas.split(' - ')[0]));
+
     this.sharedService.cambiarEstado(true)
     const {value: id} = event
     
@@ -360,7 +362,7 @@ export class SeguimientoComponent implements OnInit {
       }
     })
     localStorage.setItem('numProyecto', JSON.stringify(this.numProyecto));
-    localStorage.setItem('fecha', JSON.stringify(this.fechaInicio));
+    console.log(this.fechaInicio);
   }
 
 }

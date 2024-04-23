@@ -7,7 +7,7 @@
                 <p-toolbar *ngIf="disabledBtns">
                     <div class="col-12 d-flex justify-content-end">
                         <div class="pr-1">
-                            <button type="button" class="btn btn-success" (click)="mostrarModalComentarios()"><i class="fas fa-plus"></i> Agregar resultados</button>
+                            <button type="button" class="btn btn-success" (click)="mostrarModalComentarios()" [disabled]="!disabledEndAuditoria"><i class="fas fa-plus"></i> Agregar resultados</button>
                         </div>
                         <div>
                             <button type="button" class="btn btn-danger" (click)="finalizarAuditoria()" [disabled]="!disabledEndAuditoria"> Finalizar auditoria</button>
