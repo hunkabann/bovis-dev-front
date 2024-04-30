@@ -235,12 +235,14 @@ export class EmpleadosRegistroComponent implements OnInit {
             .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
             .subscribe({
               next: ({ data }) => {
-                // console.log(data)
-
+                // console.log("data.dtfecha_ingreso: ----------------->> " + data.dtfecha_ingreso)
                  const newFecha_Ingreso = data.dtfecha_ingreso.replace('-', ' ') // Importante reemplazarlo por un espacio
                  const newFecha_Salida = data.dtfecha_salida.replace('-', ' ') // Importante reemplazarlo por un espacio
                  const newFecha_UltimoRegis = data.dtfecha_ultimo_reingreso.replace('-', ' ') // Importante reemplazarlo por un espacio
-                
+
+               // Funciona
+                // console.log("Date.parse(data.dtfecha_ingreso)) : " + Date.parse(data.dtfecha_ingreso))
+                 //console.log("new date) : " + new Date(Date.parse(data.dtfecha_ingreso)) + " ------------ "+ new Date(newFecha_Ingreso))
                 const habilidades = data.habilidades.map(habilidad => habilidad.idHabilidad.toString())
                 const experiencias = data.experiencias.map(experiencia => experiencia.idExperiencia.toString())
                 this.form.patchValue({
@@ -420,8 +422,9 @@ export class EmpleadosRegistroComponent implements OnInit {
               nuAnno: 2023,
               nuMes: 12,
               fechaIngreso: this.form.value.fecha_ingreso,
-              sueldoBruto: this.form.value.salario,
-              num_proyecto_principal: this.form.value.num_proyecto_principal
+              sueldoBruto: this.form.value.salario ,
+              numProyecto: this.form.value.num_proyecto_principal ,
+              cotizacion: this.form.value.cotizacion
             }
 
             this.empleadosServ.getCostoID(this.form.value.num_empleado_rr_hh)
@@ -453,6 +456,9 @@ export class EmpleadosRegistroComponent implements OnInit {
                         }
                       })
                   }
+                },
+                error: (err) => {
+                  this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
                 }
               })
           }
