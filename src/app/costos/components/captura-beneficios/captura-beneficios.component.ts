@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CostoEmpleado } from '../../models/costos.model';
 import { CostosService } from '../../services/costos.service';
 import { differenceInCalendarYears, format } from 'date-fns';
-import { GenericResponse } from 'src/app/empleados/Models/empleados';
+import { GenericResponse, Proyectos } from 'src/app/empleados/Models/empleados';
 
 @Component({
   selector: 'app-captura-beneficios',
@@ -109,6 +109,7 @@ export class CapturaBeneficiosComponent implements OnInit {
   })
 
   empleados: Opcion[] = []
+  proyectos: Opcion[] = []
 
   NumEmpleado = null
 
@@ -187,13 +188,15 @@ export class CapturaBeneficiosComponent implements OnInit {
         this.empleadosServ.getEmpleados(),
         this.empleadosServ.getCatEstados(),
         this.empleadosServ.getCatPaises(),
+        this.empleadosServ.getProyectos(),
       ])
       .pipe(finalize(() => this.verificarActualizacion()))
       .subscribe({
         next: ([
-          empleadosR
+          empleadosR,proyectosR
         ]) => {
           this.empleados = empleadosR.data.map(empleado => ({name: empleado.chnombre, code: empleado.chap_materno}))
+          this.proyectos = proyectosR.data.map(proyecto => ({name: proyecto.num_proyecto_principal, code: proyecto.chproyecto_principal}))
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
@@ -244,7 +247,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                 reubicacion:                    data.map(empleado => (costoR.reubicacion)),
                 puesto:                         data.map(empleado => (costoR.puesto)),
                 pvDiasVacasAnuales:             data.map(empleado => (costoR.pvDiasVacasAnuales)),
-                proyecto:                       data.map(empleado => (costoR.proyecto)),
+                //proyecto:                       data.map(empleado => (costoR.proyecto)),
                 unidadNegocio:                  data.map(empleado => (costoR.unidadNegocio)),
                 empresa:                        data.map(empleado => (costoR.empresa)),
                 timesheet:                      data.map(empleado => (costoR.timesheet)),
@@ -282,6 +285,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                 cesantesVejez:                  data.map(empleado => (costoR.cesantesVejez)),
                 infonavit:                      data.map(empleado => (costoR.infonavit)),
                 cargasSociales:                 this.formateaValor(data.map(empleado => (costoR.cargasSociales))),
+                proyecto:                       data.map(empleado => (costoR.numProyecto)),
                 
               })
               //this.form.controls['ciudad'].disable();
@@ -309,6 +313,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                   id_persona:             data.nukidpersona?.toString(),
                   persona_nombre:         data.nombre_persona,
                   nombreJefe:             data.chjefe_directo
+                  //proyecto:              data.nuproyecto_principal
                   
                 })
               
@@ -335,6 +340,7 @@ export class CapturaBeneficiosComponent implements OnInit {
      idCostoEmpleado: null,
      NumEmpleadoRrHh: null,
      sueldoBruto: this.form.controls['sueldoBrutoInflacion'].value?.toString(),
+     numProyecto: this.form.controls['proyecto'].value?.toString() ,
      //sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
      vaidCostoMensual: this.form.value.vaidCostoMensual?.toString(),
      svCostoTotalAnual: this.form.value.svCostoTotalAnual?.toString(),
