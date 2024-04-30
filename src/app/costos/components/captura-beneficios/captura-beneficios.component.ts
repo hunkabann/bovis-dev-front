@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CostoEmpleado } from '../../models/costos.model';
 import { CostosService } from '../../services/costos.service';
 import { differenceInCalendarYears, format } from 'date-fns';
+import { GenericResponse } from 'src/app/empleados/Models/empleados';
 
 @Component({
   selector: 'app-captura-beneficios',
@@ -27,9 +28,12 @@ export class CapturaBeneficiosComponent implements OnInit {
   esActualizacion = true
   costos: CostoEmpleado[] = []
 
+  costos2: GenericResponse
+
   disabledInput: boolean = false;
 
   idEmpleado: string;
+
 
   constructor( private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -85,9 +89,9 @@ export class CapturaBeneficiosComponent implements OnInit {
     aguinaldoCantidadMeses:       [null],
     aguinaldoMontoProvisionMensual: [null],
     vaidComisionCostoMensual:     [null],
-    vaidCostoMensual:             [null],
+    vaidCostoMensual:             null,
     svCostoMensual:               [null],
-    svCostoTotalAnual:            [null],
+    svCostoTotalAnual:            null,
     sgmmCostoMensual:             [null],
     sgmmCostoTotalAnual:          [null],
     bonoAnualProvisionMensual:    [null],
@@ -99,8 +103,8 @@ export class CapturaBeneficiosComponent implements OnInit {
     retiro2:                      [null],
     cesantesVejez:                [null],
     infonavit:                    [null],
-    cargasSociales:               [null]
-
+    cargasSociales:               [null],
+    NumEmpleadoRrHh:               [null]
 
   })
 
@@ -264,8 +268,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                 aguinaldoMontoProvisionMensual: this.formateaValor(data.map(empleado => (costoR.aguinaldoMontoProvisionMensual))),
                 vaidComisionCostoMensual:       data.map(empleado => (costoR.vaidComisionCostoMensual)),
                 vaidCostoMensual:               data.map(empleado => (costoR.vaidCostoMensual)),
-                svCostoMensual:                 data.map(empleado => (costoR.vaidCostoMensual)),
-                svCostoTotalAnual:              data.map(empleado => (costoR.svCostoMensual)),
+                svCostoMensual:                 data.map(empleado => (costoR.svCostoMensual)),
+                svCostoTotalAnual:              data.map(empleado => (costoR.svCostoTotalAnual)),
                 sgmmCostoMensual:               this.formateaValor(data.map(empleado => (costoR.sgmmCostoMensual))),
                 sgmmCostoTotalAnual:            data.map(empleado => (costoR.sgmmCostoTotalAnual)),
                 bonoAnualProvisionMensual:      data.map(empleado => (costoR.bonoAnualProvisionMensual)),
@@ -318,17 +322,24 @@ export class CapturaBeneficiosComponent implements OnInit {
   }
 
   guardar() {
-    console.log(this.form.value);
+    //console.log(this.form.value);
 
+    //console.log(" this.form.value.num_empleado: " + this.form.value.num_empleado?.toString())
+    //console.log(" this.form.controls['sueldoBrutoInflacion']: " + this.form.controls['sueldoBrutoInflacion'].value?.toString())
+    //console.log(" this.form.value.sueldoNetoPercibidoMensual: " + this.form.value.sueldoNetoPercibidoMensual?.toString())
+    //console.log(" this.form.value.sueldoBrutoInflacion: " + this.form.value.sueldoBrutoInflacion?.toString())
+    
     let body = {
      //...this.form.value
+    
      idCostoEmpleado: null,
-     NumEmpleadoRrHh: this.form.value.num_empleado,
+     NumEmpleadoRrHh: null,
+     sueldoBruto: this.form.controls['sueldoBrutoInflacion'].value?.toString(),
      //sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
-     vaidCostoMensual: this.form.value.vaidCostoMensual,
-     svCostoTotalAnual: this.form.value.svCostoTotalAnual,
-     sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual,
-     avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado
+     vaidCostoMensual: this.form.value.vaidCostoMensual?.toString(),
+     svCostoTotalAnual: this.form.value.svCostoTotalAnual?.toString(),
+     sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual?.toString(),
+     avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado?.toString()
       //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
       //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
       //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
@@ -341,24 +352,53 @@ export class CapturaBeneficiosComponent implements OnInit {
                   if (data.data.length > 0) {
                     body = {
                       ...body,
-                      idCostoEmpleado: data.data[0].idCostoEmpleado
+                      idCostoEmpleado: data.data[0].idCostoEmpleado,
+                      NumEmpleadoRrHh: data.data[0].numEmpleadoRrHh,
+                      
                     }
+
+                   /* this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
+                      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                      .subscribe(resp => {
+                        Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+                        this.form.reset()
+                        this.router.navigate(['/costos/captura-beneficios'], { queryParams: { success: true } });
+                       console.log(resp);
+                     },
+                     err => {
+                      console.log(err);
+                    },
+                   );
+                   }*/
 
                     this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
                       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
                       .subscribe({
-                        next: (data) => {
+                        next: (datad) => {
+                         
+                          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
                           this.form.reset()
                           this.router.navigate(['/costos/captura-beneficios'], { queryParams: { success: true } });
+                                                  
+                         
                         },
                         error: (err) => {
-                          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                          //Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+                          if(err.error.text.includes('Actualización del registro de costos:') ){
+                            Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+                            console.log("Errores = "+ err.error.text)
+                          }else{
+                            this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
+                            console.log("Diferente error: "+ err.error.text)
+                          }
+                         
+                          
                         }
                       })
                   }
                 },
                 error: (err) => {
-                  this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                  this.messageService.add({ severity: 'error Obtener CostoID', summary: TITLES.error, detail: err.error })
                 }
               })
          // }
