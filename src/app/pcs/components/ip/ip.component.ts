@@ -64,7 +64,8 @@ export class IpComponent implements OnInit {
     nombre_contacto: [null],
     posicion_contacto: [null],
     telefono_contacto: [null],
-    correo_contacto: [null]
+    correo_contacto: [null],
+    impuesto_nomina: [3, [Validators.required]]
   })
 
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
@@ -127,7 +128,8 @@ export class IpComponent implements OnInit {
                     nombre_contacto: proyectoData.chcontacto_nombre,
                     posicion_contacto: proyectoData.chcontacto_posicion,
                     telefono_contacto: proyectoData.chcontacto_telefono,
-                    correo_contacto: proyectoData.chcontacto_correo
+                    correo_contacto: proyectoData.chcontacto_correo,
+                    impuesto_nomina: proyectoData.impuesto_nomina
                   })
                   this.actualizarTotalMeses()
                 }
