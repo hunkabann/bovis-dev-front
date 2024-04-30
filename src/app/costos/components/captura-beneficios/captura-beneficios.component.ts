@@ -29,6 +29,8 @@ export class CapturaBeneficiosComponent implements OnInit {
 
   disabledInput: boolean = false;
 
+  idEmpleado: string;
+
   constructor( private router: Router,
     private activatedRoute: ActivatedRoute,
     private empleadosServ: EmpleadosService) { }
@@ -216,6 +218,7 @@ export class CapturaBeneficiosComponent implements OnInit {
     this.activatedRoute.params
     .subscribe(({id}) => {
       if(id) {
+        this.idEmpleado = id
         this.esActualizacion = true
         this.costosService.getCostoID(id)
           .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -223,7 +226,7 @@ export class CapturaBeneficiosComponent implements OnInit {
             next: ({data}) => {
               // console.log(data)
               const [costoR] = data
-        this.costos = data
+              this.costos = data
         //this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
 
               //this.costos = data.map(empleado => (costoR.numEmpleadoRrHh))
@@ -288,6 +291,7 @@ export class CapturaBeneficiosComponent implements OnInit {
     this.activatedRoute.params
       .subscribe(({id}) => {
         if(id) {
+
           this.esActualizacion = true
           this.empleadosServ.getEmpleado(id)
             .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -316,8 +320,9 @@ export class CapturaBeneficiosComponent implements OnInit {
   guardar() {
     console.log(this.form.value);
 
-    const body = {
+    let body = {
      //...this.form.value
+     idCostoEmpleado: null,
      NumEmpleadoRrHh: this.form.value.num_empleado,
      //sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
      vaidCostoMensual: this.form.value.vaidCostoMensual,
@@ -330,7 +335,35 @@ export class CapturaBeneficiosComponent implements OnInit {
 
     }
 
-    this.empleadosService.guardarCostoEmpleadoActualiza(body,true,this.form.value.num_empleado)
+    this.empleadosServ.getCostoID(this.idEmpleado)
+              .subscribe({
+                next: (data) => {
+                  if (data.data.length > 0) {
+                    body = {
+                      ...body,
+                      idCostoEmpleado: data.data[0].idCostoEmpleado
+                    }
+
+                    this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
+                      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                      .subscribe({
+                        next: (data) => {
+                          this.form.reset()
+                          this.router.navigate(['/costos/captura-beneficios'], { queryParams: { success: true } });
+                        },
+                        error: (err) => {
+                          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                        }
+                      })
+                  }
+                },
+                error: (err) => {
+                  this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                }
+              })
+         // }
+   
+   /* this.empleadosService.guardarCostoEmpleadoActualiza(body,true,this.form.value.num_empleado)
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: (data) => {
@@ -340,7 +373,7 @@ export class CapturaBeneficiosComponent implements OnInit {
       error: (err) => {
         this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       }
-    })
+    })*/
     // console.log(body)
     
     const bodyVivienda = {
