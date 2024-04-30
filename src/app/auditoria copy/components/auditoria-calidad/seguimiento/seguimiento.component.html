@@ -4,19 +4,40 @@
 <form [formGroup]="form" (ngSubmit)="guardar()">
     <div class="main-container">
         <div class="row" *ngIf="auditoriaService.esLegal && numProyecto">
-            <div class="col-12">
-                <p-toolbar>
-                    <div class="w-100 text-right">
-                        <button type="button" class="btn btn-success" (click)="mostrarModalComentarios()"><i class="fas fa-plus"></i> Agregar resultados</button>
+                <p-toolbar *ngIf="disabledBtns">
+                    <div class="col-12 d-flex justify-content-end">
+                        <div class="pr-1">
+                            <button type="button" class="btn btn-success" (click)="mostrarModalComentarios()"><i class="fas fa-plus"></i> Agregar resultados</button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-danger" (click)="finalizarAuditoria()" [disabled]="!disabledEndAuditoria"> Finalizar auditoria</button>
+                        </div>
                     </div>
                 </p-toolbar>
+        </div>
+        <div class="row" *ngIf="auditoriaService.esLegal">
+            <div class="col-12">
+                <label for="id_proyecto">Proyecto:</label>
+                <p-dropdown id="id_proyecto" [options]="proyectos"  (onChange)="getPeriodosAudit($event)"  placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_proyecto')}"
+                    formControlName="id_proyecto" optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <div *ngIf="esInvalido('id_proyecto')">
+                    <small class="error-msg">{{ obtenerMensajeError('id_proyecto') }}</small>
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="id_periodo">Periodos Auditoria:</label>
+                <p-dropdown id="id_periodo" (onChange)="getPeriodos($event)" [options]="dtaPAuditoria" placeholder="Seleccionar un proyecto" optionLabel="fechas" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_periodo')}"
+                     formControlName="id_periodo" optionValue="proyectoid" [filter]="true" filterBy="fechas"></p-dropdown>
+                <div *ngIf="esInvalido('id_periodo')">
+                    <small class="error-msg">{{ obtenerMensajeError('id_periodo') }}</small>
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-12">
+            <div class="col-12" *ngIf="!auditoriaService.esLegal">
                 <label for="id_proyecto">Proyecto:</label>
-                <p-dropdown id="id_proyecto" [options]="proyectos" (onChange)="getSecciones($event)" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_proyecto')}"
-                    formControlName="id_proyecto" optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
+                <p-dropdown id="id_proyecto" [options]="proyectos" (onChange)="getProyectoCalidad($event)" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('id_proyecto')}"
+                     formControlName="id_proyecto" optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
                 <div *ngIf="esInvalido('id_proyecto')">
                     <small class="error-msg">{{ obtenerMensajeError('id_proyecto') }}</small>
                 </div>

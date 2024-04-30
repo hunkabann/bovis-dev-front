@@ -40,18 +40,15 @@ export class FinalizarAuditoriaModalComponent implements OnInit {
       }
       this.auditoriaService.getClosePeriodoAuditoria(request)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-      .subscribe({
-        next: ({data}) => {
-          console.log(data);
-          this.ref.close(true);
-          if(data){
-            localStorage.removeItem('numProyecto');
-            localStorage.removeItem('fecha');
-          }else{
-            console.log('remove')
-          }
-        },
-        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: SUBJECTS.error})
+      .subscribe(result => {
+        const success = result['success']
+        if(success) {
+          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Se finalizo la auditoria', detail: 'El registro ha sido guardado.' }))
+        }
+        this.ref.close(true);
+        localStorage.removeItem('numProyecto');
+        localStorage.removeItem('fecha');
+        location.reload();
       })
     }
 

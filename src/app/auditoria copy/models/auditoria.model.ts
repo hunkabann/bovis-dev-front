@@ -17,6 +17,7 @@ export interface ProyectoCumplimientoResponse {
 }
 
 export interface Seccion {
+  data: any;
   idSeccion:    number;
   chSeccion:    string;
   nuProcentaje: number;
@@ -45,6 +46,23 @@ export interface Auditoria {
   cantidadDocumentosValidados:  number;
 }
 
+export interface PeriodosAuditoritaResponse {
+  data: SeccionPeriodos[];
+  success: boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface SeccionPeriodos {
+  idProyecto: number;
+  fechaInicio: string;
+  fechaFin: string;
+}
+
+export interface SeccPrueba {
+  proyectoid: string,
+  fechas: string
+}
 export interface DocumentoResponse {
   data:          Documento;
   success:       boolean;

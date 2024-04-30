@@ -24,11 +24,25 @@ export class AuditoriaService {
   getCumplimiento() {
     return this.http.get<CumplimientoResponse>(`${this.baseUrl}api/Auditoria/${this.tipo}`)
   }
-
-  getProyectoCumplimiento(id: number) {
-    return this.http.get<ProyectoCumplimientoResponse>(`${this.baseUrl}api/Auditoria/ByProyecto/${id}/${this.tipo}`)
+  /**Aqui se agregara fecha inicio y fecha fin para mandarlo por url */
+  getProyectoCumplimiento(id: number, fechaInicio: string, fechaFin: string) {
+    console.log(id, this.tipo);
+    return this.http.get<ProyectoCumplimientoResponse>(`${this.baseUrl}api/Auditoria/ByProyecto/${id}/${this.tipo}/${fechaInicio}/${fechaFin}`)
   }
 
+  getProyectoPeriodosAuditoria(id: number) {
+    console.log('lo mando al service', id, this.tipo);
+    return this.http.get<any>(`${this.baseUrl}api/Auditoria/PeriodosAuditoriaByProyecto/${id}/${this.tipo}`)
+  }
+  
+  getClosePeriodoAuditoria(body: any) {
+    return this.http.put<any>(`${this.baseUrl}api/Auditoria/ClosePeriodoAuditoria`, body)
+  }
+
+  getOpenPeriodoAuditoria(body: any) {
+    return this.http.post<any>(`${this.baseUrl}/api/Auditoria/OpenPeriodoAuditoria`, body)
+  }
+  
   getDocumento(id: number) {
     return this.http.get<DocumentoResponse>(`${this.baseUrl}api/Auditoria/Documento/${id}`)
   }
