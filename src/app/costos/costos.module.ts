@@ -11,6 +11,9 @@ import { CapturaBeneficiosComponent } from './components/captura-beneficios/capt
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
+import { ButtonModule } from 'primeng/button';
+import { ToolbarModule } from 'primeng/toolbar';
 
 
 @NgModule({
@@ -27,7 +30,9 @@ import { DropdownModule } from 'primeng/dropdown';
     HttpClientModule,
     ReactiveFormsModule,
     InputNumberModule,
-    DropdownModule
+    DropdownModule,
+    ButtonModule,
+    ToolbarModule
   ]
 })
 export class CostosModule { }
