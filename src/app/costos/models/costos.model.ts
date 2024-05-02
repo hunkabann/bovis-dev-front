@@ -21,7 +21,7 @@ export interface CostoEmpleado {
   numProyecto:                    number;
   proyecto:                       string;
   idUnidadNegocio:                number;
-  unidadHegocio:                  string;
+  unidadNegocio:                  string;
   idEmpresa:                      number;
   Empresa:                        string;
   timesheet:                      string;
@@ -34,7 +34,7 @@ export interface CostoEmpleado {
   sueldoNetoPercibidoMensual:     number;
   retencionImss:                  number;
   ispt:                           number;
-  sueldoBruto:                    number;
+  sueldoBrutoInflacion:           number;
   anual:                          number;
   aguinaldoCantMeses:             number;
   aguinaldoMontoProvisionMensual: number;
@@ -64,5 +64,33 @@ export interface CostoEmpleado {
   indiceCargaLaboral:             number;
   fechaActualizacion:             string;
   regHistorico:                   boolean;
+  ciudad:                         string;
+  costoSalarioBruto:              number;
+  costoSalarioNeto:               number;
+  empresa:                        string;
+  aguinaldoCantidadMeses:         number;
+  nombreCompletoEmpleado:         string;
+  
 }
+
+export const encabezados = Object.freeze([
+  // {id: 'id', label: 'Id'},
+  {id: 'numEmpleadoRrHh', label: 'Número de empleado RRHH'},
+  {id: 'numEmpleadoNoi', label: 'Número de empleado NOI'},
+  {id: 'nombreCompletoEmpleado', label: 'Nombre'},
+  {id: 'ciudad', label: 'Ciudad base de trabajo'},
+  {id: 'puesto', label: 'Puesto'},
+  {id: 'numProyecto', label: 'Proyecto'},
+  {id: 'sueldoBruto', label: 'Sueldo bruto (inflación %)'},
+  {id: 'cargasSociales', label: 'Cargas Sociales'},
+  {id: 'costoMensualEmpleado', label: 'Costo Mensual Empleado'},
+  //{id: 'chunidad_negocio', label: 'Unidad de negocio'},
+  //{id: 'dtfecha_ingreso', label: 'Fecha de ingreso'},
+  //{id: 'dtfecha_salida', label: 'Fecha de salida'},
+  //{id: 'dtfecha_ultimo_reingreso', label: 'Fecha de reingreso'},
+  //{id: 'chnss', label: 'Nss'},
+  //{id: 'chemail_bovis', label: 'Email Bovis'},
+  //{id: 'nuantiguedad', label: 'Antiguedad'},
+  //{id: 'nufondo_fijo', label: 'Fondo fijo'}
+])
 
