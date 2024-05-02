@@ -31,6 +31,7 @@ export class CostoEmpleadoComponent implements OnInit {
   today: Date = new Date();
   pipe = new DatePipe('en-US');
   todayWithPipe = null;
+  FechaIngre = null;
 
   costos: CostoEmpleado[] = []
 
@@ -114,19 +115,54 @@ export class CostoEmpleadoComponent implements OnInit {
       worksheet.getCell(row, 7).value = this.formatCurrency(record.sueldoBrutoInflacion)
       worksheet.getCell(row, 8).value = this.formatCurrency(record.cargasSociales)
       worksheet.getCell(row, 9).value = this.formatCurrency(record.costoMensualEmpleado)
-      /*worksheet.getCell(row, 10).value = record.chunidad_negocio
-      worksheet.getCell(row, 11).value = record.dtfecha_ingreso
-      worksheet.getCell(row, 12).value = record.dtfecha_salida
-      worksheet.getCell(row, 13).value = record.dtfecha_ultimo_reingreso
-      worksheet.getCell(row, 14).value = record.chnss
-      worksheet.getCell(row, 15).value = record.chemail_bovis
-      worksheet.getCell(row, 16).value = record.nuantiguedad
-      worksheet.getCell(row, 17).value = record.nufondo_fijo*/
+      worksheet.getCell(row, 10).value = record.unidadNegocio
+      worksheet.getCell(row, 11).value = record.empresa
+      worksheet.getCell(row, 12).value = record.nombreJefe
+      let newDate = new Date(record.fechaIngreso);
+      this.FechaIngre = this.pipe.transform(newDate, 'dd-MM-yyyy');
+      worksheet.getCell(row, 13).value = this.FechaIngre
+      worksheet.getCell(row, 14).value = record.antiguedad
+      worksheet.getCell(row, 15).value = this.formatCurrency(record.avgDescuentoEmpleado)
+      worksheet.getCell(row, 16).value = this.formatCurrency(record.montoDescuentoMensual)
+      worksheet.getCell(row, 17).value = this.formatCurrency(record.sueldoNetoPercibidoMensual)
+      worksheet.getCell(row, 18).value = this.formatCurrency(record.retencionImss)
+      let numero_ispt = Number(record.ispt)
+      worksheet.getCell(row, 19).value = this.formatCurrency(numero_ispt)
+      //worksheet.getCell(row, 19).value = record.ispt
+      worksheet.getCell(row, 20).value = this.formatCurrency(record.sueldoBrutoInflacion)
+      worksheet.getCell(row, 21).value =this.formatCurrency( record.anual)
+      worksheet.getCell(row, 22).value = this.formatCurrency(record.aguinaldoCantidadMeses)
+      worksheet.getCell(row, 23).value = this.formatCurrency(record.aguinaldoMontoProvisionMensual)
+      worksheet.getCell(row, 24).value = record.pvDiasVacasAnuales
+      worksheet.getCell(row, 25).value = this.formatCurrency(record.pvProvisionMensual)
+      worksheet.getCell(row, 26).value = this.formatCurrency(record.indemProvisionMensual)
+      worksheet.getCell(row, 27).value = this.formatCurrency(record.avgBonoAnualEstimado)
+      worksheet.getCell(row, 28).value = this.formatCurrency(record.bonoAnualProvisionMensual)
+      worksheet.getCell(row, 29).value = record.sgmmCostoTotalAnual
+      worksheet.getCell(row, 30).value = this.formatCurrency(record.sgmmCostoMensual)
+      worksheet.getCell(row, 31).value = this.formatCurrency(record.svCostoTotalAnual)
+      worksheet.getCell(row, 32).value = this.formatCurrency(record.svCostoMensual)
+      worksheet.getCell(row, 33).value = this.formatCurrency(record.vaidCostoMensual)
+      worksheet.getCell(row, 34).value = this.formatCurrency(record.vaidComisionCostoMensual)
+      worksheet.getCell(row, 35).value = this.formatCurrency(record.ptuProvision)
+      worksheet.getCell(row, 36).value = this.formatCurrency(record.impuesto3sNomina)
+      worksheet.getCell(row, 37).value = this.formatCurrency(record.imss)
+      worksheet.getCell(row, 38).value = this.formatCurrency(record.retiro2)
+      worksheet.getCell(row, 39).value = this.formatCurrency(record.cesantesVejez)
+      worksheet.getCell(row, 40).value = this.formatCurrency(record.infonavit)
+      worksheet.getCell(row, 41).value = this.formatCurrency(record.cargasSociales)
+      worksheet.getCell(row, 42).value = this.formatCurrency(record.costoMensualEmpleado)
+      worksheet.getCell(row, 43).value = this.formatCurrency(record.costoMensualProyecto)
+      worksheet.getCell(row, 44).value = this.formatCurrency(record.costoAnualEmpleado)
+      worksheet.getCell(row, 45).value = this.formatCurrency(record.costoSalarioBruto)
+      worksheet.getCell(row, 46).value = this.formatCurrency(record.costoSalarioNeto)
+      worksheet.getCell(row, 47).value = record.nuAnno
+      worksheet.getCell(row, 48).value = record.nuMes
+      let numero_salarioDiarioIntegrado = Number(record.salarioDiarioIntegrado)
+      worksheet.getCell(row, 49).value = this.formatCurrency(numero_salarioDiarioIntegrado)
+      //worksheet.getCell(row, 49).value = record.salarioDiarioIntegrado
 
-      //worksheet.getCell(row, 18).value = record.responsable
-      //worksheet.getCell(row, 19).value = record.tipoProyecto
-      //worksheet.getCell(row, 20).value = record.tipoPy
-      //worksheet.getCell(row, 21).value = record.clasificacionPy
+      
       //worksheet.getCell(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'FFC000':  '70AD47'}};
       //worksheet.getRow(row).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ? 'ea899a' : 'ffffff' } };
       row++
