@@ -4,13 +4,17 @@
 <div class="main-container">
 
   <h1>Costo por empleado</h1>
+ 
+
+  <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
+    <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+</p-toolbar>
+
+
   
   <div class="table-container">
 
-    
-
-    
-    <p-table 
+  <p-table 
       #tablaPrincipal
       class="tabla-filtro"
       [value]="costos" 
