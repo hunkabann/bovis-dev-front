@@ -104,44 +104,67 @@ export class CargaSaeComponent implements OnInit {
       let lastRecord = false
       let isMiddleDash = false
       let cuentaActual = ''
-      // console.log(this.excelData)
+     // console.log("dentro de Excel Data" + this.excelData)
       this.excelData.map((record: any, i: number, row: any[]) => {
+       // console.log("dentro de Excel antes lastRecord" + lastRecord)
         lastRecord = (i + 1) === row.length
+        //console.log("dentro de Excel despues lastRecord" + lastRecord)
         isMiddleDash = record.Tipo === '-'
         if (isMiddleDash || lastRecord) {
           cuentaActual = record.__EMPTY
         } else {
           if (record.Concepto) {
-            const cuenta = cuentaActual.split(' ')[2]
+            try {
+
+              console.log("cuentaActual: "+ cuentaActual + " cuentaActual[2] "+ cuentaActual[2])
+                  const cuenta = cuentaActual.split(' ')[2]
             //if(!['703002003'].includes(cuenta))
-            {
-              this.cuentas.push(cuenta)
-              this.proyectos.push(record.Proyectos)
-              tempNormalRecords.push({
-                // ...record, 
-                nombre_cuenta: cuentaActual,
-                cuenta: cuenta,
-                tipo_poliza: record.__EMPTY,
-                numero: +record.Numero,
-                fecha: record.Fecha,
-                mes: record.Fecha.split('/')[1],
-                concepto: record.Concepto,
-                centro_costos: record['Centro de costos']?.trim() ?? record['centros de costos']?.trim(),
-                proyectos: record.Proyectos,
-                saldo_inicial: record['Saldo inicial'],
-                debe: record.Debe,
-                haber: record.Haber,
-                movimiento: record.Debe - record.Haber,
-                empresa: this.selectedOption.name.trim(),
-                num_proyecto: null, //record['Centro de costos'] ? +record['Centro de costos'].split('.')[0] : 0,
-                tipo_proyecto: null,
-                edo_resultados: null,
-                responsable: null,
-                tipo_cuenta: null,
-                tipo_py: null,
-                clasificacion_py: null
-              })
-            }
+             
+                  {
+                    console.log("Numero: "+ record.numero +" Fecha: " + record.Fecha +  " Concepto: " + record.Concepto)
+
+                    //if(record.Fecha === undefined || record.Fecha === null){
+
+                     
+
+                    //}else{
+
+                      this.cuentas.push(cuenta)
+                    this.proyectos.push(record.Proyectos)
+                    tempNormalRecords.push({
+                      // ...record, 
+                      nombre_cuenta: cuentaActual,
+                      cuenta: cuenta,
+                      tipo_poliza: record.__EMPTY,
+                      numero: +record.Numero,
+                      fecha: record.Fecha,
+                      mes: record.Fecha.split('/')[1],
+                      concepto: record.Concepto,
+                      centro_costos: record['Centro de costos']?.trim() ?? record['centros de costos']?.trim(),
+                      proyectos: record.Proyectos,
+                      saldo_inicial: record['Saldo inicial'],
+                      debe: record.Debe,
+                      haber: record.Haber,
+                      movimiento: record.Debe - record.Haber,
+                      empresa: this.selectedOption.name.trim(),
+                      num_proyecto: null, //record['Centro de costos'] ? +record['Centro de costos'].split('.')[0] : 0,
+                      tipo_proyecto: null,
+                      edo_resultados: null,
+                      responsable: null,
+                      tipo_cuenta: null,
+                      tipo_py: null,
+                      clasificacion_py: null
+                    })
+
+                   // }
+                   
+                    
+                  }
+              } catch(e) {
+                console.log("Error al leer el Excel"+ e.toString()); 
+                this.messageService.add({severity: 'error', summary: 'El archivo Excel tiene problema en el formato', detail: e})
+                return;
+              }
           }
         }
       })
