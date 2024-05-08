@@ -400,7 +400,8 @@ export class EmpleadosRegistroComponent implements OnInit {
           if (!this.esActualizacion) {
             const bodyCostoEmpleado = {
               numEmpleadoRrHh: this.form.value.num_empleado_rr_hh,
-              sueldoBruto: this.form.value.salario// 1,
+              sueldoBruto: this.form.value.salario,
+              cotizacion: this.form.value.cotizacion// 1,
             }
 
             this.empleadosServ.guardarCostoEmpleado(bodyCostoEmpleado, this.esActualizacion)
