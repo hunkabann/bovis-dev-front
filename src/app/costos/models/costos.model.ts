@@ -50,7 +50,7 @@ export interface CostoEmpleado {
   vaidCostoMensual:               number;
   vaidComisionCostoMensual:       number;
   ptuProvision:                   number;
-  beneficios:                     null;
+  beneficios:                     Beneficio[];
   impuesto3sNomina:               number;
   imss:                           number;
   retiro2:                        number;
@@ -74,6 +74,18 @@ export interface CostoEmpleado {
   
 }
 
+export interface Beneficio {
+  id:                  number;
+  idBeneficio:         number;
+  beneficio:           string;
+  numEmpleadoRrHh:     string;
+  costo:               number;
+  mes:                 number;
+  anio:                number;
+  fechaActualizacion:  string;
+  regHistorico:        number;
+}
+
 export const encabezados = Object.freeze([
   // {id: 'id', label: 'Id'},
   {id: 'numEmpleadoRrHh', label: 'Número de empleado RRHH'},
@@ -82,7 +94,7 @@ export const encabezados = Object.freeze([
   {id: 'ciudad', label: 'Ciudad base de trabajo'},
   {id: 'puesto', label: 'Puesto'},
   {id: 'numProyecto', label: 'Proyecto'},
-  {id: 'sueldoBruto', label: 'Sueldo bruto (inflación %)'},
+  {id: 'sueldoBrutoInflacion', label: 'Sueldo bruto (inflación %)'},
   {id: 'cargasSociales', label: 'Cargas Sociales'},
   {id: 'costoMensualEmpleado', label: 'Costo Mensual Empleado'},
   {id: 'unidadNegocio', label: 'Unidad de negocio'},
@@ -95,7 +107,7 @@ export const encabezados = Object.freeze([
   {id: 'sueldoNetoPercibidoMensual', label: 'Sueldo neto mensual'},
   {id: 'retencionImss', label: 'Retencion IMMS'},
   {id: 'ispt', label: 'ispt'},
-  {id: 'sueldoBrutoInflacion', label: 'sueldo Bruto Inflacion'},
+  //{id: 'sueldoBrutoInflacion', label: 'sueldo Bruto Inflacion'},
   {id: 'anual', label: 'anual'},
   {id: 'aguinaldoCantidadMeses', label: 'aguinaldo Cantidad Meses'},
   {id: 'aguinaldoMontoProvisionMensual', label: 'aguinaldo Monto Provision Mensual'},
@@ -125,6 +137,7 @@ export const encabezados = Object.freeze([
   {id: 'nuAnno', label: 'nuAnno'},
   {id: 'nuMes', label: 'nuMes'},
   {id: 'salarioDiarioIntegrado', label: 'salarioDiarioIntegrado'}
+  
   
 ])
 
