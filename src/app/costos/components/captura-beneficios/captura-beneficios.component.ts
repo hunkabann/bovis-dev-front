@@ -7,7 +7,7 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { Opcion} from 'src/models/general.model';
 import { CALENDAR, SUBJECTS,TITLES, errorsArray } from 'src/utils/constants';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CostoEmpleado } from '../../models/costos.model';
+import { CostoEmpleado,Beneficio } from '../../models/costos.model';
 import { CostosService } from '../../services/costos.service';
 import { differenceInCalendarYears, format } from 'date-fns';
 import { GenericResponse, Proyectos } from 'src/app/empleados/Models/empleados';
@@ -27,12 +27,16 @@ export class CapturaBeneficiosComponent implements OnInit {
   costosService   = inject(CostosService)
   esActualizacion = true
   costos: CostoEmpleado[] = []
+  arraybeneficio: Beneficio[] = []
+  data2: CostoEmpleado[] = []
 
   costos2: GenericResponse
 
   disabledInput: boolean = false;
 
   idEmpleado: string;
+
+  Costomenualproy = 0;
 
 
   constructor( private router: Router,
@@ -104,8 +108,10 @@ export class CapturaBeneficiosComponent implements OnInit {
     cesantesVejez:                [null],
     infonavit:                    [null],
     cargasSociales:               [null],
-    NumEmpleadoRrHh:               [null]
-
+    NumEmpleadoRrHh:              [null],
+    beneficios:                   [null],
+    costobeneficio:               [null],
+    beneficio:                    [null],
   })
 
   empleados: Opcion[] = []
@@ -231,15 +237,63 @@ export class CapturaBeneficiosComponent implements OnInit {
           .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
           .subscribe({
             next: ({data}) => {
-              // console.log(data)
+
+              this.arraybeneficio = data[0].beneficios
               const [costoR] = data
               this.costos = data
+
+              const dato = this.arraybeneficio;
+                 dato?.forEach(paso=>{
+                     console.log("paso.beneficio --------------> " +paso.beneficio);
+                     console.log("paso.cost-------------->> " +paso.costo);
+
+                     this.Costomenualproy += +paso.costo
+
+                     console.log("suma paso.cost-------------->> " +this.Costomenualproy);
+                     if(paso.beneficio === "Automóvil"){
+                
+                      this.form.patchValue({
+                        automovil: paso.costo
+                        
+                      })
+                    }
+                    
+                      if(paso.beneficio === "Vivienda"){
+                      
+                        this.form.patchValue({
+                          vivienda: paso.costo
+                          
+                        })
+                      
+                    }
+
+                    if(paso.beneficio === "Viáticos a comprobar"){
+                      
+                      this.form.patchValue({
+                        viaticos_a_comprobar: paso.costo
+                        
+                      })
+                    
+                  }
+                 
+                     //paso.beneficio?.forEach(est =>{
+                      //   console.log(est);
+                        // est.Detalle.forEach(detalle => {
+                         //    console.log(detalle);
+                         //})
+                    // })
+                 })
+
+                 console.log("suma fuerapaso.cost-------------->> " +this.Costomenualproy);
         //this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
 
               //this.costos = data.map(empleado => (costoR.numEmpleadoRrHh))
               //this.costos.numEmpleadoRrHh
               let newDate = new Date(data.map(empleado => (costoR.fechaIngreso))+"");
               const date = new Date(data.map(empleado => (costoR.fechaIngreso))+"");
+
+             // const beneficios = data.map(empleado => costoR.beneficios.toString())
+              //const experiencias = data.beneficios.map(experiencia => experiencia.idExperiencia.toString())
               this.form.patchValue({
                 ciudad:                         data.map(empleado => (costoR.ciudad)),
                 num_empleado_rr_hh:             data.map(empleado => (costoR.numEmpleadoRrHh)),
@@ -257,7 +311,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                 sueldoBrutoInflacion:           this.formateaValor(data.map(empleado => (costoR.sueldoBrutoInflacion))),
                 anual:                          this.formateaValor(data.map(empleado => (costoR.anual))),
                 ptuProvision:                   this.formateaValor(data.map(empleado => (costoR.ptuProvision))),
-                costoMensualEmpleado:           this.formateaValor(data.map(empleado => (costoR.costoMensualEmpleado))),
+                costoMensualEmpleado:           this.formateaValor(data.map(empleado => (costoR.costoMensualEmpleado + this.Costomenualproy))),
                 costoMensualProyecto:           this.formateaValor(data.map(empleado => (costoR.costoMensualProyecto))),
                 costoAnualEmpleado:             this.formateaValor(data.map(empleado => (costoR.costoAnualEmpleado))),
                 costoSalarioBruto:              this.formateaValor(data.map(empleado => (costoR.costoSalarioBruto))),
@@ -286,6 +340,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                 infonavit:                      this.formateaValor(data.map(empleado => (costoR.infonavit))),
                 cargasSociales:                 this.formateaValor(data.map(empleado => (costoR.cargasSociales))),
                 proyecto:                       data.map(empleado => (costoR.numProyecto)),
+                //automovil: data[0].beneficios[0].costo,
+                //beneficio:                      data.map(empleado => (costoR.beneficios).),
                 
               })
               //this.form.controls['ciudad'].disable();
@@ -333,7 +389,7 @@ export class CapturaBeneficiosComponent implements OnInit {
     //console.log(" this.form.controls['sueldoBrutoInflacion']: " + this.form.controls['sueldoBrutoInflacion'].value?.toString())
     //console.log(" this.form.value.sueldoNetoPercibidoMensual: " + this.form.value.sueldoNetoPercibidoMensual?.toString())
     //console.log(" this.form.value.sueldoBrutoInflacion: " + this.form.value.sueldoBrutoInflacion?.toString())
-    
+    console.log("Valor del costo mensual ATC ----->> " + this.Costomenualproy)
     let body = {
      //...this.form.value
     
@@ -345,7 +401,8 @@ export class CapturaBeneficiosComponent implements OnInit {
      vaidCostoMensual: this.form.value.vaidCostoMensual?.toString(),
      svCostoTotalAnual: this.form.value.svCostoTotalAnual?.toString(),
      sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual?.toString(),
-     avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado?.toString()
+     avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado?.toString(),
+     CostoMensualProyecto:  this.Costomenualproy
       //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
       //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
       //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
@@ -360,6 +417,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                       ...body,
                       idCostoEmpleado: data.data[0].idCostoEmpleado,
                       NumEmpleadoRrHh: data.data[0].numEmpleadoRrHh,
+
+
                       
                     }
 
@@ -384,7 +443,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                          
                           Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
                           this.form.reset()
-                          this.router.navigate(['/costos/captura-beneficios'], { queryParams: { success: true } });
+                          this.router.navigate(['/costos/costo-empleado'], { queryParams: { success: true } });
                                                   
                          
                         },
@@ -428,7 +487,8 @@ export class CapturaBeneficiosComponent implements OnInit {
       //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
       //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
 
-      NumEmpleadoRrHh: this.form.value.num_empleado,
+     //NumEmpleadoRrHh: this.form.value.num_empleado,
+      NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
       IdBeneficio: "1",
       Costo: this.form.value.vivienda
     }
@@ -440,7 +500,7 @@ export class CapturaBeneficiosComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.form.reset()
-          this.router.navigate(['/costos/captura-beneficios'], {queryParams: {success: true}});
+          this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -454,20 +514,21 @@ export class CapturaBeneficiosComponent implements OnInit {
     //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
     //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
     //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
-
-    NumEmpleadoRrHh: this.form.value.num_empleado,
+   
+    //NumEmpleadoRrHh: this.form.value.num_empleado,
+    NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
     IdBeneficio: "2",
     Costo: this.form.value.automovil
   }
 
 if(this.form.value.automovil != 0 || this.form.value.automovil != 0.0 || this.form.value.automovil != 0.00){
-  
+  console.log("this.form.controls['num_empleado'] "+this.form.controls['num_empleado'].value + " this.form.controls['num_empleado_rr_hh'] "+ this.form.controls['num_empleado_rr_hh'].value)
   this.empleadosService.guardarBeneficioCosto(bodyAutomovil)
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: (data) => {
         this.form.reset()
-        this.router.navigate(['/costos/captura-beneficios'], {queryParams: {success: true}});
+        this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
       },
       error: (err) => {
         this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -482,7 +543,8 @@ const bodyViaticosAComprobar = {
   //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
   //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "3",
   Costo: this.form.value.viaticos_a_comprobar
 }
@@ -494,7 +556,7 @@ this.empleadosService.guardarBeneficioCosto(bodyViaticosAComprobar)
   .subscribe({
     next: (data) => {
       this.form.reset()
-      this.router.navigate(['/costos/captura-beneficios'], {queryParams: {success: true}});
+      this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
       this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -505,7 +567,8 @@ this.empleadosService.guardarBeneficioCosto(bodyViaticosAComprobar)
 
 const bodyBonoAdicional = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "4",
   Costo: this.form.value.bono_adicional_reubicacion
 }
@@ -528,7 +591,8 @@ this.empleadosService.guardarBeneficioCosto(bodyBonoAdicional)
 
 const bodyGasolina = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "5",
   Costo: this.form.value.gasolina
 }
@@ -551,7 +615,8 @@ this.empleadosService.guardarBeneficioCosto(bodyGasolina)
 
 const bodyCasetas = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "6",
   Costo: this.form.value.casetas
 }
@@ -574,7 +639,8 @@ this.empleadosService.guardarBeneficioCosto(bodyCasetas)
 
 const bodyAyudaTransporte = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "7",
   Costo: this.form.value.ayuda_de_transporte
 }
@@ -597,7 +663,8 @@ this.empleadosService.guardarBeneficioCosto(bodyAyudaTransporte)
 
 const bodyVuelosAvion = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "8",
   Costo: this.form.value.vuelos_de_avion
 }
@@ -620,7 +687,8 @@ this.empleadosService.guardarBeneficioCosto(bodyVuelosAvion)
 
 const bodyprovisionImpues = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "9",
   Costo: this.form.value.provision_impuestos_expats
 }
@@ -643,7 +711,8 @@ this.empleadosService.guardarBeneficioCosto(bodyprovisionImpues)
 
 const bodyFringeExpats = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "3007",
   Costo: this.form.value.fringe_expats
 }
@@ -666,7 +735,8 @@ this.empleadosService.guardarBeneficioCosto(bodyFringeExpats)
 
 const bodyProgramadeEntrenamiento = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "10",
   Costo: this.form.value.programa_de_entretenimiento
 }
@@ -689,7 +759,8 @@ this.empleadosService.guardarBeneficioCosto(bodyProgramadeEntrenamiento)
 
 const bodyEventosEspeciales = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "11",
   Costo: this.form.value.eventos_especiales
 }
@@ -735,7 +806,8 @@ this.empleadosService.guardarBeneficioCosto(bodyOtros)
 
 const bodyCostoIT = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "1005",
   Costo: this.form.value.costo_it
 }
@@ -758,7 +830,8 @@ this.empleadosService.guardarBeneficioCosto(bodyCostoIT)
 
 const bodyCosto_telefonia = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "2005",
   Costo: this.form.value.costo_telefonia
 }
@@ -781,7 +854,8 @@ this.empleadosService.guardarBeneficioCosto(bodyCosto_telefonia)
 
 const bodySV_Directivos = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "3005",
   Costo: this.form.value.sv_directivos
 }
@@ -804,7 +878,8 @@ this.empleadosService.guardarBeneficioCosto(bodySV_Directivos)
 
 const bodyFacturacion_BPM = {
 
-  NumEmpleadoRrHh: this.form.value.num_empleado,
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "3",
   Costo: this.form.value.facturacion_bpm
 }
