@@ -274,7 +274,128 @@ export class CapturaBeneficiosComponent implements OnInit {
                         
                       })
                     
-                  }
+                    }
+
+                    if(paso.beneficio === "Bono Adicional"){
+                      
+                      this.form.patchValue({
+                        bono_adicional_reubicacion: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Gasolina"){
+                      
+                      this.form.patchValue({
+                        gasolina: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Casetas"){
+                      
+                      this.form.patchValue({
+                        casetas: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Ayuda de transporte"){
+                      
+                      this.form.patchValue({
+                        ayuda_de_transporte: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Vuelos de avión"){
+                      
+                      this.form.patchValue({
+                        vuelos_de_avion: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Provisión Impuestos Expats"){
+                      
+                      this.form.patchValue({
+                        provision_impuestos_expats: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Programa de entrenamiento"){
+                      
+                      this.form.patchValue({
+                        programa_de_entretenimiento: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Eventos especialeso"){
+                      
+                      this.form.patchValue({
+                        eventos_especiales: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Costo IT"){
+                      
+                      this.form.patchValue({
+                        costo_it: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Costo telefonia"){
+                      
+                      this.form.patchValue({
+                        costo_telefonia: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "S.V. Directivos"){
+                      
+                      this.form.patchValue({
+                        sv_directivos: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Facturación BPM"){
+                      
+                      this.form.patchValue({
+                        facturacion_bpm: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Fringe ExpatsM"){
+                      
+                      this.form.patchValue({
+                        fringe_expats: paso.costo
+                        
+                      })
+                    
+                    }
+
+                    
+
+                    
                  
                      //paso.beneficio?.forEach(est =>{
                       //   console.log(est);
