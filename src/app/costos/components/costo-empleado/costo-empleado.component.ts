@@ -4,7 +4,7 @@ import { CostosService } from '../../services/costos.service';
 import { SharedService } from '../../../shared/services/shared.service';
 import { finalize } from 'rxjs';
 import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
-import { CostoEmpleado,encabezados } from '../../models/costos.model';
+import { CostoEmpleado,encabezados,Beneficio } from '../../models/costos.model';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { DatePipe } from '@angular/common';
@@ -34,6 +34,10 @@ export class CostoEmpleadoComponent implements OnInit {
   FechaIngre = null;
 
   costos: CostoEmpleado[] = []
+
+  arraybeneficio: Beneficio[] = []
+
+  Costomenualproy = 0;
 
   constructor() { }
 
@@ -164,6 +168,32 @@ export class CostoEmpleadoComponent implements OnInit {
       //worksheet.getCell(row).fill = record.fechaCancelacion ? fillCancelada : fillFactura
       //const col = row.getCell(row);
 
+      
+      
+      if(record.beneficios[0] == undefined){
+        this.Costomenualproy = 0
+        //console.log("Entra Aquio --------------> " +this.Costomenualproy);
+      }else{
+        //console.log("Entra Aquio --------------> " +record.beneficios[0].costo);
+        this.arraybeneficio = record.beneficios
+      
+
+      const dato = this.arraybeneficio;
+         dato?.forEach(paso=>{
+             //console.log("paso.beneficio --------------> " +paso.beneficio);
+             //console.log("paso.cost-------------->> " +paso.costo);
+
+             this.Costomenualproy += +paso.costo
+
+             //console.log("suma paso.cost-------------->> " +this.Costomenualproy);
+            
+         })
+
+        // console.log("suma fuerapaso.cost-------------->> " +this.Costomenualproy);
+
+      }
+      
+
       worksheet.getCell(row, 1).value = record.numEmpleadoRrHh
       worksheet.getCell(row, 2).value = record.numEmpleadoNoi
       worksheet.getCell(row, 3).value = record.nombreCompletoEmpleado
@@ -212,7 +242,7 @@ export class CostoEmpleadoComponent implements OnInit {
       worksheet.getCell(row, 38).value = this.formatCurrency(record.cesantesVejez)
       worksheet.getCell(row, 39).value = this.formatCurrency(record.infonavit)
       worksheet.getCell(row, 40).value = this.formatCurrency(record.cargasSociales)
-      worksheet.getCell(row, 41).value = this.formatCurrency(record.costoMensualEmpleado)
+      worksheet.getCell(row, 41).value = this.formatCurrency(record.costoMensualEmpleado+this.Costomenualproy)
       worksheet.getCell(row, 42).value = this.formatCurrency(record.costoMensualProyecto)
       worksheet.getCell(row, 43).value = this.formatCurrency(record.costoAnualEmpleado)
       worksheet.getCell(row, 44).value = this.formatCurrency(record.costoSalarioBruto)
