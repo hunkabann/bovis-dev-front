@@ -10,6 +10,7 @@ import { TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { Rubro } from '../../models/pcs.model';
+import { CatalogosService } from '../../services/catalogos.service';
 
 @Component({
   selector: 'app-gastos',
@@ -24,6 +25,7 @@ export class GastosComponent implements OnInit {
   messageService    = inject(MessageService)
   pcsService        = inject(PcsService)
   sharedService     = inject(SharedService)
+  catalogosService = inject(CatalogosService)
 
   cargando:             boolean = true
   proyectoSeleccionado: boolean = false
@@ -31,6 +33,8 @@ export class GastosComponent implements OnInit {
   
   proyectoFechaInicio:  Date
   proyectoFechaFin:     Date
+
+  idproyecto: number;
 
   constructor() { }
   
@@ -55,7 +59,25 @@ export class GastosComponent implements OnInit {
     
     this.pcsService.cambiarEstadoBotonNuevo(false)
 
-    this.pcsService.obtenerIdProyecto()
+    this.catalogosService.obtenerParametros()
+      .subscribe(params => {
+
+        if (!params.proyecto) {
+
+          console.log("params.proyecto:" + params.proyecto)
+        }else{
+          this.idproyecto = params.proyecto
+          console.log("else params.proyecto:" + params.proyecto)
+        }
+      })
+
+      if (this.idproyecto){
+        console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
+
+        this.cargando = true
+          this.cargarInformacion(this.idproyecto)
+      } else {
+        this.pcsService.obtenerIdProyecto()
       .subscribe(numProyecto => {
         this.proyectoSeleccionado = true
         if(numProyecto) {
@@ -66,6 +88,9 @@ export class GastosComponent implements OnInit {
           console.log('No hay proyecto');
         }
       })
+      }
+
+    
   }
 
   cargarInformacion(numProyecto: number) {
