@@ -412,7 +412,14 @@ export class EmpleadosRegistroComponent implements OnInit {
                   this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                 },
                 error: (err) => {
-                  this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                  if(err.error.text.includes('Se creó nuevo registro con id:') ){
+                    Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+                    console.log("Errores = "+ err.error.text)
+                  }else{
+                    //this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
+                    this.messageService.add({ severity: 'error', summary: "guardarCostoEmpleadoActualiza()  registro components", detail: err.error })
+                    console.log("Diferente error: "+ err.error.text)
+                  }
                 }
               })
 
