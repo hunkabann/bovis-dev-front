@@ -15,6 +15,7 @@ import { CrearEtapaComponent } from '../crear-etapa/crear-etapa.component';
 import { ModificarEmpleadoComponent } from '../modificar-empleado/modificar-empleado.component';
 import { Mes } from 'src/models/general.model';
 import { obtenerMeses } from 'src/helpers/helpers';
+import { CatalogosService } from '../../services/catalogos.service';
 
 // interface Etapa {
 //   id:         number,
@@ -45,12 +46,16 @@ export class StaffingPlanComponent implements OnInit {
   messageService    = inject(MessageService)
   pcsService        = inject(PcsService)
   sharedService     = inject(SharedService)
+  catalogosService = inject(CatalogosService)
 
   proyectoFechaInicio:  Date
   proyectoFechaFin:     Date
 
   cargando:             boolean = true
   proyectoSeleccionado: boolean = false
+
+  idproyecto: number;
+  
 
   constructor() {}
 
@@ -75,27 +80,56 @@ export class StaffingPlanComponent implements OnInit {
     
     this.pcsService.cambiarEstadoBotonNuevo(false)
 
-    this.pcsService.obtenerIdProyecto()
-      .subscribe(numProyecto => {
-        this.proyectoSeleccionado = true
-        this.form.reset()
-        this.etapas.clear()
-        if(numProyecto) {
-          // this.sharedService.cambiarEstado(true)
-          this.cargando = true
-          this.pcsService.obtenerEtapasPorProyecto(numProyecto)
-            .pipe(finalize(() => {
-              // this.sharedService.cambiarEstado(false)
-              this.cargando = false
-            }))
-            .subscribe({
-              next: ({data}) => this.cargarInformacion(data),
-              error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-            })
-        } else {
-          console.log('No hay proyecto');
+    this.catalogosService.obtenerParametros()
+      .subscribe(params => {
+
+        if (!params.proyecto) {
+
+          console.log("params.proyecto:" + params.proyecto)
+        }else{
+          this.idproyecto = params.proyecto
+          console.log("else params.proyecto:" + params.proyecto)
         }
       })
+
+      if (this.idproyecto){
+        console.log("Staffing-plan.components Entro al this.idproyecto " + this.idproyecto)
+
+        this.cargando = true
+        this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+          .pipe(finalize(() => {
+            // this.sharedService.cambiarEstado(false)
+            this.cargando = false
+          }))
+          .subscribe({
+            next: ({data}) => this.cargarInformacion(data),
+            error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+          })
+      } else {
+        this.pcsService.obtenerIdProyecto()
+        .subscribe(numProyecto => {
+          this.proyectoSeleccionado = true
+          this.form.reset()
+          this.etapas.clear()
+          if(numProyecto) {
+            // this.sharedService.cambiarEstado(true)
+            this.cargando = true
+            this.pcsService.obtenerEtapasPorProyecto(numProyecto)
+              .pipe(finalize(() => {
+                // this.sharedService.cambiarEstado(false)
+                this.cargando = false
+              }))
+              .subscribe({
+                next: ({data}) => this.cargarInformacion(data),
+                error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+              })
+          } else {
+            console.log('No hay proyecto');
+          }
+        })
+      }
+
+   
   }
 
   cargarInformacion(data: EtapasPorProyectoData) {
