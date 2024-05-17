@@ -299,6 +299,4 @@ export class CostoEmpleadoComponent implements OnInit {
       currency: 'MXN',
     })
   }
-  
-
 }
