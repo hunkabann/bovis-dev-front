@@ -4,6 +4,44 @@
 <div class="main-container">
 
   <h1>Costo por empleado</h1>
+
+  <div class="row" style="margin-left: 5px;">
+           
+        
+    <div class="col-4">
+        <label for="descripcion">Personas:</label>
+        <div class="">
+            <p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar una persona" (onChange)="tablaPrincipal.filter(listaPersona.value, 'nombreCompletoEmpleado', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+            <ng-template let-option pTemplate="item">
+                <p-tag [value]="option.value" severity="success"></p-tag>
+            </ng-template>
+        </p-dropdown>
+        </div>
+    </div>
+        <div class="col-3">
+            <label for="puesto">Puesto:</label>
+            <div class="">
+                <p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'puesto', 'equals')" placeholder="puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                    <ng-template let-option pTemplate="item">
+                        <p-tag [value]="option.value" severity="success"></p-tag>
+                    </ng-template>
+                </p-dropdown>
+            </div>                
+        </div>
+        <!--div class="col-3">
+            <label for="activo">Estado:</label>
+            <div class="">
+                <p-dropdown #listaEstados [options]="estados" (onChange)="tablaPrincipal.filter(listaEstados.value, 'boactivo', 'equals')" placeholder="Estatus" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                    <ng-template let-option pTemplate="item">
+                        <p-tag [value]="option.label" severity="success"></p-tag>
+                    </ng-template>
+                </p-dropdown>
+            </div>                
+        </div-->
+
+
+    
+</div>
  
 
   <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
