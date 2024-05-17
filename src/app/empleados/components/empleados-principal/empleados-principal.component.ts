@@ -103,7 +103,8 @@ export class EmpleadosPrincipalComponent implements OnInit {
           this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
           //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
           //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
-          this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
+          //this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
+          this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.numProyecto.toString() + " - " + proyecto.nombre, label: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}` }))
           this.empresas = EmplresaR.data.map(empresa => ({value: empresa.empresa, label: empresa.empresa}))
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -348,11 +349,22 @@ export class EmpleadosPrincipalComponent implements OnInit {
 
   }
   
-  
-  
+  limpiar() {
+    console.log("Si entra a limpiar")
+    
+    //this.dropDownCliente.clear(null);
 
- 
-  
-  
+   
+    //this.fechaInicio = null;
+    //this.fechaFin = null;
+
+    //this.noFactura = null
+    this.empresas = null
+    this.proyectos = null
+    this.puestos = null
+    this.estados = null
+
+    
+  }
 
 }
