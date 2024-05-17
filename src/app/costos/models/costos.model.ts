@@ -137,7 +137,57 @@ export const encabezados = Object.freeze([
   {id: 'nuAnno', label: 'nuAnno'},
   {id: 'nuMes', label: 'nuMes'},
   {id: 'salarioDiarioIntegrado', label: 'salarioDiarioIntegrado'}
-  
+ 
   
 ])
+
+export interface PuestosResponse {
+  data:          Puesto[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface Puesto {
+  nukid_puesto:   number;
+  nukidnivel:     number;
+  chpuesto:       string;
+  boactivo:       boolean;
+  nusalario_min:  number;
+  nusalario_max:  number;
+  nusalario_prom: number;
+}
+
+export interface UpPersonasResponse {
+  data:          UpPersona[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+
+
+export interface UpPersona {
+  nukidpersona:       number;
+  nukidedo_civil:     number;
+  chedo_civil:        string;
+  nukidtipo_sangre:   number;
+  chtipo_sangre:      string;
+  chnombre:           string;
+  chap_paterno:       string;
+  chap_materno:       null | string;
+  nukidsexo:          number;
+  chsexo:             string;
+  chrfc:              string;
+  dtfecha_nacimiento: string;
+  chemail:            string;
+  chtelefono:         string;
+  chcelular:          null | string;
+  chcurp:             null | string;
+  nukidtipo_persona:  number;
+  chtipo_persona:     string;
+  boactivo:           boolean;
+  boempleado:         boolean;
+  chnombre_completo?: string
+}
 
