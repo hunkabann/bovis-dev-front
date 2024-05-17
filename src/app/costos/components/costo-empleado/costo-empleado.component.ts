@@ -2,7 +2,7 @@ import { Component, OnInit, inject,ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { CostosService } from '../../services/costos.service';
 import { SharedService } from '../../../shared/services/shared.service';
-import { finalize } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
 import { CostoEmpleado,encabezados,Beneficio } from '../../models/costos.model';
 import * as ExcelJS from 'exceljs';
@@ -14,13 +14,16 @@ import { Item,Opcion } from 'src/models/general.model';
 import { Table } from 'primeng/table';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Dropdown } from 'primeng/dropdown';
+import {TableModule} from 'primeng/table';
+import { TagModule } from 'primeng/tag';
+
 
 
 @Component({
   selector: 'app-costo-empleado',
   templateUrl: './costo-empleado.component.html',
   styleUrls: ['./costo-empleado.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, DialogService]
 })
 export class CostoEmpleadoComponent implements OnInit {
 
@@ -39,10 +42,37 @@ export class CostoEmpleadoComponent implements OnInit {
 
   Costomenualproy = 0;
 
+  personass:    Item[] = []
+  puestos:    Item[] = []
+  estados:    Item[] = [
+    {label: 'Activo', value: true},
+    {label: 'Inactivo', value: false}
+  ]
+
   constructor() { }
 
   ngOnInit(): void {
     this.sharedService.cambiarEstado(true)
+
+    forkJoin([
+      this.costosService.getPersonas(),
+      this.costosService.getPuestos()
+    ])
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (value) => {
+          
+          const [personasR, puestosR] = value
+          //const [empleadosR, puestosR] = value
+          this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: persona.chnombre_completo}))
+          this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
+          //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
+          //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
+          //this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
+          
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })
 
     this.costosService.getCostosEmpleado()
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -272,4 +302,3 @@ export class CostoEmpleadoComponent implements OnInit {
   
 
 }
- 
