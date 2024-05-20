@@ -1001,7 +1001,7 @@ const bodyFacturacion_BPM = {
 
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "3",
+  IdBeneficio: "3006",
   Costo: this.form.value.facturacion_bpm
 }
 
