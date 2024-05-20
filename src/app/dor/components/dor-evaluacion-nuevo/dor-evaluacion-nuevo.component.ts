@@ -209,7 +209,7 @@ export class DorEvaluacionNuevoComponent implements OnInit {
           this.totalObjetivosCualitativos += Number(obj.valor || '');
 
           if (obj.descripcion.startsWith("2") || obj.descripcion.startsWith("3")) {
-            this.totalCualitativosResultado += (((+obj.porcentajeReal * 100) / +obj.valor) >= 80 ? +obj.porcentajeReal : 0)
+            this.totalCualitativosResultado += (((+obj.porcentajeReal * 100) / +obj.valor) >= 70 ? +obj.porcentajeReal : 0)
           } else {
             this.totalCualitativosResultado += (+obj.porcentajeReal >= +obj.valor ? +obj.valor : 0)
           }
