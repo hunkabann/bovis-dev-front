@@ -198,6 +198,10 @@ export class EmpleadosService {
   guardarBeneficioCosto(body: any) {
     return this.http.post<GenericResponse>(`${this.baseUrl}/api/Beneficios`, body)
   }
+
+  ActualizaBeneficioCosto(body: any,url: string) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}/api/Beneficios` + url, body)
+  }
   
   getContratoPorEmpleado(id: number) {
     return this.http.get<ContratoResponse>(`${this.baseUrl}api/Contrato/ContratoEmpleado/Registro/${id}`)
