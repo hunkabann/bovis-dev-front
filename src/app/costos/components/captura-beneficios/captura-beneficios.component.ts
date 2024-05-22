@@ -34,6 +34,23 @@ export class CapturaBeneficiosComponent implements OnInit {
 
   disabledInput: boolean = false;
 
+  isvivienda: boolean = false;
+  isAutomovil: boolean = false;
+  isViaticosaComprobar: boolean = false;
+  isBonoAdicionalReubicacion: boolean = false;
+  isGasolina: boolean = false;
+  isCasetas: boolean = false;
+  isAyudaDeTransporte: boolean = false;
+  isVuelosDeAvion: boolean = false;
+  isProvisionImpuestosExpatsr: boolean = false;
+  isFringeExpats: boolean = false;
+  isProgramaDeEntretenimiento: boolean = false;
+  isEventosEspeciales: boolean = false;
+  isCostoIt: boolean = false;
+  isCostoTelefonia: boolean = false;
+  isSvDirectivos: boolean = false;
+  isFacturacionBpm: boolean = false;
+
   idEmpleado: string;
 
   Costomenualproy = 0;
@@ -120,6 +137,25 @@ export class CapturaBeneficiosComponent implements OnInit {
   NumEmpleado = null
 
   ngOnInit(): void {
+
+    //Inicializa valiables beneficios en false
+
+    this.isvivienda = false;
+    this.isAutomovil = false;
+    this.isViaticosaComprobar = false;
+    this.isBonoAdicionalReubicacion = false;
+    this.isGasolina = false;
+    this.isCasetas = false;
+    this.isAyudaDeTransporte = false;
+    this.isVuelosDeAvion = false;
+    this.isProvisionImpuestosExpatsr = false;
+    this.isFringeExpats = false;
+    this.isProgramaDeEntretenimiento = false;
+    this.isEventosEspeciales = false;
+    this.isCostoIt = false;
+    this.isCostoTelefonia = false;
+    this.isSvDirectivos = false;
+    this.isFacturacionBpm = false;
 
     this.form.controls['num_empleado'].disable(); 
     this.form.controls['persona_nombre'].disable();               
@@ -251,6 +287,7 @@ export class CapturaBeneficiosComponent implements OnInit {
 
                      //console.log("suma paso.cost-------------->> " +this.Costomenualproy);
                      if(paso.beneficio === "Automóvil"){
+                      this.isAutomovil = true;
                 
                       this.form.patchValue({
                         automovil: paso.costo
@@ -259,6 +296,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
                     
                       if(paso.beneficio === "Vivienda"){
+
+                        this.isvivienda = true;
                       
                         this.form.patchValue({
                           vivienda: paso.costo
@@ -268,6 +307,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Viáticos a comprobar"){
+
+                      this.isViaticosaComprobar = true;
                       
                       this.form.patchValue({
                         viaticos_a_comprobar: paso.costo
@@ -277,6 +318,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Bono Adicional"){
+
+                      this.isBonoAdicionalReubicacion = true;
                       
                       this.form.patchValue({
                         bono_adicional_reubicacion: paso.costo
@@ -286,6 +329,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Gasolina"){
+
+                      this.isGasolina = true;
                       
                       this.form.patchValue({
                         gasolina: paso.costo
@@ -295,6 +340,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Casetas"){
+
+                      this.isCasetas = true;
                       
                       this.form.patchValue({
                         casetas: paso.costo
@@ -304,6 +351,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Ayuda de transporte"){
+
+                      this.isAyudaDeTransporte = true;
                       
                       this.form.patchValue({
                         ayuda_de_transporte: paso.costo
@@ -313,6 +362,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Vuelos de avión"){
+
+                      this.isVuelosDeAvion = true;
                       
                       this.form.patchValue({
                         vuelos_de_avion: paso.costo
@@ -322,6 +373,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Provisión Impuestos Expats"){
+
+                      this.isProvisionImpuestosExpatsr = true;
                       
                       this.form.patchValue({
                         provision_impuestos_expats: paso.costo
@@ -331,6 +384,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Programa de entrenamiento"){
+
+                      this.isProgramaDeEntretenimiento = true;
                       
                       this.form.patchValue({
                         programa_de_entretenimiento: paso.costo
@@ -340,6 +395,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Eventos especiales"){
+
+                      this.isEventosEspeciales = true;
                       
                       this.form.patchValue({
                         eventos_especiales: paso.costo
@@ -349,6 +406,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Costo IT"){
+
+                      this.isCostoIt = true;
                       
                       this.form.patchValue({
                         costo_it: paso.costo
@@ -358,6 +417,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Costo telefonia"){
+
+                      this.isCostoTelefonia = true;
                       
                       this.form.patchValue({
                         costo_telefonia: paso.costo
@@ -367,6 +428,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "S.V. Directivos"){
+
+                      this.isSvDirectivos = true;
                       
                       this.form.patchValue({
                         sv_directivos: paso.costo
@@ -376,6 +439,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Facturación BPM"){
+
+                      this.isFacturacionBpm = true;
                       
                       this.form.patchValue({
                         facturacion_bpm: paso.costo
@@ -385,6 +450,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     }
 
                     if(paso.beneficio === "Fringe Expats"){
+
+                      this.isFringeExpats = true;
                       
                       this.form.patchValue({
                         fringe_expats: paso.costo
@@ -518,7 +585,64 @@ export class CapturaBeneficiosComponent implements OnInit {
       Costo: this.form.value.vivienda
     }
 
-  if(this.form.value.vivienda != 0 || this.form.value.vivienda != 0.0 || this.form.value.vivienda != 0.00){
+    if(this.isvivienda){
+      this.empleadosService.ActualizaBeneficioCosto(bodyVivienda,"/1/"+this.form.controls['num_empleado'].value)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          console.log("error cuando es 0 beneficio VIVIENDA --------------> " +err.error.text);
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+  
+          
+        }
+      })
+    }else{
+
+      if(this.form.value.vivienda != 0 || this.form.value.vivienda != 0.0 || this.form.value.vivienda != 0.00){
+    
+        this.empleadosService.guardarBeneficioCosto(bodyVivienda)
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe({
+            next: (data) => {
+              //this.form.reset()
+              this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+            },
+            error: (err) => {
+    
+              console.log("paso.beneficio VIVIENDA --------------> " +"/1/"+this.form.controls['num_empleado'].value);
+    
+              console.log("error beneficio VIVIENDA --------------> " +err.error.text);
+             
+    
+              this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+              this.empleadosService.ActualizaBeneficioCosto(bodyVivienda,"/1/"+this.form.controls['num_empleado'].value)
+              .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+              .subscribe({
+                next: (data) => {
+                  //this.form.reset()
+                  this.ngOnInit
+                  //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+                },
+                error: (err) => {
+                  this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        
+                  
+                }
+              })
+            }
+          })
+    
+      }
+
+    }
+
+  /*if(this.form.value.vivienda != 0 || this.form.value.vivienda != 0.0 || this.form.value.vivienda != 0.00){
     
     this.empleadosService.guardarBeneficioCosto(bodyVivienda)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -529,11 +653,49 @@ export class CapturaBeneficiosComponent implements OnInit {
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
+
+          console.log("paso.beneficio VIVIENDA --------------> " +"/1/"+this.form.controls['num_empleado'].value);
+
+          console.log("error beneficio VIVIENDA --------------> " +err.error.text);
+         
+
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+          this.empleadosService.ActualizaBeneficioCosto(bodyVivienda,"/1/"+this.form.controls['num_empleado'].value)
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe({
+            next: (data) => {
+              //this.form.reset()
+              this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+            },
+            error: (err) => {
+              this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+    
+              
+            }
+          })
         }
       })
 
-  }
+  }else{
+
+    
+    this.empleadosService.ActualizaBeneficioCosto(bodyVivienda,"/1/"+this.form.controls['num_empleado'].value)
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: (data) => {
+        //this.form.reset()
+        this.ngOnInit
+        //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+      },
+      error: (err) => {
+        console.log("error cuando es 0 beneficio VIVIENDA --------------> " +err.error.text);
+        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+        
+      }
+    })
+  }*/
 
   const bodyAutomovil = {
     //...this.form.value
@@ -547,7 +709,44 @@ export class CapturaBeneficiosComponent implements OnInit {
     Costo: this.form.value.automovil
   }
 
-if(this.form.value.automovil != 0 || this.form.value.automovil != 0.0 || this.form.value.automovil != 0.00){
+  if(this.isAutomovil){
+    this.empleadosService.ActualizaBeneficioCosto(bodyAutomovil,"/2/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio AUTOMOVIL --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+  }else{
+  
+      if(this.form.value.automovil != 0 || this.form.value.automovil != 0.0 || this.form.value.automovil != 0.00){
+        //console.log("this.form.controls['num_empleado'] "+this.form.controls['num_empleado'].value + " this.form.controls['num_empleado_rr_hh'] "+ this.form.controls['num_empleado_rr_hh'].value)
+        this.empleadosService.guardarBeneficioCosto(bodyAutomovil)
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe({
+            next: (data) => {
+              //this.form.reset()
+              this.ngOnInit
+                //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+            },
+            error: (err) => {
+              this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+            }
+          })
+      
+      }
+
+  }
+
+/*if(this.form.value.automovil != 0 || this.form.value.automovil != 0.0 || this.form.value.automovil != 0.00){
   //console.log("this.form.controls['num_empleado'] "+this.form.controls['num_empleado'].value + " this.form.controls['num_empleado_rr_hh'] "+ this.form.controls['num_empleado_rr_hh'].value)
   this.empleadosService.guardarBeneficioCosto(bodyAutomovil)
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -562,7 +761,25 @@ if(this.form.value.automovil != 0 || this.form.value.automovil != 0.0 || this.fo
       }
     })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyAutomovil,"/2/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio AUTOMOVIL --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyViaticosAComprobar = {
   //...this.form.value
@@ -576,7 +793,43 @@ const bodyViaticosAComprobar = {
   Costo: this.form.value.viaticos_a_comprobar
 }
 
-if(this.form.value.viaticos_a_comprobar != 0 || this.form.value.viaticos_a_comprobar != 0.0 || this.form.value.viaticos_a_comprobar != 0.00){
+if(this.isViaticosaComprobar){
+  this.empleadosService.ActualizaBeneficioCosto(bodyViaticosAComprobar,"/3/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio VIATIVCOSACOMPROBAR --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.viaticos_a_comprobar != 0 || this.form.value.viaticos_a_comprobar != 0.0 || this.form.value.viaticos_a_comprobar != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyViaticosAComprobar)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.viaticos_a_comprobar != 0 || this.form.value.viaticos_a_comprobar != 0.0 || this.form.value.viaticos_a_comprobar != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyViaticosAComprobar)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -591,7 +844,25 @@ this.empleadosService.guardarBeneficioCosto(bodyViaticosAComprobar)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyViaticosAComprobar,"/3/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio VIATIVCOSACOMPROBAR --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyBonoAdicional = {
 
@@ -601,7 +872,43 @@ const bodyBonoAdicional = {
   Costo: this.form.value.bono_adicional_reubicacion
 }
 
-if(this.form.value.bono_adicional_reubicacion != 0 || this.form.value.bono_adicional_reubicacion != 0.0 || this.form.value.bono_adicional_reubicacion != 0.00){
+if(this.isBonoAdicionalReubicacion){
+  this.empleadosService.ActualizaBeneficioCosto(bodyBonoAdicional,"/4/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio BONOADICIONAL --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.bono_adicional_reubicacion != 0 || this.form.value.bono_adicional_reubicacion != 0.0 || this.form.value.bono_adicional_reubicacion != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyBonoAdicional)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.bono_adicional_reubicacion != 0 || this.form.value.bono_adicional_reubicacion != 0.0 || this.form.value.bono_adicional_reubicacion != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyBonoAdicional)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -616,7 +923,25 @@ this.empleadosService.guardarBeneficioCosto(bodyBonoAdicional)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyBonoAdicional,"/4/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio BONOADICIONAL --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyGasolina = {
 
@@ -626,7 +951,43 @@ const bodyGasolina = {
   Costo: this.form.value.gasolina
 }
 
-if(this.form.value.gasolina != 0 || this.form.value.gasolina != 0.0 || this.form.value.gasolina != 0.00){
+if(this.isGasolina){
+  this.empleadosService.ActualizaBeneficioCosto(bodyGasolina,"/5/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio GASOLINA --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.gasolina != 0 || this.form.value.gasolina != 0.0 || this.form.value.gasolina != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyGasolina)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+         //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.gasolina != 0 || this.form.value.gasolina != 0.0 || this.form.value.gasolina != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyGasolina)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -641,7 +1002,25 @@ this.empleadosService.guardarBeneficioCosto(bodyGasolina)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyGasolina,"/5/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio GASOLINA --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyCasetas = {
 
@@ -651,7 +1030,43 @@ const bodyCasetas = {
   Costo: this.form.value.casetas
 }
 
-if(this.form.value.casetas != 0 || this.form.value.casetas != 0.0 || this.form.value.casetas != 0.00){
+if(this.isCasetas){
+  this.empleadosService.ActualizaBeneficioCosto(bodyCasetas,"/6/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio CASETAS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.casetas != 0 || this.form.value.casetas != 0.0 || this.form.value.casetas != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyCasetas)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.casetas != 0 || this.form.value.casetas != 0.0 || this.form.value.casetas != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyCasetas)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -666,7 +1081,25 @@ this.empleadosService.guardarBeneficioCosto(bodyCasetas)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyCasetas,"/6/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio CASETAS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyAyudaTransporte = {
 
@@ -676,7 +1109,43 @@ const bodyAyudaTransporte = {
   Costo: this.form.value.ayuda_de_transporte
 }
 
-if(this.form.value.ayuda_de_transporte != 0 || this.form.value.ayuda_de_transporte != 0.0 || this.form.value.ayuda_de_transporte != 0.00){
+if(this.isAyudaDeTransporte){
+  this.empleadosService.ActualizaBeneficioCosto(bodyAyudaTransporte,"/7/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio AYUDADETRANSPORTE --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.ayuda_de_transporte != 0 || this.form.value.ayuda_de_transporte != 0.0 || this.form.value.ayuda_de_transporte != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyAyudaTransporte)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+         //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.ayuda_de_transporte != 0 || this.form.value.ayuda_de_transporte != 0.0 || this.form.value.ayuda_de_transporte != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyAyudaTransporte)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -691,7 +1160,25 @@ this.empleadosService.guardarBeneficioCosto(bodyAyudaTransporte)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyAyudaTransporte,"/7/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio AYUDADETRANSPORTE --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyVuelosAvion = {
 
@@ -701,7 +1188,43 @@ const bodyVuelosAvion = {
   Costo: this.form.value.vuelos_de_avion
 }
 
-if(this.form.value.vuelos_de_avion != 0 || this.form.value.vuelos_de_avion != 0.0 || this.form.value.vuelos_de_avion != 0.00){
+if(this.isVuelosDeAvion){
+  this.empleadosService.ActualizaBeneficioCosto(bodyVuelosAvion,"/8/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio VUELOSAVION --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.vuelos_de_avion != 0 || this.form.value.vuelos_de_avion != 0.0 || this.form.value.vuelos_de_avion != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyVuelosAvion)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.vuelos_de_avion != 0 || this.form.value.vuelos_de_avion != 0.0 || this.form.value.vuelos_de_avion != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyVuelosAvion)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -716,7 +1239,25 @@ this.empleadosService.guardarBeneficioCosto(bodyVuelosAvion)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyVuelosAvion,"/8/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio VUELOSAVION --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyprovisionImpues = {
 
@@ -726,7 +1267,43 @@ const bodyprovisionImpues = {
   Costo: this.form.value.provision_impuestos_expats
 }
 
-if(this.form.value.provision_impuestos_expats != 0 || this.form.value.provision_impuestos_expats != 0.0 || this.form.value.provision_impuestos_expats != 0.00){
+if(this.isProvisionImpuestosExpatsr){
+  this.empleadosService.ActualizaBeneficioCosto(bodyprovisionImpues,"/9/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio PROVISIONDESCUENTO --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.provision_impuestos_expats != 0 || this.form.value.provision_impuestos_expats != 0.0 || this.form.value.provision_impuestos_expats != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyprovisionImpues)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.provision_impuestos_expats != 0 || this.form.value.provision_impuestos_expats != 0.0 || this.form.value.provision_impuestos_expats != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyprovisionImpues)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -741,7 +1318,25 @@ this.empleadosService.guardarBeneficioCosto(bodyprovisionImpues)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyprovisionImpues,"/9/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio PROVISIONDESCUENTO --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyFringeExpats = {
 
@@ -751,7 +1346,43 @@ const bodyFringeExpats = {
   Costo: this.form.value.fringe_expats
 }
 
-if(this.form.value.fringe_expats != 0 || this.form.value.fringe_expats != 0.0 || this.form.value.fringe_expats != 0.00){
+if(this.isFringeExpats){
+  this.empleadosService.ActualizaBeneficioCosto(bodyFringeExpats,"/3007/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio FRINGEEXPANTS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.fringe_expats != 0 || this.form.value.fringe_expats != 0.0 || this.form.value.fringe_expats != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyFringeExpats)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.fringe_expats != 0 || this.form.value.fringe_expats != 0.0 || this.form.value.fringe_expats != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyFringeExpats)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -766,7 +1397,25 @@ this.empleadosService.guardarBeneficioCosto(bodyFringeExpats)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyFringeExpats,"/3007/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio FRINGEEXPANTS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyProgramadeEntrenamiento = {
 
@@ -776,7 +1425,43 @@ const bodyProgramadeEntrenamiento = {
   Costo: this.form.value.programa_de_entretenimiento
 }
 
-if(this.form.value.programa_de_entretenimiento != 0 || this.form.value.programa_de_entretenimiento != 0.0 || this.form.value.programa_de_entretenimiento != 0.00){
+if(this.isProgramaDeEntretenimiento){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProgramadeEntrenamiento,"/10/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio PROGRAMADEENTRETENIMIENTO --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.programa_de_entretenimiento != 0 || this.form.value.programa_de_entretenimiento != 0.0 || this.form.value.programa_de_entretenimiento != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProgramadeEntrenamiento)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.programa_de_entretenimiento != 0 || this.form.value.programa_de_entretenimiento != 0.0 || this.form.value.programa_de_entretenimiento != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyProgramadeEntrenamiento)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -791,7 +1476,25 @@ this.empleadosService.guardarBeneficioCosto(bodyProgramadeEntrenamiento)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyProgramadeEntrenamiento,"/10/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio PROGRAMADEENTRETENIMIENTO --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyEventosEspeciales = {
 
@@ -801,7 +1504,43 @@ const bodyEventosEspeciales = {
   Costo: this.form.value.eventos_especiales
 }
 
-if(this.form.value.eventos_especiales != 0 || this.form.value.eventos_especiales != 0.0 || this.form.value.eventos_especiales != 0.00){
+if(this.isEventosEspeciales){
+  this.empleadosService.ActualizaBeneficioCosto(bodyEventosEspeciales,"/11/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio EVENTOSESPECIALES --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.eventos_especiales != 0 || this.form.value.eventos_especiales != 0.0 || this.form.value.eventos_especiales != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyEventosEspeciales)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+         //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.eventos_especiales != 0 || this.form.value.eventos_especiales != 0.0 || this.form.value.eventos_especiales != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyEventosEspeciales)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -816,7 +1555,25 @@ this.empleadosService.guardarBeneficioCosto(bodyEventosEspeciales)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyEventosEspeciales,"/11/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio EVENTOSESPECIALES --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 /**const bodyOtros = {
 
@@ -849,7 +1606,42 @@ const bodyCostoIT = {
   Costo: this.form.value.costo_it
 }
 
-if(this.form.value.costo_it != 0 || this.form.value.costo_it != 0.0 || this.form.value.costo_it != 0.00){
+if(this.isCostoIt){
+  this.empleadosService.ActualizaBeneficioCosto(bodyCostoIT,"/1005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio COSTOIT --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.costo_it != 0 || this.form.value.costo_it != 0.0 || this.form.value.costo_it != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyCostoIT)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+         //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+/*if(this.form.value.costo_it != 0 || this.form.value.costo_it != 0.0 || this.form.value.costo_it != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyCostoIT)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -864,7 +1656,25 @@ this.empleadosService.guardarBeneficioCosto(bodyCostoIT)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyCostoIT,"/1005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio COSTOIT --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyCosto_telefonia = {
 
@@ -874,7 +1684,43 @@ const bodyCosto_telefonia = {
   Costo: this.form.value.costo_telefonia
 }
 
-if(this.form.value.costo_telefonia != 0 || this.form.value.costo_telefonia != 0.0 || this.form.value.costo_telefonia != 0.00){
+if(this.isCostoTelefonia){
+  this.empleadosService.ActualizaBeneficioCosto(bodyCosto_telefonia,"/2005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio TELEFONIA --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.costo_telefonia != 0 || this.form.value.costo_telefonia != 0.0 || this.form.value.costo_telefonia != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyCosto_telefonia)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/*if(this.form.value.costo_telefonia != 0 || this.form.value.costo_telefonia != 0.0 || this.form.value.costo_telefonia != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyCosto_telefonia)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -889,7 +1735,25 @@ this.empleadosService.guardarBeneficioCosto(bodyCosto_telefonia)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyCosto_telefonia,"/2005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio TELEFONIA --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodySV_Directivos = {
 
@@ -899,7 +1763,42 @@ const bodySV_Directivos = {
   Costo: this.form.value.sv_directivos
 }
 
-if(this.form.value.sv_directivos != 0 || this.form.value.sv_directivos != 0.0 || this.form.value.sv_directivos != 0.00){
+if(this.isSvDirectivos){
+  this.empleadosService.ActualizaBeneficioCosto(bodySV_Directivos,"/3005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio SVDIRECTOS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.sv_directivos != 0 || this.form.value.sv_directivos != 0.0 || this.form.value.sv_directivos != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodySV_Directivos)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+/*if(this.form.value.sv_directivos != 0 || this.form.value.sv_directivos != 0.0 || this.form.value.sv_directivos != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodySV_Directivos)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -914,7 +1813,25 @@ this.empleadosService.guardarBeneficioCosto(bodySV_Directivos)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodySV_Directivos,"/3005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio SVDIRECTOS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
 const bodyFacturacion_BPM = {
 
@@ -924,7 +1841,43 @@ const bodyFacturacion_BPM = {
   Costo: this.form.value.facturacion_bpm
 }
 
-if(this.form.value.facturacion_bpm != 0 || this.form.value.facturacion_bpm != 0.0 || this.form.value.facturacion_bpm != 0.00){
+if(this.isFacturacionBpm){
+  this.empleadosService.ActualizaBeneficioCosto(bodyFacturacion_BPM,"/3006/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio FACTURABPM --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.facturacion_bpm != 0 || this.form.value.facturacion_bpm != 0.0 || this.form.value.facturacion_bpm != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+/* if(this.form.value.facturacion_bpm != 0 || this.form.value.facturacion_bpm != 0.0 || this.form.value.facturacion_bpm != 0.00){
 
 this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -939,7 +1892,25 @@ this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
     }
   })
 
-}
+}else{
+
+    
+  this.empleadosService.ActualizaBeneficioCosto(bodyFacturacion_BPM,"/3006/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio FACTURABPM --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}*/
 
     //console.log(" this.form.value.num_empleado: " + this.form.value.num_empleado?.toString())
     //console.log(" this.form.controls['sueldoBrutoInflacion']: " + this.form.controls['sueldoBrutoInflacion'].value?.toString())
