@@ -63,11 +63,13 @@
                     </div>
                 </th>
                 <th>Proyectos</th>
-                <th>Opciones</th>
+                <th>Dedicación</th>
+                <!--th>Opciones</th-->
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-ts>
             <tr [ngStyle]="{'background-color': ts.completado ? '#ffa4a4' : ''}">
+           
 
                 <td>{{ts.mes}}</td>
                 <td>{{ts.anio}}</td>
@@ -76,17 +78,43 @@
                 <!-- <td>{{ts.proyectos | proyectoJoin}}</td> -->
                 <td>
                     <div class="form-group" *ngFor="let proyecto of ts.proyectos">
-                        <label><strong>{{proyecto.descripcion}}: {{proyecto.tDedicacion}} %</strong></label>
-                        <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}" />
+                        <!--label><strong>{{proyecto.descripcion}}: {{proyecto.tDedicacion}} %</strong></label-->
+                        <label><strong>{{proyecto.descripcion}}</strong></label>
+                        <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}" [style]="{ width: '100%' }" mode="decimal" />
+                         
                     </div>
+                    
                     <hr>
                     <label><strong>Total: {{ts.proyectosJoin}} % - Días: {{ts.proyectosDiasJoin}}</strong></label>
+                    <!--label><strong>Total: {{ts.proyectosJoin}} % - Días: {{CalculaDias-ts.otrosDiasJoin}}</strong></label-->
+                    <!--label *ngIf="CalculaDias == null || CalculaDias < 0 ; then thenimportePesos else elseimportePesos"> </label>
+                    <ng-template #thenimportePesos>
+                        <strong>Total: {{ts.proyectosJoin | number: '1.2-2' }} % - Días: {{ts.proyectosDiasJoin | number: '1.2-2' }}</strong>
+                    </ng-template>
+                    <ng-template #elseimportePesos-->
+                        <!--strong>Total: {{CalculaDedica}} % - Días: {{CalculaDias}}</strong-->
+                        <!--strong>Total: {{ts.proyectosJoin | number: '1.2-2' }} % - Días: {{ts.proyectosDiasJoin | number: '1.2-2' }}</strong>
+                    </ng-template-->
                     <br>
-                    <label><strong>Otros: {{ts.otrosJoin}} % - Días: {{ts.otrosDiasJoin}}</strong></label>
+                    <label><strong>Otros: {{ts.otrosJoin | number: '1.2-2' }} % - Días: {{ts.otrosDiasJoin | number: '1.2-2' }}</strong></label>
                 </td>
-                <td>
+                <td> 
+                    
+                    <div class="form-group" *ngFor="let proyecto of ts.proyectos">
+                        <label><strong>% Dedicación</strong></label>
+                        <!--input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion| number: '1.2-2' }}" [style]="{ width: '100%' }" mode="decimal" /-->
+                        <input type="number" class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }"  pattern="[0-9]"/>
+                    </div>
+
+                    <hr>
+                    <label><strong>Días Registrados: {{ts.proyectosDiasJoin + ts.otrosDiasJoin | number: '1.2-2'}} - Total Dias: {{ts.dias_trabajo| number: '1.2-2'}}</strong></label>
+                    <br>
+                    <label><strong>Dedicación Registrado: {{ts.proyectosJoin + ts.otrosJoin}}% - Total Dedicación: 100%</strong></label>
+
+                </td>
+                <!--td>
                     <button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/timesheet/cargar-horas', ts.id]"></button>
-                </td>
+                </td-->
 
             </tr>
         </ng-template>
