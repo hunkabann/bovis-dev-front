@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import { TimesheetService } from '../../services/timesheet.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { MODULOS, TITLES, errorsArray } from 'src/utils/constants';
-import { SabadosOpciones } from '../../models/timesheet.model';
+import { Proyecto, SabadosOpciones,Timesheet } from '../../models/timesheet.model';
 import { Router } from '@angular/router';
 import { Opcion } from 'src/models/general.model';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -26,6 +26,9 @@ export class CargarHorasComponent implements OnInit {
 
   errorMessage: string = ''
   cargando: boolean = true
+  fecha: number = null
+  timesheets: Timesheet[] = []
+  proyectosTime: Proyecto[] = []
 
   timesheetService  = inject(TimesheetService)
   authService       = inject(MsalService)
@@ -49,6 +52,7 @@ export class CargarHorasComponent implements OnInit {
     responsable:    ['', Validators.required],
     id_responsable: [0],
     dias:           [this.diasHabiles, [Validators.min(1)]],
+    dedicacion: [0],
     sabados:        ['NO'],
     proyectos:      this.fb.array([]),
     otros:          this.fb.array([
@@ -114,7 +118,35 @@ export class CargarHorasComponent implements OnInit {
       totalOtros += +this.otros.value[i].dias
     }
 
-    return (totalProyectos + totalOtros)
+    return this.formateaValor((totalProyectos + totalOtros))
+  }
+
+  get Dedicacion() {
+    let totalProyectos = 0
+    let totalOtros = 0
+    for (let i = 0; i < this.proyectos.value.length; i++) {
+      totalProyectos += +this.proyectos.value[i].dias
+    }
+
+    for (let i = 0; i < this.otros.value.length; i++) {
+      totalOtros += +this.otros.value[i].dias
+    }
+
+    return this.formateaValor(((totalProyectos + totalOtros) * 100)/ (this.form.value.dias))
+  }
+
+  get DedicacionFaltante() {
+    let totalProyectos = 0
+    let totalOtros = 0
+    for (let i = 0; i < this.proyectos.value.length; i++) {
+      totalProyectos += +this.proyectos.value[i].dias
+    }
+
+    for (let i = 0; i < this.otros.value.length; i++) {
+      totalOtros += +this.otros.value[i].dias
+    }
+
+    return this.formateaValor((100 - ((totalProyectos + totalOtros) * 100)/ (this.form.value.dias)))
   }
 
   get sumaOtros() {
@@ -126,7 +158,7 @@ export class CargarHorasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
     this.sharedService.cambiarEstado(true)
 
     if(this.userService.rolesG.length >= 1) {
@@ -170,19 +202,52 @@ export class CargarHorasComponent implements OnInit {
   buscarProyectos(event: any) {
     this.sharedService.cambiarEstado(true)
     const id = event.value.code
+
+
+    /*const mesFormateado = 4//this.fecha ? +format(this.fecha, 'M') : 0
+    const anioFormateado = 2024//this.fecha ? +format(this.fecha, 'Y') : 0
+
+    this.timesheetService.getTimeSheetsPorEmpleado( 0,  0,  0,  0, mesFormateado, anioFormateado)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({ data }) => {
+          this.timesheets = []
+           data.map(ts => ({
+            ...ts,
+            
+            id:  this.proyectosTime.descripcion,
+            nombre: ts.chproyecto,
+            dias:       [ts.nudias, Validators.required],
+          dedicacion: [ts.nudedicacion], 
+          costo:      [ts.nucosto],
+          dedicacionCalc:      [ts.nudedicacion]
+          }))
+
+
+          this.sharedService.cambiarEstado(false)
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })*/
+
+
     this.timesheetService.getProyectos(id).subscribe(({data}) => {
       this.proyectos.clear()
       data.map(proyecto => this.proyectos.push(
         this.fb.group({
           id:         [proyecto.nunum_proyecto],
           nombre:     [proyecto.chproyecto],
-          dias:       [0, Validators.required],
-          dedicacion: [0],
-          costo:      [0]
+          dias:       [proyecto.nudias, Validators.required],
+          dedicacion: [proyecto.nudedicacion], 
+          costo:      [proyecto.nucosto],
+          diasCalc:      [0],
+          dedicacionCalc:      [proyecto.nudedicacion]
         }))
       )
       this.sharedService.cambiarEstado(false)
     })
+
+
+
   }
 
   calcularDias(event: any) {
@@ -203,21 +268,47 @@ export class CargarHorasComponent implements OnInit {
     const valor = +event
     if(seccion === 'proyectos') {
       this.proyectos.at(i).patchValue({
-        dedicacion: Math.round( (valor / this.form.value.dias) * 100 ),
-        costo:      Math.round( (valor / (this.form.value.dias - this.sumaOtros)) * 100 )
+        dedicacion:  this.formateaValor((valor / this.form.value.dias) * 100) ,
+        costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ),
+        diasCalc: valor,
+        dedicacionCalc: this.formateaValor((valor / this.form.value.dias) * 100) 
       })
+      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
     } else {
       this.otros.at(i).patchValue({
-        dedicacion: Math.round( (valor / this.form.value.dias) * 100 )
+        dedicacion: this.formateaValor( (valor / this.form.value.dias) * 100 )
       })
       this.proyectos.controls.forEach(proyecto => {
-        const costo = Math.round( ( Number(proyecto.get('dias').value) / (this.form.value.dias - this.sumaOtros) ) * 100 )
+        const costo = this.formateaValor( ( Number(proyecto.get('dias').value) / (this.form.value.dias - this.sumaOtros) ) * 100 )
         proyecto.patchValue({
           costo
         })
       })
     }
   }
+
+  calcularDiasdedica(event: any, i: number, seccion: string) {
+    const valor = +event
+    if(seccion === 'proyectos') {
+      this.proyectos.at(i).patchValue({
+        diasCalc:  this.formateaValor((valor * this.form.value.dias) / 100) ,
+        costo:      this.formateaValor( (valor * (this.form.value.dias + this.sumaOtros)) / 100 ),
+        dedicacion: valor,
+        dias:        this.formateaValor((valor * this.form.value.dias) / 100)
+
+      })
+      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+    }
+      
+      //console.log("Dedicacion1: Valor: "+  valor +" Dias: " + this.form.value.dias +" Formula: "+ this.formateaValor((valor * this.form.value.dias) / 100))
+      //console.log("Dedicacion2: "+ this.formateaValor( (valor * (this.form.value.dias - this.sumaOtros)) / 100 ))
+      //console.log("Dedicacion3: "+ valor)
+      //console.log("Dedicacion4: "+ this.form.value.dias)
+  }
+
+  
+
+  
 
   guardar() {
     if(!this.form.valid) {
@@ -298,7 +389,7 @@ export class CargarHorasComponent implements OnInit {
             id:         [registro.proyectoId],
             nombre:     [registro.proyectoNombre],
             dias:       ['', Validators.required],
-            dedicacion: [0],
+            dedicacionCalc: [0],
             costo:      [0]
           })
         )
@@ -321,5 +412,10 @@ export class CargarHorasComponent implements OnInit {
         next: (data) => this.proyectos.removeAt(i),
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
+  }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 }
