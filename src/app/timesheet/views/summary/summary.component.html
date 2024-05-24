@@ -76,9 +76,10 @@
                     <td>1</td>
                     <td>{{record.timesheet.empleado}}</td>
                     <td>{{record.timesheet.responsable}}</td>
-                    <td>{{record.timesheet.proyectos | sumaPorcentajes}}</td>
+                    <td>{{record.timesheet | sumaPorcentajes}}</td>
                     <td *ngFor="let proyecto of record.participacion">
-                        {{proyecto.dedicacion > 0 ? proyecto.dedicacion + '%' : ''}}
+                        {{proyecto.dedicacion <= 0 ? ''  : proyecto.dedicacion}}
+                        
                     </td>
                 </tr>
             </ng-template>
