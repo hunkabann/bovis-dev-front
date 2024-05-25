@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import { TimesheetService } from '../../services/timesheet.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { MODULOS, TITLES, errorsArray } from 'src/utils/constants';
-import { SabadosOpciones } from '../../models/timesheet.model';
+import { Proyecto, SabadosOpciones,Timesheet } from '../../models/timesheet.model';
 import { Router } from '@angular/router';
 import { Opcion } from 'src/models/general.model';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -26,6 +26,9 @@ export class CargarHorasComponent implements OnInit {
 
   errorMessage: string = ''
   cargando: boolean = true
+  fecha: number = null
+  timesheets: Timesheet[] = []
+  proyectosTime: Proyecto[] = []
 
   timesheetService  = inject(TimesheetService)
   authService       = inject(MsalService)
@@ -189,7 +192,8 @@ export class CargarHorasComponent implements OnInit {
         this.form.patchValue({id_responsable: nukid_empleado})
       }
 
-      this.empleados = empleadosR.data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
+      //this.empleados = empleadosR.data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
+      this.empleados = empleadosR.data.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
 
       this.form.patchValue({dias: diasR.habiles})
       this.otros.at(0).patchValue({dias: diasR.feriados})
@@ -199,21 +203,52 @@ export class CargarHorasComponent implements OnInit {
   buscarProyectos(event: any) {
     this.sharedService.cambiarEstado(true)
     const id = event.value.code
+
+
+    /*const mesFormateado = 4//this.fecha ? +format(this.fecha, 'M') : 0
+    const anioFormateado = 2024//this.fecha ? +format(this.fecha, 'Y') : 0
+
+    this.timesheetService.getTimeSheetsPorEmpleado( 0,  0,  0,  0, mesFormateado, anioFormateado)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({ data }) => {
+          this.timesheets = []
+           data.map(ts => ({
+            ...ts,
+            
+            id:  this.proyectosTime.descripcion,
+            nombre: ts.chproyecto,
+            dias:       [ts.nudias, Validators.required],
+          dedicacion: [ts.nudedicacion], 
+          costo:      [ts.nucosto],
+          dedicacionCalc:      [ts.nudedicacion]
+          }))
+
+
+          this.sharedService.cambiarEstado(false)
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })*/
+
+
     this.timesheetService.getProyectos(id).subscribe(({data}) => {
       this.proyectos.clear()
       data.map(proyecto => this.proyectos.push(
         this.fb.group({
           id:         [proyecto.nunum_proyecto],
           nombre:     [proyecto.chproyecto],
-           dias:       [proyecto.nudias, Validators.required],
-          dedicacion: [proyecto.nudedicacion],
-          costo:      [proyecto.nucosto], 
+          dias:       [proyecto.nudias, Validators.required],
+          dedicacion: [proyecto.nudedicacion], 
+          costo:      [proyecto.nucosto],
           diasCalc:      [0],
           dedicacionCalc:      [proyecto.nudedicacion]
         }))
       )
       this.sharedService.cambiarEstado(false)
     })
+
+
+
   }
 
   calcularDias(event: any) {
