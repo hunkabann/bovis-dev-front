@@ -74,11 +74,13 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
           .subscribe({
             next: (value) => {
               const [empleadosR, proyectosR, unidadesR, empresasR] = value
-              this.empleados = empleadosR.data.map(({ nunum_empleado_rr_hh, nombre_persona }) => ({ name: nombre_persona, code: nunum_empleado_rr_hh.toString() }))
+              //this.empleados = empleadosR.data.map(({ nunum_empleado_rr_hh, nombre_persona }) => ({ name: nombre_persona, code: nunum_empleado_rr_hh.toString() }))
+              this.empleados = empleadosR.data.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
               //this.proyectos = proyectosR.data.map(({ numProyecto, nombre }) => ({ name: nombre, code: numProyecto.toString() }))
               this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}` }))
               this.unidades = unidadesR.data.map(({ id, descripcion }) => ({ name: descripcion, code: id.toString() }))
               this.empresas = empresasR.data.map(({ chempresa, nukidempresa }) => ({ name: chempresa, code: nukidempresa.toString() }))
+              
               this.sharedService.cambiarEstado(false)
             },
             error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
