@@ -71,6 +71,7 @@ export interface CostoEmpleado {
   aguinaldoCantidadMeses:         number;
   nombreCompletoEmpleado:         string;
   salarioDiarioIntegrado:         number;
+  beneficiosproyecto:             BeneficiosProyectos[];
   
 }
 
@@ -85,6 +86,21 @@ export interface Beneficio {
   fechaActualizacion:  string;
   regHistorico:        number;
 }
+
+export interface BeneficiosProyectos {
+  id:                  number;
+  idBeneficio:         number;
+  beneficio:           string;
+  numEmpleadoRrHh:     string;
+  costo:               number;
+  mes:                 number;
+  anio:                number;
+  fechaActualizacion:  string;
+  regHistorico:        number;
+  nucostobeneficio:    number;
+  numProyecto:         string;
+}
+
 
 export const encabezados = Object.freeze([
   // {id: 'id', label: 'Id'},
