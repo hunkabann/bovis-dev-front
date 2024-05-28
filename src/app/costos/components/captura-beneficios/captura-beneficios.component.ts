@@ -7,7 +7,7 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { Opcion} from 'src/models/general.model';
 import { CALENDAR, SUBJECTS,TITLES, errorsArray } from 'src/utils/constants';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CostoEmpleado,Beneficio } from '../../models/costos.model';
+import { CostoEmpleado,Beneficio, BeneficiosProyectos } from '../../models/costos.model';
 import { CostosService } from '../../services/costos.service';
 import { differenceInCalendarYears, format } from 'date-fns';
 import { GenericResponse, Proyectos } from 'src/app/empleados/Models/empleados';
@@ -29,6 +29,7 @@ export class CapturaBeneficiosComponent implements OnInit {
   costos: CostoEmpleado[] = []
   arraybeneficio: Beneficio[] = []
   data2: CostoEmpleado[] = []
+  arraybeneficiosProyectos: BeneficiosProyectos[] = []
 
   costos2: GenericResponse
 
@@ -54,6 +55,7 @@ export class CapturaBeneficiosComponent implements OnInit {
   idEmpleado: string;
 
   Costomenualproy = 0;
+  bonoproyect_sueldobruto = 0;
 
 
   constructor( private router: Router,
@@ -275,6 +277,7 @@ export class CapturaBeneficiosComponent implements OnInit {
             next: ({data}) => {
 
               this.arraybeneficio = data[0].beneficios
+              this.arraybeneficiosProyectos = data[0].beneficiosproyecto
               const [costoR] = data
               this.costos = data
 
@@ -470,6 +473,22 @@ export class CapturaBeneficiosComponent implements OnInit {
                          //    console.log(detalle);
                          //})
                     // })
+                 })
+
+                 const beneficiopryect = this.arraybeneficiosProyectos;
+                 beneficiopryect?.forEach(paso=>{
+                     
+                    if(paso.beneficio === "Bono Adicional"){
+
+                      console.log("Proyecto paso.beneficio --------------> " +paso.beneficio);
+                     console.log("Proyecto paso.cost-------------->> " +paso.nucostobeneficio);
+
+                      this.bonoproyect_sueldobruto += +paso.nucostobeneficio
+                      console.log("Proyecto suma paso.cost-------------->> " +this.bonoproyect_sueldobruto);
+                    
+                    
+                    }
+
                  })
 
                  //console.log("suma fuerapaso.cost-------------->> " +this.Costomenualproy);
@@ -1917,19 +1936,24 @@ this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
     //console.log(" this.form.value.sueldoNetoPercibidoMensual: " + this.form.value.sueldoNetoPercibidoMensual?.toString())
     //console.log(" this.form.value.sueldoBrutoInflacion: " + this.form.value.sueldoBrutoInflacion?.toString())
     //console.log("Valor del costo mensual ATC ----->> " + this.Costomenualproy)
+
+    let a_Sueldoinfla = Number(this.form.controls['sueldoBrutoInflacion'].value?.toString())
+    
     let body = {
      //...this.form.value
     
      idCostoEmpleado: null,
      NumEmpleadoRrHh: null,
      sueldoBruto: this.form.controls['sueldoBrutoInflacion'].value?.toString(),
+     //sueldoBruto: a_Sueldoinfla + this.bonoproyect_sueldobruto,     
      numProyecto: this.form.controls['proyecto'].value?.toString() ,
      //sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
      vaidCostoMensual: this.form.value.vaidCostoMensual?.toString(),
      svCostoTotalAnual: this.form.value.svCostoTotalAnual?.toString(),
      sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual?.toString(),
      avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado?.toString(),
-     CostoMensualProyecto:  this.Costomenualproy
+     CostoMensualProyecto:  this.Costomenualproy,
+     bonoproyect_sueldobruto: this.bonoproyect_sueldobruto
       //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
       //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
       //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
