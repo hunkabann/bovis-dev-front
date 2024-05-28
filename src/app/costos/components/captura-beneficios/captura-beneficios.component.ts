@@ -13,7 +13,7 @@ import { differenceInCalendarYears, format } from 'date-fns';
 import { GenericResponse, Proyectos } from 'src/app/empleados/Models/empleados';
 
 @Component({
-  selector: 'app-captura-beneficios',
+  selector: 'app-captura-beneficios', 
   templateUrl: './captura-beneficios.component.html',
   styleUrls: ['./captura-beneficios.component.css'],
   providers: [MessageService]
