@@ -454,7 +454,8 @@
             </div>
             <div class="col-4">
                 <label for="cotizacion">Salario diario integrado:</label>
-                <input id="cotizacion" pInputText class="form-control" maxlength="50" formControlName="cotizacion" [ngClass]="{'ng-invalid ng-dirty': esInvalido('cotizacion')}">
+                <!--input id="cotizacion" pInputText class="form-control" maxlength="50" formControlName="cotizacion" [ngClass]="{'ng-invalid ng-dirty': esInvalido('cotizacion')}"-->
+                <p-inputNumber id="cotizacion" class="full-width" formControlName="cotizacion" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalido('cotizacion')}"></p-inputNumber>
                 <div *ngIf="esInvalido('cotizacion')">
                     <small class="error-msg">
             {{ obtenerMensajeError('cotizacion') }}
