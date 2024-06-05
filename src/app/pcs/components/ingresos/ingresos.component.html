@@ -12,7 +12,7 @@
 </div>
 
 <ng-template #principal>
-    <div class="content" style="margin: 2%">
+  <div class="content" style="margin: 2%">
 <ng-container [formGroup]="form">
     <ng-container formArrayName="secciones">
         <p-accordion [activeIndex]="i" [formGroupName]="i" *ngFor="let seccion of secciones.controls; let i = index">
