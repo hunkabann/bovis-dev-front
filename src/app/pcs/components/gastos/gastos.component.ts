@@ -23,6 +23,7 @@ import { Injectable } from '@angular/core';
   styleUrls: ['./gastos.component.css'],
   providers: [MessageService, DialogService]
 })
+  
 export class GastosComponent implements OnInit {
 
   dialogService     = inject(DialogService)
