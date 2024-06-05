@@ -16,7 +16,7 @@ import { ModificarEmpleadoComponent } from '../modificar-empleado/modificar-empl
 import { Mes } from 'src/models/general.model';
 import { obtenerMeses } from 'src/helpers/helpers';
 import { CatalogosService } from '../../services/catalogos.service';
-
+ 
 // interface Etapa {
 //   id:         number,
 //   nombre:     string,
