@@ -99,6 +99,7 @@ export class StaffingPlanComponent implements OnInit {
         this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
           .pipe(finalize(() => {
             // this.sharedService.cambiarEstado(false)
+            this.proyectoSeleccionado = true
             this.cargando = false
           }))
           .subscribe({
