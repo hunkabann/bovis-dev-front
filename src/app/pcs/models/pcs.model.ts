@@ -116,6 +116,7 @@ export interface GastosIngresosSecciones {
     codigo:    string;
     seccion:   string;
     rubros:    Rubro[];
+    
 }
 
 export interface Rubro {
@@ -126,4 +127,5 @@ export interface Rubro {
     reembolsable:     boolean;
     aplicaTodosMeses: boolean;
     fechas:           Fecha[];
+    numEmpleadoRrHh:    string;
 }
