@@ -68,7 +68,7 @@ export class IpComponent implements OnInit {
     correo_contacto: [null],
     impuesto_nomina: [0, [Validators.required]]
   })
-
+  
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   catalogosService = inject(CatalogosService)
