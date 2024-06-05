@@ -9,8 +9,13 @@ import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.comp
 import { TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro } from '../../models/pcs.model';
+import { Rubro,EtapasPorProyectoData } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
+import { CostosService } from 'src/app/costos/services/costos.service';
+import { Injectable } from '@angular/core';
+
+ 
+
 
 @Component({
   selector: 'app-gastos',
@@ -26,6 +31,8 @@ export class GastosComponent implements OnInit {
   pcsService        = inject(PcsService)
   sharedService     = inject(SharedService)
   catalogosService = inject(CatalogosService)
+  costosService   = inject(CostosService)
+  
 
   cargando:             boolean = true
   proyectoSeleccionado: boolean = false
@@ -36,12 +43,20 @@ export class GastosComponent implements OnInit {
 
   idproyecto: number;
 
-  constructor() { }
+  costoMensualEmpleado: number;
+
+  mensajito: string;
+
+   //private spinner: NgxSpinnerService
+
+  constructor() { } 
   
   form = this.fb.group({
     numProyecto:  [0, Validators.required],
-    secciones:    this.fb.array([])
+    secciones:    this.fb.array([]),
+    etapas:    this.fb.array([])
   })
+
 
   get secciones() {
     return this.form.get('secciones') as FormArray
@@ -56,7 +71,7 @@ export class GastosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+        
     this.pcsService.cambiarEstadoBotonNuevo(false)
 
     this.catalogosService.obtenerParametros()
@@ -64,16 +79,15 @@ export class GastosComponent implements OnInit {
 
         if (!params.proyecto) {
 
-          console.log("params.proyecto:" + params.proyecto)
+         // console.log("params.proyecto:" + params.proyecto)
         }else{
           this.idproyecto = params.proyecto
-          console.log("else params.proyecto:" + params.proyecto)
+          //console.log("else params.proyecto:" + params.proyecto)
         }
       })
 
       if (this.idproyecto){
-        console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
-
+        //console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
         this.cargando = true
           this.cargarInformacion(this.idproyecto)
       } else {
@@ -90,7 +104,7 @@ export class GastosComponent implements OnInit {
       })
       }
 
-    
+     
   }
 
   cargarInformacion(numProyecto: number) {
@@ -103,7 +117,8 @@ export class GastosComponent implements OnInit {
           this.proyectoFechaFin     = new Date(data.fechaFin)
           this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
-          this.secciones.clear()
+          
+         
 
           data.secciones.forEach((seccion, seccionIndex) => {
             
@@ -111,10 +126,11 @@ export class GastosComponent implements OnInit {
               idSeccion:  [seccion.idSeccion],
               codigo:     [seccion.codigo],
               seccion:    [seccion.seccion],
-              rubros:     this.fb.array([])
+              rubros:     this.fb.array([]),
+              etapas:     this.fb.array([])
             }))
-            
-            seccion.rubros.forEach((rubro, rubroIndex) => {
+
+          seccion.rubros.forEach((rubro, rubroIndex) => {
 
               // Agregamos los rubros por seccion
               this.rubros(seccionIndex).push(this.fb.group({
@@ -122,7 +138,91 @@ export class GastosComponent implements OnInit {
                 fechas:   this.fb.array([])
               }))
               
-              // Agreamos las fechas por rubro
+              if(seccion.seccion.includes('COSTOS DIRECTOS DE SALARIOS')){
+
+                this.costosService.getCostoID(rubro.numEmpleadoRrHh)
+                .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                .subscribe({
+                  next: ({data,message}) => {
+        
+                    const [costoR] = data
+                   
+
+                    if(message != null  ){
+              
+                      this.mensajito = message;
+      
+                    if(this.mensajito.includes('No se encontraron registros de costos para el empleado') ){
+
+                      console.log('message ' + message)
+                      console.log('es 0 ' + 0)
+      
+                      this.costoMensualEmpleado =  0
+
+                      // Agreamos las fechas por rubro
+                        rubro.fechas.forEach(fecha => {
+          
+          
+                          console.log('fecha.porcentaje ------< ' + fecha.porcentaje  )
+                          console.log('this.costoMensualEmpleado ------< ' +this.costoMensualEmpleado )
+                          console.log('formula cuando es el porcentaje ------< ' + (fecha.porcentaje *this.costoMensualEmpleado)/100 )
+          
+                          this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+                            id:         fecha.id,
+                            mes:        fecha.mes,
+                            anio:       fecha.anio,
+                            porcentaje: (fecha.porcentaje *this.costoMensualEmpleado)/100
+                          }))
+                        })
+      
+                    }else{
+
+                      console.log('message ' + message)
+                      console.log('data.map(empleado => costoR.idCosto ) ' + data.map(empleado => costoR.idCosto))
+                      console.log('array 0 data.map(empleado => costoR.costoMensualEmpleado ) ' +  data.map(empleado => costoR.costoMensualEmpleado )[0])
+      
+                      this.costoMensualEmpleado =  data.map(empleado => costoR.costoMensualEmpleado )[0]
+
+                      // Agreamos las fechas por rubro
+                        rubro.fechas.forEach(fecha => {
+          
+          
+                          console.log('fecha.porcentaje ------< ' + fecha.porcentaje  )
+                          console.log('this.costoMensualEmpleado ------< ' +this.costoMensualEmpleado )
+                          console.log('formula cuando es el porcentaje ------< ' + (fecha.porcentaje *this.costoMensualEmpleado)/100 )
+          
+                          this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+                            id:         fecha.id,
+                            mes:        fecha.mes,
+                            anio:       fecha.anio,
+                            porcentaje: this.formateaValor((fecha.porcentaje *this.costoMensualEmpleado)/100)
+                          }))
+                        })
+      
+                    }
+                  }
+
+                    
+        
+                  },
+                  error: (err) => {
+                    console.log("error cuando no Existe registro de costos --------------> " +err.error.text);
+                    this.costoMensualEmpleado = 0
+                    this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+                  }
+                  
+                })
+
+                console.log('hace las operaciones por que entro al 2 ' )
+
+                 
+
+              }else{
+
+                console.log('No hace operaciones por que es diferente de 2' )
+
+                 // Agreamos las fechas por rubro
               rubro.fechas.forEach(fecha => {
 
                 this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
@@ -132,12 +232,35 @@ export class GastosComponent implements OnInit {
                   porcentaje: fecha.porcentaje
                 }))
               })
+
+              }
+             
             })
+            
           })
+        
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
+
+
+      this.catalogosService.obtenerParametros()
+      .subscribe(params => {
+
+        if (!params.proyecto) {
+
+          //console.log("params.proyecto:" + params.proyecto)
+        }else{
+          this.idproyecto = params.proyecto
+         // console.log("else params.proyecto:" + params.proyecto)
+        }
+      })
+
+
+   
   }
+
+  
 
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
 
@@ -177,5 +300,11 @@ export class GastosComponent implements OnInit {
       }
     })
   }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
+  }
+
 
 }
