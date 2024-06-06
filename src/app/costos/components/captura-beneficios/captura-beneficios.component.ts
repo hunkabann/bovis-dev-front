@@ -13,7 +13,7 @@ import { differenceInCalendarYears, format } from 'date-fns';
 import { GenericResponse, Proyectos } from 'src/app/empleados/Models/empleados';
 
 @Component({
-  selector: 'app-captura-beneficios', 
+  selector: 'app-captura-beneficios',
   templateUrl: './captura-beneficios.component.html',
   styleUrls: ['./captura-beneficios.component.css'],
   providers: [MessageService]
@@ -34,6 +34,7 @@ export class CapturaBeneficiosComponent implements OnInit {
   costos2: GenericResponse
 
   disabledInput: boolean = false;
+  cotizacion: string
 
   isvivienda: boolean = false;
   isAutomovil: boolean = false;
@@ -323,6 +324,8 @@ export class CapturaBeneficiosComponent implements OnInit {
                     if(paso.beneficio === "Bono Adicional"){
 
                       this.isBonoAdicionalReubicacion = true;
+
+                      this.bonoproyect_sueldobruto += +paso.costo
                       
                       this.form.patchValue({
                         bono_adicional_reubicacion: paso.costo
@@ -548,7 +551,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                 cargasSociales:                 this.formateaValor(data.map(empleado => (costoR.cargasSociales))),
                 proyecto:                       data.map(empleado => (costoR.numProyecto)),
                 //automovil: data[0].beneficios[0].costo,
-                //beneficio:                      data.map(empleado => (costoR.beneficios).),
+                //beneficio:                      data.map(empleado => (costoR.beneficios).)o,
                 
               })
               //this.form.controls['ciudad'].disable();
@@ -571,6 +574,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                 // console.log(data)
               const habilidades = data.habilidades.map(habilidad => habilidad.idHabilidad.toString())
               const experiencias = data.experiencias.map(experiencia => experiencia.idExperiencia.toString())
+              this.cotizacion  = data.chcotizacion
                 this.form.patchValue({
                   num_empleado:           data.nunum_empleado_rr_hh?.toString(),
                   id_persona:             data.nukidpersona?.toString(),
@@ -1953,7 +1957,8 @@ this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
      sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual?.toString(),
      avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado?.toString(),
      CostoMensualProyecto:  this.Costomenualproy,
-     bonoproyect_sueldobruto: this.bonoproyect_sueldobruto
+     bonoproyect_sueldobruto: this.bonoproyect_sueldobruto,
+     cotizacion: this.cotizacion
       //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
       //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
       //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
