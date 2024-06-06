@@ -278,14 +278,14 @@
 
                   <div class="col-3">
                     <label for="avgDescuentoEmpleado">%  a descontar al empleado:</label>
-                    <p-inputNumber 
+                    <input 
                     id="avgDescuentoEmpleado"
-                    class="full-width"
-                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2"
+                    pInputText
+                    class="form-control" 
+                    maxlength="50" 
                     formControlName="avgDescuentoEmpleado"
                     [ngClass]="{'ng-invalid ng-dirty': esInvalido('avgDescuentoEmpleado')}"
-                    prefix="$" 
-                  > </p-inputNumber>
+                  >                   
                     <div *ngIf="esInvalido('avgDescuentoEmpleado')">
                       <small
                         class="error-msg"
@@ -521,14 +521,23 @@
 
                   <div class="col-3">
                     <label for="avgBonoAnualEstimado">Bono estimado:</label>
-                    <input 
+                    <!--input 
                       id="avgBonoAnualEstimado"
                       pInputText
                       class="form-control" 
                       maxlength="50" 
                       formControlName="avgBonoAnualEstimado"
-                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('avgBonoAnualEstimado')}"
-                    >
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('avgBonoAnualEstimado')}" -->
+               
+
+                    <p-inputNumber 
+                    id="avgBonoAnualEstimado"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="avgBonoAnualEstimado"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('avgBonoAnualEstimado')}"
+                    prefix="$" 
+                  > </p-inputNumber>
                     <div *ngIf="esInvalido('avgBonoAnualEstimado')">
                       <small
                         class="error-msg"
