@@ -529,7 +529,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                 costoAnualEmpleado:             this.formateaValor(data.map(empleado => (costoR.costoAnualEmpleado))),
                 costoSalarioBruto:              this.formateaValor(data.map(empleado => (costoR.costoSalarioBruto))),
                 costoSalarioNeto:               this.formateaValor(data.map(empleado => (costoR.costoSalarioNeto))),
-                avgDescuentoEmpleado:           data.map(empleado => (costoR.avgDescuentoEmpleado)),
+                avgDescuentoEmpleado:           this.formateaValor(data.map(empleado => (costoR.avgDescuentoEmpleado*100))),
                 montoDescuentoMensual:          this.formateaValor(data.map(empleado => (costoR.montoDescuentoMensual))),
                 sueldoNetoPercibidoMensual:     this.formateaValor(data.map(empleado => (costoR.sueldoNetoPercibidoMensual))),
                 retencionImss:                  this.formateaValor(data.map(empleado => (costoR.retencionImss))),
