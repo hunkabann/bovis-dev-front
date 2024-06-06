@@ -282,6 +282,8 @@ export class CapturaBeneficiosComponent implements OnInit {
               const [costoR] = data
               this.costos = data
 
+              this.Costomenualproy = 0
+
               const dato = this.arraybeneficio;
                  dato?.forEach(paso=>{
                      //console.log("paso.beneficio --------------> " +paso.beneficio);
@@ -478,6 +480,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                     // })
                  })
 
+                 this.bonoproyect_sueldobruto = 0
                  const beneficiopryect = this.arraybeneficiosProyectos;
                  beneficiopryect?.forEach(paso=>{
                      
@@ -2127,6 +2130,7 @@ this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
                   this.messageService.add({ severity: 'error Obtener CostoID', summary: TITLES.error, detail: err.error })
                 }
               })
+              
          // }
    
    /* this.empleadosService.guardarCostoEmpleadoActualiza(body,true,this.form.value.num_empleado)
