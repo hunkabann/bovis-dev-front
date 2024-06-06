@@ -329,7 +329,9 @@ export class CargarHorasComponent implements OnInit {
         next: (data) => {
           // this.form.reset()
           this.sharedService.cambiarEstado(false)
-          this.router.navigate(['/timesheet/cargar-horas'], {queryParams: {success: true}});
+          //this.router.navigate(['/timesheet/cargar-horas'], {queryParams: {success: true}});
+          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+        
         },
         error: (err) => {
           this.sharedService.cambiarEstado(false)
