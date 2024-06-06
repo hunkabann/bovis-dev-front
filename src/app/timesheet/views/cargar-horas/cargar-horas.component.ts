@@ -192,8 +192,8 @@ export class CargarHorasComponent implements OnInit {
         this.form.patchValue({id_responsable: nukid_empleado})
       }
 
-      //this.empleados = empleadosR.data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
-      this.empleados = empleadosR.data.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+      this.empleados = empleadosR.data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
+      //this.empleados = empleadosR.data.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
 
       this.form.patchValue({dias: diasR.habiles})
       this.otros.at(0).patchValue({dias: diasR.feriados})
