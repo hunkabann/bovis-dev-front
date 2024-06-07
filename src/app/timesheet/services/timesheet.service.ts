@@ -64,6 +64,10 @@ export class TimesheetService {
     return this.http.get<TimesheetsPorEmpleadoResponse>(`${this.baseUrl}api/Timesheet/TimeSheets/Filtro/${empleadoId}/${proyectoId}/${unidadId}/${empresaId}/${mes}/${anio}`)
   }
 
+  getTimeSheetsPorEmpleadoproyec(empleadoId: number = 0, proyectoId: number = 0, unidadId: number = 0, empresaId: number = 0, mes: number = 0, anio = 0) {
+    return this.http.get<EmpleadoProyectoResponse>(`${this.baseUrl}api/Timesheet/TimeSheets/Filtro/${empleadoId}/${proyectoId}/${unidadId}/${empresaId}/${mes}/${anio}`)
+  }
+
   getTimeSheetPorId(timesheetId: number) {
     return this.http.get<TimesheetPorIdResponse>(`${this.baseUrl}api/Timesheet/Registro/${timesheetId}`)
   }

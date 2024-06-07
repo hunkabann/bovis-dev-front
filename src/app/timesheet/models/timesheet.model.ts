@@ -103,7 +103,7 @@ export interface EmpleadoProyecto {
   chgrupo_proyecto:                 string;
   nudias:                           string;
   nudedicacion:                     string;
-  nucosto:                          string;
+  nucosto:                          string; 
 }
 
 export interface CargarHorasResponse {

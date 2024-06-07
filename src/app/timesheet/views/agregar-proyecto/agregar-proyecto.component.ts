@@ -43,7 +43,7 @@ export class AgregarProyectoComponent implements OnInit {
   }
 
   closeDialog() {
-    this.ref.close({exito: false})
+    this.ref.close({exito: false,registro:null})
   }
 
   seleccionarProyecto(event: any) {
@@ -59,7 +59,7 @@ export class AgregarProyectoComponent implements OnInit {
               proyectoNombre: this.proyectos.find(data => data.value === event.value).name
             }})
           },
-          error: (err) => this.ref.close({exito: false})
+          error: (err) => this.ref.close({exito: false,registro:null})
         })
     }
   }

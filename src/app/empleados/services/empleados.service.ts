@@ -179,7 +179,7 @@ export class EmpleadosService {
             ? this.http.post<GenericResponse>(`${this.baseUrl}api/Empleado/Registro/Agregar`, body)
             : this.http.put<GenericResponse>(`${this.baseUrl}api/Empleado/Registro/Actualizar`, body)
   }
-
+  
   toggleEstado(activo: boolean, id: number, esPersona = true) {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/${ esPersona ? 'Persona' : 'Empleado'}/Estatus/Actualizar`, {
       id,
