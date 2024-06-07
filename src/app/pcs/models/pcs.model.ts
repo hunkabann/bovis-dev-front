@@ -128,4 +128,5 @@ export interface Rubro {
     aplicaTodosMeses: boolean;
     fechas:           Fecha[];
     numEmpleadoRrHh:    string;
+    numProyecto:      number;
 }
