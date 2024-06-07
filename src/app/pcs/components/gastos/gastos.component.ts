@@ -41,6 +41,7 @@ export class GastosComponent implements OnInit {
   
   proyectoFechaInicio:  Date
   proyectoFechaFin:     Date
+   numProyectorubro:    number
 
   idproyecto: number;
 
@@ -90,6 +91,7 @@ export class GastosComponent implements OnInit {
       if (this.idproyecto){
         //console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
         this.cargando = true
+        this.numProyectorubro = this.idproyecto
           this.cargarInformacion(this.idproyecto)
       } else {
         this.pcsService.obtenerIdProyecto()
@@ -98,6 +100,7 @@ export class GastosComponent implements OnInit {
         if(numProyecto) {
           // this.sharedService.cambiarEstado(true)
           this.cargando = true
+          this.numProyectorubro = numProyecto
           this.cargarInformacion(numProyecto)
         } else {
           console.log('No hay proyecto');
@@ -272,7 +275,8 @@ export class GastosComponent implements OnInit {
       data: {
         rubro,
         fechaInicio:  this.proyectoFechaInicio,
-        fechaFin:     this.proyectoFechaFin
+        fechaFin:     this.proyectoFechaFin,
+        numProyecto:  this.numProyectorubro
       }
     })
     .onClose.subscribe((result) => {
