@@ -33,7 +33,8 @@ export class ModificarRubroComponent implements OnInit {
     cantidad:         ['', Validators.required],
     reembolsable:     [false],
     aplicaTodosMeses: [false],
-    fechas:           this.fb.array([])
+    fechas:           this.fb.array([]),
+    numProyecto:      [null]
   })
 
   constructor() { }
@@ -46,13 +47,16 @@ export class ModificarRubroComponent implements OnInit {
 
     const rubro = this.config.data.rubro as Rubro
 
+    const numProyectos = this.config.data.numProyecto
+
     if(this.config.data) {
       this.form.patchValue({
         idRubro:          rubro.idRubro,
         unidad:           rubro.unidad?.toString(),
         cantidad:         rubro.cantidad?.toString(),
         reembolsable:     rubro.reembolsable || false,
-        aplicaTodosMeses: rubro.aplicaTodosMeses || false
+        aplicaTodosMeses: rubro.aplicaTodosMeses || false,
+        numProyecto:      numProyectos
       })
     }
 
