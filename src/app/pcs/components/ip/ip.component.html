@@ -6,7 +6,6 @@
 
 <ng-template #principal>
     <div class="content" style="margin: 2%">
-
         <form [formGroup]="form" (ngSubmit)="guardar()" *ngIf="mostrarFormulario">
             <p-toolbar styleClass="p-1 mb-5 d-flex justify-content-end gap-2 text-right">
                 <button type="submit" class="btn btn-info" [disabled]="!form.valid">{{catalogosService.labelBotonPrincipal}}</button>
@@ -47,6 +46,18 @@
                                 </div>
                             </div>
                         </div>
+
+                        <br />
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="impuesto_nomina">Impuesto Nomina: <span class="required"></span></label>
+                                <input type="number" id="typeNumber" class="form-control" [disabled]="isConsulta" formControlName="impuesto_nomina" />
+                            </div>
+                            
+                        </div>
+
+                        
 
                     </div>
 

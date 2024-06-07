@@ -279,13 +279,13 @@ export const MENU = [
               command: () =>
                 localStorage.setItem('pageTitle', 'Costos'.toUpperCase()),
             },
-            {
-              label: 'Captura de beneficios',
-              routerLink: ['costos/costo-proyecto'],
-              id: 'costo-por-proyecto',
-              command: () =>
-                localStorage.setItem('pageTitle', 'Costos'.toUpperCase()),
-            },
+            //{
+            //  label: 'Captura de beneficios',
+            //  routerLink: ['costos/costo-proyecto'],
+            //  id: 'costo-por-proyecto',
+            //  command: () =>
+            //    localStorage.setItem('pageTitle', 'Costos'.toUpperCase()),
+            //},
           ],
         },
       ],

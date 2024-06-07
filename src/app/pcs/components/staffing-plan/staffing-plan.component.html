@@ -6,18 +6,15 @@
     <a title="Agregar etapa" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" style="text-decoration: none;" (click)="agregarEtapa()"></a>
 </div>
 
-<!--<div class="text-center" *ngIf="!proyectoSeleccionado; else cargandoView">
-    <p>Seleccione un proyecto y presione el botón <strong>Editar</strong>.</p>
-</div>-->
 
-<ng-template #cargandoView>
-    <div class="text-center" *ngIf="cargando">
-        <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
-        <p>Cargando etapas...</p>
-        <p><strong>Un momento.</strong></p>
-    </div>
-</ng-template>
+<div class="text-center" *ngIf="cargando; else principal">
+    <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+    <p>Cargando Staffing...</p>
+    <p><strong>Un momento.</strong></p>
+</div>
 
+<ng-template #principal>
+    <div class="content" style="margin: 2%">
 <div class="text-center" *ngIf="!cargando && etapas.controls.length == 0; else tablaEtapas">
     <p>Agregue al menos una etapa para comenzar.</p>
 </div>
@@ -78,4 +75,6 @@
             </p-accordionTab>
         </p-accordion>
     </ng-container>
+</ng-template>
+</div>
 </ng-template>

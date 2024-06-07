@@ -23,6 +23,7 @@
                     [filter]="true" 
                     filterBy="name"
                     appendTo="body"
+                    (onChange)="CargaSueldoCostos($event.value);"
                 ></p-dropdown>
                 <div *ngIf="esInvalido('num_empleado')">
                     <small
@@ -32,6 +33,40 @@
                     </small>
                 </div>
             </ng-template>
+        </div>
+
+        <div class="col-12">
+            <div class="row">
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="ModificaSueldo">Modificar sueldo:</label>
+                        <div>
+                            <p-inputSwitch 
+                                formControlName="ModificaSueldo"
+                                (onChange)="cambiarValoresSueldos()"
+                            ></p-inputSwitch>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="FEE">FEE: <span class="required"></span></label>
+                        <p-inputNumber 
+                            formControlName="FEE"
+                            class="full-width" 
+                        ></p-inputNumber>
+                        <div *ngIf="esInvalido('FEE')">
+                          <small
+                            class="error-msg"
+                          >
+                            {{ obtenerMensajeError('FEE') }}
+                          </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="col-12">

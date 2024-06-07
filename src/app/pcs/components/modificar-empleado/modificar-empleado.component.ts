@@ -13,6 +13,7 @@ import { Mes, Opcion } from 'src/models/general.model';
 import { Empleado as EmpleadoTS } from 'src/app/timesheet/models/timesheet.model';
 import { TITLES, errorsArray } from 'src/utils/constants';
 import { obtenerMeses } from 'src/helpers/helpers';
+import { CostosService } from 'src/app/costos/services/costos.service';
 
 interface EtapaEmpleado {
   etapa:              Etapa,
@@ -38,6 +39,7 @@ export class ModificarEmpleadoComponent implements OnInit {
   pcsService        = inject(PcsService)
   fb                = inject(FormBuilder)
   timesheetService  = inject(TimesheetService)
+  costosService   = inject(CostosService)
 
   fechaMinima:        Date
   fechaMaxima:        Date
@@ -45,12 +47,16 @@ export class ModificarEmpleadoComponent implements OnInit {
   empleados:          Opcion[] = []
   empleado:           Empleado = null
 
+  mensajito: string;
+
   form = this.fb.group({
     id_fase:          [null],
     num_empleado:     [null],
     num_proyecto:     [null],
     aplicaTodosMeses: [false],
+    ModificaSueldo:   [false],
     cantidad:         [0],
+    FEE:              [0],
     fechas:           this.fb.array([])
   })
 
@@ -61,6 +67,8 @@ export class ModificarEmpleadoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.form.controls['FEE'].disable(); 
 
     const data = this.config.data as EtapaEmpleado
     if(data) {
@@ -76,6 +84,46 @@ export class ModificarEmpleadoComponent implements OnInit {
         this.cargarEmpleados()
       } else {
         this.empleado = data.empleado
+      
+
+        this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
+        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe({
+          next: ({data,message}) => {
+
+            const [costoR] = data
+            console.log('message ' + message)
+            console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
+            console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' +  this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )))
+
+            if(message != null  ){
+            
+              this.mensajito = message;
+
+            if(this.mensajito.includes('No se encontraron registros de costos para el empleado:') ){
+
+              this.form.patchValue({
+                FEE:                          this.formateaValor(0.0),
+                
+              })
+
+            }else{
+
+              this.form.patchValue({
+                FEE:                          this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )),
+                
+              })
+
+            }
+          }
+
+            
+            
+            
+          
+          },
+          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        })
       }
 
       const fechaInicio     = new Date(data.etapa.fechaIni)
@@ -153,6 +201,77 @@ export class ModificarEmpleadoComponent implements OnInit {
     })
   }
 
+  cambiarValoresSueldos() {
+    if(this.form.value.ModificaSueldo){
+      this.form.controls['FEE'].enable()
+    }else{
+      this.form.controls['FEE'].reset()
+      this.form.controls['FEE'].disable()
+      
+    }
+
+    
+    /*this.fechas.controls.forEach((fecha, index) => {
+      this.fechas.at(index).patchValue({
+        porcentaje: this.form.value.ModificaSueldo ? this.form.value.FEE : 0
+      })
+    })*/
+  }
+
+  CargaSueldoCostos(event: any){
+
+    console.log('event.value ' + event.value )
+    console.log('event ' + event )
+    console.log('+event. ' + +event )
+
+    this.costosService.getCostoID(event)
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe({
+            next: ({data,message}) => {
+
+              const [costoR] = data
+              console.log('message ' + message)
+              console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
+              console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' +  this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )))
+
+              if(message != null  ){
+              
+                this.mensajito = message;
+
+              if(this.mensajito.includes('No se encontraron registros de costos para el empleado:') ){
+
+                this.form.patchValue({
+                  FEE:                          this.formateaValor(0.0),
+                  
+                })
+
+              }else{
+
+                this.form.patchValue({
+                  FEE:                          this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )),
+                  
+                })
+
+              }
+            }
+
+              
+              
+              
+            
+            },
+            error: (err) => {
+              console.log("error cuando no Existe registro de costos --------------> " +err.error.text);
+              this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      
+              
+            }
+          })
+
+  
+
+  }
+
   obtenerPorcentaje(fechas: Fecha[], mesRegistro: Mes) {
     const mes = fechas.find(info => info.mes == mesRegistro.mes)
 
@@ -181,6 +300,11 @@ export class ModificarEmpleadoComponent implements OnInit {
   
   closeDialog() {
     this.ref.close(null)
+  }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 
 }

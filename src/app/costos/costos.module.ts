@@ -14,6 +14,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
+import { TagModule } from 'primeng/tag';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { ToolbarModule } from 'primeng/toolbar';
     InputNumberModule,
     DropdownModule,
     ButtonModule,
-    ToolbarModule
+    ToolbarModule,
+    TagModule
   ]
 })
 export class CostosModule { }

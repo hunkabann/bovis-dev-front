@@ -60,9 +60,10 @@
     <div class="mt-5">
         <!-- barra de herramientas -->
         <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="totalRecords > 0">
-            <p-button icon="pi pi-file-excel" pTooltip="Exportar Excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+            <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
         </p-toolbar>
-        <p-table [value]="listBusquedaCompleto" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" currentPageReportTemplate="Total: {totalRecords}" styleClass="p-datatable-striped" [scrollable]="true" paginatorPosition="both" [tableStyle]="{ 'min-width': '50rem' }">
+        <p-table [value]="listBusquedaCompleto" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" currentPageReportTemplate="Total: {totalRecords}" styleClass="p-datatable-striped" [scrollable]="true" paginatorPosition="both" [tableStyle]="{ 'min-width': '50rem' }"
+            [rowsPerPageOptions]="[10, 25, 50]">
             <ng-template pTemplate="header">
                 <tr>
                     <!-- <th *ngFor="let val of getHeadersTabla()">{{val}}</th> -->

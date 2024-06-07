@@ -108,6 +108,7 @@ export interface CieRegistro {
   activo:          boolean;
   idArchivo:       null;
   nombreArchivo:   null;
+  fechaCancelacion:           string;
 }
 
 export interface CieCuentasListaResponse {
@@ -232,3 +233,29 @@ export interface CieCuentasDeleteResponse {
 export interface CieCuentaDelete {
   nombre_archivo:          string;
 }
+
+
+export const encabezados = Object.freeze([
+  // {id: 'id', label: 'Id'},
+  {id: 'nombreCuenta', label: 'NOMBRE CUENTA'},
+  {id: 'cuenta', label: 'CUENTA'},
+  {id: 'tipoPoliza', label: 'TIPO POLIZA'},
+  {id: 'numero', label: 'NUMERO'},
+  {id: 'fecha', label: 'FECHA'},
+  {id: 'mes', label: 'MES'},
+  {id: 'concepto', label: 'CONCEPTO'},
+  {id: 'centroCostos', label: 'CENTRO DE COSTOS'},
+  {id: 'proyecto', label: 'PROYECTOS'},
+  {id: 'saldoInicial', label: 'SALDO INICIAL'},
+  {id: 'debe', label: 'DEBE'},
+  {id: 'haber', label: 'HABER'},
+  {id: 'movimiento', label: 'MOVIMIENTO'},
+  {id: 'empresa', label: 'EMPRESA'},
+  {id: 'numProyecto', label: 'NUM PROYECTO'},
+  {id: 'tipoCuenta', label: 'TIPO'},
+  {id: 'edoResultados', label: 'EDO DE RESULTADOS'},
+  {id: 'responsable', label: 'RESPONSABLE'},  
+  {id: 'tipoProyecto', label: 'UNIDAD'},
+  {id: 'tipoPy', label: 'TIPO PY'},  
+  {id: 'clasificacionPy', label: 'CLASIFICACION PY'}
+])

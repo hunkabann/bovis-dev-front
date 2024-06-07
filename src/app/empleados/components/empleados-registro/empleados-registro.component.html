@@ -1,14 +1,17 @@
-<p-toast></p-toast>
- 
+<p-toast>
+</p-toast>
+
 <form [formGroup]="form" (ngSubmit)="guardar()">
-    <div class="main-container">
+    <div class="main-container" >
         <h1>{{ !esActualizacion ? 'Nuevo empleado' : 'Empleado'}}</h1>
+        
         <p-toolbar styleClass="p-1 mb-4 d-flex justify-content-end gap-2 text-right">
             <button type="button" class="btn btn-secondary" routerLink="/empleados/empleado-pri"><i class="fas fa-arrow-left"></i> Regresar</button>
             <button type="button" class="btn btn-dark" (click)="limpiar()"><i class="fas fa-eraser"></i> Limpiar campos</button>
             <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!form.valid"><i class="fas fa-save"></i> {{ !esActualizacion ? 'Guardar' : 'Actualizar'}}</button>
         </p-toolbar>
 
+        
         <div class="row">
             <div class="col-4">
                 <label for="num_empleado_rr_hh">Número de empleado RRHH:</label>
@@ -262,11 +265,11 @@
         <div class="row">
             <!-- <div class="col-4">
         <label for="id_tipo_contrato_sat">Número de sat:</label>
-        <p-dropdown
+        <p-dropdown 
           id="id_tipo_contrato_sat"
           [options]="[]"
-          placeholder="Seleccionar una opción"
-          optionLabel="name"
+          placeholder="Seleccionar una opción" 
+          optionLabel="name" 
           [showClear]="true"
           [style]="{ width: '100%' }"
           formControlName="id_tipo_contrato_sat"
@@ -284,9 +287,9 @@
       </div> -->
             <!-- <div class="col-4">
         <label for="num_empleado">Número de empleado:</label>
-        <p-inputNumber
+        <p-inputNumber 
           id="num_empleado"
-          class="full-width"
+          class="full-width" 
           formControlName="num_empleado"
           [useGrouping]="false"
           [ngClass]="{'ng-invalid ng-dirty': esInvalido('num_empleado')}"
@@ -331,9 +334,9 @@
         <!--div class="row">
       <div class="col-4">
         <label for="nss">Nss:</label>
-        <p-inputNumber
+        <p-inputNumber 
           id="nss"
-          class="full-width"
+          class="full-width" 
           formControlName="nss"
           [maxlength]="11"
           [useGrouping]="false"
@@ -453,7 +456,8 @@
             </div>
             <div class="col-4">
                 <label for="cotizacion">Salario diario integrado:</label>
-                <input id="cotizacion" pInputText class="form-control" maxlength="50" formControlName="cotizacion" [ngClass]="{'ng-invalid ng-dirty': esInvalido('cotizacion')}">
+                <!--input id="cotizacion" pInputText class="form-control" maxlength="50" formControlName="cotizacion" [ngClass]="{'ng-invalid ng-dirty': esInvalido('cotizacion')}"-->
+                <p-inputNumber id="cotizacion" class="full-width" formControlName="cotizacion" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalido('cotizacion')}"></p-inputNumber>
                 <div *ngIf="esInvalido('cotizacion')">
                     <small class="error-msg">
             {{ obtenerMensajeError('cotizacion') }}
@@ -591,5 +595,5 @@
 
     </div>
 </form>
- 
+
 <!-- <pre>{{ form.value | json }}</pre> -->

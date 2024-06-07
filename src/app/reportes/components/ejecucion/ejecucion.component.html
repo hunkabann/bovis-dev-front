@@ -7,6 +7,9 @@
     <p-toolbar styleClass="p-1 mt-5 mb-4 d-flex justify-content-end gap-2 text-right">
         <button type="button" class="btn btn-secondary" [routerLink]="['/reportes/lista']"><i class="fas fa-arrow-left"></i> Regresar</button>
     </p-toolbar>
+    <p-toolbar styleClass="p-2 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="datos !== undefined">
+        <p-button icon="pi pi-file-excel" pTooltip="Exportar Excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportToExcel()"></p-button>
+    </p-toolbar>
 
     <div class="table-container">
         <p-table #tablaPrincipal class="tabla-filtro" paginatorPosition="both" [columns]="encabezados" [value]="datos" [paginator]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]"

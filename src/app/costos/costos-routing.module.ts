@@ -5,7 +5,7 @@ import { CapturaBeneficiosComponent } from './components/captura-beneficios/capt
 
 const routes: Routes = [
   { path: 'costo-empleado', component: CostoEmpleadoComponent },
-  { path: 'costo-proyecto', component: CapturaBeneficiosComponent }
+  { path: 'costo-proyecto/:id', component: CapturaBeneficiosComponent }
 ];
 
 @NgModule({

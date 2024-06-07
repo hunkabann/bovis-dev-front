@@ -5,14 +5,14 @@
   <p>Seleccione un proyecto y presione el botón <strong>Editar</strong>.</p>
 </div>-->
 
-<ng-template #cargandoView>
-    <div class="text-center" *ngIf="cargando">
-        <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
-        <p>Cargando ingresos...</p>
-        <p><strong>Un momento.</strong></p>
-    </div>
-</ng-template>
+<div class="text-center" *ngIf="cargando; else principal">
+    <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+    <p>Cargando Ingresos...</p>
+    <p><strong>Un momento.</strong></p>
+</div>
 
+<ng-template #principal>
+  <div class="content" style="margin: 2%">
 <ng-container [formGroup]="form">
     <ng-container formArrayName="secciones">
         <p-accordion [activeIndex]="i" [formGroupName]="i" *ngFor="let seccion of secciones.controls; let i = index">
@@ -65,3 +65,5 @@
         </p-accordion>
     </ng-container>
 </ng-container>
+</div>
+</ng-template>

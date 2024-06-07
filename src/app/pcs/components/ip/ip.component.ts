@@ -39,6 +39,7 @@ export class IpComponent implements OnInit {
   proyecto: Proyecto = null
   cargando: boolean = true
   mostrarFormulario: boolean = false
+  idproyecto: number;
 
   form = this.fb.group({
     num_proyecto: ['', [Validators.required]],
@@ -64,9 +65,10 @@ export class IpComponent implements OnInit {
     nombre_contacto: [null],
     posicion_contacto: [null],
     telefono_contacto: [null],
-    correo_contacto: [null]
+    correo_contacto: [null],
+    impuesto_nomina: [0, [Validators.required]]
   })
-
+  
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   catalogosService = inject(CatalogosService)
@@ -77,19 +79,124 @@ export class IpComponent implements OnInit {
     this.pcsService.cambiarEstadoBotonNuevo(true)
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
+
         if (!params.proyecto) {
           this.proyecto = null
           this.cargando = false
           this.form.reset()
+
+          console.log("params.proyecto:" + params.proyecto)
+        }else{
+          this.idproyecto = params.proyecto
+          console.log("else params.proyecto:" + params.proyecto)
+
+          this.mostrarFormulario = true
+      // this.sharedService.cambiarEstado(true)
+      // this.cargando = true
+      this.pcsService.obtenerProyectoPorId(this.idproyecto)
+        .pipe(finalize(() => {
+          // this.sharedService.cambiarEstado(false)
+          this.cargando = false
+        }))
+        .subscribe({
+          next: ({ data }) => {
+            //console.log(data)
+            if (data.length >= 0) {
+              const [proyectoData] = data
+              const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
+              this.form.patchValue({
+                num_proyecto: proyectoData.nunum_proyecto.toString(),
+                nombre_proyecto: proyectoData.chproyecto.toString(),
+                alcance: proyectoData.chalcance.toString(),
+                codigo_postal: proyectoData.chcp,
+                ciudad: proyectoData.chciudad,
+                id_pais: proyectoData.nukidpais,
+                id_estatus: proyectoData.nukidestatus,
+                id_sector: proyectoData.nukidsector,
+                id_tipo_proyecto: proyectoData.nukidtipo_proyecto,
+                id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
+                id_responsable_construccion: proyectoData.nukidresponsable_construccion,
+                id_responsable_ehs: proyectoData.nukidresponsable_ehs,
+                id_responsable_supervisor: proyectoData.nukidresponsable_supervisor,
+                ids_clientes,
+                id_empresa: proyectoData.nukidempresa.toString(),
+                id_director_ejecutivo: proyectoData.nukiddirector_ejecutivo.toString(),
+                costo_promedio_m2: proyectoData.nucosto_promedio_m2,
+                fecha_inicio: proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
+                fecha_fin: proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
+                nombre_contacto: proyectoData.chcontacto_nombre,
+                posicion_contacto: proyectoData.chcontacto_posicion,
+                telefono_contacto: proyectoData.chcontacto_telefono,
+                correo_contacto: proyectoData.chcontacto_correo,
+                impuesto_nomina: proyectoData.impuesto_nomina
+                
+              })
+              this.actualizarTotalMeses()
+            }
+          },
+          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        })
         }
       })
 
-    this.pcsService.obtenerIdProyecto()
+     if (this.idproyecto){
+      console.log("Entro al this.idproyecto " + this.idproyecto)
+      this.mostrarFormulario = true
+      // this.sharedService.cambiarEstado(true)
+      // this.cargando = true
+      this.pcsService.obtenerProyectoPorId(this.idproyecto)
+        .pipe(finalize(() => {
+          // this.sharedService.cambiarEstado(false)
+          this.cargando = false
+        }))
+        .subscribe({
+          next: ({ data }) => {
+            //console.log(data)
+            if (data.length >= 0) {
+              const [proyectoData] = data
+              const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
+              this.form.patchValue({
+                num_proyecto: proyectoData.nunum_proyecto.toString(),
+                nombre_proyecto: proyectoData.chproyecto.toString(),
+                alcance: proyectoData.chalcance.toString(),
+                codigo_postal: proyectoData.chcp,
+                ciudad: proyectoData.chciudad,
+                id_pais: proyectoData.nukidpais,
+                id_estatus: proyectoData.nukidestatus,
+                id_sector: proyectoData.nukidsector,
+                id_tipo_proyecto: proyectoData.nukidtipo_proyecto,
+                id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
+                id_responsable_construccion: proyectoData.nukidresponsable_construccion,
+                id_responsable_ehs: proyectoData.nukidresponsable_ehs,
+                id_responsable_supervisor: proyectoData.nukidresponsable_supervisor,
+                ids_clientes,
+                id_empresa: proyectoData.nukidempresa.toString(),
+                id_director_ejecutivo: proyectoData.nukiddirector_ejecutivo.toString(),
+                costo_promedio_m2: proyectoData.nucosto_promedio_m2,
+                fecha_inicio: proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
+                fecha_fin: proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
+                nombre_contacto: proyectoData.chcontacto_nombre,
+                posicion_contacto: proyectoData.chcontacto_posicion,
+                telefono_contacto: proyectoData.chcontacto_telefono,
+                correo_contacto: proyectoData.chcontacto_correo,
+                impuesto_nomina: proyectoData.impuesto_nomina
+                
+              })
+              this.actualizarTotalMeses()
+            }
+          },
+          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        })
+    
+     }else{
+
+      this.pcsService.obtenerIdProyecto()
       .subscribe(numProyecto => {
         // this.proyectoSeleccionado = true
         // this.form.reset()
         // this.etapas.clear()
         if (numProyecto) {
+          console.log("Entro al numero de proyecto " + numProyecto)
           this.mostrarFormulario = true
           // this.sharedService.cambiarEstado(true)
           // this.cargando = true
@@ -100,7 +207,7 @@ export class IpComponent implements OnInit {
             }))
             .subscribe({
               next: ({ data }) => {
-                console.log(data)
+                //console.log(data)
                 if (data.length >= 0) {
                   const [proyectoData] = data
                   const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
@@ -108,11 +215,11 @@ export class IpComponent implements OnInit {
                     num_proyecto: proyectoData.nunum_proyecto.toString(),
                     nombre_proyecto: proyectoData.chproyecto.toString(),
                     alcance: proyectoData.chalcance.toString(),
-                    codigo_postal: proyectoData.chcp.toString(),
-                    ciudad: proyectoData.chciudad.toString(),
-                    id_pais: proyectoData.nukidpais.toString(),
-                    id_estatus: proyectoData.nukidestatus.toString(),
-                    id_sector: proyectoData.nukidsector.toString(),
+                    codigo_postal: proyectoData.chcp,
+                    ciudad: proyectoData.chciudad,
+                    id_pais: proyectoData.nukidpais,
+                    id_estatus: proyectoData.nukidestatus,
+                    id_sector: proyectoData.nukidsector,
                     id_tipo_proyecto: proyectoData.nukidtipo_proyecto,
                     id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
                     id_responsable_construccion: proyectoData.nukidresponsable_construccion,
@@ -127,17 +234,24 @@ export class IpComponent implements OnInit {
                     nombre_contacto: proyectoData.chcontacto_nombre,
                     posicion_contacto: proyectoData.chcontacto_posicion,
                     telefono_contacto: proyectoData.chcontacto_telefono,
-                    correo_contacto: proyectoData.chcontacto_correo
+                    correo_contacto: proyectoData.chcontacto_correo,
+                    impuesto_nomina: proyectoData.impuesto_nomina
+                    
                   })
                   this.actualizarTotalMeses()
                 }
               },
               error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
             })
-        } else {
-          console.log('No hay proyecto');
-        }
+        } else  {
+            console.log('No hay proyecto');
+          }
+        
       })
+
+     }
+
+    
 
     this.activatedRoute.queryParams.subscribe(params => {
       const nuevo = params['nuevo']

@@ -480,6 +480,7 @@ export interface CostoEmpleadoResponse {
 }
 
 export interface CostoEmpleado {
+  idCostoEmpleado:                number;
   idCosto:                        number;
   numEmpleadoRrHh:                string;
   nuAnno:                         number;
@@ -531,3 +532,46 @@ export interface CostoEmpleado {
   fechaActualizacion:             string;
   regHistorico:                   boolean;
 }
+
+
+export class Proyectos{
+  numProyecto: number;
+  nombre: string;
+  alcance: string;
+}
+
+export class Empresas{
+  idEmpresa: number;
+  empresa: string;
+  rfc: string;
+}
+
+export class Busqueda{
+  idProyecto: any = null;
+  //idCliente: any = null;
+  idEmpresa: any = null;
+  //fechaIni: string = null;
+  //fechaFin: string = null;
+  //noFactura: string = null;
+}
+
+export const encabezados = Object.freeze([
+  // {id: 'id', label: 'Id'},
+  {id: 'nunum_empleado_rr_hh', label: 'Número de empleado RRHH'},
+  {id: 'nombre_persona', label: 'Persona'},
+  {id: 'chtipo_emplado', label: 'Tipo empleado'},
+  {id: 'chcategoria', label: 'Categoría'},
+  {id: 'chtipo_contrato', label: 'Tipo de contrato'},
+  {id: 'chpuesto', label: 'Puesto'},
+  {id: 'chempresa', label: 'Empresa'},
+  {id: 'chciudad', label: 'Ciudad'},
+  {id: 'nukidjefe_directo', label: 'Jefe directo'},
+  {id: 'chunidad_negocio', label: 'Unidad de negocio'},
+  {id: 'dtfecha_ingreso', label: 'Fecha de ingreso'},
+  {id: 'dtfecha_salida', label: 'Fecha de salida'},
+  {id: 'dtfecha_ultimo_reingreso', label: 'Fecha de reingreso'},
+  {id: 'chnss', label: 'Nss'},
+  {id: 'chemail_bovis', label: 'Email Bovis'},
+  {id: 'nuantiguedad', label: 'Antiguedad'},
+  {id: 'nufondo_fijo', label: 'Fondo fijo'}
+])

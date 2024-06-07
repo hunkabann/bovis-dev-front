@@ -25,7 +25,7 @@ export class CalcularResultadoObjetivosPipe implements PipeTransform {
       resultado = +objetivo.valor
     }
     
-    if(objetivo.descripcion?.startsWith('2.-') || objetivo.descripcion == 'Objetivo personal') {
+    if(objetivo.descripcion?.startsWith('2.-') || objetivo.descripcion == 'Objetivo personal' || objetivo.descripcion?.startsWith('3.-')) {
       const cantidad = objetivo.resultadoTemporal * 100
       if(cantidad < MIN) {
         resultado = 0
@@ -36,7 +36,8 @@ export class CalcularResultadoObjetivosPipe implements PipeTransform {
       }
     }
 
-    return Math.round(resultado).toFixed(2);
+    //return Math.round(resultado).toFixed(2);
+    return resultado;
   }
 
 }

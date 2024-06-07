@@ -198,6 +198,10 @@ export class EmpleadosService {
   guardarBeneficioCosto(body: any) {
     return this.http.post<GenericResponse>(`${this.baseUrl}/api/Beneficios`, body)
   }
+
+  ActualizaBeneficioCosto(body: any,url: string) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}/api/Beneficios` + url, body)
+  }
   
   getContratoPorEmpleado(id: number) {
     return this.http.get<ContratoResponse>(`${this.baseUrl}api/Contrato/ContratoEmpleado/Registro/${id}`)
@@ -211,7 +215,8 @@ export class EmpleadosService {
 
   guardarCostoEmpleadoActualiza(body: any , esActualizacion: boolean,id: string) {
     
-    return this.http.put<GenericResponse>(`${this.baseUrl}${id}`, body)
+    //return this.http.put<GenericResponse>(`${this.baseUrl}api/Costo/Empleado`, body)
+     return this.http.put<GenericResponse>(`${this.baseUrl}`+id, body)
   }
 
   guardarContrato(body: any, esActualizacion: boolean) {
@@ -225,6 +230,14 @@ export class EmpleadosService {
   saveEmpleado(empleado: CatEmpleado): Observable<any> {
     console.log(empleado);
     return this.http.put(`${this.baseUrl}api/empleado/Agregar`, empleado, { headers: this.httpHeaders });
+  }
+
+   getProyectos() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/proyectos/true`);
+  }
+
+  getEmpresas() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/empresas`);
   }
 
 }

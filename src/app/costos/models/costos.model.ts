@@ -50,7 +50,7 @@ export interface CostoEmpleado {
   vaidCostoMensual:               number;
   vaidComisionCostoMensual:       number;
   ptuProvision:                   number;
-  beneficios:                     null;
+  beneficios:                     Beneficio[];
   impuesto3sNomina:               number;
   imss:                           number;
   retiro2:                        number;
@@ -70,8 +70,37 @@ export interface CostoEmpleado {
   empresa:                        string;
   aguinaldoCantidadMeses:         number;
   nombreCompletoEmpleado:         string;
+  salarioDiarioIntegrado:         number;
+  beneficiosproyecto:             BeneficiosProyectos[];
   
 }
+
+export interface Beneficio {
+  id:                  number;
+  idBeneficio:         number;
+  beneficio:           string;
+  numEmpleadoRrHh:     string;
+  costo:               number;
+  mes:                 number;
+  anio:                number;
+  fechaActualizacion:  string;
+  regHistorico:        number;
+}
+
+export interface BeneficiosProyectos {
+  id:                  number;
+  idBeneficio:         number;
+  beneficio:           string;
+  numEmpleadoRrHh:     string;
+  costo:               number;
+  mes:                 number;
+  anio:                number;
+  fechaActualizacion:  string;
+  regHistorico:        number;
+  nucostobeneficio:    number;
+  numProyecto:         string;
+}
+
 
 export const encabezados = Object.freeze([
   // {id: 'id', label: 'Id'},
@@ -81,16 +110,100 @@ export const encabezados = Object.freeze([
   {id: 'ciudad', label: 'Ciudad base de trabajo'},
   {id: 'puesto', label: 'Puesto'},
   {id: 'numProyecto', label: 'Proyecto'},
-  {id: 'sueldoBruto', label: 'Sueldo bruto (inflación %)'},
+  {id: 'sueldoBrutoInflacion', label: 'Sueldo bruto (inflación %)'},
   {id: 'cargasSociales', label: 'Cargas Sociales'},
   {id: 'costoMensualEmpleado', label: 'Costo Mensual Empleado'},
-  //{id: 'chunidad_negocio', label: 'Unidad de negocio'},
-  //{id: 'dtfecha_ingreso', label: 'Fecha de ingreso'},
-  //{id: 'dtfecha_salida', label: 'Fecha de salida'},
-  //{id: 'dtfecha_ultimo_reingreso', label: 'Fecha de reingreso'},
-  //{id: 'chnss', label: 'Nss'},
-  //{id: 'chemail_bovis', label: 'Email Bovis'},
-  //{id: 'nuantiguedad', label: 'Antiguedad'},
-  //{id: 'nufondo_fijo', label: 'Fondo fijo'}
+  {id: 'unidadNegocio', label: 'Unidad de negocio'},
+  {id: 'empresa', label: 'Empresa'},
+  {id: 'nombreJefe', label: 'Nombre del Jefe'},
+  {id: 'fechaIngreso', label: 'Fecha de ingreso'},
+  {id: 'antiguedad', label: 'Antiguedad'},
+  {id: 'avgDescuentoEmpleado', label: 'Descuento empleado'},
+  {id: 'montoDescuentoMensual', label: 'Descuento Mensual'},
+  {id: 'sueldoNetoPercibidoMensual', label: 'Sueldo neto mensual'},
+  {id: 'retencionImss', label: 'Retencion IMMS'},
+  {id: 'ispt', label: 'ispt'},
+  //{id: 'sueldoBrutoInflacion', label: 'sueldo Bruto Inflacion'},
+  {id: 'anual', label: 'anual'},
+  {id: 'aguinaldoCantidadMeses', label: 'aguinaldo Cantidad Meses'},
+  {id: 'aguinaldoMontoProvisionMensual', label: 'aguinaldo Monto Provision Mensual'},
+  {id: 'pvDiasVacasAnuales', label: 'pvDiasVacasAnuales'},
+  {id: 'pvProvisionMensual', label: 'pvProvisionMensual'},
+  {id: 'indemProvisionMensual', label: 'indemProvisionMensual'},
+  {id: 'avgBonoAnualEstimado', label: 'avgBonoAnualEstimado'},
+  {id: 'bonoAnualProvisionMensual', label: 'bonoAnualProvisionMensual'},
+  {id: 'sgmmCostoTotalAnual', label: 'sgmmCostoTotalAnual'},
+  {id: 'sgmmCostoMensual', label: 'sgmmCostoMensual'},
+  {id: 'svCostoTotalAnual', label: 'svCostoTotalAnual'},
+  {id: 'svCostoMensual', label: 'svCostoMensual'},
+  {id: 'vaidCostoMensual', label: 'vaidCostoMensual'},
+  {id: 'vaidComisionCostoMensual', label: 'vaidComisionCostoMensual'},
+  {id: 'ptuProvision', label: 'ptuProvision'},
+  {id: 'impuesto3sNomina', label: 'impuesto3sNomina'},
+  {id: 'imss', label: 'imss'},
+  {id: 'retiro2', label: 'retiro2'},
+  {id: 'cesantesVejez', label: 'cesantesVejez'},
+  {id: 'infonavit', label: 'infonavit'},
+  {id: 'cargasSociales', label: 'cargasSociales'},
+  {id: 'costoMensualEmpleado', label: 'costoMensualEmpleado'},
+  {id: 'costoMensualProyecto', label: 'costoMensualProyecto'},
+  {id: 'costoAnualEmpleado', label: 'costoAnualEmpleado'},
+  {id: 'costoSalarioBruto', label: 'costoSalarioBruto'},
+  {id: 'costoSalarioNeto', label: 'costoSalarioNeto'},
+  {id: 'nuAnno', label: 'nuAnno'},
+  {id: 'nuMes', label: 'nuMes'},
+  {id: 'salarioDiarioIntegrado', label: 'salarioDiarioIntegrado'}
+ 
+  
 ])
+
+export interface PuestosResponse {
+  data:          Puesto[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface Puesto {
+  nukid_puesto:   number;
+  nukidnivel:     number;
+  chpuesto:       string;
+  boactivo:       boolean;
+  nusalario_min:  number;
+  nusalario_max:  number;
+  nusalario_prom: number;
+}
+
+export interface UpPersonasResponse {
+  data:          UpPersona[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+
+
+export interface UpPersona {
+  nukidpersona:       number;
+  nukidedo_civil:     number;
+  chedo_civil:        string;
+  nukidtipo_sangre:   number;
+  chtipo_sangre:      string;
+  chnombre:           string;
+  chap_paterno:       string;
+  chap_materno:       null | string;
+  nukidsexo:          number;
+  chsexo:             string;
+  chrfc:              string;
+  dtfecha_nacimiento: string;
+  chemail:            string;
+  chtelefono:         string;
+  chcelular:          null | string;
+  chcurp:             null | string;
+  nukidtipo_persona:  number;
+  chtipo_persona:     string;
+  boactivo:           boolean;
+  boempleado:         boolean;
+  chnombre_completo?: string
+}
 

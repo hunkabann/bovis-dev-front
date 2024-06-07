@@ -34,26 +34,30 @@
             <label>Clasificación PY:</label>
             <p-dropdown [options]="clasificacionesPY" placeholder="Seleccionar una clasificación" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [(ngModel)]="clasificacionPY" [filter]="true" filterBy="name"></p-dropdown>
         </div>
-        <div class="col-12 d-flex justify-content-center align-items-center gap-2">
-            <button type="button" class="btn btn-dark" (click)="limpiar()">Limpiar filtros</button>
-            <button type="button" class="btn btn-info" (click)="filtrar()">Buscar</button>
+
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+                <button type="button" class="btn btn-dark" (click)="limpiar()"><i class="fas fa-eraser"></i> Limpiar filtros</button>
+                <button type="button" class="btn btn-primary" (click)="filtrar()"><i class="fas fa-save"></i> Buscar</button>
+            </div>
         </div>
     </div>
 
     <div class="d-flex flex-column gap-2">
         <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="totalRegistros > 0">
-            <p-button label="Exportar Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+            <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
         </p-toolbar>
-
         <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [showCurrentPageReport]="true" [totalRecords]="totalRegistros" [lazy]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50, 100]"
-            [rows]="noRegistros" [loading]="loading" paginatorPosition="both" (onLazyLoad)="loadData($event)" styleClass="p-datatable-striped">
+            [rows]="noRegistros" [loading]="loading" paginatorPosition="both" (onLazyLoad)="loadData($event)">
             <ng-template pTemplate="header">
                 <tr>
-                    <th *ngFor="let header of cieHeadersLocal" [pSortableColumn]="cieHeadersFieldsLocal[header]">
-                        <div class="d-flex align-items-center">{{header}}
-                            <p-sortIcon [field]="cieHeadersFieldsLocal[header]"></p-sortIcon>
+                    <!--th *ngFor="let header of cieHeadersLocal" [pSortableColumn]="cieHeadersFieldsLocal[header]">
+                    <div class="d-flex align-items-left">{{header}}<p-sortIcon [field]="cieHeadersFieldsLocal[header]"></p-sortIcon></div>
+                </th-->
+                    <th *ngFor="let val of getHeadersTabla()" [pSortableColumn]="val.key">
+                        <div class="d-flex align-items-center">{{val.label}}
+                            <p-sortIcon [field]="val.key"></p-sortIcon>
                         </div>
-                        <!-- {{header}} -->
                     </th>
                     <th pSortableColumn="inconsistente">
                         <div class="d-flex align-items-center">Inconsistente
@@ -89,7 +93,7 @@
                     <td>{{record.centroCostos}}</td>
                     <td>{{record.proyecto}}</td>
                     <td>{{record.saldoInicial | currency}}</td>
-                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion); then thendebe else elsedebe"> </td>
+                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion) ; then thendebe else elsedebe"> </td>
                     <ng-template #thendebe>
                         <td>{{record.debe|currency}}</td>
                     </ng-template>
@@ -97,7 +101,7 @@
                         <td>{{0.0|currency}}</td>
                     </ng-template>
                     <!--td>{{record.debe | currency}}</td-->
-                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion); then thenhaber else elsehaber"> </td>
+                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion) ; then thenhaber else elsehaber"> </td>
                     <ng-template #thenhaber>
                         <td>{{record.haber|currency}}</td>
                     </ng-template>
@@ -105,9 +109,9 @@
                         <td>{{0.0|currency}}</td>
                     </ng-template>
                     <!--td>{{record.haber | currency}}</td-->
-                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion); then thenmovimiento else elsemovimiento"> </td>
+                    <td *ngIf="esElmismomes(record.fecha,record.fechaCancelacion) ; then thenmovimiento else elsemovimiento"> </td>
                     <ng-template #thenmovimiento>
-                        <td>{{record.movimiento|currency}}</td>
+                        <td>{{regresaValorPositivo(record.debe, record.movimiento)|currency}}</td>
                     </ng-template>
                     <ng-template #elsemovimiento>
                         <td>{{0.0|currency}}</td>

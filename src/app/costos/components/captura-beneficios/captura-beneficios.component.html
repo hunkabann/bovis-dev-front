@@ -5,8 +5,8 @@
     <div class="main-container">
         <div class="buttons-container">
             <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Guardar</button>
+            <button type="button" class="btn btn-info" routerLink="/costos/costo-empleado">Regresar</button>
         </div>
-    
         <div class="row">
             <div class="col-12">
                 <label for="num_empleado">Empleado:</label>
@@ -22,6 +22,7 @@
                     [filter]="true" 
                     filterBy="name"
                     optionValue="code"
+                    
                 ></p-dropdown>
                 <div *ngIf="esInvalido('num_empleado')">
                     <small
@@ -32,6 +33,965 @@
                 </div>
             </div>
 
+        </div>
+    
+        <div class="row">
+            
+
+            <div class="col-3">
+                <label for="num_empleado_rr_hh">Número de empleado RRHH:</label>
+                <input 
+                  id="num_empleado_rr_hh"
+                  pInputText
+                  class="form-control" 
+                  formControlName="num_empleado_rr_hh"
+                  [ngClass]="{'ng-invalid ng-dirty': esInvalido('num_empleado_rr_hh')}"
+                  
+                />
+                <div *ngIf="esInvalido('num_empleado_rr_hh')">
+                  <small
+                    class="error-msg"
+                  >
+                    {{ obtenerMensajeError('num_empleado_rr_hh') }}
+                  </small>
+                </div>
+              </div>
+
+             <div class="col-3">
+                <label for="numEmpleadoNoi">Número de empleado NOI:</label>
+                <input 
+                  id="numEmpleadoNoi"
+                  pInputText
+                  class="form-control" 
+                  formControlName="numEmpleadoNoi"
+                  [ngClass]="{'ng-invalid ng-dirty': esInvalido('numEmpleadoNoi')}"
+                  
+                  [readonly]="disabledInput"
+                 
+                >
+                <div *ngIf="esInvalido('numEmpleadoNoi')">
+                  <small
+                    class="error-msg"
+                  >
+                    {{ obtenerMensajeError('numEmpleadoNoi') }}
+                  </small>
+                </div>
+              </div>
+
+              <div class="col-3">
+                  <label for="ciudad">Ciudad de trabajo:</label>
+                  <input 
+                    id="ciudad"
+                    pInputText
+                    class="form-control" 
+                    maxlength="50" 
+                    formControlName="ciudad"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('ciudad')}"
+                  >
+                  <div *ngIf="esInvalido('ciudad')">
+                    <small
+                      class="error-msg"
+                    >
+                      {{ obtenerMensajeError('ciudad') }}
+                    </small>
+                  </div>
+                </div>
+
+                <div class="col-3">
+                    <label for="reubicacion">Reubicacion:</label>
+                    <input 
+                      id="reubicacion"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="reubicacion"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('reubicacion')}"
+                    >
+                    <div *ngIf="esInvalido('reubicacion')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('reubicacion') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  
+                  <div class="col-3">
+                    <label for="puesto">Puesto:</label>
+                    <input 
+                      id="puesto"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="puesto"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('puesto')}"
+                    >
+                    <div *ngIf="esInvalido('puesto')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('puesto') }}
+                      </small>
+                    </div>
+                  </div>
+                  
+                  <div class="col-3">
+                    <label for="proyecto">Proyecto:</label>
+                    <input 
+                      id="proyecto"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="proyecto"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('proyecto')}"
+                    >
+                    <div *ngIf="esInvalido('proyecto')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('proyecto') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="unidadNegocio"> Unidad negocios :</label>
+                    <input 
+                      id="unidadNegocio"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="unidadNegocio"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('unidadNegocio')}"
+                    >
+                    <div *ngIf="esInvalido('unidadNegocio')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('unidadNegocio') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="empresa">Nomina:</label>
+                    <input 
+                      id="empresa"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="empresa"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('empresa')}"
+                    >
+                    <div *ngIf="esInvalido('empresa')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('empresa') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="timesheet">Timesheet:</label>
+                    <input 
+                      id="timesheet"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="timesheet"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('timesheet')}"
+                    >
+                    <div *ngIf="esInvalido('timesheet')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('timesheet') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="nombreJefe">Jefe Directo:</label>
+                    <input 
+                      id="nombreJefe"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="nombreJefe"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('nombreJefe')}"
+                    >
+                    <div *ngIf="esInvalido('nombreJefe')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('nombreJefe') }}
+                      </small>
+                    </div>
+                  </div>
+                  
+                  <h4 class="mt-2">Seniority</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="fechaIngreso">Fecha Ingreso:</label>
+                    <input 
+                      id="fechaIngreso"
+                      pInputText
+                      dateFormat="dd/mm/yy"
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="fechaIngreso"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('fechaIngreso')}"
+                    >
+                    <div *ngIf="esInvalido('fechaIngreso')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('fechaIngreso') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="antiguedad">Antigüedad:</label>
+                    <input 
+                      id="antiguedad"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="antiguedad"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('antiguedad')}"
+                    >
+                    <div *ngIf="esInvalido('antiguedad')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('antiguedad') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Sueldo Neto Mensual (MN)</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="avgDescuentoEmpleado">%  a descontar al empleado:</label>
+                    <input 
+                    id="avgDescuentoEmpleado"
+                    pInputText
+                    class="form-control" 
+                    maxlength="50" 
+                    formControlName="avgDescuentoEmpleado"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('avgDescuentoEmpleado')}"
+                  >                   
+                    <div *ngIf="esInvalido('avgDescuentoEmpleado')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('avgDescuentoEmpleado') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="montoDescuentoMensual">Monto descuento Mensual:</label>
+                    <p-inputNumber 
+                      id="montoDescuentoMensual"
+                      class="full-width"
+                      mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                      formControlName="montoDescuentoMensual"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('montoDescuentoMensual')}"
+                      prefix="$" 
+                    > </p-inputNumber>
+                    <div *ngIf="esInvalido('montoDescuentoMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('montoDescuentoMensual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="sueldoNetoPercibidoMensual">Sueldo Neto percibido Mensual :</label>
+                    <p-inputNumber 
+                    id="sueldoNetoPercibidoMensual"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="sueldoNetoPercibidoMensual"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoNetoPercibidoMensual')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('sueldoNetoPercibidoMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('sueldoNetoPercibidoMensual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="retencionImss">Retención Imss:</label>
+                    <p-inputNumber 
+                    id="retencionImss"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="retencionImss"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('retencionImss')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('retencionImss')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('retencionImss') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="ispt">ISPT:</label>
+                    <p-inputNumber 
+                    id="ispt"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="ispt"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('ispt')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('ispt')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('ispt') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Sueldo Bruto MN/ usd</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="sueldoBrutoInflacion">Sueldo  bruto (inflación %):</label>
+                    <p-inputNumber 
+                    id="sueldoBrutoInflacion"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="sueldoBrutoInflacion"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('sueldoBrutoInflacion')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('sueldoBrutoInflacion')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('sueldoBrutoInflacion') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="anual">Anual:</label>
+                    <p-inputNumber 
+                    id="anual"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="anual"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('anual')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('anual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('anual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">AGUINALDO</h4>
+                  <hr>
+                  
+                  <div class="col-3">
+                    <label for="aguinaldoCantidadMeses">Cant (Meses):</label>
+                    <input 
+                      id="aguinaldoCantidadMeses"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="aguinaldoCantidadMeses"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('aguinaldoCantidadMeses')}"
+                    >
+                    <div *ngIf="esInvalido('aguinaldoCantidadMeses')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('aguinaldoCantidadMeses') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="aguinaldoMontoProvisionMensual">Monto (Provisión Mensual):</label>
+                    <p-inputNumber 
+                    id="aguinaldoMontoProvisionMensual"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="aguinaldoMontoProvisionMensual"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('aguinaldoMontoProvisionMensual')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('aguinaldoMontoProvisionMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('aguinaldoMontoProvisionMensual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Prima Vacacional</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="pvDiasVacasAnuales">Días de Vacaciones:</label>
+                    <input 
+                      id="pvDiasVacasAnuales"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="pvDiasVacasAnuales"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('pvDiasVacasAnuales')}"
+                    >
+                    <div *ngIf="esInvalido('pvDiasVacasAnuales')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('pvDiasVacasAnuales') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="pvProvisionMensual">Prima Vacacional (provisión Mensual):</label>
+                    <p-inputNumber 
+                    id="pvProvisionMensual"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="pvProvisionMensual"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('pvProvisionMensual')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('pvProvisionMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('pvProvisionMensual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Indemnizacion</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="indemProvisionMensual">Provisión Mensual:</label>
+                    <p-inputNumber 
+                    id="indemProvisionMensual"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="indemProvisionMensual"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('indemProvisionMensual')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('indemProvisionMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('indemProvisionMensual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Provision Bono Mensual</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="avgBonoAnualEstimado">Bono estimado:</label>
+                    <!--input 
+                      id="avgBonoAnualEstimado"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="avgBonoAnualEstimado"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('avgBonoAnualEstimado')}" -->
+               
+
+                    <p-inputNumber 
+                    id="avgBonoAnualEstimado"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="avgBonoAnualEstimado"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('avgBonoAnualEstimado')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('avgBonoAnualEstimado')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('avgBonoAnualEstimado') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <!--div class="col-3">
+                    <label for="bonoAnualProvisionMensual">Provisión Mensual (AC/12):</label>
+                    <input 
+                      id="bonoAnualProvisionMensual"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="bonoAnualProvisionMensual"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('bonoAnualProvisionMensual')}"
+                    >
+                    <div *ngIf="esInvalido('bonoAnualProvisionMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('bonoAnualProvisionMensual') }}
+                      </small>
+                    </div>
+                  </div-->
+
+                  <h4 class="mt-2">GMM</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="sgmmCostoTotalAnual">Costo total Anual SGMM:</label>
+                    <input 
+                      id="sgmmCostoTotalAnual"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="sgmmCostoTotalAnual"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('sgmmCostoTotalAnual')}"
+                    >
+                    <div *ngIf="esInvalido('sgmmCostoTotalAnual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('sgmmCostoTotalAnual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="sgmmCostoMensual">SGMM (Costo Mensual):</label>
+                    <input 
+                      id="sgmmCostoMensual"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="sgmmCostoMensual"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('sgmmCostoMensual')}"
+                    >
+                    <div *ngIf="esInvalido('sgmmCostoMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('sgmmCostoMensual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Seguro de Vida</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="svCostoTotalAnual">Costo total Anual:</label>
+                    <input 
+                      id="svCostoTotalAnual"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="svCostoTotalAnual"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('svCostoTotalAnual')}"
+                    >
+                    <div *ngIf="esInvalido('svCostoTotalAnual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('svCostoTotalAnual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="svCostoMensual">Costo Mensual:</label>
+                    <input 
+                      id="svCostoMensual"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="svCostoMensual"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('svCostoMensual')}"
+                    >
+                    <div *ngIf="esInvalido('svCostoMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('svCostoMensual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Vales de Despensa</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="vaidCostoMensual">Costo Mensual:</label>
+                    <input 
+                      id="vaidCostoMensual"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="vaidCostoMensual"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('vaidCostoMensual')}"
+                    >
+                    <div *ngIf="esInvalido('vaidCostoMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('vaidCostoMensual') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="vaidComisionCostoMensual">Comisión (Costo Mensual):</label>
+                    <input 
+                      id="vaidComisionCostoMensual"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="vaidComisionCostoMensual"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('vaidComisionCostoMensual')}"
+                    >
+                    <div *ngIf="esInvalido('vaidComisionCostoMensual')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('pvDiasVacavaidComisionCostoMensualsAnuales') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">PTU</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="ptuProvision">PTU:</label>
+                    <p-inputNumber 
+                    id="ptuProvision"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="ptuProvision"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('ptuProvision')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('ptuProvision')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('ptuProvision') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Cargas Sociales e Impuestos laborales</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="impuesto3sNomina">IMPUESTO 3% S/Nomina:</label>
+                    <p-inputNumber 
+                    id="impuesto3sNomina"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="impuesto3sNomina"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('impuesto3sNomina')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('impuesto3sNomina')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('impuesto3sNomina') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="imss">IMSS:</label>
+                    <p-inputNumber 
+                    id="imss"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="imss"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('imss')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('imss')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('imss') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="retiro2">RETIRO 2%:</label>
+                    <p-inputNumber 
+                    id="retiro2"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="retiro2"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('retiro2')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('retiro2')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('retiro2') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="cesantesVejez">C Y V:</label>
+                    <p-inputNumber 
+                    id="cesantesVejez"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="cesantesVejez"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('cesantesVejez')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('cesantesVejez')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('cesantesVejez') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="infonavit">INFONAVIT:</label>
+                    <p-inputNumber 
+                    id="infonavit"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="infonavit"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('infonavit')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('infonavit')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('infonavit') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="cargasSociales">CARGAS SOCIALES:</label>
+                    <p-inputNumber 
+                    id="cargasSociales"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="cargasSociales"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('cargasSociales')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('cargasSociales')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('cargasSociales') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <h4 class="mt-2">Costo Total laboral BLL</h4>
+                  <hr>
+
+                  <div class="col-3">
+                    <label for="costoMensualEmpleado">Costo Mensual Empleado:</label>
+                    <p-inputNumber 
+                    id="costoMensualEmpleado"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="costoMensualEmpleado"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('costoMensualEmpleado')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('costoMensualEmpleado')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('costoMensualEmpleado') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="costoMensualProyecto">Costo Mensual Proyecto:</label>
+                    <p-inputNumber 
+                    id="costoMensualProyecto"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="costoMensualProyecto"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('costoMensualProyecto')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('costoMensualProyecto')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('costoMensualProyecto') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="costoAnualEmpleado">Costo Empleado Anual MN :</label>
+                    <p-inputNumber 
+                    id="costoAnualEmpleado"
+                    class="full-width"
+                    mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5"
+                    formControlName="costoAnualEmpleado"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('costoAnualEmpleado')}"
+                    prefix="$" 
+                  > </p-inputNumber>
+                    <div *ngIf="esInvalido('costoAnualEmpleado')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('costoAnualEmpleado') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="costoSalarioBruto">% Costo total / Salario Bruto:</label>
+                    <input 
+                      id="costoSalarioBruto"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="costoSalarioBruto"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('costoSalarioBruto')}"
+                    >
+                    <div *ngIf="esInvalido('costoSalarioBruto')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('costoSalarioBruto') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="costoSalarioNeto">% Costo total / Salario Neto:</label>
+                    <input 
+                      id="costoSalarioNeto"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="costoSalarioNeto"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('costoSalarioNeto')}"
+                    >
+                    <div *ngIf="esInvalido('costoSalarioNeto')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('costoSalarioNeto') }}
+                      </small>
+                    </div>
+                  </div>
+                  
+
+                  <!--div class="col-3">
+                    <label for="Nomina">Nomina:</label>
+                    <input 
+                      id="Nomina"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="Nomina"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('Nomina')}"
+                    >
+                    <div *ngIf="esInvalido('Nomina')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('Nomina') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  
+
+                  
+
+                  <div class="col-3">
+                    <label for="ingreso">Ingreso:</label>
+                    <input 
+                      id="ingreso"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="ingreso"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('ingreso')}"
+                    >
+                    <div *ngIf="esInvalido('ingreso')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('ingreso ') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="col-3">
+                    <label for="antiguedad">Antigüedad:</label>
+                    <input 
+                      id="antiguedad"
+                      pInputText
+                      class="form-control" 
+                      maxlength="50" 
+                      formControlName="antiguedad"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('antiguedad')}"
+                    >
+                    <div *ngIf="esInvalido('antiguedad')">
+                      <small
+                        class="error-msg"
+                      >
+                        {{ obtenerMensajeError('antiguedad') }}
+                      </small>
+                    </div>
+                  </div-->
+
+            <h4 class="mt-2">Beneficios (Valores Mensuales)</h4>
+                  <hr>
+                  
+  
             <div class="col-3">
                 <label for="vivienda">Vivienda:</label>
                 <p-inputNumber 
@@ -42,6 +1002,7 @@
                     [minFractionDigits]="2"
                     [maxFractionDigits]="5"
                     [ngClass]="{'ng-invalid ng-dirty': esInvalido('vivienda')}"
+                    
                 ></p-inputNumber>
                 <div *ngIf="esInvalido('vivienda')">
                 <small

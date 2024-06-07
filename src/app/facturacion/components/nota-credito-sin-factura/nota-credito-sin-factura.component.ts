@@ -198,6 +198,7 @@ export class NotaCreditoSinFacturaComponent implements OnInit {
             });
 
             this.clearFile()
+            location.reload();
           }
         },
         error: (e) => {

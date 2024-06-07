@@ -88,6 +88,7 @@ export interface Proyecto {
     chcontacto_telefono?:             string;
     chcontacto_correo?:               string;
     clientes:                         ClientePcs[];
+    impuesto_nomina:                  number;
 }
 
 export interface ClientePcs {
@@ -115,6 +116,7 @@ export interface GastosIngresosSecciones {
     codigo:    string;
     seccion:   string;
     rubros:    Rubro[];
+    
 }
 
 export interface Rubro {
@@ -125,4 +127,5 @@ export interface Rubro {
     reembolsable:     boolean;
     aplicaTodosMeses: boolean;
     fechas:           Fecha[];
+    numEmpleadoRrHh:    string;
 }
