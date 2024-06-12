@@ -11,6 +11,20 @@ import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { Rubro } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
+import {
+  Busqueda,
+  BusquedaCancelacion,
+  Clientes,
+  Cobranza,
+  Empresas,
+  NotaCredito,
+  Proyectos,
+  encabezados,
+  equivalenteFacturaCobranza,
+  equivalenteFacturaNota,
+  facturaCancelacion,
+} from 'src/app/facturacion/Models/FacturacionModels';
+import { FacturacionService } from 'src/app/facturacion/services/facturacion.service';
 
 @Component({
   selector: 'app-ingresos',
@@ -19,6 +33,11 @@ import { CatalogosService } from '../../services/catalogos.service';
   providers: [MessageService, DialogService]
 })
 export class IngresosComponent implements OnInit {
+
+  fechaInicio: Date;
+  fechaFin: Date;
+  
+  noFactura: string;
 
   dialogService     = inject(DialogService)
   fb                = inject(FormBuilder)
@@ -30,13 +49,26 @@ export class IngresosComponent implements OnInit {
   cargando:             boolean = true
   proyectoSeleccionado: boolean = false
   mesesProyecto:        Mes[] = []
+
+  facturas :        BusquedaCancelacion[] = []
   
   proyectoFechaInicio:  Date
   proyectoFechaFin:     Date
 
   idproyecto: number;
 
-  constructor() { }
+  totalRecords: number = 0;
+
+ 
+  IDEmpresa: number;
+  IDCliente: number;
+
+  listBusquedaCompleto: Array<BusquedaCancelacion> =
+  new Array<BusquedaCancelacion>();
+listBusquedaUnique: Array<BusquedaCancelacion> =
+  new Array<BusquedaCancelacion>();
+
+  constructor(private facturacionService: FacturacionService) { }
   
   form = this.fb.group({
     numProyecto:  [0, Validators.required],
@@ -135,6 +167,56 @@ export class IngresosComponent implements OnInit {
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
+
+
+
+      this.totalRecords = 0;
+      this.sharedService.cambiarEstado(true)
+      this.listBusquedaCompleto = new Array<BusquedaCancelacion>();
+      this.listBusquedaUnique = new Array<BusquedaCancelacion>();
+      this.facturacionService
+        .getBusqueda(this.getFiltrosVaues())
+        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe((bus) => {
+          console.log(bus);
+          this.listBusquedaCompleto = bus.data.map(factura => {
+            this.totalRecords++;
+            let importePendiente = 0
+            let importeEnPesos = 0
+  
+            console.log('factura concepto   -----'+ factura.concepto)
+            console.log('factura importe   -----'+ factura.importe)
+            importePendiente = factura.total
+            importeEnPesos = factura.idMoneda === 'MXN' ? factura.importe : factura.importe * factura.tipoCambio
+  
+            
+  
+            if (factura.notas != null && factura.notas.length > 0) {
+              factura.notas.forEach(nota => {
+                importePendiente -= nota.nC_Total
+              })
+            }
+  
+            if (factura.cobranzas != null && factura.cobranzas.length > 0) {
+              factura.cobranzas.forEach(cobranza => {
+                //importePendiente -= +cobranza.c_ImportePagado
+                importePendiente -= +cobranza.base
+              })
+            }
+  
+            return ({
+              ...factura,
+              importeEnPesos,
+              importePendiente
+            })
+          });
+          console.log(this.listBusquedaCompleto);
+           this.listBusquedaUnique = [
+             ...new Map(
+               this.listBusquedaCompleto.map((item) => [item['uuid'], item])
+             ).values(),
+          ];
+        });
   }
 
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
@@ -174,6 +256,32 @@ export class IngresosComponent implements OnInit {
         })
       }
     })
+  }
+
+  getFiltrosVaues() {
+    let objBusqueda: Busqueda = new Busqueda();
+
+   
+    
+    console.log('factura this.idproyecto   ----- '+ this.idproyecto)
+    //objBusqueda.idProyecto = this.idproyecto;
+    objBusqueda.idProyecto = 229;
+    
+
+    // switch (this.opcionFiltro) {
+    //   case 1:
+    //     objBusqueda.idProyecto = this.IDProyecto;
+    //     break;
+    //   case 2:
+    //     objBusqueda.idEmpresa = this.IDEmpresa;
+    //     break;
+    //   case 3:
+    //     objBusqueda.idCliente = this.IDCliente;
+    //     break;
+    // }
+
+
+    return objBusqueda;
   }
 
 }
