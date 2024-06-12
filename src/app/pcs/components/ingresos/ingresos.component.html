@@ -10,10 +10,9 @@
     <p>Cargando Ingresos...</p>
     <p><strong>Un momento.</strong></p>
 </div>
-
 <ng-template #principal>
-  <div class="content" style="margin: 2%">
-<ng-container [formGroup]="form">
+    <div class="content" style="margin: 2%">
+<ng-container [formGroup]="form" *ngIf="!cargando">
     <ng-container formArrayName="secciones">
         <p-accordion [activeIndex]="i" [formGroupName]="i" *ngFor="let seccion of secciones.controls; let i = index">
             <p-accordionTab>
@@ -25,42 +24,72 @@
                         </div>
                     </div>
                 </ng-template>
-                <ng-template pTemplate="content">
+                <ng-template  pTemplate="content">
                     <p-table [value]="rubros(i).controls" [scrollable]="true" scrollHeight="400px">
                         <ng-template pTemplate="header">
+                            
                             <tr>
-                                <th width="100px">Opciones</th>
-                                <th>Nombre</th>
-                                <th>Unidad</th>
-                                <th>Cantidad</th>
-                                <th>Reembolsable</th>
-                                <th>Subtotal</th>
-                                <th *ngFor="let mesRegistro of mesesProyecto">
-                                    {{mesRegistro.desc | uppercase}}
-                                </th>
+                                <th *ngIf="seccion.value.idSeccion == 13 || seccion.value.idSeccion == 14; then elsefecha else thenfecha"> </th>
+                                <ng-template #thenfecha>
+                                    <th width="100px">Opciones</th>
+                                    <th>Nombre</th>
+                                    <th>Unidad</th>
+                                    <th>Cantidad</th>
+                                    <th>Reembolsable</th>
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                </ng-template>
+                                <ng-template #elsefecha>
+                                    <th >Concepto</th>
+                                    <th>Importe</th>
+                                    
+                                </ng-template>
+                                
+                                
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-rubro let-iRubro="rowIndex">
+                        <ng-template pTemplate="body" let-rubro let-iRubro="rowIndex" let-bus>
                             <tr>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro">
-                                    <i class="pi pi-pencil vertical-align-middle"></i>
-                                </button>
-                                    </div>
-                                </td>
-                                <td>{{rubro.value.rubro}}</td>
-                                <td>{{rubro.value.unidad}}</td>
-                                <td>{{rubro.value.cantidad}}</td>
-                                <td>{{rubro.value.reembolsable ? 'Sí' : 'No'}}</td>
-                                <td>{{rubro.value.fechas | calcularSubtotal}}</td>
-                                <td *ngFor="let mesRegistro of mesesProyecto">
-                                    {{rubro.value.fechas | porcentajeMes:mesRegistro}}
-                                </td>
+                                <td  *ngIf="seccion.value.idSeccion == 13 || seccion.value.idSeccion == 14; then elsefecha else thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro || seccion.value.idSeccion == 2 ">
+                                        <i class="pi pi-pencil vertical-align-middle"></i>
+                                    </button>
+                                        </div>
+                                    </td>
+                                    <td>{{rubro.value.rubro}}</td>
+                                    <td>{{rubro.value.unidad}}</td>
+                                    <td>{{rubro.value.cantidad}}</td>
+                                    <td>{{rubro.value.reembolsable ? 'Sí' : 'No'}}</td>
+                                    <td>{{rubro.value.fechas | calcularSubtotal}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{rubro.value.fechas | porcentajeMes:mesRegistro}}
+                                    </td>
+                                    
+                                </ng-template>
+                                <ng-template #elsefecha>
+                                    
+                                    <td >
+                                        {{listBusquedaCompleto}} 
+                                    </td>
+                                    
+                                   
+                                    
+                                </ng-template>
+                                
                             </tr>
+                            
                         </ng-template>
+                        
+                        
                     </p-table>
                 </ng-template>
+                
             </p-accordionTab>
         </p-accordion>
     </ng-container>
