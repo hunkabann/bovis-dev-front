@@ -38,6 +38,7 @@ export interface Fecha {
     mes:        number;
     anio:       number;
     porcentaje: number;
+    mesTranscurrido: number;
 }
 
 export interface ProyectoPorIDResponse {
@@ -116,6 +117,7 @@ export interface GastosIngresosSecciones {
     codigo:    string;
     seccion:   string;
     rubros:    Rubro[];
+    sumaFechas:    SumaFecha[];
     
 }
 
@@ -129,4 +131,10 @@ export interface Rubro {
     fechas:           Fecha[];
     numEmpleadoRrHh:    string;
     numProyecto:      number;
+}
+
+export interface SumaFecha {
+    mes:        number;
+    anio:       number;
+    sumaPorcentaje: number;
 }
