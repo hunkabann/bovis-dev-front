@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { PcsService } from '../../services/pcs.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
-import { obtenerMeses,obtenerMesesTrans } from 'src/helpers/helpers';
+import { obtenerMeses } from 'src/helpers/helpers';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
 import { TITLES } from 'src/utils/constants';
