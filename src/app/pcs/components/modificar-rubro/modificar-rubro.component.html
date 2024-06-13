@@ -6,15 +6,24 @@
     <div class="row">
         
       <div class="col-4">
-        <label for="unidad">Unidad: <span class="required"></span></label>
-        <input 
+        <label for="unidad"><span class="required"></span></label>
+        <!--input 
           id="unidad"
           pInputText
           class="form-control" 
           maxlength="50" 
           formControlName="unidad"
-          [ngClass]="{'ng-invalid ng-dirty': esInvalido('unidad')}"
-        >
+          [ngClass]="{'ng-invalid ng-dirty': esInvalido('unidad')}"-->
+      
+        <p-dropdown 
+        id="unidad"
+        [options]="unidades" 
+        [(ngModel)]="selectedUnidades" 
+        optionLabel="name"
+        placeholder="unidad"
+        formControlName="unidad"
+        optionValue="name"
+        ></p-dropdown>
         <div *ngIf="esInvalido('unidad')">
           <small
             class="error-msg"
