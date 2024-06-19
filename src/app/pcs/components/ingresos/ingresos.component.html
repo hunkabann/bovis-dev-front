@@ -56,7 +56,7 @@
                         <ng-template pTemplate="body" let-rubro let-iRubro="rowIndex" let-bus>
                             <tr>
                                 
-                            <td  *ngIf="rubro.value.reembolsable ; then thenfecha else elsefecha"></td>
+                            <td  *ngIf="rubro.value.reembolsable ; then thenfecha "></td>
                                 <ng-template #thenfecha>   
                                 <td>{{rubro.value.rubro}}</td>
                                 <td>{{rubro.value.unidad}}</td>
@@ -68,13 +68,7 @@
                                 </td>
                                     
                             </ng-template>
-                            <ng-template #elsefecha>
-                                
-                                
-                                
-                               
-                                
-                            </ng-template>
+                           
                                 
                             </tr>
                             
@@ -129,7 +123,7 @@
                         <ng-template pTemplate="body" let-norubro let-inoRubro="rowIndex" let-bus>
                             <tr>
                                
-                                <td  *ngIf="norubro.value.reembolsable ; then elsefecha else thenfecha"></td>
+                                <td  *ngIf="!norubro.value.reembolsable ; then  thenfecha"></td>
                                 <ng-template #thenfecha>
                                     
                                     <td>{{norubro.value.rubro}}</td>
@@ -142,13 +136,7 @@
                                     </td>
                                     
                                 </ng-template>
-                                <ng-template #elsefecha>
-                                    
-                                    
-                                    
-                                   
-                                    
-                                </ng-template>
+                               
                                     
                                
                                 
