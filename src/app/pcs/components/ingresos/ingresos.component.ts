@@ -11,8 +11,20 @@ import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { Rubro } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
-
-
+import {
+  Busqueda,
+  BusquedaCancelacion,
+  Clientes,
+  Cobranza,
+  Empresas,
+  NotaCredito,
+  Proyectos,
+  encabezados,
+  equivalenteFacturaCobranza,
+  equivalenteFacturaNota,
+  facturaCancelacion,
+} from 'src/app/facturacion/Models/FacturacionModels';
+import { FacturacionService } from 'src/app/facturacion/services/facturacion.service';
 
 @Component({
   selector: 'app-ingresos',
@@ -38,6 +50,7 @@ export class IngresosComponent implements OnInit {
   proyectoSeleccionado: boolean = false
   mesesProyecto:        Mes[] = []
 
+  facturas :        BusquedaCancelacion[] = []
   
   proyectoFechaInicio:  Date
   proyectoFechaFin:     Date
@@ -54,9 +67,12 @@ export class IngresosComponent implements OnInit {
 
   rembolsable: string;
 
+  listBusquedaCompleto: Array<BusquedaCancelacion> =
+  new Array<BusquedaCancelacion>();
+listBusquedaUnique: Array<BusquedaCancelacion> =
+  new Array<BusquedaCancelacion>();
 
-
-  constructor() { }
+  constructor(private facturacionService: FacturacionService) { }
   
   form = this.fb.group({
     numProyecto:  [0, Validators.required],
