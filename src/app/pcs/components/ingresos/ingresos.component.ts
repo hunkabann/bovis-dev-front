@@ -11,20 +11,8 @@ import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { Rubro } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
-import {
-  Busqueda,
-  BusquedaCancelacion,
-  Clientes,
-  Cobranza,
-  Empresas,
-  NotaCredito,
-  Proyectos,
-  encabezados,
-  equivalenteFacturaCobranza,
-  equivalenteFacturaNota,
-  facturaCancelacion,
-} from 'src/app/facturacion/Models/FacturacionModels';
-import { FacturacionService } from 'src/app/facturacion/services/facturacion.service';
+
+
 
 @Component({
   selector: 'app-ingresos',
@@ -50,7 +38,6 @@ export class IngresosComponent implements OnInit {
   proyectoSeleccionado: boolean = false
   mesesProyecto:        Mes[] = []
 
-  facturas :        BusquedaCancelacion[] = []
   
   proyectoFechaInicio:  Date
   proyectoFechaFin:     Date
@@ -67,12 +54,9 @@ export class IngresosComponent implements OnInit {
 
   rembolsable: string;
 
-  listBusquedaCompleto: Array<BusquedaCancelacion> =
-  new Array<BusquedaCancelacion>();
-listBusquedaUnique: Array<BusquedaCancelacion> =
-  new Array<BusquedaCancelacion>();
 
-  constructor(private facturacionService: FacturacionService) { }
+
+  constructor() { }
   
   form = this.fb.group({
     numProyecto:  [0, Validators.required],
@@ -205,34 +189,6 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
               })
             })
 
-          })
-         
-        }
-        
-
-        ,
-        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-      })
-      
-
-      this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'ingreso')
-      .pipe(finalize(() => this.cargando = false))
-      .subscribe({
-        next: ({data}) => {
-
-          this.proyectoFechaInicio  = new Date(data.fechaIni)
-          this.proyectoFechaFin     = new Date(data.fechaFin)
-          this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
-
-          data.secciones.forEach((seccion, seccionIndex) => {
-            
-            this.secciones.push(this.fb.group({
-              idSeccion:  [seccion.idSeccion],
-              codigo:     [seccion.codigo],
-              seccion:    [seccion.seccion],
-              rubros:     this.fb.array([])
-            }))
-            
             seccion.rubros.forEach((norubro, norubroIndex) => {
 
               // Agregamos los rubros por seccion
@@ -261,61 +217,10 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
         ,
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
-
-/**
-      this.totalRecords = 0;
-      this.sharedService.cambiarEstado(true)
-      this.listBusquedaCompleto = new Array<BusquedaCancelacion>();
-      this.listBusquedaUnique = new Array<BusquedaCancelacion>();
-      this.facturacionService
-        .getBusqueda(this.getFiltrosVaues())
-        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-        .subscribe((bus) => {
-          console.log(bus);
-          this.listBusquedaCompleto = bus.data.map(factura => {
-            this.totalRecords++;
-            let importePendiente = 0
-            let importeEnPesos = 0
-  
-            console.log('factura concepto   -----'+ factura.concepto)
-            console.log('factura importe   -----'+ factura.importe)
-            importePendiente = factura.total
-            importeEnPesos = factura.idMoneda === 'MXN' ? factura.importe : factura.importe * factura.tipoCambio
-  
-            
-  
-            if (factura.notas != null && factura.notas.length > 0) {
-              factura.notas.forEach(nota => {
-                importePendiente -= nota.nC_Total
-              })
-            }
-  
-            if (factura.cobranzas != null && factura.cobranzas.length > 0) {
-              factura.cobranzas.forEach(cobranza => {
-                //importePendiente -= +cobranza.c_ImportePagado
-                importePendiente -= +cobranza.base
-              })
-            }
-  
-            return ({
-              ...factura,
-              importeEnPesos,
-              importePendiente
-            })
-          });
-          console.log(this.listBusquedaCompleto);
-           this.listBusquedaUnique = [
-             ...new Map(
-               this.listBusquedaCompleto.map((item) => [item['uuid'], item])
-             ).values(),
-          ];
-        });*/
-
-        
-       
       
 
-      
+     
+
       
   }
 
