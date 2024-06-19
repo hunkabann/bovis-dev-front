@@ -63,6 +63,10 @@ export class IngresosComponent implements OnInit {
   IDEmpresa: number;
   IDCliente: number;
 
+  isrembolsable: boolean = false
+
+  rembolsable: string;
+
   listBusquedaCompleto: Array<BusquedaCancelacion> =
   new Array<BusquedaCancelacion>();
 listBusquedaUnique: Array<BusquedaCancelacion> =
@@ -107,7 +111,24 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
         console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
 
         this.cargando = true
-          this.cargarInformacion(this.idproyecto)
+        this.cargarInformacion(this.idproyecto)
+        /**for(let i = 0; i < 3; i++) {
+
+          console.log("valor de i -------------- " + i) 
+          
+          if(i > 1){
+            this.isrembolsable  = true
+            this.rembolsable = "REMBOLSABLE"
+           }else{
+            this.isrembolsable  = false
+            this.rembolsable = "NO REMBOLSABLE"
+           }
+    
+           console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
+        
+        
+          i++
+          }*/
       } else {
         this.pcsService.obtenerIdProyecto()
       .subscribe(numProyecto => {
@@ -116,6 +137,23 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
           // this.sharedService.cambiarEstado(true)
           this.cargando = true
           this.cargarInformacion(numProyecto)
+          /**for(let i = 0; i < 3; i++) {
+
+            console.log("valor de i -------------- " + i) 
+            
+            if(i > 1){
+              this.isrembolsable  = true
+              this.rembolsable = "REMBOLSABLE"
+             }else{
+              this.isrembolsable  = false
+              this.rembolsable = "NO REMBOLSABLE"
+             }
+      
+             console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
+          
+         
+            i++
+            }*/
         } else {
           console.log('No hay proyecto');
         }
@@ -126,6 +164,9 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
   }
 
   cargarInformacion(numProyecto: number) {
+
+    
+   
     this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'ingreso')
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
@@ -163,13 +204,65 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
                 }))
               })
             })
+
           })
-        },
+         
+        }
+        
+
+        ,
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
+      
+
+      this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'ingreso')
+      .pipe(finalize(() => this.cargando = false))
+      .subscribe({
+        next: ({data}) => {
+
+          this.proyectoFechaInicio  = new Date(data.fechaIni)
+          this.proyectoFechaFin     = new Date(data.fechaFin)
+          this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
+
+          data.secciones.forEach((seccion, seccionIndex) => {
+            
+            this.secciones.push(this.fb.group({
+              idSeccion:  [seccion.idSeccion],
+              codigo:     [seccion.codigo],
+              seccion:    [seccion.seccion],
+              rubros:     this.fb.array([])
+            }))
+            
+            seccion.rubros.forEach((norubro, norubroIndex) => {
+
+              // Agregamos los rubros por seccion
+              this.rubros(seccionIndex).push(this.fb.group({
+                ...norubro,
+                fechas:   this.fb.array([])
+              }))
+              
+              // Agreamos las fechas por rubro
+              norubro.fechas.forEach(fecha => {
+
+                this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
+                  id:         fecha.id,
+                  mes:        fecha.mes,
+                  anio:       fecha.anio,
+                  porcentaje: fecha.porcentaje
+                }))
+              })
+            })
+
+          })
+         
+        }
+        
+
+        ,
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
 
-
-
+/**
       this.totalRecords = 0;
       this.sharedService.cambiarEstado(true)
       this.listBusquedaCompleto = new Array<BusquedaCancelacion>();
@@ -216,9 +309,17 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
                this.listBusquedaCompleto.map((item) => [item['uuid'], item])
              ).values(),
           ];
-        });
+        });*/
+
+        
+       
+      
+
+      
+      
   }
 
+  /**
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
 
     this.dialogService.open(ModificarRubroComponent, {
@@ -257,8 +358,8 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
       }
     })
   }
-
-  getFiltrosVaues() {
+*/
+  /**getFiltrosVaues() {
     let objBusqueda: Busqueda = new Busqueda();
 
    
@@ -282,6 +383,6 @@ listBusquedaUnique: Array<BusquedaCancelacion> =
 
 
     return objBusqueda;
-  }
+  }*/
 
 }
