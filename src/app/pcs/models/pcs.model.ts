@@ -110,6 +110,7 @@ export interface GastosIngresosSeccionesData {
     fechaIni:    string;
     fechaFin:    string;
     secciones:   GastosIngresosSecciones[];
+    totales:   GastosIngresosTotales[];
 }
 
 export interface GastosIngresosSecciones {
@@ -118,6 +119,14 @@ export interface GastosIngresosSecciones {
     seccion:   string;
     rubros:    Rubro[];
     sumaFechas:    SumaFecha[];
+    
+}
+
+export interface GastosIngresosTotales {
+    reembolsable:     boolean;
+    mes:        number;
+    anio:       number;
+    totalPorcentaje: number;
     
 }
 
