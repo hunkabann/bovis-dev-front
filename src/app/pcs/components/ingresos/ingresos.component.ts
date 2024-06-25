@@ -9,7 +9,7 @@ import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.comp
 import { TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro } from '../../models/pcs.model';
+import { Rubro,GastosIngresosTotales } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 
 
@@ -54,13 +54,17 @@ export class IngresosComponent implements OnInit {
 
   rembolsable: string;
 
+  totaless: GastosIngresosTotales[] = []
+
+  SumaIngresos = 0;
 
 
   constructor() { }
   
   form = this.fb.group({
     numProyecto:  [0, Validators.required],
-    secciones:    this.fb.array([])
+    secciones:    this.fb.array([]),
+    totales:    this.fb.array([])
   })
 
   get secciones() {
@@ -75,6 +79,15 @@ export class IngresosComponent implements OnInit {
     return (this.rubros(seccionIndex).at(rubroIndex).get('fechas') as FormArray)
   }
 
+  fechasIngreso(seccionIndex: number) {
+    return (this.secciones.at(seccionIndex).get('totales') as FormArray)
+  }
+
+  get totals() {
+    return this.form.get('totales') as FormArray
+  }
+
+ 
   ngOnInit(): void {
     
     this.pcsService.cambiarEstadoBotonNuevo(false)
@@ -155,6 +168,29 @@ export class IngresosComponent implements OnInit {
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
         next: ({data}) => {
+          this.totaless = data.totales
+
+          data.totales.forEach(total => {
+
+            console.log('total.reembolsable: ' + total.reembolsable)
+            console.log('total.mes: ' + total.mes)
+            console.log('total.anio: ' + total.anio)
+            console.log('total.totalPorcentaje: ' + total.totalPorcentaje)
+
+            this.SumaIngresos += +total.totalPorcentaje
+            
+           
+            /**  this.fechasIngreso(totalIndex).push(this.fb.group({
+              reembolsable:  [total.reembolsable],
+              mes:     [total.mes],
+              anio:    [total.anio],
+              totalPorcentaje:    [total.totalPorcentaje]
+            }))*/
+            
+            
+
+           
+          })
 
           this.proyectoFechaInicio  = new Date(data.fechaIni)
           this.proyectoFechaFin     = new Date(data.fechaFin)
@@ -189,6 +225,7 @@ export class IngresosComponent implements OnInit {
               })
             })
 
+            
             seccion.rubros.forEach((norubro, norubroIndex) => {
 
               // Agregamos los rubros por seccion
@@ -207,9 +244,17 @@ export class IngresosComponent implements OnInit {
                   porcentaje: fecha.porcentaje
                 }))
               })
+
             })
 
           })
+
+
+          
+          
+          
+
+          
          
         }
         
