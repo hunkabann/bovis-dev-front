@@ -91,7 +91,8 @@
                             formControlName="cantidad"
                             class="full-width" 
                             (onBlur)="cambiarValores()"
-                            
+                            [min]="0" 
+                            [max]="100"
                         ></p-inputNumber>
                         <div *ngIf="esInvalido('cantidad')">
                           <small
