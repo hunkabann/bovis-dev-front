@@ -38,6 +38,8 @@ import { calcularSubtotalStaffingPipe } from './pipes/calcular-subtotal-staffing
 import { CalcularSubtotalIngresoPipe } from './pipes/calcular-subtotal-ingreso.pipe';
 import { PorcentajeMesIngresoPipe } from './pipes/porcentaje-mes-ingreso.pipe';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { PorcentajeMesFacturaPipe } from './pipes/porcentaje-mes-factura.pipe';
+import { PorcentajeMesCobranzaPipe } from './pipes/porcentaje-mes-cobranza.pipe';
 
 
 @NgModule({
@@ -60,7 +62,9 @@ import { MultiSelectModule } from 'primeng/multiselect';
     CalcularSubtotalPipe,
     calcularSubtotalStaffingPipe,
     CalcularSubtotalIngresoPipe,
-    PorcentajeMesIngresoPipe
+    PorcentajeMesIngresoPipe,
+    PorcentajeMesFacturaPipe,
+    PorcentajeMesCobranzaPipe
   ],
   imports: [
     CommonModule,
