@@ -2111,6 +2111,7 @@ if(this.isFacturacionBpm){
 
 /** BENEFICIOS DEL PROYECTO */
 
+/**
 const bodyProyectoVivienda = {
   //...this.form.value
   //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
@@ -2178,7 +2179,7 @@ if(this.isProy_vivienda){
 
   }
 
-}
+}*/
 
 /* if(this.form.value.facturacion_bpm != 0 || this.form.value.facturacion_bpm != 0.0 || this.form.value.facturacion_bpm != 0.00){
 
