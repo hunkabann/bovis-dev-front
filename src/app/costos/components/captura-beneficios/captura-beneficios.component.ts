@@ -53,6 +53,23 @@ export class CapturaBeneficiosComponent implements OnInit {
   isSvDirectivos: boolean = false;
   isFacturacionBpm: boolean = false;
 
+  isProy_vivienda: boolean = false;
+  isProy_Automovil: boolean = false;
+  isProy_ViaticosaComprobar: boolean = false;
+  isProy_BonoAdicionalReubicacion: boolean = false;
+  isProy_Gasolina: boolean = false;
+  isProy_Casetas: boolean = false;
+  isProy_AyudaDeTransporte: boolean = false;
+  isProy_VuelosDeAvion: boolean = false;
+  isProy_ProvisionImpuestosExpatsr: boolean = false;
+  isProy_FringeExpats: boolean = false;
+  isProy_ProgramaDeEntretenimiento: boolean = false;
+  isProy_EventosEspeciales: boolean = false;
+  isProy_CostoIt: boolean = false;
+  isProy_CostoTelefonia: boolean = false;
+  isProy_SvDirectivos: boolean = false;
+  isProy_FacturacionBpm: boolean = false;
+
   idEmpleado: string;
 
   Costomenualproy = 0;
@@ -132,6 +149,23 @@ export class CapturaBeneficiosComponent implements OnInit {
     beneficios:                   [null],
     costobeneficio:               [null],
     beneficio:                    [null],
+    proy_vivienda:                     [0, Validators.required],
+    proy_automovil:                    [0, Validators.required],
+    proy_viaticos_a_comprobar:         [0, Validators.required],
+    proy_bono_adicional_reubicacion:   [0, Validators.required],
+    proy_gasolina:                     [0, Validators.required],
+    proy_casetas:                      [0, Validators.required],
+    proy_ayuda_de_transporte:          [0, Validators.required],
+    proy_vuelos_de_avion:              [0, Validators.required],
+    proy_provision_impuestos_expats:   [0, Validators.required],
+    proy_fringe_expats:                [0, Validators.required],
+    proy_programa_de_entretenimiento:  [0, Validators.required],
+    proy_eventos_especiales:           [0, Validators.required],
+    proy_otros:                        [0, Validators.required],
+    proy_costo_it:                     [0, Validators.required],
+    proy_costo_telefonia:              [0, Validators.required],
+    proy_sv_directivos:                [0, Validators.required],
+    proy_facturacion_bpm:              [0, Validators.required],
   })
 
   empleados: Opcion[] = []
@@ -484,14 +518,183 @@ export class CapturaBeneficiosComponent implements OnInit {
                  const beneficiopryect = this.arraybeneficiosProyectos;
                  beneficiopryect?.forEach(paso=>{
                      
+                   
+
+                    if(paso.beneficio === "Automóvil"){
+                      this.isProy_Automovil = true;
+                
+                      this.form.patchValue({
+                        proy_automovil: paso.nucostobeneficio
+                        
+                      })
+                    }
+                    
+                      if(paso.beneficio === "Vivienda"){
+
+                        this.isProy_vivienda = true;
+                      
+                        this.form.patchValue({
+                          proy_vivienda: paso.nucostobeneficio
+                          
+                        })
+                      
+                    }
+
+                    if(paso.beneficio === "Viáticos a comprobar"){
+
+                      this.isProy_ViaticosaComprobar = true;
+                      
+                      this.form.patchValue({
+                        proy_viaticos_a_comprobar: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
                     if(paso.beneficio === "Bono Adicional"){
 
                       console.log("Proyecto paso.beneficio --------------> " +paso.beneficio);
-                     console.log("Proyecto paso.cost-------------->> " +paso.nucostobeneficio);
-
-                      this.bonoproyect_sueldobruto += +paso.nucostobeneficio
-                      console.log("Proyecto suma paso.cost-------------->> " +this.bonoproyect_sueldobruto);
+                      console.log("Proyecto paso.cost-------------->> " +paso.nucostobeneficio);
+ 
+                       this.bonoproyect_sueldobruto += +paso.nucostobeneficio
+                       console.log("Proyecto suma paso.cost-------------->> " +this.bonoproyect_sueldobruto);
+                      
+                      this.form.patchValue({
+                        proy_bono_adicional_reubicacion: paso.nucostobeneficio
+                        
+                      })
                     
+                    }
+
+                    if(paso.beneficio === "Gasolina"){
+
+                      this.isProy_Gasolina = true;
+                      
+                      this.form.patchValue({
+                        proy_gasolina: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Casetas"){
+
+                      this.isProy_Casetas = true;
+                      
+                      this.form.patchValue({
+                        proy_casetas: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Ayuda de transporte"){
+
+                      this.isProy_AyudaDeTransporte = true;
+                      
+                      this.form.patchValue({
+                        proy_ayuda_de_transporte: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Vuelos de avión"){
+
+                      this.isProy_VuelosDeAvion = true;
+                      
+                      this.form.patchValue({
+                        proy_vuelos_de_avion: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Provisión Impuestos Expats"){
+
+                      this.isProy_ProvisionImpuestosExpatsr = true;
+                      
+                      this.form.patchValue({
+                        proy_provision_impuestos_expats: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Programa de entrenamiento"){
+
+                      this.isProy_ProgramaDeEntretenimiento = true;
+                      
+                      this.form.patchValue({
+                        proy_programa_de_entretenimiento: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Eventos especiales"){
+
+                      this.isProy_EventosEspeciales = true;
+                      
+                      this.form.patchValue({
+                        proy_eventos_especiales: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Costo IT"){
+
+                      this.isProy_CostoIt = true;
+                      
+                      this.form.patchValue({
+                        proy_costo_it: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Costo telefonia"){
+
+                      this.isProy_CostoTelefonia = true;
+                      
+                      this.form.patchValue({
+                        proy_costo_telefonia: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "S.V. Directivos"){
+
+                      this.isProy_SvDirectivos = true;
+                      
+                      this.form.patchValue({
+                        proy_sv_directivos: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Facturación BPM"){
+
+                      this.isProy_FacturacionBpm = true;
+                      
+                      this.form.patchValue({
+                        proy_facturacion_bpm: paso.nucostobeneficio
+                        
+                      })
+                    
+                    }
+
+                    if(paso.beneficio === "Fringe Expats"){
+
+                      this.isProy_FringeExpats = true;
+                      
+                      this.form.patchValue({
+                        proy_fringe_expats: paso.nucostobeneficio
+                        
+                      })
                     
                     }
 
@@ -1901,6 +2104,80 @@ if(this.isFacturacionBpm){
       })
     
     }
+}
+
+
+
+
+/** BENEFICIOS DEL PROYECTO */
+
+const bodyProyectoVivienda = {
+  //...this.form.value
+  //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
+  //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
+  //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
+
+ //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "1",
+  Costo: this.form.value.proy_vivienda
+}
+
+if(this.isProy_vivienda){
+  this.empleadosService.ActualizaProyextoBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value )
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio PROYECTO VIVIENDA --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_vivienda != 0 || this.form.value.proy_vivienda != 0.0 || this.form.value.proy_vivienda != 0.00){
+
+    this.empleadosService.guardarProyextoBeneficioCosto(bodyProyectoVivienda)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+
+          console.log("paso.beneficio VIVIENDA --------------> " +"/1/"+this.form.controls['num_empleado'].value);
+
+          console.log("error beneficio VIVIENDA --------------> " +err.error.text);
+         
+
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+          this.empleadosService.ActualizaProyextoBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value)
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe({
+            next: (data) => {
+              //this.form.reset()
+              this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+            },
+            error: (err) => {
+              this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+    
+              
+            }
+          })
+        }
+      })
+
+  }
+
 }
 
 /* if(this.form.value.facturacion_bpm != 0 || this.form.value.facturacion_bpm != 0.0 || this.form.value.facturacion_bpm != 0.00){
