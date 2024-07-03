@@ -40,6 +40,7 @@ import { PorcentajeMesIngresoPipe } from './pipes/porcentaje-mes-ingreso.pipe';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { PorcentajeMesFacturaPipe } from './pipes/porcentaje-mes-factura.pipe';
 import { PorcentajeMesCobranzaPipe } from './pipes/porcentaje-mes-cobranza.pipe';
+import { porcentajeMesControlPipe } from './pipes/porcentaje-mes-control.pipe';
 
 
 @NgModule({
@@ -64,7 +65,8 @@ import { PorcentajeMesCobranzaPipe } from './pipes/porcentaje-mes-cobranza.pipe'
     CalcularSubtotalIngresoPipe,
     PorcentajeMesIngresoPipe,
     PorcentajeMesFacturaPipe,
-    PorcentajeMesCobranzaPipe
+    PorcentajeMesCobranzaPipe,
+    porcentajeMesControlPipe
   ],
   imports: [
     CommonModule,
