@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 import { environment } from 'src/environments/environment';
-import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse } from '../models/pcs.model';
+import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse,GastosIngresosControlResponse } from '../models/pcs.model';
 
 interface NuevoProyecto {
   id:     number,
@@ -88,6 +88,10 @@ export class PcsService {
 
   actualizarRubro(body: any) {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/GastosIngresos`, body)
+  }
+
+  obtenerGastosControlSalarios(numProyecto: number, tipo: string = 'gasto') {
+    return this.http.get<GastosIngresosControlResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/${numProyecto}/${tipo}`)
   }
   
 }
