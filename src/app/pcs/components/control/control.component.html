@@ -7,7 +7,7 @@
 
 <div class="text-center" *ngIf="cargando; else principal">
     <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
-    <p>Cargando Ingresos...</p>
+    <p>Cargando Control...</p>
     <p><strong>Un momento.</strong></p>
 </div>
 
@@ -80,7 +80,7 @@
     <!-- SALARIOS -->
     <ng-container formArrayName="secciones">
         
-        <p-accordion >
+        <p-accordion>
             
             <p-accordionTab>
                 
@@ -93,7 +93,7 @@
                     </div>
                 </ng-template>
                 <ng-template  pTemplate="content">
-                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                    <p-table [value]="SumaFecha"  [scrollable]="true" scrollHeight="400px" >
                         <ng-template pTemplate="header">
                             
                             <tr>                               
@@ -111,28 +111,20 @@
                                 
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-total>
+                        <ng-template pTemplate="body" let-SumaFechas>
                             <tr>
-                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                               
+                                <td  *ngIf="SumaFechas.mes === 1  ; then  thenfecha"></td>
                                 <ng-template #thenfecha>
-                                    
-                                     
-                                    <td>Tarifa Rembolsable</td>
-                                    
+                                    <td>Previsto</td>
                                     
                                     <td>{{SumaIngresos}}</td>
                                     <td *ngFor="let mesRegistro of mesesProyecto">
-                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                        {{SumaFecha | porcentajeMesControl:mesRegistro}}
                                     </td>
                                
                                     
                                 </ng-template>
-                               
-                               
-                            
-                                   
-                                    
-                               
                                 
                             </tr>
                             
@@ -162,7 +154,7 @@
                     </div>
                 </ng-template>
                 <ng-template  pTemplate="content">
-                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                    <p-table [value]="SumaFechaViaticos"  [scrollable]="true" scrollHeight="400px" >
                         <ng-template pTemplate="header">
                             
                             <tr>                               
@@ -180,26 +172,17 @@
                                 
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-total>
+                        <ng-template pTemplate="body" let-SumaFechaViaticoss>
                             <tr>
-                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
-                                <ng-template #thenfecha>
+                               
+                                
+                                    <td>{{SumaFechaViaticoss.rubro}}</td>
                                     
-                                     
-                                    <td>Tarifa Rembolsable</td>
-                                    
-                                    
-                                    <td>{{SumaIngresos}}</td>
+                                    <td>{{SumaIngresosViaticos}}</td>
                                     <td *ngFor="let mesRegistro of mesesProyecto">
-                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                        {{SumaFechaViaticos | porcentajeMesControl:mesRegistro}}
                                     </td>
                                
-                                    
-                                </ng-template>
-                               
-                               
-                            
-                                   
                                     
                                
                                 
@@ -438,7 +421,7 @@
                     </div>
                 </ng-template>
                 <ng-template  pTemplate="content">
-                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                    <p-table [value]="SumaFechaGastos"  [scrollable]="true" scrollHeight="400px" >
                         <ng-template pTemplate="header">
                             
                             <tr>                               
@@ -456,28 +439,20 @@
                                 
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-total>
+                        <ng-template pTemplate="body" let-SumaFechas>
                             <tr>
-                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                               
+                                <td  *ngIf="SumaFechas.mes === 1  ; then  thenfecha"></td>
                                 <ng-template #thenfecha>
+                                    <td>{{SumaFechas.rubro}}</td>
                                     
-                                     
-                                    <td>Tarifa Rembolsable</td>
-                                    
-                                    
-                                    <td>{{SumaIngresos}}</td>
+                                    <td>{{SumaIngresosGasto}}</td>
                                     <td *ngFor="let mesRegistro of mesesProyecto">
-                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                        {{SumaFechaGastos | porcentajeMesControl:mesRegistro}}
                                     </td>
                                
                                     
                                 </ng-template>
-                               
-                               
-                            
-                                   
-                                    
-                               
                                 
                             </tr>
                             
