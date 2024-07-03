@@ -147,3 +147,60 @@ export interface SumaFecha {
     anio:       number;
     sumaPorcentaje: number;
 }
+
+
+
+export interface GastosIngresosControlResponse {
+    data:          GastosIngresosControlData;
+    success:       boolean;
+    message:       null;
+    transactionId: null;
+}
+
+export interface GastosIngresosControlData {
+    salarios: Salarios;
+    viaticos: Salarios;
+    gastos:   Gastos;
+}
+
+export interface Gastos {
+    previstos: Previsto[];
+    reales:    Previsto[];
+}
+
+export interface Previsto {
+    subTotal:   number;
+    sumaFechas: SumaFecha[];
+}
+
+export interface SumaFecha {
+    rubro:          Rubross | null;
+    mes:            number;
+    anio:           number;
+    sumaPorcentaje: number;
+}
+
+export enum Rubross {
+    BonoDeProyecto = "Bono de proyecto",
+    Combustibles = "Combustibles",
+    Comidas = "Comidas",
+    Contingencias = "Contingencias",
+    Hospedaje = "Hospedaje",
+    LeasingDeAutos = "Leasing de autos",
+    MantenimientoAutomoviles = "Mantenimiento automoviles",
+    MesInicioEfectoDeInflaciónAnual = "(<Mes inicio) Efecto de inflación anual",
+    Otros = "Otros",
+    Peajes = "Peajes",
+    ProvisionSalarios = "Provision Salarios",
+    RentaDeAutosProvision = "Renta de autos (provision)",
+    ReversiónProvisiónDeBonos = "Reversión provisión de bonos",
+    TransportacionForaneaAutobusVuelos = "Transportacion Foranea (Autobus, Vuelos)",
+    TransportacionLocalTaxisUber = "Transportacion Local (Taxis, Uber)",
+    UsoAutomovilEmpleado = "Uso automovil empleado",
+}
+
+export interface Salarios {
+    rubro:    null;
+    previsto: Previsto;
+    real:     Previsto;
+}
