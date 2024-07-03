@@ -1341,6 +1341,359 @@
                 </div>
             </div>
 
+            <h4 class="mt-2">Beneficios del proyecto (Valores Mensuales)</h4>
+                  <hr>
+                  
+  
+            <div class="col-3">
+                <label for="proy_vivienda">Vivienda:</label>
+                <p-inputNumber 
+                    id="proy_vivienda"
+                    class="full-width" 
+                    formControlName="proy_vivienda"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_vivienda')}"
+                    
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_vivienda')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_vivienda') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_automovil">Automóvil:</label>
+                <p-inputNumber 
+                    id="proy_automovil"
+                    class="full-width" 
+                    formControlName="proy_automovil"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_automovil')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_automovil')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_automovil') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_viaticos_a_comprobar">Viáticos a comprobar:</label>
+                <p-inputNumber 
+                    id="proy_viaticos_a_comprobar"
+                    class="full-width" 
+                    formControlName="proy_viaticos_a_comprobar"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_viaticos_a_comprobar')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_viaticos_a_comprobar')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_viaticos_a_comprobar') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_bono_adicional_reubicacion">Bono Adicional Reubicación:</label>
+                <p-inputNumber 
+                    id="proy_bono_adicional_reubicacion"
+                    class="full-width" 
+                    formControlName="proy_bono_adicional_reubicacion"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_bono_adicional_reubicacion')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_bono_adicional_reubicacion')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('vbono_adicional_reubicacion') }}
+                </small>
+                </div>
+            </div>
+
+            <!-- Siguiente Fila -->
+
+            <div class="col-3">
+                <label for="proy_gasolina">Gasolina:</label>
+                <p-inputNumber 
+                    id="proy_gasolina"
+                    class="full-width" 
+                    formControlName="proy_gasolina"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_gasolina')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_gasolina')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_gasolina') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_casetas">Casetas:</label>
+                <p-inputNumber 
+                    id="proy_casetas"
+                    class="full-width" 
+                    formControlName="proy_casetas"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_casetas')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_casetas')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_casetas') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_ayuda_de_transporte">Ayuda de transporte:</label>
+                <p-inputNumber 
+                    id="proy_ayuda_de_transporte"
+                    class="full-width" 
+                    formControlName="proy_ayuda_de_transporte"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_ayuda_de_transporte')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_ayuda_de_transporte')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_ayuda_de_transporte') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_vuelos_de_avion">Vuelos de Avión:</label>
+                <p-inputNumber 
+                    id="proy_vuelos_de_avion"
+                    class="full-width" 
+                    formControlName="proy_vuelos_de_avion"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_vuelos_de_avion')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_vuelos_de_avion')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_vuelos_de_avion') }}
+                </small>
+                </div>
+            </div>
+
+            <!-- Siguiente Fila -->
+
+            <div class="col-3">
+                <label for="proy_provision_impuestos_expats">Provisión Impuestos Expats:</label>
+                <p-inputNumber 
+                    id="proy_provision_impuestos_expats"
+                    class="full-width" 
+                    formControlName="proy_provision_impuestos_expats"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_provision_impuestos_expats')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_provision_impuestos_expats')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_provision_impuestos_expats') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_fringe_expats">Fringe Expats:</label>
+                <p-inputNumber 
+                    id="proy_fringe_expats"
+                    class="full-width" 
+                    formControlName="proy_fringe_expats"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_fringe_expats')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_fringe_expats')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_fringe_expats') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_programa_de_entretenimiento">Programa de Entrenamiento:</label>
+                <p-inputNumber 
+                    id="proy_programa_de_entretenimiento"
+                    class="full-width" 
+                    formControlName="proy_programa_de_entretenimiento"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_programa_de_entretenimiento')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_programa_de_entretenimiento')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_programa_de_entretenimiento') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_eventos_especiales">Eventos Especiales:</label>
+                <p-inputNumber 
+                    id="proy_eventos_especiales"
+                    class="full-width" 
+                    formControlName="proy_eventos_especiales"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_eventos_especiales')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_eventos_especiales')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_eventos_especiales') }}
+                </small>
+                </div>
+            </div>
+
+            <!-- Siguiente Fila -->
+
+            <div class="col-3">
+                <label for="proy_otros">Otros:</label>
+                <p-inputNumber 
+                    id="proy_otros"
+                    class="full-width" 
+                    formControlName="proy_otros"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_otros')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_otros')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_otros') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_costo_it">Costo IT:</label>
+                <p-inputNumber 
+                    id="proy_costo_it"
+                    class="full-width" 
+                    formControlName="proy_costo_it"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_costo_it')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_costo_it')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_costo_it') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_costo_telefonia">Costo telefonía:</label>
+                <p-inputNumber 
+                    id="proy_costo_telefonia"
+                    class="full-width" 
+                    formControlName="proy_costo_telefonia"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_costo_telefonia')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_costo_telefonia')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_costo_telefonia') }}
+                </small>
+                </div>
+            </div>
+            
+            <div class="col-3">
+                <label for="proy_sv_directivos">S.V. Directivos:</label>
+                <p-inputNumber 
+                    id="proy_sv_directivos"
+                    class="full-width" 
+                    formControlName="proy_sv_directivos"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_sv_directivos')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_sv_directivos')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_sv_directivos') }}
+                </small>
+                </div>
+            </div>
+
+            <!-- Siguiente Fila -->
+
+            <div class="col-3">
+                <label for="proy_facturacion_bpm">Facturación BPM:</label>
+                <p-inputNumber 
+                    id="proy_facturacion_bpm"
+                    class="full-width" 
+                    formControlName="proy_facturacion_bpm"
+                    mode="decimal"
+                    [minFractionDigits]="2"
+                    [maxFractionDigits]="5"
+                    [ngClass]="{'ng-invalid ng-dirty': esInvalido('proy_facturacion_bpm')}"
+                ></p-inputNumber>
+                <div *ngIf="esInvalido('proy_facturacion_bpm')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('proy_facturacion_bpm') }}
+                </small>
+                </div>
+            </div>
+
         </div>
     </div>
 </form>
