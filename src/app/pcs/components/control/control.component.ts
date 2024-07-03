@@ -9,7 +9,7 @@ import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.comp
 import { TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro,GastosIngresosTotales } from '../../models/pcs.model';
+import { Rubro,GastosIngresosTotales,GastosIngresosControlData,SumaFecha,Previsto } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 
 @Component({
@@ -20,8 +20,14 @@ import { CatalogosService } from '../../services/catalogos.service';
 })
 export class ControlComponent implements OnInit {
 
+  Control: GastosIngresosControlData 
+
   fechaInicio: Date;
   fechaFin: Date;
+
+  SumaFecha: SumaFecha[] = []
+  SumaFechaViaticos: SumaFecha[] = []
+  SumaFechaGastos: SumaFecha[] = []
   
   noFactura: string;
 
@@ -55,6 +61,8 @@ export class ControlComponent implements OnInit {
   totaless: GastosIngresosTotales[] = []
 
   SumaIngresos = 0;
+  SumaIngresosViaticos = 0;
+  SumaIngresosGasto = 0;
 
 
   constructor() { }
@@ -84,6 +92,7 @@ export class ControlComponent implements OnInit {
   get totals() {
     return this.form.get('totales') as FormArray
   }
+  
 
  
   ngOnInit(): void {
@@ -106,6 +115,7 @@ export class ControlComponent implements OnInit {
         console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
 
         this.cargando = true
+        this.cargarInformacionIngreso(this.idproyecto)
         this.cargarInformacion(this.idproyecto)
         /**for(let i = 0; i < 3; i++) {
 
@@ -131,6 +141,7 @@ export class ControlComponent implements OnInit {
         if(numProyecto) {
           // this.sharedService.cambiarEstado(true)
           this.cargando = true
+          this.cargarInformacionIngreso(numProyecto)
           this.cargarInformacion(numProyecto)
           /**for(let i = 0; i < 3; i++) {
 
@@ -158,110 +169,77 @@ export class ControlComponent implements OnInit {
     
   }
 
+
+  cargarInformacionIngreso(numProyecto: number) {
+
+    this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'gastos')
+    .pipe(finalize(() => this.cargando = false))
+    .subscribe({
+      next: ({data}) => {
+        
+        this.proyectoFechaInicio  = new Date(data.fechaIni)
+        this.proyectoFechaFin     = new Date(data.fechaFin)
+        
+        console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
+        console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)  
+       
+  
+ 
+      }
+     ,
+      error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+    })
+
+  }
+
   cargarInformacion(numProyecto: number) {
 
     
-   
-    this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'ingreso')
-      .pipe(finalize(() => this.cargando = false))
-      .subscribe({
-        next: ({data}) => {
-          this.totaless = data.totales
+    this.pcsService.obtenerGastosControlSalarios(numProyecto, 'Control')
+    .pipe(finalize(() => this.cargando = false))
+    .subscribe({
+      next: ({data}) => {
 
-          data.totales.forEach(total => {
+         console.log('data.salarios: ' +data.salarios)
+        console.log('data.salarios.previsto: ' + data.salarios.previsto )
+        console.log('data.salarios.previsto.subTotal: ' +data.salarios.previsto.subTotal)
+        console.log('data.salarios suma fecha: ' +data.salarios.previsto.sumaFechas)      
 
-            console.log('total.reembolsable: ' + total.reembolsable)
-            console.log('total.mes: ' + total.mes)
-            console.log('total.anio: ' + total.anio)
-            console.log('total.totalPorcentaje: ' + total.totalPorcentaje)
+        console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
+        console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)  
 
-            this.SumaIngresos += +total.totalPorcentaje
-            
-           
-            /**  this.fechasIngreso(totalIndex).push(this.fb.group({
-              reembolsable:  [total.reembolsable],
-              mes:     [total.mes],
-              anio:    [total.anio],
-              totalPorcentaje:    [total.totalPorcentaje]
-            }))*/
-            
-            
+        this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
-           
-          })
-
-          this.proyectoFechaInicio  = new Date(data.fechaIni)
-          this.proyectoFechaFin     = new Date(data.fechaFin)
-          this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
-
-          data.secciones.forEach((seccion, seccionIndex) => {
-            
-            this.secciones.push(this.fb.group({
-              idSeccion:  [seccion.idSeccion],
-              codigo:     [seccion.codigo],
-              seccion:    [seccion.seccion],
-              rubros:     this.fb.array([])
-            }))
-            
-            seccion.rubros.forEach((rubro, rubroIndex) => {
-
-              // Agregamos los rubros por seccion
-              this.rubros(seccionIndex).push(this.fb.group({
-                ...rubro,
-                fechas:   this.fb.array([])
-              }))
-              
-              // Agreamos las fechas por rubro
-              rubro.fechas.forEach(fecha => {
-
-                this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                  id:         fecha.id,
-                  mes:        fecha.mes,
-                  anio:       fecha.anio,
-                  porcentaje: fecha.porcentaje
-                }))
-              })
-            })
-
-            
-            seccion.rubros.forEach((norubro, norubroIndex) => {
-
-              // Agregamos los rubros por seccion
-              this.rubros(seccionIndex).push(this.fb.group({
-                ...norubro,
-                fechas:   this.fb.array([])
-              }))
-              
-              // Agreamos las fechas por rubro
-              norubro.fechas.forEach(fecha => {
-
-                this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
-                  id:         fecha.id,
-                  mes:        fecha.mes,
-                  anio:       fecha.anio,
-                  porcentaje: fecha.porcentaje
-                }))
-              })
-
-            })
-
-          })
-
-
-          
-          
-          
-
-          
-         
-        }
+        this.SumaFecha = data.salarios.previsto.sumaFechas
+        this.SumaFechaViaticos = data.viaticos.previsto.sumaFechas
         
 
-        ,
-        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-      })
-      
+        this.SumaIngresos =  data.salarios.previsto.subTotal
+        this.SumaIngresosViaticos =  data.viaticos.previsto.subTotal
 
+        data.gastos.previstos.forEach((sumaFecha) => {
+
+          //console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
+          
+          this.SumaIngresosGasto =  sumaFecha.subTotal
+
+          this.SumaFechaGastos = sumaFecha.sumaFechas
+          
+        })
+       
+       
+       
+      }
+              ,
+      error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+    })
+    
+
+    
+
+    
+   
+   
      
 
       
@@ -286,13 +264,7 @@ export class ControlComponent implements OnInit {
 
         const rubroRespuesta = result.rubro as Rubro
 
-        this.rubros(seccionIndex).at(rubroIndex).patchValue({
-          unidad:           rubroRespuesta.unidad,
-          cantidad:         rubroRespuesta.cantidad,
-          reembolsable:     rubroRespuesta.reembolsable,
-          aplicaTodosMeses: rubroRespuesta.aplicaTodosMeses
-        })
-
+       
         this.fechas(seccionIndex, rubroIndex).clear()
 
         rubroRespuesta.fechas.forEach(fechaRegistro => {
