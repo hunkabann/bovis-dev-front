@@ -514,7 +514,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                     // })
                  })
 
-                 this.bonoproyect_sueldobruto = 0
+                 //this.bonoproyect_sueldobruto = 0
                  const beneficiopryect = this.arraybeneficiosProyectos;
                  beneficiopryect?.forEach(paso=>{
                      
@@ -555,6 +555,8 @@ export class CapturaBeneficiosComponent implements OnInit {
 
                       console.log("Proyecto paso.beneficio --------------> " +paso.beneficio);
                       console.log("Proyecto paso.cost-------------->> " +paso.nucostobeneficio);
+
+                      this.isProy_BonoAdicionalReubicacion = true;
  
                        this.bonoproyect_sueldobruto += +paso.nucostobeneficio
                        console.log("Proyecto suma paso.cost-------------->> " +this.bonoproyect_sueldobruto);
@@ -2111,7 +2113,7 @@ if(this.isFacturacionBpm){
 
 /** BENEFICIOS DEL PROYECTO */
 
-/**
+
 const bodyProyectoVivienda = {
   //...this.form.value
   //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
@@ -2119,9 +2121,11 @@ const bodyProyectoVivienda = {
   //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
 
  //NumEmpleadoRrHh: this.form.value.num_empleado,
-  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "1",
-  Costo: this.form.value.proy_vivienda
+   NumProyecto: this.form.controls['proyecto'].value?.toString(),
+   //NumProyecto: this.form.value.proyecto?.toString(),
+   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+   IdBeneficio: "1",
+   nucostobeneficio: this.form.value.proy_vivienda
 }
 
 if(this.isProy_vivienda){
@@ -2179,27 +2183,683 @@ if(this.isProy_vivienda){
 
   }
 
-}*/
+}
 
-/* if(this.form.value.facturacion_bpm != 0 || this.form.value.facturacion_bpm != 0.0 || this.form.value.facturacion_bpm != 0.00){
+const bodyProyectoAutomovil = {
+  //...this.form.value
+  //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
+  //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
+  //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
+ 
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "2",
+  nucostobeneficio: this.form.value.proy_automovil
+}
 
-this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
+if(this.isProy_Automovil){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoAutomovil,"/2/"+this.form.controls['num_empleado'].value)
+.pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+.subscribe({
+  next: (data) => {
+    //this.form.reset()
+    this.ngOnInit
+    //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+  },
+  error: (err) => {
+    console.log("error cuando es 0 beneficio AUTOMOVIL --------------> " +err.error.text);
+    this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+    
+  }
+})
+}else{
+
+    if(this.form.value.proy_automovil != 0 || this.form.value.proy_automovil != 0.0 || this.form.value.proy_automovil != 0.00){
+      //console.log("this.form.controls['num_empleado'] "+this.form.controls['num_empleado'].value + " this.form.controls['num_empleado_rr_hh'] "+ this.form.controls['num_empleado_rr_hh'].value)
+      this.empleadosService.guardarBeneficioCosto(bodyProyectoAutomovil)
+        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe({
+          next: (data) => {
+            //this.form.reset()
+            this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+          },
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+          }
+        })
+    
+    }
+
+}
+
+
+
+const bodyProyectoViaticosAComprobar = {
+//...this.form.value
+//fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
+//fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
+//fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
+
+//NumEmpleadoRrHh: this.form.value.num_empleado,
+NumProyecto: this.form.controls['proyecto'].value?.toString(),
+NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+IdBeneficio: "3",
+nucostobeneficio: this.form.value.proy_viaticos_a_comprobar
+}
+
+if(this.isProy_ViaticosaComprobar){
+this.empleadosService.ActualizaBeneficioCosto(bodyProyectoViaticosAComprobar,"/3/"+this.form.controls['num_empleado'].value)
+.pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+.subscribe({
+  next: (data) => {
+    //this.form.reset()
+    this.ngOnInit
+    //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+  },
+  error: (err) => {
+    console.log("error cuando es 0 beneficio VIATIVCOSACOMPROBAR --------------> " +err.error.text);
+    this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+    
+  }
+})
+}else{
+
+if(this.form.value.proy_viaticos_a_comprobar != 0 || this.form.value.proy_viaticos_a_comprobar != 0.0 || this.form.value.proy_viaticos_a_comprobar != 0.00){
+
+  this.empleadosService.guardarBeneficioCosto(bodyProyectoViaticosAComprobar)
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: (data) => {
+        //this.form.reset()
+        this.ngOnInit
+        //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      }
+    })
+  
+  }
+}
+
+
+
+
+const bodyProyectoBonoAdicional = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "4",
+  nucostobeneficio: this.form.value.proy_bono_adicional_reubicacion
+}
+
+if(this.isProy_BonoAdicionalReubicacion){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoBonoAdicional,"/4/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
       //this.form.reset()
       this.ngOnInit
-          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
+      console.log("error cuando es 0 beneficio BONOADICIONAL --------------> " +err.error.text);
       this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
     }
   })
-
 }else{
 
+  if(this.form.value.proy_bono_adicional_reubicacion != 0 || this.form.value.proy_bono_adicional_reubicacion != 0.0 || this.form.value.proy_bono_adicional_reubicacion != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoBonoAdicional)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
     
-  this.empleadosService.ActualizaBeneficioCosto(bodyFacturacion_BPM,"/3006/"+this.form.controls['num_empleado'].value)
+    }
+}
+
+
+const bodyProyectoGasolina = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "5",
+  nucostobeneficio: this.form.value.gasolina
+}
+
+if(this.isProy_Gasolina){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoGasolina,"/5/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio GASOLINA --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_gasolina != 0 || this.form.value.proy_gasolina != 0.0 || this.form.value.proy_gasolina != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoGasolina)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+         //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+const bodyProyectoCasetas = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "6",
+  nucostobeneficio: this.form.value.casetas
+}
+
+if(this.isProy_Casetas){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoCasetas,"/6/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio CASETAS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_casetas != 0 || this.form.value.proy_casetas != 0.0 || this.form.value.proy_casetas != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoCasetas)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+const bodyProyectoAyudaTransporte = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "7",
+  nucostobeneficio: this.form.value.ayuda_de_transporte
+}
+
+if(this.isProy_AyudaDeTransporte){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoAyudaTransporte,"/7/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio AYUDADETRANSPORTE --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_ayuda_de_transporte != 0 || this.form.value.proy_ayuda_de_transporte != 0.0 || this.form.value.proy_ayuda_de_transporte != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoAyudaTransporte)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+         //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+const bodyProyectoVuelosAvion = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "8",
+  nucostobeneficio: this.form.value.vuelos_de_avion
+}
+
+if(this.isProy_VuelosDeAvion){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoVuelosAvion,"/8/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio VUELOSAVION --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_vuelos_de_avion != 0 || this.form.value.proy_vuelos_de_avion != 0.0 || this.form.value.proy_vuelos_de_avion != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoVuelosAvion)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+const bodyProyectoprovisionImpues = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "9",
+  nucostobeneficio: this.form.value.provision_impuestos_expats
+}
+
+if(this.isProy_ProvisionImpuestosExpatsr){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoprovisionImpues,"/9/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio PROVISIONDESCUENTO --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_provision_impuestos_expats != 0 || this.form.value.proy_provision_impuestos_expats != 0.0 || this.form.value.proy_provision_impuestos_expats != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoprovisionImpues)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+const bodyProyectoFringeExpats = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "3007",
+  nucostobeneficio: this.form.value.fringe_expats
+}
+
+if(this.isProy_FringeExpats){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoFringeExpats,"/3007/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio FRINGEEXPANTS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_fringe_expats != 0 || this.form.value.proy_fringe_expats != 0.0 || this.form.value.proy_fringe_expats != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoFringeExpats)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+const bodyProyectoProgramadeEntrenamiento = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "10",
+  nucostobeneficio: this.form.value.programa_de_entretenimiento
+}
+
+if(this.isProy_ProgramaDeEntretenimiento){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoProgramadeEntrenamiento,"/10/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio PROGRAMADEENTRETENIMIENTO --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_programa_de_entretenimiento != 0 || this.form.value.proy_programa_de_entretenimiento != 0.0 || this.form.value.proy_programa_de_entretenimiento != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoProgramadeEntrenamiento)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+          //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+const bodyProyectoEventosEspeciales = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "11",
+  nucostobeneficio: this.form.value.eventos_especiales
+}
+
+if(this.isProy_EventosEspeciales){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoEventosEspeciales,"/11/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio EVENTOSESPECIALES --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_eventos_especiales != 0 || this.form.value.proy_eventos_especiales != 0.0 || this.form.value.proy_eventos_especiales != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoEventosEspeciales)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+         //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+const bodyProyectoCostoIT = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "1005",
+  nucostobeneficio: this.form.value.costo_it
+}
+
+if(this.isProy_CostoIt){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoCostoIT,"/1005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio COSTOIT --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_costo_it != 0 || this.form.value.proy_costo_it != 0.0 || this.form.value.proy_costo_it != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoCostoIT)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+         //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+const bodyProyectoCosto_telefonia = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "2005",
+  nucostobeneficio: this.form.value.costo_telefonia
+}
+
+if(this.isProy_CostoTelefonia){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoCosto_telefonia,"/2005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio TELEFONIA --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_costo_telefonia != 0 || this.form.value.proy_costo_telefonia != 0.0 || this.form.value.proy_costo_telefonia != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoCosto_telefonia)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+const bodyProyectosSV_Directivos = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "3005",
+  nucostobeneficio: this.form.value.sv_directivos
+}
+
+if(this.isProy_SvDirectivos){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectosSV_Directivos,"/3005/"+this.form.controls['num_empleado'].value)
+  .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+  .subscribe({
+    next: (data) => {
+      //this.form.reset()
+      this.ngOnInit
+      //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+    },
+    error: (err) => {
+      console.log("error cuando es 0 beneficio SVDIRECTOS --------------> " +err.error.text);
+      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+      
+    }
+  })
+}else{
+
+  if(this.form.value.proy_sv_directivos != 0 || this.form.value.proy_sv_directivos != 0.0 || this.form.value.proy_sv_directivos != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectosSV_Directivos)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+const bodyProyectoFacturacion_BPM = {
+
+  //NumEmpleadoRrHh: this.form.value.num_empleado,
+  NumProyecto: this.form.controls['proyecto'].value?.toString(),
+  NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
+  IdBeneficio: "3006",
+  nucostobeneficio: this.form.value.facturacion_bpm
+}
+
+if(this.isProy_FacturacionBpm){
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoFacturacion_BPM,"/3006/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2214,13 +2874,33 @@ this.empleadosService.guardarBeneficioCosto(bodyFacturacion_BPM)
       
     }
   })
-}*/
+}else{
 
-    //console.log(" this.form.value.num_empleado: " + this.form.value.num_empleado?.toString())
-    //console.log(" this.form.controls['sueldoBrutoInflacion']: " + this.form.controls['sueldoBrutoInflacion'].value?.toString())
-    //console.log(" this.form.value.sueldoNetoPercibidoMensual: " + this.form.value.sueldoNetoPercibidoMensual?.toString())
-    //console.log(" this.form.value.sueldoBrutoInflacion: " + this.form.value.sueldoBrutoInflacion?.toString())
-    //console.log("Valor del costo mensual ATC ----->> " + this.Costomenualproy)
+  if(this.form.value.proy_facturacion_bpm != 0 || this.form.value.proy_facturacion_bpm != 0.0 || this.form.value.proy_facturacion_bpm != 0.00){
+
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoFacturacion_BPM)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          //this.form.reset()
+          this.ngOnInit
+              //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        }
+      })
+    
+    }
+}
+
+
+
+
+
+
+
+
 
     let a_Sueldoinfla = Number(this.form.controls['sueldoBrutoInflacion'].value?.toString())
     
