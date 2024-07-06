@@ -2129,7 +2129,7 @@ const bodyProyectoVivienda = {
 }
 
 if(this.isProy_vivienda){
-  this.empleadosService.ActualizaProyextoBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value )
+  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value )
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2148,7 +2148,7 @@ if(this.isProy_vivienda){
 
   if(this.form.value.proy_vivienda != 0 || this.form.value.proy_vivienda != 0.0 || this.form.value.proy_vivienda != 0.00){
 
-    this.empleadosService.guardarProyextoBeneficioCosto(bodyProyectoVivienda)
+    this.empleadosService.guardarBeneficioCosto(bodyProyectoVivienda)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2164,7 +2164,7 @@ if(this.isProy_vivienda){
          
 
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-          this.empleadosService.ActualizaProyextoBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value)
+          this.empleadosService.ActualizaBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value)
           .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
           .subscribe({
             next: (data) => {
