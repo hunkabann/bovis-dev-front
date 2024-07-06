@@ -200,7 +200,7 @@ export class EmpleadosService {
   }
 
   ActualizaBeneficioCosto(body: any,url: string) {
-    return this.http.put<GenericResponse>(`${this.baseUrl}/api/Beneficios` + url + '/0', body)
+    return this.http.put<GenericResponse>(`${this.baseUrl}/api/Beneficios` + url , body)
   }
   
   getContratoPorEmpleado(id: number) {
@@ -240,11 +240,11 @@ export class EmpleadosService {
     return this.http.get<any>(`${this.baseUrl}api/pcs/empresas`);
   }
 
-  ActualizaProyextoBeneficioCosto(body: any,url: string) {
-    return this.http.put<GenericResponse>(`${this.baseUrl}/api/Beneficios` + url +'/0', body)
+  ActualizaProyectoBeneficioCosto(body: any,url: string) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Beneficios` + url +'/0', body)
   }
 
-  guardarProyextoBeneficioCosto(body: any) {
+  guardarProyectoBeneficioCosto(body: any) {
     return this.http.post<GenericResponse>(`${this.baseUrl}api/Beneficios/0`, body)
   }
 
