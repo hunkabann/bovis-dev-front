@@ -2129,7 +2129,7 @@ const bodyProyectoVivienda = {
 }
 
 if(this.isProy_vivienda){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value )
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value )
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2148,7 +2148,7 @@ if(this.isProy_vivienda){
 
   if(this.form.value.proy_vivienda != 0 || this.form.value.proy_vivienda != 0.0 || this.form.value.proy_vivienda != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoVivienda)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoVivienda)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2164,7 +2164,7 @@ if(this.isProy_vivienda){
          
 
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-          this.empleadosService.ActualizaBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value)
+          this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoVivienda,"/1/"+this.form.controls['num_empleado'].value)
           .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
           .subscribe({
             next: (data) => {
@@ -2199,7 +2199,7 @@ const bodyProyectoAutomovil = {
 }
 
 if(this.isProy_Automovil){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoAutomovil,"/2/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoAutomovil,"/2/"+this.form.controls['num_empleado'].value)
 .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
 .subscribe({
   next: (data) => {
@@ -2218,7 +2218,7 @@ if(this.isProy_Automovil){
 
     if(this.form.value.proy_automovil != 0 || this.form.value.proy_automovil != 0.0 || this.form.value.proy_automovil != 0.00){
       //console.log("this.form.controls['num_empleado'] "+this.form.controls['num_empleado'].value + " this.form.controls['num_empleado_rr_hh'] "+ this.form.controls['num_empleado_rr_hh'].value)
-      this.empleadosService.guardarBeneficioCosto(bodyProyectoAutomovil)
+      this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoAutomovil)
         .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
         .subscribe({
           next: (data) => {
@@ -2251,7 +2251,7 @@ nucostobeneficio: this.form.value.proy_viaticos_a_comprobar
 }
 
 if(this.isProy_ViaticosaComprobar){
-this.empleadosService.ActualizaBeneficioCosto(bodyProyectoViaticosAComprobar,"/3/"+this.form.controls['num_empleado'].value)
+this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoViaticosAComprobar,"/3/"+this.form.controls['num_empleado'].value)
 .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
 .subscribe({
   next: (data) => {
@@ -2270,7 +2270,7 @@ this.empleadosService.ActualizaBeneficioCosto(bodyProyectoViaticosAComprobar,"/3
 
 if(this.form.value.proy_viaticos_a_comprobar != 0 || this.form.value.proy_viaticos_a_comprobar != 0.0 || this.form.value.proy_viaticos_a_comprobar != 0.00){
 
-  this.empleadosService.guardarBeneficioCosto(bodyProyectoViaticosAComprobar)
+  this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoViaticosAComprobar)
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: (data) => {
@@ -2299,7 +2299,7 @@ const bodyProyectoBonoAdicional = {
 }
 
 if(this.isProy_BonoAdicionalReubicacion){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoBonoAdicional,"/4/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoBonoAdicional,"/4/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2318,7 +2318,7 @@ if(this.isProy_BonoAdicionalReubicacion){
 
   if(this.form.value.proy_bono_adicional_reubicacion != 0 || this.form.value.proy_bono_adicional_reubicacion != 0.0 || this.form.value.proy_bono_adicional_reubicacion != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoBonoAdicional)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoBonoAdicional)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2345,7 +2345,7 @@ const bodyProyectoGasolina = {
 }
 
 if(this.isProy_Gasolina){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoGasolina,"/5/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoGasolina,"/5/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2364,7 +2364,7 @@ if(this.isProy_Gasolina){
 
   if(this.form.value.proy_gasolina != 0 || this.form.value.proy_gasolina != 0.0 || this.form.value.proy_gasolina != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoGasolina)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoGasolina)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2391,7 +2391,7 @@ const bodyProyectoCasetas = {
 }
 
 if(this.isProy_Casetas){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoCasetas,"/6/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoCasetas,"/6/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2410,7 +2410,7 @@ if(this.isProy_Casetas){
 
   if(this.form.value.proy_casetas != 0 || this.form.value.proy_casetas != 0.0 || this.form.value.proy_casetas != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoCasetas)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoCasetas)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2438,7 +2438,7 @@ const bodyProyectoAyudaTransporte = {
 }
 
 if(this.isProy_AyudaDeTransporte){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoAyudaTransporte,"/7/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoAyudaTransporte,"/7/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2457,7 +2457,7 @@ if(this.isProy_AyudaDeTransporte){
 
   if(this.form.value.proy_ayuda_de_transporte != 0 || this.form.value.proy_ayuda_de_transporte != 0.0 || this.form.value.proy_ayuda_de_transporte != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoAyudaTransporte)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoAyudaTransporte)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2485,7 +2485,7 @@ const bodyProyectoVuelosAvion = {
 }
 
 if(this.isProy_VuelosDeAvion){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoVuelosAvion,"/8/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoVuelosAvion,"/8/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2504,7 +2504,7 @@ if(this.isProy_VuelosDeAvion){
 
   if(this.form.value.proy_vuelos_de_avion != 0 || this.form.value.proy_vuelos_de_avion != 0.0 || this.form.value.proy_vuelos_de_avion != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoVuelosAvion)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoVuelosAvion)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2532,7 +2532,7 @@ const bodyProyectoprovisionImpues = {
 }
 
 if(this.isProy_ProvisionImpuestosExpatsr){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoprovisionImpues,"/9/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoprovisionImpues,"/9/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2551,7 +2551,7 @@ if(this.isProy_ProvisionImpuestosExpatsr){
 
   if(this.form.value.proy_provision_impuestos_expats != 0 || this.form.value.proy_provision_impuestos_expats != 0.0 || this.form.value.proy_provision_impuestos_expats != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoprovisionImpues)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoprovisionImpues)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2579,7 +2579,7 @@ const bodyProyectoFringeExpats = {
 }
 
 if(this.isProy_FringeExpats){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoFringeExpats,"/3007/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoFringeExpats,"/3007/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2598,7 +2598,7 @@ if(this.isProy_FringeExpats){
 
   if(this.form.value.proy_fringe_expats != 0 || this.form.value.proy_fringe_expats != 0.0 || this.form.value.proy_fringe_expats != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoFringeExpats)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoFringeExpats)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2626,7 +2626,7 @@ const bodyProyectoProgramadeEntrenamiento = {
 }
 
 if(this.isProy_ProgramaDeEntretenimiento){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoProgramadeEntrenamiento,"/10/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoProgramadeEntrenamiento,"/10/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2645,7 +2645,7 @@ if(this.isProy_ProgramaDeEntretenimiento){
 
   if(this.form.value.proy_programa_de_entretenimiento != 0 || this.form.value.proy_programa_de_entretenimiento != 0.0 || this.form.value.proy_programa_de_entretenimiento != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoProgramadeEntrenamiento)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoProgramadeEntrenamiento)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2673,7 +2673,7 @@ const bodyProyectoEventosEspeciales = {
 }
 
 if(this.isProy_EventosEspeciales){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoEventosEspeciales,"/11/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoEventosEspeciales,"/11/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2692,7 +2692,7 @@ if(this.isProy_EventosEspeciales){
 
   if(this.form.value.proy_eventos_especiales != 0 || this.form.value.proy_eventos_especiales != 0.0 || this.form.value.proy_eventos_especiales != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoEventosEspeciales)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoEventosEspeciales)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2720,7 +2720,7 @@ const bodyProyectoCostoIT = {
 }
 
 if(this.isProy_CostoIt){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoCostoIT,"/1005/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoCostoIT,"/1005/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2739,7 +2739,7 @@ if(this.isProy_CostoIt){
 
   if(this.form.value.proy_costo_it != 0 || this.form.value.proy_costo_it != 0.0 || this.form.value.proy_costo_it != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoCostoIT)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoCostoIT)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2766,7 +2766,7 @@ const bodyProyectoCosto_telefonia = {
 }
 
 if(this.isProy_CostoTelefonia){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoCosto_telefonia,"/2005/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoCosto_telefonia,"/2005/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2785,7 +2785,7 @@ if(this.isProy_CostoTelefonia){
 
   if(this.form.value.proy_costo_telefonia != 0 || this.form.value.proy_costo_telefonia != 0.0 || this.form.value.proy_costo_telefonia != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoCosto_telefonia)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoCosto_telefonia)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2813,7 +2813,7 @@ const bodyProyectosSV_Directivos = {
 }
 
 if(this.isProy_SvDirectivos){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectosSV_Directivos,"/3005/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectosSV_Directivos,"/3005/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2832,7 +2832,7 @@ if(this.isProy_SvDirectivos){
 
   if(this.form.value.proy_sv_directivos != 0 || this.form.value.proy_sv_directivos != 0.0 || this.form.value.proy_sv_directivos != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectosSV_Directivos)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectosSV_Directivos)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
@@ -2859,7 +2859,7 @@ const bodyProyectoFacturacion_BPM = {
 }
 
 if(this.isProy_FacturacionBpm){
-  this.empleadosService.ActualizaBeneficioCosto(bodyProyectoFacturacion_BPM,"/3006/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoFacturacion_BPM,"/3006/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2878,7 +2878,7 @@ if(this.isProy_FacturacionBpm){
 
   if(this.form.value.proy_facturacion_bpm != 0 || this.form.value.proy_facturacion_bpm != 0.0 || this.form.value.proy_facturacion_bpm != 0.00){
 
-    this.empleadosService.guardarBeneficioCosto(bodyProyectoFacturacion_BPM)
+    this.empleadosService.guardarProyectoBeneficioCosto(bodyProyectoFacturacion_BPM)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
