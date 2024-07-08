@@ -75,6 +75,9 @@ export class CapturaBeneficiosComponent implements OnInit {
   Costomenualproy = 0;
   bonoproyect_sueldobruto = 0;
 
+  //calculo Impuesto Nomina
+  bonoproyect_sueldobruto_ImpuestoNOM = 0;
+
 
   constructor( private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -362,6 +365,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                       this.isBonoAdicionalReubicacion = true;
 
                       this.bonoproyect_sueldobruto += +paso.costo
+                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
                       
                       this.form.patchValue({
                         bono_adicional_reubicacion: paso.costo
@@ -395,6 +399,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                     if(paso.beneficio === "Ayuda de transporte"){
 
                       this.isAyudaDeTransporte = true;
+                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
                       
                       this.form.patchValue({
                         ayuda_de_transporte: paso.costo
@@ -553,13 +558,15 @@ export class CapturaBeneficiosComponent implements OnInit {
 
                     if(paso.beneficio === "Bono Adicional"){
 
-                      console.log("Proyecto paso.beneficio --------------> " +paso.beneficio);
-                      console.log("Proyecto paso.cost-------------->> " +paso.nucostobeneficio);
+                      //console.log("Proyecto paso.beneficio --------------> " +paso.beneficio);
+                      //console.log("Proyecto paso.cost-------------->> " +paso.nucostobeneficio);
 
                       this.isProy_BonoAdicionalReubicacion = true;
  
+                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.nucostobeneficio
+
                        this.bonoproyect_sueldobruto += +paso.nucostobeneficio
-                       console.log("Proyecto suma paso.cost-------------->> " +this.bonoproyect_sueldobruto);
+                       //console.log("Proyecto suma paso.cost-------------->> " +this.bonoproyect_sueldobruto);
                       
                       this.form.patchValue({
                         proy_bono_adicional_reubicacion: paso.nucostobeneficio
@@ -712,6 +719,20 @@ export class CapturaBeneficiosComponent implements OnInit {
 
              // const beneficios = data.map(empleado => costoR.beneficios.toString())
               //const experiencias = data.beneficios.map(experiencia => experiencia.idExperiencia.toString())
+
+              console.log("suma aguinaldoMontoProvisionMensual-------------->> " +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual)));
+              console.log("suma pvProvisionMensual-------------->> " +data.map(empleado => (costoR.pvProvisionMensual)));
+              console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
+              console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
+              
+
+              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual))
+              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.pvProvisionMensual))
+              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
+              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
+
+              console.log("this.bonoproyect_sueldobruto_ImpuestoNOM -------------->> " +this.bonoproyect_sueldobruto_ImpuestoNOM);
+
               this.form.patchValue({
                 ciudad:                         data.map(empleado => (costoR.ciudad)),
                 num_empleado_rr_hh:             data.map(empleado => (costoR.numEmpleadoRrHh)),
@@ -741,12 +762,12 @@ export class CapturaBeneficiosComponent implements OnInit {
                 ispt:                           this.formateaValor(data.map(empleado => (costoR.ispt))),
                 aguinaldoCantidadMeses:         data.map(empleado => (costoR.aguinaldoCantidadMeses)),
                 aguinaldoMontoProvisionMensual: this.formateaValor(data.map(empleado => (costoR.aguinaldoMontoProvisionMensual))),
-                vaidComisionCostoMensual:       data.map(empleado => (costoR.vaidComisionCostoMensual)),
+                vaidComisionCostoMensual:       this.formateaValor(data.map(empleado => (costoR.vaidComisionCostoMensual))),
                 vaidCostoMensual:               data.map(empleado => (costoR.vaidCostoMensual)),
                 svCostoMensual:                 data.map(empleado => (costoR.svCostoMensual)),
                 svCostoTotalAnual:              data.map(empleado => (costoR.svCostoTotalAnual)),
                 sgmmCostoMensual:               this.formateaValor(data.map(empleado => (costoR.sgmmCostoMensual))),
-                sgmmCostoTotalAnual:            data.map(empleado => (costoR.sgmmCostoTotalAnual)),
+                sgmmCostoTotalAnual:            this.formateaValor(data.map(empleado => (costoR.sgmmCostoTotalAnual))),
                 bonoAnualProvisionMensual:      data.map(empleado => (costoR.bonoAnualProvisionMensual)),
                 avgBonoAnualEstimado:           data.map(empleado => (costoR.avgBonoAnualEstimado)),
                 indemProvisionMensual:          this.formateaValor(data.map(empleado => (costoR.indemProvisionMensual))),
@@ -826,7 +847,7 @@ export class CapturaBeneficiosComponent implements OnInit {
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
-          console.log("error cuando es 0 beneficio VIVIENDA --------------> " +err.error.text);
+          //console.log("error cuando es 0 beneficio VIVIENDA --------------> " +err.error.text);
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
   
           
@@ -846,9 +867,9 @@ export class CapturaBeneficiosComponent implements OnInit {
             },
             error: (err) => {
     
-              console.log("paso.beneficio VIVIENDA --------------> " +"/1/"+this.form.controls['num_empleado'].value);
+              //console.log("paso.beneficio VIVIENDA --------------> " +"/1/"+this.form.controls['num_empleado'].value);
     
-              console.log("error beneficio VIVIENDA --------------> " +err.error.text);
+              //console.log("error beneficio VIVIENDA --------------> " +err.error.text);
              
     
               this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -950,7 +971,7 @@ export class CapturaBeneficiosComponent implements OnInit {
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
-      console.log("error cuando es 0 beneficio AUTOMOVIL --------------> " +err.error.text);
+      //console.log("error cuando es 0 beneficio AUTOMOVIL --------------> " +err.error.text);
       this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
 
       
@@ -1034,7 +1055,7 @@ if(this.isViaticosaComprobar){
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
-      console.log("error cuando es 0 beneficio VIATIVCOSACOMPROBAR --------------> " +err.error.text);
+      //console.log("error cuando es 0 beneficio VIATIVCOSACOMPROBAR --------------> " +err.error.text);
       this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
 
       
@@ -2919,7 +2940,8 @@ if(this.isProy_FacturacionBpm){
      avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado?.toString(),
      CostoMensualProyecto:  this.Costomenualproy,
      bonoproyect_sueldobruto: this.bonoproyect_sueldobruto,
-     cotizacion: this.cotizacion
+     cotizacion: this.cotizacion,
+     bonoproyect_sueldobruto_ImpuestoNOM: this.bonoproyect_sueldobruto_ImpuestoNOM,
       //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
       //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
       //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
