@@ -364,8 +364,8 @@ export class CapturaBeneficiosComponent implements OnInit {
 
                       this.isBonoAdicionalReubicacion = true;
 
-                      this.bonoproyect_sueldobruto += +paso.costo
-                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
+                     // this.bonoproyect_sueldobruto += +paso.costo
+                      //this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
                       
                       this.form.patchValue({
                         bono_adicional_reubicacion: paso.costo
@@ -399,7 +399,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                     if(paso.beneficio === "Ayuda de transporte"){
 
                       this.isAyudaDeTransporte = true;
-                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
+                      //this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
                       
                       this.form.patchValue({
                         ayuda_de_transporte: paso.costo
@@ -563,9 +563,9 @@ export class CapturaBeneficiosComponent implements OnInit {
 
                       this.isProy_BonoAdicionalReubicacion = true;
  
-                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.nucostobeneficio
+                      //this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.nucostobeneficio
 
-                       this.bonoproyect_sueldobruto += +paso.nucostobeneficio
+                       //this.bonoproyect_sueldobruto += +paso.nucostobeneficio
                        //console.log("Proyecto suma paso.cost-------------->> " +this.bonoproyect_sueldobruto);
                       
                       this.form.patchValue({
@@ -720,18 +720,18 @@ export class CapturaBeneficiosComponent implements OnInit {
              // const beneficios = data.map(empleado => costoR.beneficios.toString())
               //const experiencias = data.beneficios.map(experiencia => experiencia.idExperiencia.toString())
 
-              console.log("suma aguinaldoMontoProvisionMensual-------------->> " +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual)));
-              console.log("suma pvProvisionMensual-------------->> " +data.map(empleado => (costoR.pvProvisionMensual)));
-              console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
-              console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
+             // console.log("suma aguinaldoMontoProvisionMensual-------------->> " +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual)));
+             // console.log("suma pvProvisionMensual-------------->> " +data.map(empleado => (costoR.pvProvisionMensual)));
+             // console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
+            //  console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
               
 
-              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual))
-              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.pvProvisionMensual))
-              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
-              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
+             // this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual))
+              //this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.pvProvisionMensual))
+              //this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
+             // this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
 
-              console.log("this.bonoproyect_sueldobruto_ImpuestoNOM -------------->> " +this.bonoproyect_sueldobruto_ImpuestoNOM);
+              //console.log("this.bonoproyect_sueldobruto_ImpuestoNOM -------------->> " +this.bonoproyect_sueldobruto_ImpuestoNOM);
 
               this.form.patchValue({
                 ciudad:                         data.map(empleado => (costoR.ciudad)),
@@ -2924,6 +2924,82 @@ if(this.isProy_FacturacionBpm){
 
 
     let a_Sueldoinfla = Number(this.form.controls['sueldoBrutoInflacion'].value?.toString())
+
+    this.activatedRoute.params
+    .subscribe(({id}) => {
+      if(id) {
+        this.idEmpleado = id
+        this.esActualizacion = true
+        this.costosService.getCostoID(id)
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe({
+            next: ({data}) => {
+
+              this.arraybeneficio = data[0].beneficios
+              this.arraybeneficiosProyectos = data[0].beneficiosproyecto
+              const [costoR] = data
+              this.costos = data
+
+              this.Costomenualproy = 0
+
+              const dato = this.arraybeneficio;
+                 dato?.forEach(paso=>{
+                     
+
+                    if(paso.beneficio === "Bono Adicional"){
+
+                      this.bonoproyect_sueldobruto += +paso.costo
+                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
+                      
+                    
+                    }
+
+                    if(paso.beneficio === "Ayuda de transporte"){
+
+                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
+                    
+                    }
+
+                    
+
+                 })
+
+                 //this.bonoproyect_sueldobruto = 0
+                 const beneficiopryect = this.arraybeneficiosProyectos;
+                 beneficiopryect?.forEach(paso=>{
+
+                    if(paso.beneficio === "Bono Adicional"){
+
+                      this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.nucostobeneficio
+
+                       this.bonoproyect_sueldobruto += +paso.nucostobeneficio
+                      
+                    
+                    }
+
+                  
+                 })
+              console.log("suma aguinaldoMontoProvisionMensual-------------->> " +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual)));
+              console.log("suma pvProvisionMensual-------------->> " +data.map(empleado => (costoR.pvProvisionMensual)));
+              console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
+              console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
+              
+
+              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual))
+              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.pvProvisionMensual))
+              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
+              this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
+
+              console.log("this.bonoproyect_sueldobruto_ImpuestoNOM -------------->> " +this.bonoproyect_sueldobruto_ImpuestoNOM); 
+
+            },
+            error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+          })
+      } 
+  })
+
+   
+
     
     let body = {
      //...this.form.value
@@ -2980,7 +3056,7 @@ if(this.isProy_FacturacionBpm){
                       .subscribe({
                         next: (datad) => {
                          
-                          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+                          
                           //this.form.reset()
                           //this.router.navigate(['/costos/costo-empleado'], { queryParams: { success: true } });
 
@@ -3105,7 +3181,13 @@ if(this.isProy_FacturacionBpm){
                         }
                       })
                   }
-                },
+
+                  this.bonoproyect_sueldobruto = 0
+                  this.bonoproyect_sueldobruto_ImpuestoNOM = 0
+                  Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+                }
+                
+                ,
                 error: (err) => {
                   this.messageService.add({ severity: 'error Obtener CostoID', summary: TITLES.error, detail: err.error })
                 }
