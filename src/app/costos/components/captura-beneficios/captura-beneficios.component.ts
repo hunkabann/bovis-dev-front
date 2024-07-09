@@ -2366,7 +2366,7 @@ const bodyProyectoGasolina = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "5",
-  nucostobeneficio: this.form.value.gasolina
+  nucostobeneficio: this.form.value.proy_gasolina
 }
 
 if(this.isProy_Gasolina){
@@ -2412,7 +2412,7 @@ const bodyProyectoCasetas = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "6",
-  nucostobeneficio: this.form.value.casetas
+  nucostobeneficio: this.form.value.proy_casetas
 }
 
 if(this.isProy_Casetas){
@@ -2459,7 +2459,7 @@ const bodyProyectoAyudaTransporte = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "7",
-  nucostobeneficio: this.form.value.ayuda_de_transporte
+  nucostobeneficio: this.form.value.proy_ayuda_de_transporte
 }
 
 if(this.isProy_AyudaDeTransporte){
@@ -2506,7 +2506,7 @@ const bodyProyectoVuelosAvion = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "8",
-  nucostobeneficio: this.form.value.vuelos_de_avion
+  nucostobeneficio: this.form.value.proy_vuelos_de_avion
 }
 
 if(this.isProy_VuelosDeAvion){
@@ -2553,7 +2553,7 @@ const bodyProyectoprovisionImpues = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "9",
-  nucostobeneficio: this.form.value.provision_impuestos_expats
+  nucostobeneficio: this.form.value.proy_provision_impuestos_expats
 }
 
 if(this.isProy_ProvisionImpuestosExpatsr){
@@ -2600,7 +2600,7 @@ const bodyProyectoFringeExpats = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "3007",
-  nucostobeneficio: this.form.value.fringe_expats
+  nucostobeneficio: this.form.value.proy_fringe_expats
 }
 
 if(this.isProy_FringeExpats){
@@ -2647,7 +2647,7 @@ const bodyProyectoProgramadeEntrenamiento = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "10",
-  nucostobeneficio: this.form.value.programa_de_entretenimiento
+  nucostobeneficio: this.form.value.proy_programa_de_entretenimiento
 }
 
 if(this.isProy_ProgramaDeEntretenimiento){
@@ -2694,7 +2694,7 @@ const bodyProyectoEventosEspeciales = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "11",
-  nucostobeneficio: this.form.value.eventos_especiales
+  nucostobeneficio: this.form.value.proy_eventos_especiales
 }
 
 if(this.isProy_EventosEspeciales){
@@ -2741,7 +2741,7 @@ const bodyProyectoCostoIT = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "1005",
-  nucostobeneficio: this.form.value.costo_it
+  nucostobeneficio: this.form.value.proy_costo_it
 }
 
 if(this.isProy_CostoIt){
@@ -2787,7 +2787,7 @@ const bodyProyectoCosto_telefonia = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "2005",
-  nucostobeneficio: this.form.value.costo_telefonia
+  nucostobeneficio: this.form.value.proy_costo_telefonia
 }
 
 if(this.isProy_CostoTelefonia){
@@ -2834,7 +2834,7 @@ const bodyProyectosSV_Directivos = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "3005",
-  nucostobeneficio: this.form.value.sv_directivos
+  nucostobeneficio: this.form.value.proy_sv_directivos
 }
 
 if(this.isProy_SvDirectivos){
@@ -2880,7 +2880,7 @@ const bodyProyectoFacturacion_BPM = {
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
   IdBeneficio: "3006",
-  nucostobeneficio: this.form.value.facturacion_bpm
+  nucostobeneficio: this.form.value.proy_facturacion_bpm
 }
 
 if(this.isProy_FacturacionBpm){
