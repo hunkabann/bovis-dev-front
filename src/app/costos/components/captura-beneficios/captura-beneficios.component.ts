@@ -78,6 +78,8 @@ export class CapturaBeneficiosComponent implements OnInit {
   //calculo Impuesto Nomina
   bonoproyect_sueldobruto_ImpuestoNOM = 0;
 
+  cargando:             boolean = false
+
 
   constructor( private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -364,7 +366,7 @@ export class CapturaBeneficiosComponent implements OnInit {
 
                       this.isBonoAdicionalReubicacion = true;
 
-                     // this.bonoproyect_sueldobruto += +paso.costo
+                      //this.bonoproyect_sueldobruto += +paso.costo
                       //this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
                       
                       this.form.patchValue({
@@ -399,7 +401,7 @@ export class CapturaBeneficiosComponent implements OnInit {
                     if(paso.beneficio === "Ayuda de transporte"){
 
                       this.isAyudaDeTransporte = true;
-                      //this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
+                     // this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
                       
                       this.form.patchValue({
                         ayuda_de_transporte: paso.costo
@@ -563,9 +565,9 @@ export class CapturaBeneficiosComponent implements OnInit {
 
                       this.isProy_BonoAdicionalReubicacion = true;
  
-                      //this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.nucostobeneficio
+                     // this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.nucostobeneficio
 
-                       //this.bonoproyect_sueldobruto += +paso.nucostobeneficio
+                      // this.bonoproyect_sueldobruto += +paso.nucostobeneficio
                        //console.log("Proyecto suma paso.cost-------------->> " +this.bonoproyect_sueldobruto);
                       
                       this.form.patchValue({
@@ -825,6 +827,8 @@ export class CapturaBeneficiosComponent implements OnInit {
   guardar() {
     //console.log(this.form.value);
 
+    this.cargando = true
+
     const bodyVivienda = {
       //...this.form.value
       //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
@@ -843,7 +847,7 @@ export class CapturaBeneficiosComponent implements OnInit {
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          ////this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -862,7 +866,7 @@ export class CapturaBeneficiosComponent implements OnInit {
           .subscribe({
             next: (data) => {
               //this.form.reset()
-              this.ngOnInit
+              //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
             },
             error: (err) => {
@@ -878,7 +882,7 @@ export class CapturaBeneficiosComponent implements OnInit {
               .subscribe({
                 next: (data) => {
                   //this.form.reset()
-                  this.ngOnInit
+                  //this.ngOnInit
                   //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
                 },
                 error: (err) => {
@@ -901,7 +905,7 @@ export class CapturaBeneficiosComponent implements OnInit {
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -917,7 +921,7 @@ export class CapturaBeneficiosComponent implements OnInit {
           .subscribe({
             next: (data) => {
               //this.form.reset()
-              this.ngOnInit
+              //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
             },
             error: (err) => {
@@ -937,7 +941,7 @@ export class CapturaBeneficiosComponent implements OnInit {
     .subscribe({
       next: (data) => {
         //this.form.reset()
-        this.ngOnInit
+        //this.ngOnInit
         //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
       },
       error: (err) => {
@@ -967,7 +971,7 @@ export class CapturaBeneficiosComponent implements OnInit {
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -986,7 +990,7 @@ export class CapturaBeneficiosComponent implements OnInit {
           .subscribe({
             next: (data) => {
               //this.form.reset()
-              this.ngOnInit
+              //this.ngOnInit
                 //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
             },
             error: (err) => {
@@ -1005,7 +1009,7 @@ export class CapturaBeneficiosComponent implements OnInit {
     .subscribe({
       next: (data) => {
         //this.form.reset()
-        this.ngOnInit
+        //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
       },
       error: (err) => {
@@ -1021,7 +1025,7 @@ export class CapturaBeneficiosComponent implements OnInit {
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1051,7 +1055,7 @@ if(this.isViaticosaComprobar){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1070,7 +1074,7 @@ if(this.isViaticosaComprobar){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1088,7 +1092,7 @@ this.empleadosService.guardarBeneficioCosto(bodyViaticosAComprobar)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1104,7 +1108,7 @@ this.empleadosService.guardarBeneficioCosto(bodyViaticosAComprobar)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1130,7 +1134,7 @@ if(this.isBonoAdicionalReubicacion){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1149,7 +1153,7 @@ if(this.isBonoAdicionalReubicacion){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1167,7 +1171,7 @@ this.empleadosService.guardarBeneficioCosto(bodyBonoAdicional)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1183,7 +1187,7 @@ this.empleadosService.guardarBeneficioCosto(bodyBonoAdicional)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1209,7 +1213,7 @@ if(this.isGasolina){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1228,7 +1232,7 @@ if(this.isGasolina){
       .subscribe({
         next: (data) => {
          //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1246,7 +1250,7 @@ this.empleadosService.guardarBeneficioCosto(bodyGasolina)
   .subscribe({
     next: (data) => {
      //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1262,7 +1266,7 @@ this.empleadosService.guardarBeneficioCosto(bodyGasolina)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1288,7 +1292,7 @@ if(this.isCasetas){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1307,7 +1311,7 @@ if(this.isCasetas){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1325,7 +1329,7 @@ this.empleadosService.guardarBeneficioCosto(bodyCasetas)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1341,7 +1345,7 @@ this.empleadosService.guardarBeneficioCosto(bodyCasetas)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1367,7 +1371,7 @@ if(this.isAyudaDeTransporte){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1386,7 +1390,7 @@ if(this.isAyudaDeTransporte){
       .subscribe({
         next: (data) => {
          //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1404,7 +1408,7 @@ this.empleadosService.guardarBeneficioCosto(bodyAyudaTransporte)
   .subscribe({
     next: (data) => {
      //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1420,7 +1424,7 @@ this.empleadosService.guardarBeneficioCosto(bodyAyudaTransporte)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1446,7 +1450,7 @@ if(this.isVuelosDeAvion){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1465,7 +1469,7 @@ if(this.isVuelosDeAvion){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1483,7 +1487,7 @@ this.empleadosService.guardarBeneficioCosto(bodyVuelosAvion)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1499,7 +1503,7 @@ this.empleadosService.guardarBeneficioCosto(bodyVuelosAvion)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1525,7 +1529,7 @@ if(this.isProvisionImpuestosExpatsr){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1544,7 +1548,7 @@ if(this.isProvisionImpuestosExpatsr){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1562,7 +1566,7 @@ this.empleadosService.guardarBeneficioCosto(bodyprovisionImpues)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1578,7 +1582,7 @@ this.empleadosService.guardarBeneficioCosto(bodyprovisionImpues)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1604,7 +1608,7 @@ if(this.isFringeExpats){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1623,7 +1627,7 @@ if(this.isFringeExpats){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1641,7 +1645,7 @@ this.empleadosService.guardarBeneficioCosto(bodyFringeExpats)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1657,7 +1661,7 @@ this.empleadosService.guardarBeneficioCosto(bodyFringeExpats)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1683,7 +1687,7 @@ if(this.isProgramaDeEntretenimiento){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1702,7 +1706,7 @@ if(this.isProgramaDeEntretenimiento){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1720,7 +1724,7 @@ this.empleadosService.guardarBeneficioCosto(bodyProgramadeEntrenamiento)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1736,7 +1740,7 @@ this.empleadosService.guardarBeneficioCosto(bodyProgramadeEntrenamiento)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1762,7 +1766,7 @@ if(this.isEventosEspeciales){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1781,7 +1785,7 @@ if(this.isEventosEspeciales){
       .subscribe({
         next: (data) => {
          //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1799,7 +1803,7 @@ this.empleadosService.guardarBeneficioCosto(bodyEventosEspeciales)
   .subscribe({
     next: (data) => {
      //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1815,7 +1819,7 @@ this.empleadosService.guardarBeneficioCosto(bodyEventosEspeciales)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1864,7 +1868,7 @@ if(this.isCostoIt){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1883,7 +1887,7 @@ if(this.isCostoIt){
       .subscribe({
         next: (data) => {
          //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1900,7 +1904,7 @@ this.empleadosService.guardarBeneficioCosto(bodyCostoIT)
   .subscribe({
     next: (data) => {
      //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1916,7 +1920,7 @@ this.empleadosService.guardarBeneficioCosto(bodyCostoIT)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1942,7 +1946,7 @@ if(this.isCostoTelefonia){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1961,7 +1965,7 @@ if(this.isCostoTelefonia){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -1979,7 +1983,7 @@ this.empleadosService.guardarBeneficioCosto(bodyCosto_telefonia)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -1995,7 +1999,7 @@ this.empleadosService.guardarBeneficioCosto(bodyCosto_telefonia)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2021,7 +2025,7 @@ if(this.isSvDirectivos){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2040,7 +2044,7 @@ if(this.isSvDirectivos){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2057,7 +2061,7 @@ this.empleadosService.guardarBeneficioCosto(bodySV_Directivos)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2073,7 +2077,7 @@ this.empleadosService.guardarBeneficioCosto(bodySV_Directivos)
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2099,7 +2103,7 @@ if(this.isFacturacionBpm){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2118,7 +2122,7 @@ if(this.isFacturacionBpm){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2155,7 +2159,7 @@ if(this.isProy_vivienda){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2174,7 +2178,7 @@ if(this.isProy_vivienda){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2190,7 +2194,7 @@ if(this.isProy_vivienda){
           .subscribe({
             next: (data) => {
               //this.form.reset()
-              this.ngOnInit
+              //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
             },
             error: (err) => {
@@ -2225,7 +2229,7 @@ if(this.isProy_Automovil){
 .subscribe({
   next: (data) => {
     //this.form.reset()
-    this.ngOnInit
+    //this.ngOnInit
     //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
   },
   error: (err) => {
@@ -2244,7 +2248,7 @@ if(this.isProy_Automovil){
         .subscribe({
           next: (data) => {
             //this.form.reset()
-            this.ngOnInit
+            //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
           },
           error: (err) => {
@@ -2277,7 +2281,7 @@ this.empleadosService.ActualizaProyectoBeneficioCosto(bodyProyectoViaticosACompr
 .subscribe({
   next: (data) => {
     //this.form.reset()
-    this.ngOnInit
+    //this.ngOnInit
     //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
   },
   error: (err) => {
@@ -2296,7 +2300,7 @@ if(this.form.value.proy_viaticos_a_comprobar != 0 || this.form.value.proy_viatic
     .subscribe({
       next: (data) => {
         //this.form.reset()
-        this.ngOnInit
+        //this.ngOnInit
         //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
       },
       error: (err) => {
@@ -2325,7 +2329,7 @@ if(this.isProy_BonoAdicionalReubicacion){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2344,7 +2348,7 @@ if(this.isProy_BonoAdicionalReubicacion){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2371,7 +2375,7 @@ if(this.isProy_Gasolina){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2390,7 +2394,7 @@ if(this.isProy_Gasolina){
       .subscribe({
         next: (data) => {
          //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2417,7 +2421,7 @@ if(this.isProy_Casetas){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2436,7 +2440,7 @@ if(this.isProy_Casetas){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2464,7 +2468,7 @@ if(this.isProy_AyudaDeTransporte){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2483,7 +2487,7 @@ if(this.isProy_AyudaDeTransporte){
       .subscribe({
         next: (data) => {
          //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2511,7 +2515,7 @@ if(this.isProy_VuelosDeAvion){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2530,7 +2534,7 @@ if(this.isProy_VuelosDeAvion){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2558,7 +2562,7 @@ if(this.isProy_ProvisionImpuestosExpatsr){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2577,7 +2581,7 @@ if(this.isProy_ProvisionImpuestosExpatsr){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2605,7 +2609,7 @@ if(this.isProy_FringeExpats){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2624,7 +2628,7 @@ if(this.isProy_FringeExpats){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2652,7 +2656,7 @@ if(this.isProy_ProgramaDeEntretenimiento){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2671,7 +2675,7 @@ if(this.isProy_ProgramaDeEntretenimiento){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
           //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2699,7 +2703,7 @@ if(this.isProy_EventosEspeciales){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2718,7 +2722,7 @@ if(this.isProy_EventosEspeciales){
       .subscribe({
         next: (data) => {
          //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2746,7 +2750,7 @@ if(this.isProy_CostoIt){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2765,7 +2769,7 @@ if(this.isProy_CostoIt){
       .subscribe({
         next: (data) => {
          //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2792,7 +2796,7 @@ if(this.isProy_CostoTelefonia){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2811,7 +2815,7 @@ if(this.isProy_CostoTelefonia){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2839,7 +2843,7 @@ if(this.isProy_SvDirectivos){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2858,7 +2862,7 @@ if(this.isProy_SvDirectivos){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2885,7 +2889,7 @@ if(this.isProy_FacturacionBpm){
   .subscribe({
     next: (data) => {
       //this.form.reset()
-      this.ngOnInit
+      //this.ngOnInit
       //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
     },
     error: (err) => {
@@ -2904,7 +2908,7 @@ if(this.isProy_FacturacionBpm){
       .subscribe({
         next: (data) => {
           //this.form.reset()
-          this.ngOnInit
+          //this.ngOnInit
               //this.router.navigate(['/costos/costo-empleado'], {queryParams: {success: true}});
         },
         error: (err) => {
@@ -2949,6 +2953,9 @@ if(this.isProy_FacturacionBpm){
                     if(paso.beneficio === "Bono Adicional"){
 
                       this.bonoproyect_sueldobruto += +paso.costo
+                      console.log("this.bonoproyect_sueldobruto beneficio-------------->> " +this.bonoproyect_sueldobruto);
+
+                      
                       this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.costo
                       
                     
@@ -2973,16 +2980,18 @@ if(this.isProy_FacturacionBpm){
                       this.bonoproyect_sueldobruto_ImpuestoNOM += +paso.nucostobeneficio
 
                        this.bonoproyect_sueldobruto += +paso.nucostobeneficio
+
+                       console.log("this.bonoproyect_sueldobruto proyecto beneficio-------------->> " +this.bonoproyect_sueldobruto);
                       
                     
                     }
 
                   
                  })
-              console.log("suma aguinaldoMontoProvisionMensual-------------->> " +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual)));
-              console.log("suma pvProvisionMensual-------------->> " +data.map(empleado => (costoR.pvProvisionMensual)));
-              console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
-              console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
+              //console.log("suma aguinaldoMontoProvisionMensual-------------->> " +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual)));
+              //console.log("suma pvProvisionMensual-------------->> " +data.map(empleado => (costoR.pvProvisionMensual)));
+              //console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
+              //console.log("suma avgBonoAnualEstimado-------------->> " +data.map(empleado => (costoR.avgBonoAnualEstimado)));
               
 
               this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.aguinaldoMontoProvisionMensual))
@@ -2990,7 +2999,9 @@ if(this.isProy_FacturacionBpm){
               this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
               this.bonoproyect_sueldobruto_ImpuestoNOM += +data.map(empleado => (costoR.avgBonoAnualEstimado))
 
-              console.log("this.bonoproyect_sueldobruto_ImpuestoNOM -------------->> " +this.bonoproyect_sueldobruto_ImpuestoNOM); 
+              //console.log("this.bonoproyect_sueldobruto_ImpuestoNOM -------------->> " +this.bonoproyect_sueldobruto_ImpuestoNOM); 
+
+              
 
             },
             error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -2998,200 +3009,21 @@ if(this.isProy_FacturacionBpm){
       } 
   })
 
-   
+  this.delay(1200000);
+
+  console.log('Inicio de la función de prueba.');
+    this.sleep(120000);    //Dormimos la ejecución durante 2 Minutos
+    console.log('Fin de la función de prueba.');
+  
+    console.log('Hello');
+setTimeout(() => { this.guardarelCosto() }, 60000);
+console.log('Goodbye!');
+
+
+  
 
     
-    let body = {
-     //...this.form.value
     
-     idCostoEmpleado: null,
-     NumEmpleadoRrHh: null,
-     sueldoBruto: this.form.controls['sueldoBrutoInflacion'].value?.toString(),
-     //sueldoBruto: a_Sueldoinfla + this.bonoproyect_sueldobruto,     
-     numProyecto: this.form.controls['proyecto'].value?.toString() ,
-     //sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
-     vaidCostoMensual: this.form.value.vaidCostoMensual?.toString(),
-     svCostoTotalAnual: this.form.value.svCostoTotalAnual?.toString(),
-     sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual?.toString(),
-     avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado?.toString(),
-     CostoMensualProyecto:  this.Costomenualproy,
-     bonoproyect_sueldobruto: this.bonoproyect_sueldobruto,
-     cotizacion: this.cotizacion,
-     bonoproyect_sueldobruto_ImpuestoNOM: this.bonoproyect_sueldobruto_ImpuestoNOM,
-      //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
-      //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
-      //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
-
-    }
-
-    this.empleadosServ.getCostoID(this.idEmpleado)
-              .subscribe({
-                next: (data) => {
-                  if (data.data.length > 0) {
-                    body = {
-                      ...body,
-                      idCostoEmpleado: data.data[0].idCostoEmpleado,
-                      NumEmpleadoRrHh: data.data[0].numEmpleadoRrHh,
-
-
-                      
-                    }
-
-                   /* this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
-                      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-                      .subscribe(resp => {
-                        Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
-                        this.form.reset()
-                        this.router.navigate(['/costos/captura-beneficios'], { queryParams: { success: true } });
-                       console.log(resp);
-                     },
-                     err => {
-                      console.log(err);
-                    },
-                   );
-                   }*/
-
-                    this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
-                      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-                      .subscribe({
-                        next: (datad) => {
-                         
-                          
-                          //this.form.reset()
-                          //this.router.navigate(['/costos/costo-empleado'], { queryParams: { success: true } });
-
-                          this.Costomenualproy = 0
-
-                          this.activatedRoute.params
-                            .subscribe(({id}) => {
-                              forkJoin([
-                                id ? this.empleadosServ.getPersonas() : this.empleadosServ.getPersonasDisponibles(),
-                                this.empleadosServ.getCatEmpleados(),
-                                this.empleadosServ.getCatCategorias(),
-                                this.empleadosServ.getCatTiposContratos(),
-                                this.empleadosServ.getCatNivelEstudios(),
-                                this.empleadosServ.getCatFormasPago(),
-                                this.empleadosServ.getCatJornadas(),
-                                this.empleadosServ.getCatDepartamentos(),
-                                this.empleadosServ.getCatClasificacion(),
-                                this.empleadosServ.getCatUnidadNegocio(),
-                                this.empleadosServ.getCatTurno(),
-                                this.empleadosServ.getHabilidades(),
-                                this.empleadosServ.getExperiencias(),
-                                this.empleadosServ.getProfesiones(),
-                                this.empleadosServ.getPuestos(),
-                                this.empleadosServ.getEmpleados(),
-                                this.empleadosServ.getCatEstados(),
-                                this.empleadosServ.getCatPaises(),
-                                this.empleadosServ.getProyectos(),
-                              ])
-                              .pipe(finalize(() => this.verificarActualizacion()))
-                              .subscribe({
-                                next: ([
-                                  empleadosR,proyectosR
-                                ]) => {
-                                  this.empleados = empleadosR.data.map(empleado => ({name: empleado.chnombre, code: empleado.chap_materno}))
-                                  this.proyectos = proyectosR.data.map(proyecto => ({name: proyecto.num_proyecto_principal, code: proyecto.chproyecto_principal}))
-                                },
-                                error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-                              })
-                            })
-                        
-                            
-                        
-                            
-                        
-                            this.empleadosService.getEmpleados()
-                              .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-                              .subscribe({
-                                next: ({data}) => {
-                                  this.empleados = data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
-                                  
-                                  //NumEmpleado = this.empleados.num_empleado_rr_hh as any
-                                },
-                                error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-                              })
-                                                  
-                         
-                        },
-                        error: (err) => {
-                          //Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
-                          if(err.error.text.includes('Actualización del registro de costos:') ){
-                            Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
-
-                            this.Costomenualproy = 0
-
-                            this.activatedRoute.params
-                            .subscribe(({id}) => {
-                              forkJoin([
-                                id ? this.empleadosServ.getPersonas() : this.empleadosServ.getPersonasDisponibles(),
-                                this.empleadosServ.getCatEmpleados(),
-                                this.empleadosServ.getCatCategorias(),
-                                this.empleadosServ.getCatTiposContratos(),
-                                this.empleadosServ.getCatNivelEstudios(),
-                                this.empleadosServ.getCatFormasPago(),
-                                this.empleadosServ.getCatJornadas(),
-                                this.empleadosServ.getCatDepartamentos(),
-                                this.empleadosServ.getCatClasificacion(),
-                                this.empleadosServ.getCatUnidadNegocio(),
-                                this.empleadosServ.getCatTurno(),
-                                this.empleadosServ.getHabilidades(),
-                                this.empleadosServ.getExperiencias(),
-                                this.empleadosServ.getProfesiones(),
-                                this.empleadosServ.getPuestos(),
-                                this.empleadosServ.getEmpleados(),
-                                this.empleadosServ.getCatEstados(),
-                                this.empleadosServ.getCatPaises(),
-                                this.empleadosServ.getProyectos(),
-                              ])
-                              .pipe(finalize(() => this.verificarActualizacion()))
-                              .subscribe({
-                                next: ([
-                                  empleadosR,proyectosR
-                                ]) => {
-                                  this.empleados = empleadosR.data.map(empleado => ({name: empleado.chnombre, code: empleado.chap_materno}))
-                                  this.proyectos = proyectosR.data.map(proyecto => ({name: proyecto.num_proyecto_principal, code: proyecto.chproyecto_principal}))
-                                },
-                                error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-                              })
-                            })
-                        
-                            
-                        
-                            
-                        
-                            this.empleadosService.getEmpleados()
-                              .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-                              .subscribe({
-                                next: ({data}) => {
-                                  this.empleados = data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
-                                  
-                                  //NumEmpleado = this.empleados.num_empleado_rr_hh as any
-                                },
-                                error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-                              })
-
-                            //console.log("Errores = "+ err.error.text)
-                          }else{
-                            this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
-                            //console.log("Diferente error: "+ err.error.text)
-                          }
-                         
-                          
-                        }
-                      })
-                  }
-
-                  this.bonoproyect_sueldobruto = 0
-                  this.bonoproyect_sueldobruto_ImpuestoNOM = 0
-                  Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
-                }
-                
-                ,
-                error: (err) => {
-                  this.messageService.add({ severity: 'error Obtener CostoID', summary: TITLES.error, detail: err.error })
-                }
-              })
               
          // }
    
@@ -3211,6 +3043,212 @@ if(this.isProy_FacturacionBpm){
     
 
     
+  }
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async delay(ms: number) {
+    await new Promise(resolve => setTimeout(()=>resolve, ms)).then(()=>console.log("fired"));
+}
+
+  guardarelCosto() {
+
+    let body = {
+      //...this.form.value
+     
+      idCostoEmpleado: null,
+      NumEmpleadoRrHh: null,
+      sueldoBruto: this.form.controls['sueldoBrutoInflacion'].value?.toString(),
+      //sueldoBruto: a_Sueldoinfla + this.bonoproyect_sueldobruto,     
+      numProyecto: this.form.controls['proyecto'].value?.toString() ,
+      //sueldoBrutoInflacion: this.form.value.sueldoBrutoInflacion,
+      vaidCostoMensual: this.form.value.vaidCostoMensual?.toString(),
+      svCostoTotalAnual: this.form.value.svCostoTotalAnual?.toString(),
+      sgmmCostoTotalAnual: this.form.value.sgmmCostoTotalAnual?.toString(),
+      avgBonoAnualEstimado: this.form.value.avgBonoAnualEstimado?.toString(),
+      CostoMensualProyecto:  this.Costomenualproy,
+      bonoproyect_sueldobruto: this.bonoproyect_sueldobruto,
+      cotizacion: this.cotizacion,
+      bonoproyect_sueldobruto_ImpuestoNOM: this.bonoproyect_sueldobruto_ImpuestoNOM,
+       //fecha_ingreso:          format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
+       //fecha_salida:           this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
+       //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
+ 
+     }
+ 
+     this.empleadosServ.getCostoID(this.idEmpleado)
+               .subscribe({
+                 next: (data) => {
+                   if (data.data.length > 0) {
+                     body = {
+                       ...body,
+                       idCostoEmpleado: data.data[0].idCostoEmpleado,
+                       NumEmpleadoRrHh: data.data[0].numEmpleadoRrHh,
+ 
+ 
+                       
+                     }
+ 
+                    /* this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
+                       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                       .subscribe(resp => {
+                         Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+                         this.form.reset()
+                         this.router.navigate(['/costos/captura-beneficios'], { queryParams: { success: true } });
+                        console.log(resp);
+                      },
+                      err => {
+                       console.log(err);
+                     },
+                    );
+                    }*/
+ 
+                     this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
+                       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                       .subscribe({
+                         next: (datad) => {
+                          
+                           
+                           //this.form.reset()
+                           //this.router.navigate(['/costos/costo-empleado'], { queryParams: { success: true } });
+ 
+                           this.Costomenualproy = 0
+ 
+                           this.activatedRoute.params
+                             .subscribe(({id}) => {
+                               forkJoin([
+                                 id ? this.empleadosServ.getPersonas() : this.empleadosServ.getPersonasDisponibles(),
+                                 this.empleadosServ.getCatEmpleados(),
+                                 this.empleadosServ.getCatCategorias(),
+                                 this.empleadosServ.getCatTiposContratos(),
+                                 this.empleadosServ.getCatNivelEstudios(),
+                                 this.empleadosServ.getCatFormasPago(),
+                                 this.empleadosServ.getCatJornadas(),
+                                 this.empleadosServ.getCatDepartamentos(),
+                                 this.empleadosServ.getCatClasificacion(),
+                                 this.empleadosServ.getCatUnidadNegocio(),
+                                 this.empleadosServ.getCatTurno(),
+                                 this.empleadosServ.getHabilidades(),
+                                 this.empleadosServ.getExperiencias(),
+                                 this.empleadosServ.getProfesiones(),
+                                 this.empleadosServ.getPuestos(),
+                                 this.empleadosServ.getEmpleados(),
+                                 this.empleadosServ.getCatEstados(),
+                                 this.empleadosServ.getCatPaises(),
+                                 this.empleadosServ.getProyectos(),
+                               ])
+                               .pipe(finalize(() => this.verificarActualizacion()))
+                               .subscribe({
+                                 next: ([
+                                   empleadosR,proyectosR
+                                 ]) => {
+                                   this.empleados = empleadosR.data.map(empleado => ({name: empleado.chnombre, code: empleado.chap_materno}))
+                                   this.proyectos = proyectosR.data.map(proyecto => ({name: proyecto.num_proyecto_principal, code: proyecto.chproyecto_principal}))
+                                 },
+                                 error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                               })
+                             })
+                         
+                             
+                         
+                             
+                         
+                             this.empleadosService.getEmpleados()
+                               .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                               .subscribe({
+                                 next: ({data}) => {
+                                   this.empleados = data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
+                                   
+                                   //NumEmpleado = this.empleados.num_empleado_rr_hh as any
+                                 },
+                                 error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+                               })
+                                                   
+                          
+                         },
+                         error: (err) => {
+                           //Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+                           if(err.error.text.includes('Actualización del registro de costos:') ){
+                             Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+ 
+                             this.Costomenualproy = 0
+ 
+                             this.activatedRoute.params
+                             .subscribe(({id}) => {
+                               forkJoin([
+                                 id ? this.empleadosServ.getPersonas() : this.empleadosServ.getPersonasDisponibles(),
+                                 this.empleadosServ.getCatEmpleados(),
+                                 this.empleadosServ.getCatCategorias(),
+                                 this.empleadosServ.getCatTiposContratos(),
+                                 this.empleadosServ.getCatNivelEstudios(),
+                                 this.empleadosServ.getCatFormasPago(),
+                                 this.empleadosServ.getCatJornadas(),
+                                 this.empleadosServ.getCatDepartamentos(),
+                                 this.empleadosServ.getCatClasificacion(),
+                                 this.empleadosServ.getCatUnidadNegocio(),
+                                 this.empleadosServ.getCatTurno(),
+                                 this.empleadosServ.getHabilidades(),
+                                 this.empleadosServ.getExperiencias(),
+                                 this.empleadosServ.getProfesiones(),
+                                 this.empleadosServ.getPuestos(),
+                                 this.empleadosServ.getEmpleados(),
+                                 this.empleadosServ.getCatEstados(),
+                                 this.empleadosServ.getCatPaises(),
+                                 this.empleadosServ.getProyectos(),
+                               ])
+                               .pipe(finalize(() => this.verificarActualizacion()))
+                               .subscribe({
+                                 next: ([
+                                   empleadosR,proyectosR
+                                 ]) => {
+                                   this.empleados = empleadosR.data.map(empleado => ({name: empleado.chnombre, code: empleado.chap_materno}))
+                                   this.proyectos = proyectosR.data.map(proyecto => ({name: proyecto.num_proyecto_principal, code: proyecto.chproyecto_principal}))
+                                 },
+                                 error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                               })
+                             })
+                         
+                             
+                         
+                             
+                         
+                             this.empleadosService.getEmpleados()
+                               .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+                               .subscribe({
+                                 next: ({data}) => {
+                                   this.empleados = data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
+                                   
+                                   //NumEmpleado = this.empleados.num_empleado_rr_hh as any
+                                 },
+                                 error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+                               })
+ 
+                             //console.log("Errores = "+ err.error.text)
+                           }else{
+                             this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
+                             //console.log("Diferente error: "+ err.error.text)
+                           }
+                          
+                           
+                         }
+                       })
+                   }
+ 
+                   this.bonoproyect_sueldobruto = 0
+                   this.bonoproyect_sueldobruto_ImpuestoNOM = 0
+                   Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+ 
+                   this.cargando = false
+                 }
+                 
+                 ,
+                 error: (err) => {
+                   this.messageService.add({ severity: 'error Obtener CostoID', summary: TITLES.error, detail: err.error })
+                 }
+               })
+
   }
 
   esInvalido(campo: string): boolean {
