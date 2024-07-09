@@ -15,6 +15,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { TagModule } from 'primeng/tag';
     DropdownModule,
     ButtonModule,
     ToolbarModule,
-    TagModule
+    TagModule,
+    ProgressSpinnerModule
   ]
 })
 export class CostosModule { }
