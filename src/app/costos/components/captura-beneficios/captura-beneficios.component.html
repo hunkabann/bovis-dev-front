@@ -1,6 +1,14 @@
 
+
+<div class="text-center" *ngIf="cargando; else principal">
+  <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+  <p>Guardando costos...</p>
+  <p><strong>Un momento.</strong></p>
+</div>
 <p-toast></p-toast>
 
+
+<ng-template #principal>
 <form [formGroup]="form" (ngSubmit)="guardar()">
     <div class="main-container">
         <div class="buttons-container">
@@ -1697,3 +1705,5 @@
         </div>
     </div>
 </form>
+
+</ng-template>
