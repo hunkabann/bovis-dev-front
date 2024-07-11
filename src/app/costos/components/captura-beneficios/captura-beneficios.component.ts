@@ -2953,7 +2953,7 @@ if(this.isProy_FacturacionBpm){
 
                     if(paso.beneficio === "Bono Adicional"){
 
-                      this.bonoproyect_sueldobruto += +paso.costo
+                     // this.bonoproyect_sueldobruto += +paso.costo
                       console.log("this.bonoproyect_sueldobruto beneficio-------------->> " +this.bonoproyect_sueldobruto);
 
                       
@@ -2983,6 +2983,14 @@ if(this.isProy_FacturacionBpm){
                        this.bonoproyect_sueldobruto += +paso.nucostobeneficio
 
                        console.log("this.bonoproyect_sueldobruto proyecto beneficio-------------->> " +this.bonoproyect_sueldobruto);
+                      
+                    
+                    }
+
+                    if(paso.beneficio === "Viáticos a comprobar"){
+
+                      this.bonoproyect_sueldobruto += +paso.nucostobeneficio
+                      
                       
                     
                     }
