@@ -15,6 +15,7 @@ import { AgregarProyectoComponent } from '../agregar-proyecto/agregar-proyecto.c
 import { UserService } from '../../../services/user.service';
 
 import { EmpleadosService } from 'src/app/empleados/services/empleados.service';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-modificar',
@@ -89,7 +90,7 @@ export class ModificarComponent implements OnInit {
     ])
   })
 
-  constructor() { }
+  constructor(public config: DynamicDialogConfig,) { }
 
   get proyectos() {
     return this.form.get('proyectos') as FormArray
@@ -132,9 +133,13 @@ export class ModificarComponent implements OnInit {
   ngOnInit(): void {
     
     this.sharedService.cambiarEstado(true)
+    
 
     this.activatedRoute.paramMap.subscribe(params => {
-      const id = Number(params.get('id'))
+     // const id = Number(params.get('id'))
+     const id = this.config.data.code
+
+      
       this.form.patchValue({id_time_sheet: id})
       forkJoin(([
         this.timesheetService.getTimeSheetPorId(id)
