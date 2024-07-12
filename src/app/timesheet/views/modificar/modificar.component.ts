@@ -9,17 +9,25 @@ import { format } from 'date-fns';
 import { Opcion } from 'src/models/general.model';
 import { finalize, forkJoin } from 'rxjs';
 import { SabadosOpciones, Timesheet } from '../../models/timesheet.model';
-import { TITLES, errorsArray } from 'src/utils/constants';
+import { TITLES, errorsArray,MODULOS } from 'src/utils/constants';
+import { DialogService } from 'primeng/dynamicdialog';
+import { AgregarProyectoComponent } from '../agregar-proyecto/agregar-proyecto.component';
+import { UserService } from '../../../services/user.service';
+
+import { EmpleadosService } from 'src/app/empleados/services/empleados.service';
 
 @Component({
   selector: 'app-modificar',
   templateUrl: './modificar.component.html',
   styleUrls: ['./modificar.component.scss'],
-  providers: [MessageService]
+  providers: [MessageService,DialogService]
 })
 export class ModificarComponent implements OnInit {
 
   errorMessage: string = ''
+
+  empleadodialog: string = ''
+  codedialog: number
   cargando: boolean = true
 
   timesheetService  = inject(TimesheetService)
@@ -29,6 +37,9 @@ export class ModificarComponent implements OnInit {
   messageService    = inject(MessageService)
   router            = inject(Router)
   activatedRoute    = inject(ActivatedRoute)
+  dialogService     = inject(DialogService)
+  userService       = inject(UserService)
+  empleadosService  = inject(EmpleadosService)
 
   diasHabiles: number = 0
 
@@ -139,12 +150,61 @@ export class ModificarComponent implements OnInit {
         }
       })
     })
+
+    this.cargarDatos()
+
+    /**this.activatedRoute.paramMap.subscribe(params => {
+      const id = Number(params.get('id'))
+      this.form.patchValue({id_time_sheet: id})
+      forkJoin(([
+        this.timesheetService.getTimeSheetPorId(id)
+      ]))
+      .pipe(
+        finalize(() => {
+          this.sharedService.cambiarEstado(false)
+        })
+      )
+      .subscribe(([timesheetR]) => {
+        if(timesheetR.data) {
+          this.mapForm(timesheetR.data)
+        }
+      })
+    })*/
+  }
+
+  cargarDatos() {
+
+    forkJoin(([
+      this.timesheetService.getEmpleadoInfo(localStorage.getItem('userMail') || ''),
+      this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? this.empleadosService.getEmpleados() : this.timesheetService.getEmpleadosByJefeEmail(localStorage.getItem('userMail') || ''),
+      this.timesheetService.getDiasHabiles(+this.form.value.mes, +this.form.value.anio, this.form.value.sabados as SabadosOpciones)
+    ]))
+    .pipe(
+      finalize(() => {
+        this.sharedService.cambiarEstado(false)
+      })
+    )
+    .subscribe(([empleadoR, empleadosR, diasR]) => {
+      if(!empleadoR.success) {
+        this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: '¡No pudimos encontrar información del usuario responsable!' })
+      } else {
+        const {nukid_empleado, chnombre, chap_paterno} = empleadoR.data
+        this.form.patchValue({responsable: `${chnombre} ${chap_paterno}`})
+        this.form.patchValue({id_responsable: nukid_empleado})
+      }
+
+      //this.empleados = empleadosR.data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
+      //this.empleado = empleadosR.data.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+
+      this.form.patchValue({dias: diasR.habiles})
+      this.otros.at(0).patchValue({dias: diasR.feriados})
+    })
   }
 
   buscarProyectos(event: any) {
     this.sharedService.cambiarEstado(true)
     const id = event.value.code
-    this.timesheetService.getProyectos(id).subscribe(({data}) => {
+    /**this.timesheetService.getProyectos(id).subscribe(({data}) => {
       this.proyectos.clear()
       data.map(proyecto => this.proyectos.push(
         this.fb.group({
@@ -153,6 +213,22 @@ export class ModificarComponent implements OnInit {
           dias:       ['', Validators.required],
           dedicacion: [0],
           costo:      [0]
+        }))
+      )
+      this.sharedService.cambiarEstado(false)
+    })*/
+
+    this.timesheetService.getProyectos(id).subscribe(({data}) => {
+      this.proyectos.clear()
+      data.map(proyecto => this.proyectos.push(
+        this.fb.group({
+          id:         [proyecto.nunum_proyecto],
+          nombre:     [proyecto.chproyecto],
+          dias:       [proyecto.nudias, Validators.required],
+          dedicacion: [proyecto.nudedicacion], 
+          costo:      [proyecto.nucosto],
+          diasCalc:      [0],
+          dedicacionCalc:      [proyecto.nudedicacion]
         }))
       )
       this.sharedService.cambiarEstado(false)
@@ -173,7 +249,7 @@ export class ModificarComponent implements OnInit {
     })
   }
 
-  calcularPorcentajes(event: any, i: number, seccion: string) {
+  /**calcularPorcentajes(event: any, i: number, seccion: string) {
     const valor = +event
     if(seccion === 'proyectos') {
       this.proyectos.at(i).patchValue({
@@ -191,7 +267,7 @@ export class ModificarComponent implements OnInit {
         })
       })
     }
-  }
+  }*/
 
   actualizar() {
     if(!this.form.valid) {
@@ -214,7 +290,7 @@ export class ModificarComponent implements OnInit {
 
     this.sharedService.cambiarEstado(true)
 
-    this.timesheetService.actualizarHoras(body)
+   /**  this.timesheetService.actualizarHoras(body)
       .subscribe({
         next: (data) => {
           // this.form.reset()
@@ -225,10 +301,28 @@ export class ModificarComponent implements OnInit {
           this.sharedService.cambiarEstado(false)
           this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: err.error || '¡Ha ocurrido un error!' })
         }
+      })*/
+
+      this.timesheetService.cargarHoras(body)
+      .subscribe({
+        next: (data) => {
+          // this.form.reset()
+          this.sharedService.cambiarEstado(false)
+          //this.router.navigate(['/timesheet/cargar-horas'], {queryParams: {success: true}});
+          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+        
+        },
+        error: (err) => {
+          this.sharedService.cambiarEstado(false)
+          this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: err.error || '¡Ha ocurrido un error!' })
+        }
       })
+  
   }
 
   mapForm(data: Timesheet) {
+    this.empleadodialog = data.empleado
+    this.codedialog = data.id_empleado
     this.form.patchValue({
       empleado:       data.empleado,
       fecha:          `${data.mes}/${data.anio}`,
@@ -249,7 +343,9 @@ export class ModificarComponent implements OnInit {
           nombre:     [proyecto.descripcion],
           dias:       [proyecto.dias, Validators.required],
           dedicacion: [0],
-          costo:      [0]
+          costo:      [proyecto.costo],
+          diasCalc:      [0],
+          dedicacionCalc:      [proyecto.tDedicacion]
         })
       )
       this.calcularPorcentajes(proyecto.dias, index, 'proyectos')
@@ -302,4 +398,84 @@ export class ModificarComponent implements OnInit {
 
     return mensaje
   }
+
+  agregarProyectoModal() {
+    
+    console.log('this.empleadodialog ------ ' +this.empleadodialog)
+    console.log('this.form.value.empleado ------ ' +this.form.value.empleado)
+
+    const empleado = this.form.value.empleado
+
+    console.log('this.codedialog ------ ' +this.codedialog)
+
+    this.dialogService.open(AgregarProyectoComponent, {
+      header: 'Agregar proyecto',
+      width: '50%',
+      height: '380px',
+      contentStyle: {overflow: 'auto'},
+      data: {
+        empleado,
+        code: this.codedialog
+      }
+    })
+    .onClose.subscribe(({exito, registro}) => {
+      if(exito) {
+        this.proyectos.push(
+          this.fb.group({
+            id:         [registro.proyectoId],
+            nombre:     [registro.proyectoNombre],
+            dias:       ['', Validators.required],
+            dedicacion: [0],
+            dedicacionCalc: [0],
+            costo:      [0],
+            diasCalc:      [0]
+          })
+        )
+      }
+    })
+  }
+
+  calcularPorcentajes(event: any, i: number, seccion: string) {
+    const valor = +event
+    if(seccion === 'proyectos') {
+      this.proyectos.at(i).patchValue({
+        dedicacion:  this.formateaValor((valor / this.form.value.dias) * 100) ,
+        costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ),
+        diasCalc: valor,
+        dedicacionCalc: this.formateaValor((valor / this.form.value.dias) * 100) 
+      })
+      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+    } else {
+      this.otros.at(i).patchValue({
+        dedicacion: this.formateaValor( (valor / this.form.value.dias) * 100 )
+      })
+      this.proyectos.controls.forEach(proyecto => {
+        const costo = this.formateaValor( ( Number(proyecto.get('dias').value) / (this.form.value.dias - this.sumaOtros) ) * 100 )
+        proyecto.patchValue({
+          costo
+        })
+      })
+    }
+  }
+
+  calcularDiasdedica(event: any, i: number, seccion: string) {
+    const valor = +event
+    if(seccion === 'proyectos') {
+      this.proyectos.at(i).patchValue({
+        diasCalc:  this.formateaValor((valor * this.form.value.dias) / 100) ,
+        costo:      this.formateaValor( (valor * (this.form.value.dias + this.sumaOtros)) / 100 ),
+        dedicacion: valor,
+        dias:        this.formateaValor((valor * this.form.value.dias) / 100)
+
+      })
+      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+    }
+
+  }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
+  }
+  
 }
