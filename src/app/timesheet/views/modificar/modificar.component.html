@@ -18,7 +18,8 @@
     <form [formGroup]="form" (ngSubmit)="actualizar()">
         <div class="buttons-container">
             <button type="submit" class="btn btn-info" [disabled]="!form.valid || totalSuperado || totalNoAlcanzado">Guardar</button>
-            <button type="button" class="btn btn-info" routerLink="/timesheet/consultar">Regresar</button>
+            <!--button type="button" class="btn btn-info" routerLink="/timesheet/consultar">Regresar</button-->
+            <!--button type="button" class="btn btn-secondary" routerLink="/timesheet/consultar/"><i class="fas fa-arrow-left"></i> Regresar</button-->
         </div>
 
         <div class="grid">
