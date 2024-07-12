@@ -113,7 +113,8 @@
 
                 </td>
                 <td>
-                    <button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/timesheet/cargar-horas', ts.id]"></button>
+                    <!--button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/timesheet/cargar-horas', ts.id]"></button-->
+                    <button title="txtEditar" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="CargarHorasModal(ts.id)"></button>
                 </td>
 
             </tr>
