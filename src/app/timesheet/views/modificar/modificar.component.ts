@@ -308,13 +308,13 @@ export class ModificarComponent implements OnInit {
         }
       })*/
 
-      this.timesheetService.cargarHoras(body)
+        this.timesheetService.actualizarHoras(body)
       .subscribe({
         next: (data) => {
           // this.form.reset()
           this.sharedService.cambiarEstado(false)
           //this.router.navigate(['/timesheet/cargar-horas'], {queryParams: {success: true}});
-          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+          Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro actializado', detail: 'El registro ha sido actualizado.' }))
         
         },
         error: (err) => {
