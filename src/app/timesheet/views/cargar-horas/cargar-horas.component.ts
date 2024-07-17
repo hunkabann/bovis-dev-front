@@ -274,13 +274,14 @@ export class CargarHorasComponent implements OnInit {
         diasCalc: valor,
         dedicacionCalc: this.formateaValor((valor / this.form.value.dias) * 100) 
       })
-      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+      
     } else {
       this.otros.at(i).patchValue({
         dedicacion: this.formateaValor( (valor / this.form.value.dias) * 100 )
       })
       this.proyectos.controls.forEach(proyecto => {
         const costo = this.formateaValor( ( Number(proyecto.get('dias').value) / (this.form.value.dias - this.sumaOtros) ) * 100 )
+       
         proyecto.patchValue({
           costo
         })
@@ -298,6 +299,11 @@ export class CargarHorasComponent implements OnInit {
         dias:        this.formateaValor((valor * this.form.value.dias) / 100)
 
       })
+
+      console.log("Calcula calcularDiasdedica valor: "+  valor )
+      console.log("Calcula calcularDiasdedica this.form.value.dias: "+ this.form.value.dias)
+      console.log("Calcula calcularDiasdedica this.sumaOtros: "+  this.sumaOtros)
+      console.log("Calcula calcularDiasdedica Costo Formula: "+  this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ))
       //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
     }
       
