@@ -13,12 +13,16 @@ import { ProyectoJoinPipe } from '../../pipes/proyecto-join.pipe';
 import { UserService } from 'src/app/services/user.service';
 import { EmpleadosService } from 'src/app/empleados/services/empleados.service';
 import { FacturacionService } from 'src/app/facturacion/services/facturacion.service';
+import { ModificarComponent } from '../modificar/modificar.component';
+
+import { DialogService } from 'primeng/dynamicdialog';
+
 
 @Component({
   selector: 'app-consultar',
   templateUrl: './consultar.component.html',
   styleUrls: ['./consultar.component.css'],
-  providers: [MessageService, ProyectoJoinPipe]
+  providers: [MessageService, ProyectoJoinPipe,DialogService]
 })
 export class ConsultarComponent implements OnInit { //AfterViewInit {
 
@@ -31,6 +35,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   userService = inject(UserService)
   empleadosService = inject(EmpleadosService)
   facturacionService = inject(FacturacionService)
+  dialogService     = inject(DialogService)
 
   empleados: Opcion[] = []
   proyectos: Opcion[] = []
@@ -427,5 +432,29 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
     // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
   //  return isNaN(valor) ? valor : parseFloat(valor).toFixed(0);
   //}
+
+  CargarHorasModal(timesheet: number) {
+    
+    
+
+   
+
+    
+
+    this.dialogService.open(ModificarComponent, {
+      header: 'Carga Horas',
+      width: '95%',
+      height: '95%',
+      contentStyle: {overflow: 'auto'},
+      data: {
+        code: timesheet
+      }
+    })
+    .onClose.subscribe(({exito, registro}) => {
+      if(exito) {
+        
+      }
+    })
+  }
 
 }
