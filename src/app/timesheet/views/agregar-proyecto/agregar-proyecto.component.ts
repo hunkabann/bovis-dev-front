@@ -27,8 +27,13 @@ export class AgregarProyectoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if(this.config.data.empleado.code) {
-      this.empleadoId = this.config.data.empleado.code
+
+    console.log('entra ------ ' )
+
+    console.log('this.config.data.empleado.code ------ ' +this.config.data.code)
+
+    if (this.config.data.code) {
+      this.empleadoId = this.config.data.code
       this.timesheetService.getProyectosFaltanEmpleado(this.empleadoId)
         .subscribe({
           next: ({data}) => this.proyectos = data.map(data => ({
@@ -38,8 +43,24 @@ export class AgregarProyectoComponent implements OnInit {
           error: (err) => {}
         })
     } else {
-      this.closeDialog()
+
+      if(this.config.data.empleado.code) {
+        this.empleadoId = this.config.data.empleado.code
+        this.timesheetService.getProyectosFaltanEmpleado(this.empleadoId)
+          .subscribe({
+            next: ({data}) => this.proyectos = data.map(data => ({
+              name: data.proyecto.toString(),
+              value: data.numProyecto.toString()
+            })),
+            error: (err) => {}
+          })
+      } else {
+        this.closeDialog()
+      }
+      
     }
+
+    
   }
 
   closeDialog() {
