@@ -108,6 +108,9 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   buscarRegistros(event: any, tipo: string) {
     this.sharedService.cambiarEstado(true)
 
+    console.log('this.mes '+ this.mes);
+    
+
     const mesFormateado = this.mes ? +format(this.mes, 'M') : 0
     const anioFormateado = this.mes ? +format(this.mes, 'Y') : 0
 
@@ -450,10 +453,12 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
         code: timesheet
       }
     })
-    .onClose.subscribe(({exito, registro}) => {
-      if(exito) {
+    .onClose.subscribe(() => {
+      
+        this.buscarRegistros('','')
+
         
-      }
+      
     })
   }
 
