@@ -414,7 +414,8 @@ export class CargarHorasComponent implements OnInit {
 
     this.timesheetService.eliminarProyecto({
         id_empleado: empleado.code,
-        id_proyecto: idProyecto
+        id_proyecto: idProyecto,
+        id_timesheet: 0
       })
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
