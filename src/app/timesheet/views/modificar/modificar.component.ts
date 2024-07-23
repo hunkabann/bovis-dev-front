@@ -43,6 +43,7 @@ export class ModificarComponent implements OnInit {
   empleadosService  = inject(EmpleadosService)
 
   diasHabiles: number = 0
+  timesheetID: number = 0
 
   form = this.fb.group({
     id_time_sheet:  [0],
@@ -90,7 +91,7 @@ export class ModificarComponent implements OnInit {
     ])
   })
 
-  constructor(public config: DynamicDialogConfig,) { }
+  constructor(public ref: DynamicDialogRef,public config: DynamicDialogConfig) { }
 
   get proyectos() {
     return this.form.get('proyectos') as FormArray
@@ -139,7 +140,8 @@ export class ModificarComponent implements OnInit {
      // const id = Number(params.get('id'))
      const id = this.config.data.code
 
-      
+     this.timesheetID= this.config.data.code
+
       this.form.patchValue({id_time_sheet: id})
       forkJoin(([
         this.timesheetService.getTimeSheetPorId(id)
@@ -368,7 +370,25 @@ export class ModificarComponent implements OnInit {
   }
 
   eliminarProyecto(idProyecto: number, i: number) {
-    this.proyectos.removeAt(i)
+
+    const empleado: any = this.form.value.empleado
+
+    this.sharedService.cambiarEstado(true)
+
+    const values = this.form.value
+    
+
+    this.timesheetService.eliminarProyecto({
+        id_empleado: values.id_empleado,
+        id_proyecto: idProyecto,
+        id_timesheet: this.timesheetID
+      })
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => this.proyectos.removeAt(i),
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
+    //this.proyectos.removeAt(i)
     // error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
   }
 
@@ -482,5 +502,6 @@ export class ModificarComponent implements OnInit {
     // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
     return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
+
   
 }
