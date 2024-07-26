@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { SumaFechas } from '../models/pcs.model';
+import { SumaFechas,SumaFecha } from '../models/pcs.model';
 import { Mes } from 'src/models/general.model';
 
 @Pipe({
@@ -7,7 +7,7 @@ import { Mes } from 'src/models/general.model';
 })
 export class porcentajeMesControlPipe implements PipeTransform {
 
-  transform(value: SumaFechas[], ...args: unknown[]): unknown {
+  transform(value: SumaFecha[], ...args: unknown[]): unknown {
     const [mesRegistro] = args as Array<Mes>
 
     
