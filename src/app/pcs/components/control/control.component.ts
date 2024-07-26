@@ -27,10 +27,10 @@ export class ControlComponent implements OnInit {
   fechaInicio: Date;
   fechaFin: Date;
 
-  SumaFechaSalarios: SumaFecha[] = []
-  SumaFechaRealSalarios: SumaFecha[] = []
-  SumaFechaViaticos: SumaFecha[] = []
-  SumaFechaGastos: SumaFecha[] = []
+  SumaFecha: SumaFechas[] = []
+  SumaFechaRealSalarios: SumaFechas[] = []
+  SumaFechaViaticos: SumaFechas[] = []
+  SumaFechaGastos: SumaFechas[] = []
 
   frutas: string[] 
   
@@ -232,7 +232,7 @@ export class ControlComponent implements OnInit {
 
         this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
-        this.SumaFechaSalarios = data.salarios.previsto.sumaFechas
+        this.SumaFecha = data.salarios.previsto.sumaFechas
         this.SumaFechaRealSalarios= data.salarios.real.sumaFechas
 
 
@@ -253,7 +253,7 @@ export class ControlComponent implements OnInit {
 
         data.gastos.previstos.forEach((sumaFecha) => {
 
-          console.log('this.SumaFechaSalarios  =>  ' + this.SumaFechaSalarios.length)
+          console.log('this.SumaFechaSalarios  =>  ' + this.SumaFecha.length)
           
           this.SumaIngresosGasto =  sumaFecha.subTotal
 
