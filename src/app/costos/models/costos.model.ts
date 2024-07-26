@@ -152,7 +152,40 @@ export const encabezados = Object.freeze([
   {id: 'costoSalarioNeto', label: 'costoSalarioNeto'},
   {id: 'nuAnno', label: 'nuAnno'},
   {id: 'nuMes', label: 'nuMes'},
-  {id: 'salarioDiarioIntegrado', label: 'salarioDiarioIntegrado'}
+  {id: 'salarioDiarioIntegrado', label: 'salarioDiarioIntegrado'},
+  {id: 'Vivienda', label: 'Vivienda'},
+  {id: 'Automóvil', label: 'Automóvil'},
+  {id: 'Viáticos a comprobar', label: 'Viáticos a comprobar'},			
+  {id: 'Bono Adicional', label: 'Bono Adicional'},
+  {id: 'Gasolina', label: 'Gasolina'},
+  {id: 'Casetas', label: 'Casetas'},
+  {id: 'Ayuda de transporte', label: 'Ayuda de transporte'},
+  {id: 'Vuelos de avión', label: 'Vuelos de avión'},
+  {id: 'Provisión Impuestos Expats', label: 'Provisión Impuestos Expats'},
+  {id: 'Programa de entrenamiento', label: 'Programa de entrenamiento'},
+  {id: 'Eventos especiales', label: 'Eventos especiales'},
+  {id: 'Costo IT', label: 'Costo IT'},
+  {id: 'Costo telefonia', label: 'Costo telefonia'},
+  {id: 'S.V. Directivos', label: 'S.V. Directivos'},
+  {id: 'Facturación BPM', label: 'Facturación BPM'},
+  {id: 'Fringe Expats', label: 'Fringe Expats'},
+  {id: 'Vivienda', label: 'Vivienda'},
+  {id: 'Automóvil', label: 'Automóvil'},
+  {id: 'Viáticos a comprobar', label: 'Viáticos a comprobar'},			
+  {id: 'Bono Adicional', label: 'Bono Adicional'},
+  {id: 'Gasolina', label: 'Gasolina'},
+  {id: 'Casetas', label: 'Casetas'},
+  {id: 'Ayuda de transporte', label: 'Ayuda de transporte'},
+  {id: 'Vuelos de avión', label: 'Vuelos de avión'},
+  {id: 'Provisión Impuestos Expats', label: 'Provisión Impuestos Expats'},
+  {id: 'Programa de entrenamiento', label: 'Programa de entrenamiento'},
+  {id: 'Eventos especiales', label: 'Eventos especiales'},
+  {id: 'Costo IT', label: 'Costo IT'},
+  {id: 'Costo telefonia', label: 'Costo telefonia'},
+  {id: 'S.V. Directivos', label: 'S.V. Directivos'},
+  {id: 'Facturación BPM', label: 'Facturación BPM'},
+  {id: 'Fringe Expats', label: 'Fringe Expats'}
+  
  
   
 ])
@@ -206,4 +239,3 @@ export interface UpPersona {
   boempleado:         boolean;
   chnombre_completo?: string
 }
-
