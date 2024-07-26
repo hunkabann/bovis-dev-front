@@ -93,7 +93,7 @@
                     </div>
                 </ng-template>
                 <ng-template  pTemplate="content">
-                    <p-table [value]="SumaFecha"  [scrollable]="true" scrollHeight="400px" >
+                    <p-table [value]="frutas"  [scrollable]="true" scrollHeight="400px" >
                         <ng-template pTemplate="header">
                             
                             <tr>                               
@@ -111,10 +111,9 @@
                                 
                             </tr>
                         </ng-template>
-                        <ng-template pTemplate="body" let-SumaFechas>
+                        <ng-template pTemplate="body" let-frutas>
                             <tr>
-                               
-                                <td  *ngIf="SumaFechas.mes === 1  ; then  thenfecha"></td>
+                                <td *ngIf="frutas == 'Previsto'; then thenfecha else elsefecha"> </td>
                                 <ng-template #thenfecha>
                                     <td>Previsto</td>
                                     
@@ -122,9 +121,20 @@
                                     <td *ngFor="let mesRegistro of mesesProyecto">
                                         {{SumaFecha | porcentajeMesControl:mesRegistro}}
                                     </td>
+                                </ng-template>
+                                <ng-template #elsefecha>
+                                    <td>REAL</td>
+                                    
+                                    <td>{{SumaIngresosReal}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{SumaFechaRealSalarios | porcentajeMesControl:mesRegistro}}
+                                    </td>
+                                </ng-template>
+                                
+                                    
                                
                                     
-                                </ng-template>
+                                
                                 
                             </tr>
                             
