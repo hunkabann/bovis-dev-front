@@ -27,10 +27,10 @@ export class ControlComponent implements OnInit {
   fechaInicio: Date;
   fechaFin: Date;
 
-  SumaFechaSalarios: SumaFechas[] = []
-  SumaFechaRealSalarios: SumaFechas[] = []
-  SumaFechaViaticos: SumaFechas[] = []
-  SumaFechaGastos: SumaFechas[] = []
+  SumaFechaSalarios: SumaFecha[] = []
+  SumaFechaRealSalarios: SumaFecha[] = []
+  SumaFechaViaticos: SumaFecha[] = []
+  SumaFechaGastos: SumaFecha[] = []
 
   frutas: string[] 
   
