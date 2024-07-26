@@ -4,7 +4,7 @@ import { CostosService } from '../../services/costos.service';
 import { SharedService } from '../../../shared/services/shared.service';
 import { finalize, forkJoin } from 'rxjs';
 import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
-import { CostoEmpleado,encabezados,Beneficio } from '../../models/costos.model';
+import { CostoEmpleado,encabezados,Beneficio,BeneficiosProyectos } from '../../models/costos.model';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { DatePipe } from '@angular/common';
@@ -36,18 +36,58 @@ export class CostoEmpleadoComponent implements OnInit {
   todayWithPipe = null;
   FechaIngre = null;
 
+  maxDate: Date;
+  fechaInicio: Date;
+  fechaFin: Date;
+
   costos: CostoEmpleado[] = []
 
   arraybeneficio: Beneficio[] = []
+  arraybeneficiosProyectos: BeneficiosProyectos[] = []
 
   Costomenualproy = 0;
 
   personass:    Item[] = []
   puestos:    Item[] = []
+  proyectos:    Item[] = []
   estados:    Item[] = [
     {label: 'Activo', value: true},
     {label: 'Inactivo', value: false}
   ]
+
+  vivienda = 0;
+  Automovil = 0;
+  ViaticosaComprobar = 0;
+  BonoAdicionalReubicacion = 0;
+  Gasolina = 0;
+  Casetas = 0;
+  AyudaDeTransporte = 0;
+  VuelosDeAvion = 0;
+  ProvisionImpuestosExpatsr = 0;
+  FringeExpats = 0;
+  ProgramaDeEntretenimiento = 0;
+  EventosEspeciales = 0;
+  CostoIt = 0;
+  CostoTelefonia = 0;
+  SvDirectivos = 0;
+  FacturacionBpm = 0;
+
+  Proy_vivienda = 0;
+  Proy_Automovil = 0;
+  Proy_ViaticosaComprobar = 0;
+  Proy_BonoAdicionalReubicacion = 0;
+  Proy_Gasolina = 0;
+  Proy_Casetas = 0;
+  Proy_AyudaDeTransporte = 0;
+  Proy_VuelosDeAvion = 0;
+  Proy_ProvisionImpuestosExpatsr = 0;
+  Proy_FringeExpats = 0;
+  Proy_ProgramaDeEntretenimiento = 0;
+  Proy_EventosEspeciales = 0;
+  Proy_CostoIt = 0;
+  Proy_CostoTelefonia = 0;
+  Proy_SvDirectivos = 0;
+  Proy_FacturacionBpm = 0;
 
   constructor() { }
 
@@ -56,17 +96,19 @@ export class CostoEmpleadoComponent implements OnInit {
 
     forkJoin([
       this.costosService.getPersonas(),
-      this.costosService.getPuestos()
+      this.costosService.getPuestos(),
+      this.costosService.getProyectos()
     ])
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (value) => {
           
-          const [personasR, puestosR] = value
-          //const [empleadosR, puestosR] = value
+          const [personasR, puestosR,proyectosR] = value
+          //const [empleadosR, puestosR] = value 
           this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: persona.chnombre_completo}))
           this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
           //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
+          this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.nombre, label: `${proyecto.nombre}` }))
           //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
           //this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
           
@@ -117,7 +159,7 @@ export class CostoEmpleadoComponent implements OnInit {
 
     const fillNota: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
     //const fillNotaCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
-    //const fillCobranza: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffa4ffa4' } }
+    const fillCobranza: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffa4ffa4' } }
     const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
 
@@ -174,7 +216,16 @@ export class CostoEmpleadoComponent implements OnInit {
     worksheet.getCell('AH3').value = 'PTU'
     worksheet.getCell('AH3').fill = fillNota
     worksheet.getCell('AH3').alignment = alignment
-    //worksheet.mergeCells('Z3:AA3')
+
+    worksheet.getCell('AW3').value = 'BENEFICIOS DEL EMPLEADO'
+    worksheet.getCell('AW3').fill = fillNota
+    worksheet.getCell('AW3').alignment = alignment
+    worksheet.mergeCells('AW3:BL3')
+
+    worksheet.getCell('BM3').value = 'BENEFICIOS DEL PROYECTO'
+    worksheet.getCell('BM3').fill = fillCobranza
+    worksheet.getCell('BM3').alignment = alignment
+    worksheet.mergeCells('BM3:CB3')
   }
 
   _setXLSXHeader(worksheet: ExcelJS.Worksheet) {
@@ -202,6 +253,25 @@ export class CostoEmpleadoComponent implements OnInit {
       
       if(record.beneficios[0] == undefined){
         this.Costomenualproy = 0
+
+        this.vivienda = 0
+        this.Automovil = 0
+        this.ViaticosaComprobar = 0
+        this.BonoAdicionalReubicacion = 0
+        this.Gasolina = 0
+        this.Casetas = 0
+        this.AyudaDeTransporte = 0
+        this.VuelosDeAvion = 0
+        this.ProvisionImpuestosExpatsr = 0
+        this.FringeExpats = 0
+        this.ProgramaDeEntretenimiento = 0
+        this.EventosEspeciales = 0
+        this.CostoIt = 0
+        this.CostoTelefonia = 0
+        this.SvDirectivos = 0
+        this.FacturacionBpm = 0
+        
+       
         //console.log("Entra Aquio --------------> " +this.Costomenualproy);
       }else{
         //console.log("Entra Aquio --------------> " +record.beneficios[0].costo);
@@ -215,11 +285,189 @@ export class CostoEmpleadoComponent implements OnInit {
 
              this.Costomenualproy += +paso.costo
 
-             //console.log("suma paso.cost-------------->> " +this.Costomenualproy);
+             if(paso.beneficio === "Automóvil"){
+              this.Automovil = paso.costo;
+            }
+            
+              if(paso.beneficio === "Vivienda"){
+
+                this.vivienda = paso.costo;
+            }
+
+            if(paso.beneficio === "Viáticos a comprobar"){
+
+              this.ViaticosaComprobar = paso.costo;
+            
+            }
+
+            if(paso.beneficio === "Bono Adicional"){
+
+              this.BonoAdicionalReubicacion = paso.costo;            
+            }
+
+            if(paso.beneficio === "Gasolina"){
+
+              this.Gasolina = paso.costo;
+            }
+
+            if(paso.beneficio === "Casetas"){
+
+              this.Casetas = paso.costo;
+            
+            }
+
+            if(paso.beneficio === "Ayuda de transporte"){
+
+              this.AyudaDeTransporte = paso.costo;
+            }
+
+            if(paso.beneficio === "Vuelos de avión"){
+
+              this.VuelosDeAvion = paso.costo;
+            }
+
+            if(paso.beneficio === "Provisión Impuestos Expats"){
+
+              this.ProvisionImpuestosExpatsr = paso.costo;
+            }
+
+            if(paso.beneficio === "Programa de entrenamiento"){
+
+              this.ProgramaDeEntretenimiento = paso.costo;
+            }
+
+            if(paso.beneficio === "Eventos especiales"){
+
+              this.EventosEspeciales = paso.costo;
+            }
+
+            if(paso.beneficio === "Costo IT"){
+
+              this.CostoIt = paso.costo;
+            }
+
+            if(paso.beneficio === "Costo telefonia"){
+
+              this.CostoTelefonia = paso.costo;
+            }
+
+            if(paso.beneficio === "S.V. Directivos"){
+
+              this.SvDirectivos = paso.costo;
+            }
+
+            if(paso.beneficio === "Facturación BPM"){
+
+              this.FacturacionBpm = paso.costo;
+            }
+
+            if(paso.beneficio === "Fringe Expats"){
+
+              this.FringeExpats = paso.costo;
+            
+            }
+
             
          })
 
+
+
         // console.log("suma fuerapaso.cost-------------->> " +this.Costomenualproy);
+
+        this.arraybeneficiosProyectos = record.beneficiosproyecto
+      
+
+      const datoProyecto = this.arraybeneficiosProyectos;
+      datoProyecto?.forEach(pasoProyec=>{
+             //console.log("paso.beneficio --------------> " +paso.beneficio);
+             //console.log("paso.cost-------------->> " +paso.costo);
+
+             
+
+             if(pasoProyec.beneficio === "Automóvil"){
+              this.Proy_Automovil = pasoProyec.nucostobeneficio;
+            }
+            
+              if(pasoProyec.beneficio === "Vivienda"){
+
+                this.Proy_vivienda = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Viáticos a comprobar"){
+
+              this.Proy_ViaticosaComprobar = pasoProyec.nucostobeneficio;
+            
+            }
+
+            if(pasoProyec.beneficio === "Bono Adicional"){
+
+              this.Proy_BonoAdicionalReubicacion = pasoProyec.nucostobeneficio;            
+            }
+
+            if(pasoProyec.beneficio === "Gasolina"){
+
+              this.Proy_Gasolina = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Casetas"){
+
+              this.Proy_Casetas = pasoProyec.nucostobeneficio;
+            
+            }
+
+            if(pasoProyec.beneficio === "Ayuda de transporte"){
+
+              this.Proy_AyudaDeTransporte = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Vuelos de avión"){
+
+              this.Proy_VuelosDeAvion = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Provisión Impuestos Expats"){
+
+              this.Proy_ProvisionImpuestosExpatsr = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Programa de entrenamiento"){
+
+              this.Proy_ProgramaDeEntretenimiento = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Eventos especiales"){
+
+              this.Proy_EventosEspeciales = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Costo IT"){
+
+              this.Proy_CostoIt = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Costo telefonia"){
+
+              this.Proy_CostoTelefonia = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "S.V. Directivos"){
+
+              this.Proy_SvDirectivos = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Facturación BPM"){
+
+              this.Proy_FacturacionBpm = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Fringe Expats"){
+
+              this.Proy_FringeExpats = pasoProyec.nucostobeneficio;
+            
+            }
+
+            
+         })
 
       }
       
@@ -283,6 +531,44 @@ export class CostoEmpleadoComponent implements OnInit {
       worksheet.getCell(row, 48).value = this.formatCurrency(numero_salarioDiarioIntegrado)
       //worksheet.getCell(row, 49).value = record.salarioDiarioIntegrado
 
+      //BENEFICIOS POR EMPLEADO
+
+      worksheet.getCell(row, 49).value = this.formatCurrency(this.vivienda)
+      worksheet.getCell(row, 50).value = this.formatCurrency(this.Automovil)
+      worksheet.getCell(row, 51).value = this.formatCurrency(this.ViaticosaComprobar)
+      worksheet.getCell(row, 52).value = this.formatCurrency(this.BonoAdicionalReubicacion)
+      worksheet.getCell(row, 53).value = this.formatCurrency(this.Gasolina)
+      worksheet.getCell(row, 54).value = this.formatCurrency(this.Casetas)
+      worksheet.getCell(row, 55).value = this.formatCurrency(this.AyudaDeTransporte)
+      worksheet.getCell(row, 56).value = this.formatCurrency(this.VuelosDeAvion)
+      worksheet.getCell(row, 57).value = this.formatCurrency(this.ProvisionImpuestosExpatsr)
+      worksheet.getCell(row, 58).value = this.formatCurrency(this.FringeExpats)
+      worksheet.getCell(row, 59).value = this.formatCurrency(this.ProgramaDeEntretenimiento)
+      worksheet.getCell(row, 60).value = this.formatCurrency(this.EventosEspeciales)
+      worksheet.getCell(row, 61).value = this.formatCurrency(this.CostoIt)
+      worksheet.getCell(row, 62).value = this.formatCurrency(this.CostoTelefonia)
+      worksheet.getCell(row, 63).value = this.formatCurrency(this.SvDirectivos)
+      worksheet.getCell(row, 64).value = this.formatCurrency(this.FacturacionBpm)
+
+      //BENEFICIOS POR PROYECTO
+
+      worksheet.getCell(row, 65).value = this.formatCurrency(this.Proy_vivienda)
+      worksheet.getCell(row, 66).value = this.formatCurrency(this.Proy_Automovil)
+      worksheet.getCell(row, 67).value = this.formatCurrency(this.Proy_ViaticosaComprobar)
+      worksheet.getCell(row, 68).value = this.formatCurrency(this.Proy_BonoAdicionalReubicacion)
+      worksheet.getCell(row, 69).value = this.formatCurrency(this.Proy_Gasolina)
+      worksheet.getCell(row, 70).value = this.formatCurrency(this.Proy_Casetas)
+      worksheet.getCell(row, 71).value = this.formatCurrency(this.Proy_AyudaDeTransporte)
+      worksheet.getCell(row, 72).value = this.formatCurrency(this.Proy_VuelosDeAvion)
+      worksheet.getCell(row, 73).value = this.formatCurrency(this.Proy_ProvisionImpuestosExpatsr)
+      worksheet.getCell(row, 74).value = this.formatCurrency(this.Proy_FringeExpats)
+      worksheet.getCell(row, 75).value = this.formatCurrency(this.Proy_ProgramaDeEntretenimiento)
+      worksheet.getCell(row, 76).value = this.formatCurrency(this.Proy_EventosEspeciales)
+      worksheet.getCell(row, 77).value = this.formatCurrency(this.Proy_CostoIt)
+      worksheet.getCell(row, 78).value = this.formatCurrency(this.Proy_CostoTelefonia)
+      worksheet.getCell(row, 79).value = this.formatCurrency(this.Proy_SvDirectivos)
+      worksheet.getCell(row, 80).value = this.formatCurrency(this.Proy_FacturacionBpm)
+
       
       //worksheet.getCell(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'FFC000':  '70AD47'}};
       //worksheet.getRow(row).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ? 'ea899a' : 'ffffff' } };
@@ -299,6 +585,8 @@ export class CostoEmpleadoComponent implements OnInit {
       currency: 'MXN',
     })
   }
+
+  
   
 
 }
