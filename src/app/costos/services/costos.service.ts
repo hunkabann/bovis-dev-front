@@ -29,4 +29,8 @@ export class CostosService {
   getPuestos() {
     return this.http.get<PuestosResponse>(`${this.baseUrl}api/Catalogo/Puesto/true`)
   }
+
+  getProyectos() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/proyectos/true`);
+  }
 }
