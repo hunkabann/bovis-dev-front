@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { SumaFecha } from '../models/pcs.model';
+import { SumaFechas } from '../models/pcs.model';
 import { Mes } from 'src/models/general.model';
 
 @Pipe({
@@ -7,8 +7,17 @@ import { Mes } from 'src/models/general.model';
 })
 export class porcentajeMesControlPipe implements PipeTransform {
 
-  transform(value: SumaFecha[], ...args: unknown[]): unknown {
+  transform(value: SumaFechas[], ...args: unknown[]): unknown {
     const [mesRegistro] = args as Array<Mes>
+
+    
+    
+    //console.log(' registro mes ------>> ' + mesRegistro.mes)
+    //console.log(' registro mes ------>> ' + mesRegistro.anio)
+
+    //console.log(' value[0].mes ------>> ' + value[0]);
+
+    
     
     const mes = value.find(info => info.mes == mesRegistro.mes)
 
@@ -16,13 +25,13 @@ export class porcentajeMesControlPipe implements PipeTransform {
 
     const anio  = value.find(info =>info.anio == mesRegistro.anio)
 
-   // console.log(' anio ------>> ' + anio.anio)
+   //console.log(' anio ------>> ' + anio.anio)
 
    
 
       if(mes && anio && mes.sumaPorcentaje > 0) {
 
-        //console.log(' mes.porcentaje ------>> ' + mes.porcentaje)
+     //   console.log(' mes.porcentaje ------>> ' + mes.sumaPorcentaje)
         return mes.sumaPorcentaje
       }
 
