@@ -8,7 +8,7 @@
   <div class="row" style="margin-left: 5px;">
            
         
-    <div class="col-4">
+    <div class="col-3">
         <label for="descripcion">Personas:</label>
         <div class="">
             <p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar una persona" (onChange)="tablaPrincipal.filter(listaPersona.value, 'nombreCompletoEmpleado', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
@@ -18,7 +18,7 @@
         </p-dropdown>
         </div>
     </div>
-        <div class="col-3">
+        <div class="col-2">
             <label for="puesto">Puesto:</label>
             <div class="">
                 <p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'puesto', 'equals')" placeholder="puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
@@ -28,6 +28,34 @@
                 </p-dropdown>
             </div>                
         </div>
+        <div class="col-4">
+          <label for="proyecto">Proyecto:</label>
+          <div class="">
+            <p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="tablaPrincipal.filter(listaProyecto.value, 'proyecto', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+              <ng-template let-option pTemplate="item">
+                  <p-tag [value]="option.value" severity="success"></p-tag>
+              </ng-template>
+          </p-dropdown>
+          </div>                
+      </div>
+
+      <!--div class="col-4">
+        <label for="email">Fecha Inicio:</label>
+        <div class="">
+            <p-calendar [showIcon]="true" styleClass="w-full" dateFormat="dd/mm/yy" [maxDate]="maxDate" [(ngModel)]="fechaInicio"></p-calendar>
+           
+        </div>
+    </div>
+    <div class="col-4">
+        <label for="email">Fecha Fin:</label>
+        <div class="">
+            <p-calendar [showIcon]="true" styleClass="w-full" dateFormat="dd/mm/yy" [maxDate]="maxDate" [(ngModel)]="fechaFin"></p-calendar>
+           
+        </div>
+    </div-->
+
+
+
         <!--div class="col-3">
             <label for="activo">Estado:</label>
             <div class="">
@@ -42,6 +70,13 @@
 
     
 </div>
+
+<!--div class="row">
+  <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+      <button type="button" class="btn btn-dark" (click)="clearFiltros()"><i class="fas fa-eraser"></i> Limpiar filtros</button>
+      <button type="button" class="btn btn-primary" (click)="busqueda()"><i class="fas fa-save"></i> Buscar</button>
+  </div>
+</div-->
  
 
   <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
