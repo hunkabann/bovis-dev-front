@@ -170,11 +170,11 @@ export interface Gastos {
 
 export interface Previsto {
     subTotal:   number;
-    sumaFechas: SumaFecha[];
+    sumaFechas: SumaFechas[];
 }
 
-export interface SumaFecha {
-    rubro:          Rubross | null;
+export interface SumaFechas {
+    rubro:          string;
     mes:            number;
     anio:           number;
     sumaPorcentaje: number;
