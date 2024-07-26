@@ -9,7 +9,7 @@ import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.comp
 import { TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro,GastosIngresosTotales,GastosIngresosControlData,SumaFecha,Previsto } from '../../models/pcs.model';
+import { Rubro,GastosIngresosTotales,GastosIngresosControlData,SumaFecha,Previsto,SumaFechas } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 
 @Component({
@@ -22,12 +22,17 @@ export class ControlComponent implements OnInit {
 
   Control: GastosIngresosControlData 
 
+  Previsto:  Previsto
+
   fechaInicio: Date;
   fechaFin: Date;
 
-  SumaFecha: SumaFecha[] = []
-  SumaFechaViaticos: SumaFecha[] = []
-  SumaFechaGastos: SumaFecha[] = []
+  SumaFechaSalarios: SumaFechas[] = []
+  SumaFechaRealSalarios: SumaFechas[] = []
+  SumaFechaViaticos: SumaFechas[] = []
+  SumaFechaGastos: SumaFechas[] = []
+
+  frutas: string[] 
   
   noFactura: string;
 
@@ -61,6 +66,7 @@ export class ControlComponent implements OnInit {
   totaless: GastosIngresosTotales[] = []
 
   SumaIngresos = 0;
+  SumaIngresosReal = 0;
   SumaIngresosViaticos = 0;
   SumaIngresosGasto = 0;
 
@@ -70,7 +76,8 @@ export class ControlComponent implements OnInit {
   form = this.fb.group({
     numProyecto:  [0, Validators.required],
     secciones:    this.fb.array([]),
-    totales:    this.fb.array([])
+    totales:    this.fb.array([]),
+    sumaFechas:    this.fb.array([])
   })
 
   get secciones() {
@@ -93,6 +100,11 @@ export class ControlComponent implements OnInit {
     return this.form.get('totales') as FormArray
   }
   
+  
+
+  get fechasControlSalarios() {
+    return this.form.get('sumaFechas') as FormArray
+  }
 
  
   ngOnInit(): void {
@@ -203,29 +215,67 @@ export class ControlComponent implements OnInit {
          console.log('data.salarios: ' +data.salarios)
         console.log('data.salarios.previsto: ' + data.salarios.previsto )
         console.log('data.salarios.previsto.subTotal: ' +data.salarios.previsto.subTotal)
-        console.log('data.salarios suma fecha: ' +data.salarios.previsto.sumaFechas)      
+        console.log('data.salarios suma fecha: ' +data.salarios.previsto.sumaFechas)     
+        
+       // data.salarios.previsto.sumaFechas.forEach((sumaFecha) => {
+
+        //  console.log('sumaFecha.mes  =>  ' + sumaFecha.mes)
+       //   console.log('sumaFecha.anio  =>  ' + sumaFecha.anio)
+       //   console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
+          
+          
+          
+      //  })
 
         console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
         console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)  
 
         this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
-        this.SumaFecha = data.salarios.previsto.sumaFechas
+        this.SumaFechaSalarios = data.salarios.previsto.sumaFechas
+        this.SumaFechaRealSalarios= data.salarios.real.sumaFechas
+
+
+        this.Previsto= data.salarios.previsto
         this.SumaFechaViaticos = data.viaticos.previsto.sumaFechas
+
+        let frutasverdes = ["Previsto","Real"];
+
+        console.log('this.frutasverdes  =>  ' + frutasverdes.length)
+
+        this.frutas = frutasverdes
+        
         
 
         this.SumaIngresos =  data.salarios.previsto.subTotal
+        this.SumaIngresosReal =  data.salarios.real.subTotal
         this.SumaIngresosViaticos =  data.viaticos.previsto.subTotal
 
         data.gastos.previstos.forEach((sumaFecha) => {
 
-          //console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
+          console.log('this.SumaFechaSalarios  =>  ' + this.SumaFechaSalarios.length)
           
           this.SumaIngresosGasto =  sumaFecha.subTotal
 
           this.SumaFechaGastos = sumaFecha.sumaFechas
+
+          
           
         })
+
+        data.salarios.previsto.sumaFechas.forEach((seccion) => {
+            
+          this.fechasControlSalarios.push(this.fb.group({
+            rubro:  [seccion.rubro],
+            mes:     [seccion.mes],
+            anio:    [seccion.anio],
+            sumaPorcentaje:    [seccion.sumaPorcentaje]
+          }))
+
+        })
+          
+          
+       
        
        
        
