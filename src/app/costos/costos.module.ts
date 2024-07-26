@@ -6,9 +6,9 @@ import { CostoEmpleadoComponent } from './components/costo-empleado/costo-emplea
 import { CostoProyectoComponent } from './components/costo-proyecto/costo-proyecto.component';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CapturaBeneficiosComponent } from './components/captura-beneficios/captura-beneficios.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule,FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
@@ -33,10 +33,13 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ReactiveFormsModule,
     InputNumberModule,
     DropdownModule,
+    FormsModule,
     ButtonModule,
     ToolbarModule,
     TagModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    CalendarModule
+    
   ]
 })
 export class CostosModule { }
