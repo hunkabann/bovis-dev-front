@@ -240,3 +240,8 @@ export interface UpPersona {
   chnombre_completo?: string
 }
 
+export interface Opcion {
+  value: string,
+  label: string
+}
+
