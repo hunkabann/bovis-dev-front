@@ -4,13 +4,13 @@ import { CostosService } from '../../services/costos.service';
 import { SharedService } from '../../../shared/services/shared.service';
 import { finalize, forkJoin } from 'rxjs';
 import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
-import { CostoEmpleado,encabezados,Beneficio,BeneficiosProyectos } from '../../models/costos.model';
+import { CostoEmpleado,encabezados,Beneficio,BeneficiosProyectos,Opcion } from '../../models/costos.model';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { Item,Opcion } from 'src/models/general.model';
+import { Item } from 'src/models/general.model';
 import { Table } from 'primeng/table';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Dropdown } from 'primeng/dropdown';
@@ -47,9 +47,9 @@ export class CostoEmpleadoComponent implements OnInit {
 
   Costomenualproy = 0;
 
-  personass:    Item[] = []
-  puestos:    Item[] = []
-  proyectos:    Item[] = []
+  personass:    Opcion[] = []
+  puestos:    Opcion[] = []
+  proyectos:    Opcion[] = []
   estados:    Item[] = [
     {label: 'Activo', value: true},
     {label: 'Inactivo', value: false}
@@ -105,8 +105,10 @@ export class CostoEmpleadoComponent implements OnInit {
           
           const [personasR, puestosR,proyectosR] = value
           //const [empleadosR, puestosR] = value 
-          this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: persona.chnombre_completo}))
-          this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
+          //this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: persona.chnombre_completo}))
+          this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: `${persona.chnombre_completo}` }))
+         //this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
+          this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: `${puesto.chpuesto}` }))
           //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
           this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.nombre, label: `${proyecto.nombre}` }))
           //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
@@ -163,69 +165,69 @@ export class CostoEmpleadoComponent implements OnInit {
     const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
 
-    worksheet.getCell('M3').value = 'Seniority'
+    worksheet.getCell('K3').value = 'Seniority'
+    worksheet.getCell('K3').fill = fillNota
+    worksheet.getCell('K3').alignment = alignment
+    worksheet.mergeCells('K3:L3')
+
+    worksheet.getCell('M3').value = 'Sueldo Neto Mensual (MN)'
     worksheet.getCell('M3').fill = fillNota
     worksheet.getCell('M3').alignment = alignment
-    worksheet.mergeCells('M3:N3')
+    worksheet.mergeCells('M3:O3')
 
-    worksheet.getCell('O3').value = 'Sueldo Neto Mensual (MN)'
-    worksheet.getCell('O3').fill = fillNota
-    worksheet.getCell('O3').alignment = alignment
-    worksheet.mergeCells('O3:Q3')
+    worksheet.getCell('P3').value = 'Sueldo Bruto'
+    worksheet.getCell('P3').fill = fillNota
+    worksheet.getCell('P3').alignment = alignment
+    worksheet.mergeCells('P3:R3')
 
-    worksheet.getCell('R3').value = 'Sueldo Bruto MN / USD'
-    worksheet.getCell('R3').fill = fillNota
-    worksheet.getCell('R3').alignment = alignment
-    worksheet.mergeCells('R3:T3')
+    worksheet.getCell('S3').value = 'Aguinaldo'
+    worksheet.getCell('S3').fill = fillNota
+    worksheet.getCell('S3').alignment = alignment
+    worksheet.mergeCells('S3:T3')
 
-    worksheet.getCell('U3').value = 'Aguinaldo'
+    worksheet.getCell('U3').value = 'Prima Vacacional'
     worksheet.getCell('U3').fill = fillNota
     worksheet.getCell('U3').alignment = alignment
     worksheet.mergeCells('U3:V3')
 
-    worksheet.getCell('W3').value = 'Prima Vacacional'
+    worksheet.getCell('W3').value = 'Indemnizacion'
     worksheet.getCell('W3').fill = fillNota
     worksheet.getCell('W3').alignment = alignment
-    worksheet.mergeCells('W3:X3')
-
-    worksheet.getCell('Y3').value = 'Indemnizacion'
-    worksheet.getCell('Y3').fill = fillNota
-    worksheet.getCell('Y3').alignment = alignment
    // worksheet.mergeCells('W3:X3')
 
-    worksheet.getCell('Z3').value = 'Provision Bono Anual'
+    worksheet.getCell('X3').value = 'Provision Bono Anual'
+    worksheet.getCell('X3').fill = fillNota
+    worksheet.getCell('X3').alignment = alignment
+    worksheet.mergeCells('X3:Y3')
+
+    worksheet.getCell('Z3').value = 'GMM'
     worksheet.getCell('Z3').fill = fillNota
     worksheet.getCell('Z3').alignment = alignment
     worksheet.mergeCells('Z3:AA3')
 
-    worksheet.getCell('AB3').value = 'GMM'
+    worksheet.getCell('AB3').value = 'Seguro de Vida'
     worksheet.getCell('AB3').fill = fillNota
     worksheet.getCell('AB3').alignment = alignment
     worksheet.mergeCells('AB3:AC3')
 
-    worksheet.getCell('AD3').value = 'Seguro de Vida'
+    worksheet.getCell('AD3').value = 'Vales de Despensa'
     worksheet.getCell('AD3').fill = fillNota
     worksheet.getCell('AD3').alignment = alignment
     worksheet.mergeCells('AD3:AE3')
 
-    worksheet.getCell('AF3').value = 'Vales de Despensa'
+    worksheet.getCell('AF3').value = 'PTU'
     worksheet.getCell('AF3').fill = fillNota
     worksheet.getCell('AF3').alignment = alignment
-    worksheet.mergeCells('AF3:AG3')
 
-    worksheet.getCell('AH3').value = 'PTU'
-    worksheet.getCell('AH3').fill = fillNota
-    worksheet.getCell('AH3').alignment = alignment
+    worksheet.getCell('AU3').value = 'BENEFICIOS DEL EMPLEADO'
+    worksheet.getCell('AU3').fill = fillNota
+    worksheet.getCell('AU3').alignment = alignment
+    worksheet.mergeCells('AU3:BJ3')
 
-    worksheet.getCell('AW3').value = 'BENEFICIOS DEL EMPLEADO'
-    worksheet.getCell('AW3').fill = fillNota
-    worksheet.getCell('AW3').alignment = alignment
-    worksheet.mergeCells('AW3:BL3')
-
-    worksheet.getCell('BM3').value = 'BENEFICIOS DEL PROYECTO'
-    worksheet.getCell('BM3').fill = fillCobranza
-    worksheet.getCell('BM3').alignment = alignment
-    worksheet.mergeCells('BM3:CB3')
+    worksheet.getCell('BK3').value = 'BENEFICIOS DEL PROYECTO'
+    worksheet.getCell('BK3').fill = fillCobranza
+    worksheet.getCell('BK3').alignment = alignment
+    worksheet.mergeCells('BK3:BZ3')
   }
 
   _setXLSXHeader(worksheet: ExcelJS.Worksheet) {
@@ -482,92 +484,92 @@ export class CostoEmpleadoComponent implements OnInit {
      
 
       worksheet.getCell(row, 7).value = this.formatCurrency(record.sueldoBrutoInflacion)
-      worksheet.getCell(row, 8).value = this.formatCurrency(record.cargasSociales)
-      worksheet.getCell(row, 9).value = this.formatCurrency(record.costoMensualEmpleado)
-      worksheet.getCell(row, 10).value = record.unidadNegocio
-      worksheet.getCell(row, 11).value = record.empresa
-      worksheet.getCell(row, 12).value = record.nombreJefe
+      //worksheet.getCell(row, 8).value = this.formatCurrency(record.cargasSociales)
+     // worksheet.getCell(row, 9).value = this.formatCurrency(record.costoMensualEmpleado)
+      worksheet.getCell(row, 8).value = record.unidadNegocio
+      worksheet.getCell(row, 9).value = record.empresa
+      worksheet.getCell(row, 10).value = record.nombreJefe
       let newDate = new Date(record.fechaIngreso);
       this.FechaIngre = this.pipe.transform(newDate, 'dd-MM-yyyy');
-      worksheet.getCell(row, 13).value = this.FechaIngre
-      worksheet.getCell(row, 14).value = record.antiguedad
-      worksheet.getCell(row, 15).value = this.formatCurrency(record.avgDescuentoEmpleado)
-      worksheet.getCell(row, 16).value = this.formatCurrency(record.montoDescuentoMensual)
-      worksheet.getCell(row, 17).value = this.formatCurrency(record.sueldoNetoPercibidoMensual)
-      worksheet.getCell(row, 18).value = this.formatCurrency(record.retencionImss)
+      worksheet.getCell(row, 11).value = this.FechaIngre
+      worksheet.getCell(row, 12).value = record.antiguedad
+      worksheet.getCell(row, 13).value = this.formatCurrency(record.avgDescuentoEmpleado)
+      worksheet.getCell(row, 14).value = this.formatCurrency(record.montoDescuentoMensual)
+      worksheet.getCell(row, 15).value = this.formatCurrency(record.sueldoNetoPercibidoMensual)
+      worksheet.getCell(row, 16).value = this.formatCurrency(record.retencionImss)
       let numero_ispt = Number(record.ispt)
-      worksheet.getCell(row, 19).value = this.formatCurrency(numero_ispt)
+      worksheet.getCell(row, 17).value = this.formatCurrency(numero_ispt)
       //worksheet.getCell(row, 19).value = record.ispt
       //worksheet.getCell(row, 20).value = this.formatCurrency(record.sueldoBrutoInflacion)
-      worksheet.getCell(row, 20).value =this.formatCurrency( record.anual)
-      worksheet.getCell(row, 21).value = this.formatCurrency(record.aguinaldoCantidadMeses)
-      worksheet.getCell(row, 22).value = this.formatCurrency(record.aguinaldoMontoProvisionMensual)
-      worksheet.getCell(row, 23).value = record.pvDiasVacasAnuales
-      worksheet.getCell(row, 24).value = this.formatCurrency(record.pvProvisionMensual)
-      worksheet.getCell(row, 25).value = this.formatCurrency(record.indemProvisionMensual)
-      worksheet.getCell(row, 26).value = this.formatCurrency(record.avgBonoAnualEstimado)
-      worksheet.getCell(row, 27).value = this.formatCurrency(record.bonoAnualProvisionMensual)
-      worksheet.getCell(row, 28).value = record.sgmmCostoTotalAnual
-      worksheet.getCell(row, 39).value = this.formatCurrency(record.sgmmCostoMensual)
-      worksheet.getCell(row, 30).value = this.formatCurrency(record.svCostoTotalAnual)
-      worksheet.getCell(row, 31).value = this.formatCurrency(record.svCostoMensual)
-      worksheet.getCell(row, 32).value = this.formatCurrency(record.vaidCostoMensual)
-      worksheet.getCell(row, 33).value = this.formatCurrency(record.vaidComisionCostoMensual)
-      worksheet.getCell(row, 34).value = this.formatCurrency(record.ptuProvision)
-      worksheet.getCell(row, 35).value = this.formatCurrency(record.impuesto3sNomina)
-      worksheet.getCell(row, 36).value = this.formatCurrency(record.imss)
-      worksheet.getCell(row, 37).value = this.formatCurrency(record.retiro2)
-      worksheet.getCell(row, 38).value = this.formatCurrency(record.cesantesVejez)
-      worksheet.getCell(row, 39).value = this.formatCurrency(record.infonavit)
-      worksheet.getCell(row, 40).value = this.formatCurrency(record.cargasSociales)
-      worksheet.getCell(row, 41).value = this.formatCurrency(record.costoMensualEmpleado+this.Costomenualproy)
-      worksheet.getCell(row, 42).value = this.formatCurrency(record.costoMensualProyecto)
-      worksheet.getCell(row, 43).value = this.formatCurrency(record.costoAnualEmpleado)
-      worksheet.getCell(row, 44).value = this.formatCurrency(record.costoSalarioBruto)
-      worksheet.getCell(row, 45).value = this.formatCurrency(record.costoSalarioNeto)
-      worksheet.getCell(row, 46).value = record.nuAnno
-      worksheet.getCell(row, 47).value = record.nuMes
+      worksheet.getCell(row, 18).value =this.formatCurrency( record.anual)
+      worksheet.getCell(row, 19).value = this.formatCurrency(record.aguinaldoCantidadMeses)
+      worksheet.getCell(row, 20).value = this.formatCurrency(record.aguinaldoMontoProvisionMensual)
+      worksheet.getCell(row, 21).value = record.pvDiasVacasAnuales
+      worksheet.getCell(row, 22).value = this.formatCurrency(record.pvProvisionMensual)
+      worksheet.getCell(row, 23).value = this.formatCurrency(record.indemProvisionMensual)
+      worksheet.getCell(row, 24).value = this.formatCurrency(record.avgBonoAnualEstimado)
+      worksheet.getCell(row, 25).value = this.formatCurrency(record.bonoAnualProvisionMensual)
+      worksheet.getCell(row, 26).value = record.sgmmCostoTotalAnual
+      worksheet.getCell(row, 27).value = this.formatCurrency(record.sgmmCostoMensual)
+      worksheet.getCell(row, 28).value = this.formatCurrency(record.svCostoTotalAnual)
+      worksheet.getCell(row, 29).value = this.formatCurrency(record.svCostoMensual)
+      worksheet.getCell(row, 30).value = this.formatCurrency(record.vaidCostoMensual)
+      worksheet.getCell(row, 31).value = this.formatCurrency(record.vaidComisionCostoMensual)
+      worksheet.getCell(row, 32).value = this.formatCurrency(record.ptuProvision)
+      worksheet.getCell(row, 33).value = this.formatCurrency(record.impuesto3sNomina)
+      worksheet.getCell(row, 34).value = this.formatCurrency(record.imss)
+      worksheet.getCell(row, 35).value = this.formatCurrency(record.retiro2)
+      worksheet.getCell(row, 36).value = this.formatCurrency(record.cesantesVejez)
+      worksheet.getCell(row, 37).value = this.formatCurrency(record.infonavit)
+      worksheet.getCell(row, 38).value = this.formatCurrency(record.cargasSociales)
+      worksheet.getCell(row, 39).value = this.formatCurrency(record.costoMensualEmpleado+this.Costomenualproy)
+      worksheet.getCell(row, 40).value = this.formatCurrency(record.costoMensualProyecto)
+      worksheet.getCell(row, 41).value = this.formatCurrency(record.costoAnualEmpleado)
+      worksheet.getCell(row, 42).value = this.formatCurrency(record.costoSalarioBruto)
+      worksheet.getCell(row, 43).value = this.formatCurrency(record.costoSalarioNeto)
+      worksheet.getCell(row, 44).value = record.nuAnno
+      worksheet.getCell(row, 45).value = record.nuMes
       let numero_salarioDiarioIntegrado = Number(record.salarioDiarioIntegrado)
-      worksheet.getCell(row, 48).value = this.formatCurrency(numero_salarioDiarioIntegrado)
+      worksheet.getCell(row, 46).value = this.formatCurrency(numero_salarioDiarioIntegrado)
       //worksheet.getCell(row, 49).value = record.salarioDiarioIntegrado
 
       //BENEFICIOS POR EMPLEADO
 
-      worksheet.getCell(row, 49).value = this.formatCurrency(this.vivienda)
-      worksheet.getCell(row, 50).value = this.formatCurrency(this.Automovil)
-      worksheet.getCell(row, 51).value = this.formatCurrency(this.ViaticosaComprobar)
-      worksheet.getCell(row, 52).value = this.formatCurrency(this.BonoAdicionalReubicacion)
-      worksheet.getCell(row, 53).value = this.formatCurrency(this.Gasolina)
-      worksheet.getCell(row, 54).value = this.formatCurrency(this.Casetas)
-      worksheet.getCell(row, 55).value = this.formatCurrency(this.AyudaDeTransporte)
-      worksheet.getCell(row, 56).value = this.formatCurrency(this.VuelosDeAvion)
-      worksheet.getCell(row, 57).value = this.formatCurrency(this.ProvisionImpuestosExpatsr)
-      worksheet.getCell(row, 58).value = this.formatCurrency(this.FringeExpats)
-      worksheet.getCell(row, 59).value = this.formatCurrency(this.ProgramaDeEntretenimiento)
-      worksheet.getCell(row, 60).value = this.formatCurrency(this.EventosEspeciales)
-      worksheet.getCell(row, 61).value = this.formatCurrency(this.CostoIt)
-      worksheet.getCell(row, 62).value = this.formatCurrency(this.CostoTelefonia)
-      worksheet.getCell(row, 63).value = this.formatCurrency(this.SvDirectivos)
-      worksheet.getCell(row, 64).value = this.formatCurrency(this.FacturacionBpm)
+      worksheet.getCell(row, 47).value = this.formatCurrency(this.vivienda)
+      worksheet.getCell(row, 48).value = this.formatCurrency(this.Automovil)
+      worksheet.getCell(row, 49).value = this.formatCurrency(this.ViaticosaComprobar)
+      worksheet.getCell(row, 50).value = this.formatCurrency(this.BonoAdicionalReubicacion)
+      worksheet.getCell(row, 51).value = this.formatCurrency(this.Gasolina)
+      worksheet.getCell(row, 52).value = this.formatCurrency(this.Casetas)
+      worksheet.getCell(row, 53).value = this.formatCurrency(this.AyudaDeTransporte)
+      worksheet.getCell(row, 54).value = this.formatCurrency(this.VuelosDeAvion)
+      worksheet.getCell(row, 55).value = this.formatCurrency(this.ProvisionImpuestosExpatsr)
+      worksheet.getCell(row, 56).value = this.formatCurrency(this.FringeExpats)
+      worksheet.getCell(row, 57).value = this.formatCurrency(this.ProgramaDeEntretenimiento)
+      worksheet.getCell(row, 58).value = this.formatCurrency(this.EventosEspeciales)
+      worksheet.getCell(row, 59).value = this.formatCurrency(this.CostoIt)
+      worksheet.getCell(row, 60).value = this.formatCurrency(this.CostoTelefonia)
+      worksheet.getCell(row, 61).value = this.formatCurrency(this.SvDirectivos)
+      worksheet.getCell(row, 62).value = this.formatCurrency(this.FacturacionBpm)
 
       //BENEFICIOS POR PROYECTO
 
-      worksheet.getCell(row, 65).value = this.formatCurrency(this.Proy_vivienda)
-      worksheet.getCell(row, 66).value = this.formatCurrency(this.Proy_Automovil)
-      worksheet.getCell(row, 67).value = this.formatCurrency(this.Proy_ViaticosaComprobar)
-      worksheet.getCell(row, 68).value = this.formatCurrency(this.Proy_BonoAdicionalReubicacion)
-      worksheet.getCell(row, 69).value = this.formatCurrency(this.Proy_Gasolina)
-      worksheet.getCell(row, 70).value = this.formatCurrency(this.Proy_Casetas)
-      worksheet.getCell(row, 71).value = this.formatCurrency(this.Proy_AyudaDeTransporte)
-      worksheet.getCell(row, 72).value = this.formatCurrency(this.Proy_VuelosDeAvion)
-      worksheet.getCell(row, 73).value = this.formatCurrency(this.Proy_ProvisionImpuestosExpatsr)
-      worksheet.getCell(row, 74).value = this.formatCurrency(this.Proy_FringeExpats)
-      worksheet.getCell(row, 75).value = this.formatCurrency(this.Proy_ProgramaDeEntretenimiento)
-      worksheet.getCell(row, 76).value = this.formatCurrency(this.Proy_EventosEspeciales)
-      worksheet.getCell(row, 77).value = this.formatCurrency(this.Proy_CostoIt)
-      worksheet.getCell(row, 78).value = this.formatCurrency(this.Proy_CostoTelefonia)
-      worksheet.getCell(row, 79).value = this.formatCurrency(this.Proy_SvDirectivos)
-      worksheet.getCell(row, 80).value = this.formatCurrency(this.Proy_FacturacionBpm)
+      worksheet.getCell(row, 63).value = this.formatCurrency(this.Proy_vivienda)
+      worksheet.getCell(row, 64).value = this.formatCurrency(this.Proy_Automovil)
+      worksheet.getCell(row, 65).value = this.formatCurrency(this.Proy_ViaticosaComprobar)
+      worksheet.getCell(row, 66).value = this.formatCurrency(this.Proy_BonoAdicionalReubicacion)
+      worksheet.getCell(row, 67).value = this.formatCurrency(this.Proy_Gasolina)
+      worksheet.getCell(row, 68).value = this.formatCurrency(this.Proy_Casetas)
+      worksheet.getCell(row, 69).value = this.formatCurrency(this.Proy_AyudaDeTransporte)
+      worksheet.getCell(row, 70).value = this.formatCurrency(this.Proy_VuelosDeAvion)
+      worksheet.getCell(row, 71).value = this.formatCurrency(this.Proy_ProvisionImpuestosExpatsr)
+      worksheet.getCell(row, 72).value = this.formatCurrency(this.Proy_FringeExpats)
+      worksheet.getCell(row, 73).value = this.formatCurrency(this.Proy_ProgramaDeEntretenimiento)
+      worksheet.getCell(row, 74).value = this.formatCurrency(this.Proy_EventosEspeciales)
+      worksheet.getCell(row, 75).value = this.formatCurrency(this.Proy_CostoIt)
+      worksheet.getCell(row, 76).value = this.formatCurrency(this.Proy_CostoTelefonia)
+      worksheet.getCell(row, 77).value = this.formatCurrency(this.Proy_SvDirectivos)
+      worksheet.getCell(row, 78).value = this.formatCurrency(this.Proy_FacturacionBpm)
 
       
       //worksheet.getCell(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'FFC000':  '70AD47'}};
