@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { GastosIngresosTotales } from '../models/pcs.model';
 import { Mes } from 'src/models/general.model';
+import {formatCurrency, getCurrencySymbol} from '@angular/common';
 
 @Pipe({
   name: 'porcentajeMesIngreso'
@@ -23,7 +24,7 @@ export class PorcentajeMesIngresoPipe implements PipeTransform {
       if(mes && anio && mes.totalPorcentaje > 0) {
 
         console.log(' mes.porcentaje ------>> ' + mes.totalPorcentaje)
-        return mes.totalPorcentaje
+        return this.formateaValor(formatCurrency( mes.totalPorcentaje, 'en-US', getCurrencySymbol('USD', 'wide')))
       }
 
    
@@ -31,6 +32,11 @@ export class PorcentajeMesIngresoPipe implements PipeTransform {
     
 
     return '-';
+  }
+
+  formateaValor(valor) {
+    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
+    return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 
 }
