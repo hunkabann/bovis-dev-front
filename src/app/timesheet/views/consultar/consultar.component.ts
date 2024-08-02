@@ -4,9 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { Opcion } from 'src/models/general.model';
 import { TimesheetService } from '../../services/timesheet.service';
-import { Timesheet } from '../../models/timesheet.model';
+import { Proyecto, Timesheet } from '../../models/timesheet.model';
 import { finalize, forkJoin } from 'rxjs';
-import { MODULOS, SUBJECTS, TITLES } from 'src/utils/constants';
+import { MODULOS, SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
 import { format } from 'date-fns';
 import { CieService } from 'src/app/cie/services/cie.service';
 import { ProyectoJoinPipe } from '../../pipes/proyecto-join.pipe';
@@ -17,6 +17,11 @@ import { ModificarComponent } from '../modificar/modificar.component';
 
 import { DialogService } from 'primeng/dynamicdialog';
 
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+import { DatePipe } from '@angular/common';
+
+import { encabezados } from '../../models/timesheet.model';
 
 @Component({
   selector: 'app-consultar',
@@ -43,6 +48,9 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   empresas: Opcion[] = []
   timesheets: Timesheet[] = []
 
+  consultaExcel: Timesheet[] = []
+  consultaExcelProyecto: Proyecto[] = []
+
   idEmpleado: number = null
   idProyecto: number = null
   idUnidad: number = null
@@ -51,6 +59,12 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
 
   CalculaDias: number = null
   CalculaDedica: number = null
+
+  today: Date = new Date();
+  pipe = new DatePipe('en-US');
+  todayWithPipe = null;
+
+  indexcolum: number
 
   constructor() { }
 
@@ -119,6 +133,9 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
       .subscribe({
         next: ({ data }) => {
           this.timesheets = []
+
+          this.consultaExcel = data
+
           this.timesheets = data.map(ts => ({
             ...ts,
             proyectosJoin: this.proyectoJoin.transform(ts.proyectos, 'proyectos', ts.dias_trabajo),
@@ -437,13 +454,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   //}
 
   CargarHorasModal(timesheet: number) {
-    
-    
-
    
-
-    
-
     this.dialogService.open(ModificarComponent, {
       header: 'Carga Horas',
       width: '95%',
@@ -457,9 +468,197 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
       
         this.buscarRegistros('','')
 
-        
-      
     })
+  }
+
+  exportJsonToExcel(): void {
+
+    const workbook = new ExcelJS.Workbook()
+
+    const worksheet = workbook.addWorksheet('Detalle')
+
+    // Tìtulos
+    this._setXLSXTitles(worksheet)
+
+    // Encabezados
+    this._setXLSXHeader(worksheet)
+
+    let row = 5
+    // Contenido
+    row = this._setXLSXContent(worksheet, row)
+
+    // Contenido
+    //this._setXLSXContent(worksheet)
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+
+      //saveAs(blob, `FacturacionCancelacion_${Date.now()}${EXCEL_EXTENSION}`)
+      this.todayWithPipe = this.pipe.transform(Date.now(), 'dd_MM_yyyy');
+
+      saveAs(blob, `Consulta_TimeSheet_` + this.todayWithPipe + `${EXCEL_EXTENSION}`)
+    });
+  }
+
+  _setXLSXTitles(worksheet: ExcelJS.Worksheet) {
+
+    const fillNota: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
+    //const fillNotaCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
+    const fillCobranza: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffa4ffa4' } }
+    const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
+
+
+    worksheet.getCell('H3').value = 'PROYECTOS'
+    worksheet.getCell('H3').fill = fillNota
+    worksheet.getCell('H3').alignment = alignment
+    worksheet.mergeCells('H3:AF3')
+
+    
+
+    
+
+    
+  }
+
+  _setXLSXHeader(worksheet: ExcelJS.Worksheet) {
+    const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ff91d2ff' } }
+    const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
+
+    encabezados.forEach((encabezado, index) => {
+      let cell = worksheet.getCell(4, index + 1)
+      cell.value = encabezado.label
+
+     /**  this.consultaExcel.forEach(record => {
+        
+  
+        this.consultaExcelProyecto = record.proyectos
+
+        cell.value = encabezado.label
+      
+      });*/
+
+      cell.fill = fill
+      cell.alignment = alignment
+    })
+  }
+
+  _setXLSXContent(worksheet: ExcelJS.Worksheet, row: number): number {
+
+    const fillCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
+    const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
+
+
+    
+
+
+    this.consultaExcel.forEach(record => {
+      //worksheet.getCell(row).fill = record.fechaCancelacion ? fillCancelada : fillFactura
+      //const col = row.getCell(row);
+
+
+      this.consultaExcelProyecto = record.proyectos
+        // console.log("suma fuerapaso.cost-------------->> " +this.Costomenualproy);
+
+       // worksheet.getCell(row, 1).value = record.coi_empresa
+        worksheet.getCell(row, 1).value = record.mes
+        worksheet.getCell(row, 2).value = record.anio
+        worksheet.getCell(row, 3).value = record.num_empleado
+        worksheet.getCell(row, 4).value = record.empleado     
+        worksheet.getCell(row, 5).value = record.responsable      
+        worksheet.getCell(row, 6).value = record.dias_trabajo 
+        
+
+
+        this.indexcolum  = 7
+        const dato = this.consultaExcelProyecto;
+                         dato?.forEach(paso=>{
+
+                             console.log("paso.beneficio --------------> " +paso.descripcion);
+
+                             worksheet.getCell(row, this.indexcolum++).value = paso.descripcion
+                             worksheet.getCell(row, this.indexcolum++).value = paso.dias
+                             worksheet.getCell(row, this.indexcolum++).value = paso.tDedicacion
+                             worksheet.getCell(row, this.indexcolum++).value = paso.costo
+                             //console.log("paso.cost-------------->> " +paso.costo);
+                
+                             //this.Costomenualproy += +paso.costo
+                
+                             //console.log("suma paso.cost-------------->> " +this.Costomenualproy);
+                            
+                         })
+
+      /**
+      worksheet.getCell(row, 8).value = record.unidadNegocio
+      worksheet.getCell(row, 9).value = record.empresa
+      worksheet.getCell(row, 10).value = record.nombreJefe
+      let newDate = new Date(record.fechaIngreso);
+      this.FechaIngre = this.pipe.transform(newDate, 'dd-MM-yyyy');
+      worksheet.getCell(row, 11).value = this.FechaIngre
+      worksheet.getCell(row, 12).value = record.antiguedad
+      worksheet.getCell(row, 13).value = this.formatCurrency(record.avgDescuentoEmpleado)
+      worksheet.getCell(row, 14).value = this.formatCurrency(record.montoDescuentoMensual)
+      worksheet.getCell(row, 15).value = this.formatCurrency(record.sueldoNetoPercibidoMensual)
+      worksheet.getCell(row, 16).value = this.formatCurrency(record.retencionImss)
+      let numero_ispt = Number(record.ispt)
+      worksheet.getCell(row, 17).value = this.formatCurrency(numero_ispt)
+      worksheet.getCell(row, 18).value =this.formatCurrency( record.anual)
+      worksheet.getCell(row, 19).value = this.formatCurrency(record.aguinaldoCantidadMeses)
+      worksheet.getCell(row, 20).value = this.formatCurrency(record.aguinaldoMontoProvisionMensual)
+      worksheet.getCell(row, 21).value = record.pvDiasVacasAnuales
+      worksheet.getCell(row, 22).value = this.formatCurrency(record.pvProvisionMensual)
+      worksheet.getCell(row, 23).value = this.formatCurrency(record.indemProvisionMensual)
+      worksheet.getCell(row, 24).value = this.formatCurrency(record.avgBonoAnualEstimado)
+      worksheet.getCell(row, 25).value = this.formatCurrency(record.bonoAnualProvisionMensual)
+      worksheet.getCell(row, 26).value = record.sgmmCostoTotalAnual
+      worksheet.getCell(row, 27).value = this.formatCurrency(record.sgmmCostoMensual)
+      worksheet.getCell(row, 28).value = this.formatCurrency(record.svCostoTotalAnual)
+      worksheet.getCell(row, 29).value = this.formatCurrency(record.svCostoMensual)
+      worksheet.getCell(row, 30).value = this.formatCurrency(record.vaidCostoMensual)
+      worksheet.getCell(row, 31).value = this.formatCurrency(record.vaidComisionCostoMensual)
+      worksheet.getCell(row, 32).value = this.formatCurrency(record.ptuProvision)
+      worksheet.getCell(row, 33).value = this.formatCurrency(record.impuesto3sNomina)
+      worksheet.getCell(row, 34).value = this.formatCurrency(record.imss)
+      worksheet.getCell(row, 35).value = this.formatCurrency(record.retiro2)
+      worksheet.getCell(row, 36).value = this.formatCurrency(record.cesantesVejez)
+      worksheet.getCell(row, 37).value = this.formatCurrency(record.infonavit)
+      worksheet.getCell(row, 38).value = this.formatCurrency(record.cargasSociales)
+      worksheet.getCell(row, 39).value = this.formatCurrency(record.costoMensualEmpleado+this.Costomenualproy)
+      worksheet.getCell(row, 40).value = this.formatCurrency(record.costoMensualProyecto)
+      worksheet.getCell(row, 41).value = this.formatCurrency(record.costoAnualEmpleado)
+      worksheet.getCell(row, 42).value = this.formatCurrency(record.costoSalarioBruto)
+      worksheet.getCell(row, 43).value = this.formatCurrency(record.costoSalarioNeto)
+      worksheet.getCell(row, 44).value = record.nuAnno
+      worksheet.getCell(row, 45).value = record.nuMes
+      let numero_salarioDiarioIntegrado = Number(record.salarioDiarioIntegrado)
+      worksheet.getCell(row, 46).value = this.formatCurrency(numero_salarioDiarioIntegrado)*/
+
+      
+      //worksheet.getCell(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'FFC000':  '70AD47'}};
+      //worksheet.getRow(row).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ? 'ea899a' : 'ffffff' } };
+      row++
+    });
+
+    return row
+
+  }
+
+  formatCurrency(valor: number) {
+    return valor.toLocaleString('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+    })
+  }
+
+  getHeadersTabla() {
+    return [
+      {id: 'empresa', label: 'Empresa'},
+      {id: 'mes', label: 'Mes'},
+      {id: 'anio', label: 'Año'},
+      {id: 'numempleado', label: 'Num empleado'},
+      {id: 'empleado', label: 'Empleado'},
+      {id: 'responsable', label: 'Responsable'},
+      {id: 'diasTrabajo', label: 'Días Trabajo'},
+    ];
   }
 
 }
