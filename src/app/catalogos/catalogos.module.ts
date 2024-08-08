@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PrimengModule } from '../shared/primeng.module';
 
 import { CatalogosRoutingModule } from './catalogos-routing.module';
 import { CatalogosComponent } from './container/catalogos.component';
@@ -73,7 +74,8 @@ import { PuestoRegistroComponent } from './components/puesto/registro/puesto-reg
     InputTextareaModule,
     TooltipModule,
     TagModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PrimengModule
   ],
   providers: [
     CatalogosService,
