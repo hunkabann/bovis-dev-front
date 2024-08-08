@@ -8,6 +8,7 @@ import { CatalogosRoutingModule } from './catalogos-routing.module';
 import { CatalogosComponent } from './container/catalogos.component';
 import { ViaticosComponent } from './components/viaticos/viaticos.component';
 import { CatalogosService } from './services/catalogos.service';
+import { PuestoPrincipalComponent } from './components/puesto/principal/puesto-principal.component';
 
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -35,6 +36,7 @@ import { TagModule } from 'primeng/tag';
 import { CatalogosGeneralesComponent } from './components/catalogos-generales/catalogos-generales.component';
 import { RegistroComponent } from './components/clientes/registro/registro.component';
 import { PrincipalComponent } from './components/clientes/principal/principal.component';
+import { PuestoRegistroComponent } from './components/puesto/registro/puesto-registro.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,9 @@ import { PrincipalComponent } from './components/clientes/principal/principal.co
     ViaticosComponent,
     CatalogosGeneralesComponent,
     RegistroComponent,
-    PrincipalComponent
+    PrincipalComponent,
+    PuestoPrincipalComponent,
+    PuestoRegistroComponent
   ],
   imports: [
     CommonModule,
