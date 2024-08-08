@@ -1,0 +1,54 @@
+<p-toast>
+</p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+
+    <div class="row">
+
+        <div class="col-12">
+            <label for="chpuesto">PUESTO:</label>
+            <input id="chpuesto" pInputText class="form-control" maxlength="50" formControlName="chpuesto" [ngClass]="{'ng-invalid ng-dirty': esInvalido('chpuesto')}">
+            <div *ngIf="esInvalido('chpuesto')">
+                <small class="error-msg">
+                    {{ obtenerMensajeError('chpuesto') }}
+                </small>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label for="nusalario_min">SALARIO MINIMO:</label>
+            <input id="nusalario_min" pInputText class="form-control" maxlength="50" formControlName="nusalario_min" [ngClass]="{'ng-invalid ng-dirty': esInvalido('nusalario_min')}">
+            <div *ngIf="esInvalido('nusalario_min')">
+                <small class="error-msg">
+                    {{ obtenerMensajeError('nusalario_min') }}
+                </small>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label for="nusalario_max">SALARIO MAXIMO:</label>
+            <input id="nusalario_max" pInputText class="form-control" maxlength="50" formControlName="nusalario_max" [ngClass]="{'ng-invalid ng-dirty': esInvalido('nusalario_max')}">
+            <div *ngIf="esInvalido('nusalario_max')">
+                <small class="error-msg">
+                    {{ obtenerMensajeError('nusalario_max') }}
+                </small>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <label for="nusalario_prom">SALARIO PROMEDIO:</label>
+            <input id="nusalario_prom" pInputText class="form-control" maxlength="50" formControlName="nusalario_prom" [ngClass]="{'ng-invalid ng-dirty': esInvalido('nusalario_prom')}">
+            <div *ngIf="esInvalido('nusalario_prom')">
+                <small class="error-msg">
+                    {{ obtenerMensajeError('nusalario_prom') }}
+                </small>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="d-flex justify-content-end mt-2">
+        <button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!form.valid"><i class="fas fa-save"></i> Guardar</button>
+    </div>
+
+</form>
