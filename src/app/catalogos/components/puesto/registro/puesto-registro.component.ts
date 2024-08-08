@@ -6,6 +6,7 @@ import { finalize } from 'rxjs';
 import { PuestoService } from 'src/app/catalogos/services/puesto.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { TITLES, errorsArray } from 'src/utils/constants';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-puesto-registro',
@@ -27,17 +28,20 @@ export class PuestoRegistroComponent implements OnInit {
 
   form = this.fb.group({
     nukid_puesto:   [null],
-    nukidnivel:      ['', Validators.required],
+    nukidnivel:      [0, Validators.required],
     chpuesto:          ['', Validators.required],
-    nusalario_min:          ['', Validators.required],
-    nusalario_max:          ['', Validators.required],
-    nusalario_prom:          ['', Validators.required],
+    nusalario_min:          [0, Validators.required],
+    nusalario_max:          [0, Validators.required],
+    nusalario_prom:          [0, Validators.required],
     boactivo:       [true]
   })
 
   constructor() { }
 
   ngOnInit(): void {
+
+   // this.form.controls['nusalario_prom'].disable();
+
     if(this.config.data.cliente) {
       
       this.esActualizacion = true
@@ -49,7 +53,7 @@ export class PuestoRegistroComponent implements OnInit {
         chpuesto:    cliente.chpuesto,
         nusalario_min:    cliente.nusalario_min,
         nusalario_max:    cliente.nusalario_max,
-        nusalario_prom:    cliente.nusalario_prom
+        nusalario_prom:    ((cliente.nusalario_min+cliente.nusalario_max)/2)
       })
     }
   }
@@ -67,6 +71,8 @@ export class PuestoRegistroComponent implements OnInit {
       .subscribe({
         next: ({data}) => {
           this.ref.close({exito: true, clienteActualizado: this.form.value})
+
+
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
@@ -86,6 +92,32 @@ export class PuestoRegistroComponent implements OnInit {
     })
 
     return mensaje
+  }
+
+  calcularPromedioMax(event: any,  seccion: string) {
+    const valor = +event
+   
+      this.form.patchValue({
+        nusalario_prom:  (valor + this.form.value.nusalario_min) / 2
+        //costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ),
+       // diasCalc: valor,
+        //dedicacionCalc: this.formateaValor((valor / this.form.value.dias) * 100) 
+      })
+      
+    
+  }
+
+  calcularPromedioMin(event: any,  seccion: string) {
+    const valor = +event
+   
+      this.form.patchValue({
+        nusalario_prom:  (valor + this.form.value.nusalario_max) / 2
+        //costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ),
+       // diasCalc: valor,
+        //dedicacionCalc: this.formateaValor((valor / this.form.value.dias) * 100) 
+      })
+      
+    
   }
 
 }
