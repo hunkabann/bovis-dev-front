@@ -24,7 +24,8 @@ export class PorcentajeMesPipe implements PipeTransform {
       if(mes && anio && mes.porcentaje > 0) {
 
         //console.log(' mes.porcentaje ------>> ' + mes.porcentaje)
-        return this.formateaValor(formatCurrency(mes.porcentaje, 'en-US', getCurrencySymbol('USD', 'wide')))
+        //return this.formateaValor(formatCurrency(mes.porcentaje, 'en-US', getCurrencySymbol('USD', 'wide')))
+        return mes.porcentaje
       }
 
     return '-';
