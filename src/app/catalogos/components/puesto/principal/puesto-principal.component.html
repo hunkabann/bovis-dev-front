@@ -3,7 +3,7 @@
 
 <div class="main-container">
 
-    <h1>Clientes</h1>
+    <h1>Puesto</h1>
 
     <p-toolbar styleClass="p-1 mb-4 d-flex justify-content-end gap-2 text-right">
         <button type="button" class="btn btn-secondary" routerLink="/catalogos"><i class="fas fa-arrow-left"></i> Regresar</button>
@@ -58,9 +58,9 @@
                     <td>{{cliente.nukid_puesto}}</td>
                     <td>{{cliente.nukidnivel}}</td>
                     <td>{{cliente.chpuesto}}</td>
-                    <td>{{cliente.nusalario_min}}</td>
-                    <td>{{cliente.nusalario_max}}</td>
-                    <td>{{cliente.nusalario_prom}}</td>
+                    <td>{{cliente.nusalario_min| currency}}</td>
+                    <td>{{cliente.nusalario_max| currency}}</td>
+                    <td>{{(cliente.nusalario_min+cliente.nusalario_max)/2 | currency}}</td>
                     <td>
                         <p-tag severity="success" *ngIf="cliente.boactivo">Activo</p-tag>
                         <p-tag severity="danger" *ngIf="!cliente.boactivo">Inactivo</p-tag>
