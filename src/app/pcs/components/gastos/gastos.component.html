@@ -37,7 +37,7 @@
                                 <th>Reembolsable</th>
                                 <th>Subtotal</th>
                                 <th *ngFor="let mesRegistro of mesesProyecto">
-                                    {{mesRegistro.desc | uppercase}}
+                                    {{mesRegistro.desc | uppercase}} 
                                 </th>
                             </tr>
                         </ng-template>
@@ -45,7 +45,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro">
+                                        <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro || seccion.value.idSeccion == 2 ">
                                     <i class="pi pi-pencil vertical-align-middle"></i>
                                 </button>
                                     </div>
@@ -59,7 +59,27 @@
                                     {{rubro.value.fechas | porcentajeMes:mesRegistro}}
                                 </td>
                             </tr>
+                            
                         </ng-template>
+                        <!--ng-template  pTemplate="footer"  >
+                           
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>totales</td>
+                                <td *ngFor="let sumatot of sumaTotales">
+                                    {{sumatot.sumaPorcentaje }}
+                                </td>
+                                
+                                <td>
+                                   
+                                </td>
+                            </tr>
+                        </ng-template-->
+                        
                     </p-table>
                 </ng-template>
             </p-accordionTab>

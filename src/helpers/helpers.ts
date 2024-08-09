@@ -1,8 +1,10 @@
 
 import * as base64js from 'base64-js'
-import { addMonths, differenceInCalendarMonths, format } from 'date-fns';
+import { addMonths, differenceInCalendarMonths, format} from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Mes } from 'src/models/general.model';
+
+
 
 export const descargarArchivo = async (base64Datos: string, nombreArchivo: string): Promise<void>  => {
   const base64String = base64Datos.split(';base64,').pop()
@@ -52,6 +54,48 @@ export const obtenerMeses = (fechaInicio: Date, fechaFin: Date): Mes[] => {
 
   return meses
 }
+
+export const obtenerMesesTrans = (fechaInicio: Date, fechaFin: Date):number => {
+
+  
+ 
+  const diferenciaMeses = differenceInCalendarMonths(fechaFin, fechaInicio);
+          console.log("diferenciaMeses: " + diferenciaMeses)
+
+        
+          
+          for (let i = 0; i <= diferenciaMeses; i++) {
+            const fecha = addMonths(fechaInicio, i)
+            const mes   = +format(fecha, 'M')
+            const anio  = +format(fecha, 'Y')
+     
+           
+          }
+
+  return diferenciaMeses
+}
+
+export const obtenerMesesFecha = (fechaInicio: Date, fechaFin: Date): Mes[] => {
+
+  const diferenciaMeses = differenceInCalendarMonths(fechaFin, fechaInicio);
+  const meses: Mes[] = []
+  
+  for (let i = 0; i <= diferenciaMeses; i++) {
+    const fecha = addMonths(fechaInicio, i)
+    const mes   = +format(fecha, 'M')
+    const anio  = +format(fecha, 'Y')
+    const desc  = format(fecha, 'LLL/Y', {locale: es})
+
+    meses.push({
+      mes:  mes,
+      anio: anio,
+      desc: desc
+    })
+  }
+
+  return meses
+}
+
 
 export const formatCurrency = (valor: number) => {
   return valor.toLocaleString('es-MX', {

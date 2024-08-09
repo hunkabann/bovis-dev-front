@@ -34,7 +34,13 @@ import { ValorMesPipe } from './pipes/valor-mes.pipe';
 import { ModificarRubroComponent } from './components/modificar-rubro/modificar-rubro.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CalcularSubtotalPipe } from './pipes/calcular-subtotal.pipe';
+import { calcularSubtotalStaffingPipe } from './pipes/calcular-subtotal-staffing.pipe';
+import { CalcularSubtotalIngresoPipe } from './pipes/calcular-subtotal-ingreso.pipe';
+import { PorcentajeMesIngresoPipe } from './pipes/porcentaje-mes-ingreso.pipe';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { PorcentajeMesFacturaPipe } from './pipes/porcentaje-mes-factura.pipe';
+import { PorcentajeMesCobranzaPipe } from './pipes/porcentaje-mes-cobranza.pipe';
+import { porcentajeMesControlPipe } from './pipes/porcentaje-mes-control.pipe';
 
 
 @NgModule({
@@ -54,7 +60,13 @@ import { MultiSelectModule } from 'primeng/multiselect';
     PorcentajeMesPipe,
     ValorMesPipe,
     ModificarRubroComponent,
-    CalcularSubtotalPipe
+    CalcularSubtotalPipe,
+    calcularSubtotalStaffingPipe,
+    CalcularSubtotalIngresoPipe,
+    PorcentajeMesIngresoPipe,
+    PorcentajeMesFacturaPipe,
+    PorcentajeMesCobranzaPipe,
+    porcentajeMesControlPipe
   ],
   imports: [
     CommonModule,

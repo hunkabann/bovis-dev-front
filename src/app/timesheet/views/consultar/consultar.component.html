@@ -38,6 +38,10 @@
         </div>
     </div>
 
+    <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
+        <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+    </p-toolbar>
+
     <p-table [value]="timesheets" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]" [rows]="10"
         class="main-table" paginatorPosition="both" styleClass="p-datatable-striped">
         <ng-template pTemplate="header">

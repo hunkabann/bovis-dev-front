@@ -86,11 +86,13 @@
                 
                 <div class="col-6" *ngIf="form.value.aplicaTodosMeses">
                     <div class="form-group">
-                        <label for="cantidad">Cantidad: <span class="required"></span></label>
+                        <label for="cantidad">% Participación: <span class="required"></span></label>
                         <p-inputNumber 
                             formControlName="cantidad"
                             class="full-width" 
                             (onBlur)="cambiarValores()"
+                            [min]="0" 
+                            [max]="100"
                         ></p-inputNumber>
                         <div *ngIf="esInvalido('cantidad')">
                           <small
@@ -112,7 +114,7 @@
             >
                 <div class="d-grid">
                     <label [for]="'campo-fecha-'+i">
-                        <strong>{{fecha.value.desc | uppercase}}:</strong>
+                        <strong> {{'% '+fecha.value.desc | uppercase}}:</strong>
                     </label>
                     <p-inputNumber 
                         formControlName="porcentaje" 
@@ -121,6 +123,7 @@
                         mode="decimal" 
                         [min]="0" 
                         [max]="100"
+                       
                     ></p-inputNumber>
                 </div>
             </div>

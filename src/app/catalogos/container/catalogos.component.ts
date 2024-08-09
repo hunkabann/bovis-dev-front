@@ -97,7 +97,7 @@ export class CatalogosComponent implements OnInit {
       catalogo: 'cat_puesto',
       id: null,
       nombre: 'Puesto',
-      nameService: ''
+      nameService: 'Puesto'
     },
     {
       catalogo: 'cat_profesion',

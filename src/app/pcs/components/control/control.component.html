@@ -1,1 +1,829 @@
-<p>control works!</p>
+<p-toast>
+</p-toast>
+
+<!--<div class="text-center" *ngIf="!proyectoSeleccionado; else cargandoView">
+  <p>Seleccione un proyecto y presione el botón <strong>Editar</strong>.</p>
+</div>-->
+
+<div class="text-center" *ngIf="cargando; else principal">
+    <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+    <p>Cargando Control...</p>
+    <p><strong>Un momento.</strong></p>
+</div>
+
+<ng-template #principal>
+     
+    <div class="content" style="margin: 2%">
+<ng-container [formGroup]="form" *ngIf="!cargando">
+    
+	
+    <!--ng-container formArrayName="secciones">
+        
+        <p-accordion [activeIndex]="X" [formGroupName]="X" *ngFor="let seccion of secciones.controls; let X = index">
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">{{seccion.value.codigo}} {{seccion.value.seccion}}</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table [value]="rubros(X).controls" [scrollable]="true" scrollHeight="400px">
+                        <ng-template pTemplate="header">
+                            
+                            <tr>
+                                
+                                    
+                                    <th>Nombre</th>
+                                    
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-norubro let-inoRubro="rowIndex" let-bus>
+                            <tr>
+                               
+                                
+                                    
+                                    <td>{{norubro.value.rubro}}</td>
+                                    <td>{{norubro.value.fechas | calcularSubtotal}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{norubro.value.fechas | porcentajeMes:mesRegistro}}
+                                    </td>
+                                    
+                               
+                               
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+                
+            </p-accordionTab>
+        </p-accordion>
+    </ng-container-->
+    <!-- SALARIOS -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion>
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">SA SALARIOS</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table [value]="frutas"  [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-frutas>
+                            <tr>
+                                <td *ngIf="frutas == 'Previsto'; then thenfecha else elsefecha"> </td>
+                                <ng-template #thenfecha>
+                                    <td>Previsto</td>
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{SumaFecha | porcentajeMesControl:mesRegistro}}
+                                    </td>
+                                </ng-template>
+                                <ng-template #elsefecha>
+                                    <td>REAL</td>
+                                    
+                                    <td>{{SumaIngresosReal}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{SumaFechaRealSalarios | porcentajeMesControl:mesRegistro}}
+                                    </td>
+                                </ng-template>
+                                
+                                    
+                               
+                                    
+                                
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    <!-- VIATICOS -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">VA VIATICOS</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table [value]="SumaFechaViaticos"  [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-SumaFechaViaticoss>
+                            <tr>
+                               
+                                
+                                    <td>{{SumaFechaViaticoss.rubro}}</td>
+                                    
+                                    <td>{{SumaIngresosViaticos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{SumaFechaViaticos | porcentajeMesControl:mesRegistro}}
+                                    </td>
+                               
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    <!-- Condiciones Generales - Gasto General -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">GGA	Condiciones Generales - Gasto General</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-total>
+                            <tr>
+                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    
+                                     
+                                    <td>Tarifa Rembolsable</td>
+                                    
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                               
+                               
+                            
+                                   
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    <!-- Condiciones Generales - Gastos Directos de Proyecto -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">GDPA	Condiciones Generales - Gastos Directos de Proyecto</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-total>
+                            <tr>
+                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    
+                                     
+                                    <td>Tarifa Rembolsable</td>
+                                    
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                               
+                               
+                            
+                                   
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+     <!-- Gastos Overhead -->
+     <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">GOA	Gastos Overhead</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-total>
+                            <tr>
+                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    
+                                     
+                                    <td>Tarifa Rembolsable</td>
+                                    
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                               
+                               
+                            
+                                   
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    <!--Gastos -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">GA	Gastos</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table [value]="SumaFechaGastos"  [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-SumaFechas>
+                            <tr>
+                               
+                                <td  *ngIf="SumaFechas.mes === 1  ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    <td>{{SumaFechas.rubro}}</td>
+                                    
+                                    <td>{{SumaIngresosGasto}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{SumaFechaGastos | porcentajeMesControl:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    
+    <!-- INGRESO -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">F	Ingresos</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-total>
+                            <tr>
+                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    
+                                     
+                                    <td>Tarifa Rembolsable</td>
+                                    
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                               
+                               
+                            
+                                   
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    
+
+    <!-- FACTURAS -->
+
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">G	Facturacion</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-total>
+                            <tr>
+                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    
+                                     
+                                    <td>Tarifa Rembolsable</td>
+                                    
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{totaless | porcentajeMesFactura:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                               
+                               
+                            
+                                   
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    <!--BIE(CIE) -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">H	BIE(CIE)</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-total>
+                            <tr>
+                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    
+                                     
+                                    <td>Tarifa Rembolsable</td>
+                                    
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                               
+                               
+                            
+                                   
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    <!-- COBRANZA -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">COBRANZA</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-total>
+                            <tr>
+                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    
+                                     
+                                    <td>Tarifa Rembolsable</td>
+                                    
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{totaless | porcentajeMesCobranza:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                               
+                               
+                            
+                                   
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+
+    <!--Posicion Caja -->
+    <ng-container formArrayName="secciones">
+        
+        <p-accordion >
+            
+            <p-accordionTab>
+                
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">J	Posicion Caja</span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template  pTemplate="content">
+                    <p-table   [scrollable]="true" scrollHeight="400px" >
+                        <ng-template pTemplate="header">
+                            
+                            <tr>                               
+                                    
+                                    <th>Nombre</th>
+                                    
+                                   
+                                    <th>Subtotal</th>
+                                    <th *ngFor="let mesRegistro of mesesProyecto">
+                                        {{mesRegistro.desc | uppercase}} 
+                                    </th>
+                                    
+                                
+                                
+                                
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-total>
+                            <tr>
+                                <td  *ngIf="total.mes === 1 && total.reembolsable ; then  thenfecha"></td>
+                                <ng-template #thenfecha>
+                                    
+                                     
+                                    <td>Tarifa Rembolsable</td>
+                                    
+                                    
+                                    <td>{{SumaIngresos}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{totaless | porcentajeMesIngreso:mesRegistro}}
+                                    </td>
+                               
+                                    
+                                </ng-template>
+                               
+                               
+                            
+                                   
+                                    
+                               
+                                
+                            </tr>
+                            
+                        </ng-template>
+                        
+                        
+                    </p-table>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>       
+           
+    </ng-container>
+</ng-container>
+</div>
+</ng-template>

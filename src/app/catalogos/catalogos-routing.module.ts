@@ -7,6 +7,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CatalogosGeneralesComponent } from './components/catalogos-generales/catalogos-generales.component';
 import { DiasTimesheetComponent } from '../timesheet/views/dias-timesheet/dias-timesheet.component';
 import { PrincipalComponent } from './components/clientes/principal/principal.component';
+import { PuestoPrincipalComponent } from './components/puesto/principal/puesto-principal.component';
 
 const routes: Routes = [
   { path: '', component: CatalogosComponent },
@@ -30,7 +31,8 @@ const routes: Routes = [
   { path: 'cat_experiencia', component: CatalogosGeneralesComponent },
   { path: 'cat_profesion', component: CatalogosGeneralesComponent },
   { path: 'cat_dias', component: DiasTimesheetComponent },
-  { path: 'cat_cta_contable', component: CatalogosGeneralesComponent }
+  { path: 'cat_cta_contable', component: CatalogosGeneralesComponent },
+  { path: 'cat_puesto', component: PuestoPrincipalComponent }
 ];
 
 @NgModule({

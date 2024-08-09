@@ -111,8 +111,8 @@ export const encabezados = Object.freeze([
   {id: 'puesto', label: 'Puesto'},
   {id: 'numProyecto', label: 'Proyecto'},
   {id: 'sueldoBrutoInflacion', label: 'Sueldo bruto (inflación %)'},
-  {id: 'cargasSociales', label: 'Cargas Sociales'},
-  {id: 'costoMensualEmpleado', label: 'Costo Mensual Empleado'},
+  //{id: 'cargasSociales', label: 'Cargas Sociales'},
+  //{id: 'costoMensualEmpleado', label: 'Costo Mensual Empleado'},
   {id: 'unidadNegocio', label: 'Unidad de negocio'},
   {id: 'empresa', label: 'Empresa'},
   {id: 'nombreJefe', label: 'Nombre del Jefe'},
@@ -239,3 +239,9 @@ export interface UpPersona {
   boempleado:         boolean;
   chnombre_completo?: string
 }
+
+export interface Opcion {
+  value: string,
+  label: string
+}
+

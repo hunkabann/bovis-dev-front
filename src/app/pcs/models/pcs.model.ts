@@ -38,6 +38,7 @@ export interface Fecha {
     mes:        number;
     anio:       number;
     porcentaje: number;
+    mesTranscurrido: number;
 }
 
 export interface ProyectoPorIDResponse {
@@ -109,6 +110,7 @@ export interface GastosIngresosSeccionesData {
     fechaIni:    string;
     fechaFin:    string;
     secciones:   GastosIngresosSecciones[];
+    totales:   GastosIngresosTotales[];
 }
 
 export interface GastosIngresosSecciones {
@@ -116,6 +118,15 @@ export interface GastosIngresosSecciones {
     codigo:    string;
     seccion:   string;
     rubros:    Rubro[];
+    sumaFechas:    SumaFecha[];
+    
+}
+
+export interface GastosIngresosTotales {
+    reembolsable:     boolean;
+    mes:        number;
+    anio:       number;
+    totalPorcentaje: number;
     
 }
 
@@ -128,4 +139,68 @@ export interface Rubro {
     aplicaTodosMeses: boolean;
     fechas:           Fecha[];
     numEmpleadoRrHh:    string;
+    numProyecto:      number;
+}
+
+export interface SumaFecha {
+    mes:        number;
+    anio:       number;
+    sumaPorcentaje: number;
+}
+
+
+
+export interface GastosIngresosControlResponse {
+    data:          GastosIngresosControlData;
+    success:       boolean;
+    message:       null;
+    transactionId: null;
+}
+
+export interface GastosIngresosControlData {
+    salarios: Salarios;
+    viaticos: Salarios;
+    gastos:   Gastos;
+}
+
+export interface Gastos {
+    previstos: Previsto[];
+    reales:    Previsto[];
+}
+
+export interface Previsto {
+    subTotal:   number;
+    sumaFechas: SumaFechas[];
+}
+
+export interface SumaFechas {
+    rubro:          string;
+    mes:            number;
+    anio:           number;
+    sumaPorcentaje: number;
+}
+
+export enum Rubross {
+    BonoDeProyecto = "Bono de proyecto",
+    Combustibles = "Combustibles",
+    Comidas = "Comidas",
+    Contingencias = "Contingencias",
+    Hospedaje = "Hospedaje",
+    LeasingDeAutos = "Leasing de autos",
+    MantenimientoAutomoviles = "Mantenimiento automoviles",
+    MesInicioEfectoDeInflaciónAnual = "(<Mes inicio) Efecto de inflación anual",
+    Otros = "Otros",
+    Peajes = "Peajes",
+    ProvisionSalarios = "Provision Salarios",
+    RentaDeAutosProvision = "Renta de autos (provision)",
+    ReversiónProvisiónDeBonos = "Reversión provisión de bonos",
+    TransportacionForaneaAutobusVuelos = "Transportacion Foranea (Autobus, Vuelos)",
+    TransportacionLocalTaxisUber = "Transportacion Local (Taxis, Uber)",
+    UsoAutomovilEmpleado = "Uso automovil empleado",
+}
+
+export interface Salarios {
+    rubro:    null;
+    previsto: Previsto;
+    real:     Previsto;
 }

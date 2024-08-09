@@ -12,9 +12,9 @@
         <label for="descripcion">Personas:</label>
         <div class="">
             <p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar una persona" (onChange)="tablaPrincipal.filter(listaPersona.value, 'nombreCompletoEmpleado', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
-            <ng-template let-option pTemplate="item">
+            <!--ng-template let-option pTemplate="item">
                 <p-tag [value]="option.value" severity="success"></p-tag>
-            </ng-template>
+            </ng-template-->
         </p-dropdown>
         </div>
     </div>
@@ -22,9 +22,9 @@
             <label for="puesto">Puesto:</label>
             <div class="">
                 <p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'puesto', 'equals')" placeholder="puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
-                    <ng-template let-option pTemplate="item">
+                    <!--ng-template let-option pTemplate="item">
                         <p-tag [value]="option.value" severity="success"></p-tag>
-                    </ng-template>
+                    </ng-template-->
                 </p-dropdown>
             </div>                
         </div>
@@ -32,9 +32,9 @@
           <label for="proyecto">Proyecto:</label>
           <div class="">
             <p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="tablaPrincipal.filter(listaProyecto.value, 'proyecto', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
-              <ng-template let-option pTemplate="item">
+              <!--ng-template let-option pTemplate="item">
                   <p-tag [value]="option.value" severity="success"></p-tag>
-              </ng-template>
+              </ng-template-->
           </p-dropdown>
           </div>                
       </div>

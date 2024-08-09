@@ -9,8 +9,10 @@ import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.comp
 import { TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro } from '../../models/pcs.model';
+import { Rubro,GastosIngresosTotales } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
+
+
 
 @Component({
   selector: 'app-ingresos',
@@ -19,6 +21,11 @@ import { CatalogosService } from '../../services/catalogos.service';
   providers: [MessageService, DialogService]
 })
 export class IngresosComponent implements OnInit {
+
+  fechaInicio: Date;
+  fechaFin: Date;
+  
+  noFactura: string;
 
   dialogService     = inject(DialogService)
   fb                = inject(FormBuilder)
@@ -30,17 +37,34 @@ export class IngresosComponent implements OnInit {
   cargando:             boolean = true
   proyectoSeleccionado: boolean = false
   mesesProyecto:        Mes[] = []
+
   
   proyectoFechaInicio:  Date
   proyectoFechaFin:     Date
 
   idproyecto: number;
 
+  totalRecords: number = 0;
+
+ 
+  IDEmpresa: number;
+  IDCliente: number;
+
+  isrembolsable: boolean = false
+
+  rembolsable: string;
+
+  totaless: GastosIngresosTotales[] = []
+
+  SumaIngresos = 0;
+
+
   constructor() { }
   
   form = this.fb.group({
     numProyecto:  [0, Validators.required],
-    secciones:    this.fb.array([])
+    secciones:    this.fb.array([]),
+    totales:    this.fb.array([])
   })
 
   get secciones() {
@@ -55,6 +79,15 @@ export class IngresosComponent implements OnInit {
     return (this.rubros(seccionIndex).at(rubroIndex).get('fechas') as FormArray)
   }
 
+  fechasIngreso(seccionIndex: number) {
+    return (this.secciones.at(seccionIndex).get('totales') as FormArray)
+  }
+
+  get totals() {
+    return this.form.get('totales') as FormArray
+  }
+
+ 
   ngOnInit(): void {
     
     this.pcsService.cambiarEstadoBotonNuevo(false)
@@ -75,7 +108,24 @@ export class IngresosComponent implements OnInit {
         console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
 
         this.cargando = true
-          this.cargarInformacion(this.idproyecto)
+        this.cargarInformacion(this.idproyecto)
+        /**for(let i = 0; i < 3; i++) {
+
+          console.log("valor de i -------------- " + i) 
+          
+          if(i > 1){
+            this.isrembolsable  = true
+            this.rembolsable = "REMBOLSABLE"
+           }else{
+            this.isrembolsable  = false
+            this.rembolsable = "NO REMBOLSABLE"
+           }
+    
+           console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
+        
+        
+          i++
+          }*/
       } else {
         this.pcsService.obtenerIdProyecto()
       .subscribe(numProyecto => {
@@ -84,6 +134,23 @@ export class IngresosComponent implements OnInit {
           // this.sharedService.cambiarEstado(true)
           this.cargando = true
           this.cargarInformacion(numProyecto)
+          /**for(let i = 0; i < 3; i++) {
+
+            console.log("valor de i -------------- " + i) 
+            
+            if(i > 1){
+              this.isrembolsable  = true
+              this.rembolsable = "REMBOLSABLE"
+             }else{
+              this.isrembolsable  = false
+              this.rembolsable = "NO REMBOLSABLE"
+             }
+      
+             console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
+          
+         
+            i++
+            }*/
         } else {
           console.log('No hay proyecto');
         }
@@ -94,10 +161,36 @@ export class IngresosComponent implements OnInit {
   }
 
   cargarInformacion(numProyecto: number) {
+
+    
+   
     this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'ingreso')
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
         next: ({data}) => {
+          this.totaless = data.totales
+
+          data.totales.forEach(total => {
+
+            console.log('total.reembolsable: ' + total.reembolsable)
+            console.log('total.mes: ' + total.mes)
+            console.log('total.anio: ' + total.anio)
+            console.log('total.totalPorcentaje: ' + total.totalPorcentaje)
+
+            this.SumaIngresos += +total.totalPorcentaje
+            
+           
+            /**  this.fechasIngreso(totalIndex).push(this.fb.group({
+              reembolsable:  [total.reembolsable],
+              mes:     [total.mes],
+              anio:    [total.anio],
+              totalPorcentaje:    [total.totalPorcentaje]
+            }))*/
+            
+            
+
+           
+          })
 
           this.proyectoFechaInicio  = new Date(data.fechaIni)
           this.proyectoFechaFin     = new Date(data.fechaFin)
@@ -131,12 +224,52 @@ export class IngresosComponent implements OnInit {
                 }))
               })
             })
+
+            
+            seccion.rubros.forEach((norubro, norubroIndex) => {
+
+              // Agregamos los rubros por seccion
+              this.rubros(seccionIndex).push(this.fb.group({
+                ...norubro,
+                fechas:   this.fb.array([])
+              }))
+              
+              // Agreamos las fechas por rubro
+              norubro.fechas.forEach(fecha => {
+
+                this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
+                  id:         fecha.id,
+                  mes:        fecha.mes,
+                  anio:       fecha.anio,
+                  porcentaje: fecha.porcentaje
+                }))
+              })
+
+            })
+
           })
-        },
+
+
+          
+          
+          
+
+          
+         
+        }
+        
+
+        ,
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
+      
+
+     
+
+      
   }
 
+  
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
 
     this.dialogService.open(ModificarRubroComponent, {
@@ -175,5 +308,31 @@ export class IngresosComponent implements OnInit {
       }
     })
   }
+
+  /**getFiltrosVaues() {
+    let objBusqueda: Busqueda = new Busqueda();
+
+   
+    
+    console.log('factura this.idproyecto   ----- '+ this.idproyecto)
+    //objBusqueda.idProyecto = this.idproyecto;
+    objBusqueda.idProyecto = 229;
+    
+
+    // switch (this.opcionFiltro) {
+    //   case 1:
+    //     objBusqueda.idProyecto = this.IDProyecto;
+    //     break;
+    //   case 2:
+    //     objBusqueda.idEmpresa = this.IDEmpresa;
+    //     break;
+    //   case 3:
+    //     objBusqueda.idCliente = this.IDCliente;
+    //     break;
+    // }
+
+
+    return objBusqueda;
+  }*/
 
 }
