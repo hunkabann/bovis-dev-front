@@ -162,7 +162,8 @@ export class ModificarEmpleadoComponent implements OnInit {
               idFase:             this.form.value.id_fase,
               fechas:             [],
               aplicaTodosMeses:   this.form.value.aplicaTodosMeses,
-              cantidad:           this.form.value.cantidad
+              cantidad:           this.form.value.cantidad,
+              fee:                null
             }
           }
           const empleadoRespuesta: Empleado = {
