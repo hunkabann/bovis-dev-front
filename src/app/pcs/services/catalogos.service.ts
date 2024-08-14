@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import {  CostosEmpleadoResponse,CostoEmpleado } from '../models/ip';
 
 @Injectable({
   providedIn: 'root'
@@ -59,4 +60,11 @@ export class CatalogosService {
     return this.http.get<any>(`${this.baseUrl}api/Requerimiento/DirectoresEjecutivos`)
   }
 
+
+  getEmpleadosExcel() {
+      return this.http.get<CostosEmpleadoResponse>(`${ this.baseUrl }api/Costo/costos/0`)
+    
+  }
+
+  
 }

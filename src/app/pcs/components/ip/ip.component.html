@@ -4,7 +4,14 @@
     <p><strong>Un momento.</strong></p>
 </div>
 
+
+
 <ng-template #principal>
+
+    <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
+        <p-button icon="pi pi-file-excel" label="Layout Off Line" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+    </p-toolbar>
+
     <div class="content" style="margin: 2%">
         <form [formGroup]="form" (ngSubmit)="guardar()" *ngIf="mostrarFormulario">
             <p-toolbar styleClass="p-1 mb-5 d-flex justify-content-end gap-2 text-right">
