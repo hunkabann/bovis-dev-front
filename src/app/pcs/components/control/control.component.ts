@@ -9,7 +9,7 @@ import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.comp
 import { TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro,GastosIngresosTotales,GastosIngresosControlData,SumaFecha,Previsto,SumaFechas } from '../../models/pcs.model';
+import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 
 @Component({
@@ -20,9 +20,9 @@ import { CatalogosService } from '../../services/catalogos.service';
 })
 export class ControlComponent implements OnInit {
 
-  Control: GastosIngresosControlData 
+  Control: GastosIngresosControlData
 
-  Previsto:  Previsto
+  Previsto: Previsto
 
   fechaInicio: Date;
   fechaFin: Date;
@@ -32,30 +32,30 @@ export class ControlComponent implements OnInit {
   SumaFechaViaticos: SumaFechas[] = []
   SumaFechaGastos: SumaFechas[] = []
 
-  frutas: string[] 
-  
+  frutas: string[]
+
   noFactura: string;
 
-  dialogService     = inject(DialogService)
-  fb                = inject(FormBuilder)
-  messageService    = inject(MessageService)
-  pcsService        = inject(PcsService)
-  sharedService     = inject(SharedService)
+  dialogService = inject(DialogService)
+  fb = inject(FormBuilder)
+  messageService = inject(MessageService)
+  pcsService = inject(PcsService)
+  sharedService = inject(SharedService)
   catalogosService = inject(CatalogosService)
 
-  cargando:             boolean = true
+  cargando: boolean = true
   proyectoSeleccionado: boolean = false
-  mesesProyecto:        Mes[] = []
+  mesesProyecto: Mes[] = []
 
-  
-  proyectoFechaInicio:  Date
-  proyectoFechaFin:     Date
+
+  proyectoFechaInicio: Date
+  proyectoFechaFin: Date
 
   idproyecto: number;
 
   totalRecords: number = 0;
 
- 
+
   IDEmpresa: number;
   IDCliente: number;
 
@@ -72,22 +72,22 @@ export class ControlComponent implements OnInit {
 
 
   constructor() { }
-  
+
   form = this.fb.group({
-    numProyecto:  [0, Validators.required],
-    secciones:    this.fb.array([]),
-    totales:    this.fb.array([]),
-    sumaFechas:    this.fb.array([])
+    numProyecto: [0, Validators.required],
+    secciones: this.fb.array([]),
+    totales: this.fb.array([]),
+    sumaFechas: this.fb.array([])
   })
 
   get secciones() {
     return this.form.get('secciones') as FormArray
   }
-  
+
   rubros(seccionIndex: number) {
     return (this.secciones.at(seccionIndex).get('rubros') as FormArray)
   }
-  
+
   fechas(seccionIndex: number, rubroIndex: number) {
     return (this.rubros(seccionIndex).at(rubroIndex).get('fechas') as FormArray)
   }
@@ -99,16 +99,16 @@ export class ControlComponent implements OnInit {
   get totals() {
     return this.form.get('totales') as FormArray
   }
-  
-  
+
+
 
   get fechasControlSalarios() {
     return this.form.get('sumaFechas') as FormArray
   }
 
- 
+
   ngOnInit(): void {
-    
+
     this.pcsService.cambiarEstadoBotonNuevo(false)
 
     this.catalogosService.obtenerParametros()
@@ -117,216 +117,218 @@ export class ControlComponent implements OnInit {
         if (!params.proyecto) {
 
           console.log("params.proyecto:" + params.proyecto)
-        }else{
+        } else {
           this.idproyecto = params.proyecto
           console.log("else params.proyecto:" + params.proyecto)
         }
       })
 
-      if (this.idproyecto){
-        console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
+    if (this.idproyecto) {
+      console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
 
-        this.cargando = true
-        this.cargarInformacionIngreso(this.idproyecto)
-        this.cargarInformacion(this.idproyecto)
-        /**for(let i = 0; i < 3; i++) {
+      this.cargando = true
+      this.cargarInformacionIngreso(this.idproyecto)
+      this.cargarInformacion(this.idproyecto)
+      /**for(let i = 0; i < 3; i++) {
 
-          console.log("valor de i -------------- " + i) 
-          
-          if(i > 1){
-            this.isrembolsable  = true
-            this.rembolsable = "REMBOLSABLE"
-           }else{
-            this.isrembolsable  = false
-            this.rembolsable = "NO REMBOLSABLE"
-           }
-    
-           console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
+        console.log("valor de i -------------- " + i) 
         
-        
-          i++
-          }*/
-      } else {
-        this.pcsService.obtenerIdProyecto()
-      .subscribe(numProyecto => {
-        this.proyectoSeleccionado = true
-        if(numProyecto) {
-          // this.sharedService.cambiarEstado(true)
-          this.cargando = true
-          this.cargarInformacionIngreso(numProyecto)
-          this.cargarInformacion(numProyecto)
-          /**for(let i = 0; i < 3; i++) {
-
-            console.log("valor de i -------------- " + i) 
-            
-            if(i > 1){
-              this.isrembolsable  = true
-              this.rembolsable = "REMBOLSABLE"
-             }else{
-              this.isrembolsable  = false
-              this.rembolsable = "NO REMBOLSABLE"
-             }
+        if(i > 1){
+          this.isrembolsable  = true
+          this.rembolsable = "REMBOLSABLE"
+         }else{
+          this.isrembolsable  = false
+          this.rembolsable = "NO REMBOLSABLE"
+         }
+  
+         console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
       
-             console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
-          
-         
-            i++
-            }*/
-        } else {
-          console.log('No hay proyecto');
-        }
-      })
-      }
+      
+        i++
+        }*/
+    } else {
+      this.pcsService.obtenerIdProyecto()
+        .subscribe(numProyecto => {
+          this.proyectoSeleccionado = true
+          if (numProyecto) {
+            // this.sharedService.cambiarEstado(true)
+            this.cargando = true
+            this.cargarInformacionIngreso(numProyecto)
+            this.cargarInformacion(numProyecto)
+            /**for(let i = 0; i < 3; i++) {
+  
+              console.log("valor de i -------------- " + i) 
+              
+              if(i > 1){
+                this.isrembolsable  = true
+                this.rembolsable = "REMBOLSABLE"
+               }else{
+                this.isrembolsable  = false
+                this.rembolsable = "NO REMBOLSABLE"
+               }
+        
+               console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
+            
+           
+              i++
+              }*/
+          } else {
+            console.log('No hay proyecto');
+          }
+        })
+    }
 
-    
+
   }
 
 
   cargarInformacionIngreso(numProyecto: number) {
 
     this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'gastos')
-    .pipe(finalize(() => this.cargando = false))
-    .subscribe({
-      next: ({data}) => {
-        
-        this.proyectoFechaInicio  = new Date(data.fechaIni)
-        this.proyectoFechaFin     = new Date(data.fechaFin)
-        
-        console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
-        console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)  
-       
-  
- 
-      }
-     ,
-      error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-    })
+      .pipe(finalize(() => this.cargando = false))
+      .subscribe({
+        next: ({ data }) => {
+
+          this.proyectoFechaInicio = new Date(data.fechaIni)
+          this.proyectoFechaFin = new Date(data.fechaFin)
+
+          console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
+          console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)
+
+
+
+        }
+        ,
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })
 
   }
 
   cargarInformacion(numProyecto: number) {
 
-    
+
     this.pcsService.obtenerGastosControlSalarios(numProyecto, 'Control')
-    .pipe(finalize(() => this.cargando = false))
-    .subscribe({
-      next: ({data}) => {
+      .pipe(finalize(() => this.cargando = false))
+      .subscribe({
+        next: ({ data }) => {
 
-         console.log('data.salarios: ' +data.salarios)
-        console.log('data.salarios.previsto: ' + data.salarios.previsto )
-        console.log('data.salarios.previsto.subTotal: ' +data.salarios.previsto.subTotal)
-        console.log('data.salarios suma fecha: ' +data.salarios.previsto.sumaFechas)     
-        
-       // data.salarios.previsto.sumaFechas.forEach((sumaFecha) => {
+          console.log('data.salarios: ' + data.salarios)
+          console.log('data.salarios.previsto: ' + data.salarios.previsto)
+          console.log('data.salarios.previsto.subTotal: ' + data.salarios.previsto.subTotal)
+          console.log('data.salarios suma fecha: ' + data.salarios.previsto.sumaFechas)
 
-        //  console.log('sumaFecha.mes  =>  ' + sumaFecha.mes)
-       //   console.log('sumaFecha.anio  =>  ' + sumaFecha.anio)
-       //   console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
-          
-          
-          
-      //  })
+          // data.salarios.previsto.sumaFechas.forEach((sumaFecha) => {
 
-        console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
-        console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)  
+          //  console.log('sumaFecha.mes  =>  ' + sumaFecha.mes)
+          //   console.log('sumaFecha.anio  =>  ' + sumaFecha.anio)
+          //   console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
 
-        this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
+          //  })
 
-        this.SumaFecha = data.salarios.previsto.sumaFechas
-        this.SumaFechaRealSalarios= data.salarios.real.sumaFechas
+          console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
+          console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)
+
+          this.mesesProyecto = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
+
+          this.SumaFecha = data.salarios.previsto.sumaFechas
+          this.SumaFechaRealSalarios = data.salarios.real.sumaFechas
 
 
-        this.Previsto= data.salarios.previsto
-        this.SumaFechaViaticos = data.viaticos.previsto.sumaFechas
+          this.Previsto = data.salarios.previsto
+          this.SumaFechaViaticos = data.viaticos.previsto.sumaFechas
+          // Remove the duplicate items
+          const uniqueByRubroAnio = [...new Map(this.SumaFechaViaticos.map(item => [`${item.rubro}`, item])).values()];
+          this.SumaFechaViaticos = uniqueByRubroAnio;
 
-        let frutasverdes = ["Previsto","Real"];
 
-        console.log('this.frutasverdes  =>  ' + frutasverdes.length)
+          let frutasverdes = ["Previsto", "Real"];
 
-        this.frutas = frutasverdes
-        
-        
+          console.log('this.frutasverdes  =>  ' + frutasverdes.length)
 
-        this.SumaIngresos =  data.salarios.previsto.subTotal
-        this.SumaIngresosReal =  data.salarios.real.subTotal
-        this.SumaIngresosViaticos =  data.viaticos.previsto.subTotal
+          this.frutas = frutasverdes
 
-        data.gastos.previstos.forEach((sumaFecha) => {
 
-          console.log('this.SumaFechaSalarios  =>  ' + this.SumaFecha.length)
-          
-          this.SumaIngresosGasto =  sumaFecha.subTotal
 
-          this.SumaFechaGastos = sumaFecha.sumaFechas
+          this.SumaIngresos = data.salarios.previsto.subTotal
+          this.SumaIngresosReal = data.salarios.real.subTotal
+          this.SumaIngresosViaticos = data.viaticos.previsto.subTotal
 
-          
-          
-        })
+          data.gastos.previstos.forEach((sumaFecha) => {
 
-        data.salarios.previsto.sumaFechas.forEach((seccion) => {
-            
-          this.fechasControlSalarios.push(this.fb.group({
-            rubro:  [seccion.rubro],
-            mes:     [seccion.mes],
-            anio:    [seccion.anio],
-            sumaPorcentaje:    [seccion.sumaPorcentaje]
-          }))
+            console.log('this.SumaFechaSalarios  =>  ' + this.SumaFecha.length)
 
-        })
-          
-          
-       
-       
-       
-       
-      }
-              ,
-      error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-    })
-    
+            this.SumaIngresosGasto = sumaFecha.subTotal
 
-    
+            this.SumaFechaGastos = sumaFecha.sumaFechas
 
-    
-   
-   
-     
 
-      
+
+          })
+
+          data.salarios.previsto.sumaFechas.forEach((seccion) => {
+
+            this.fechasControlSalarios.push(this.fb.group({
+              rubro: [seccion.rubro],
+              mes: [seccion.mes],
+              anio: [seccion.anio],
+              sumaPorcentaje: [seccion.sumaPorcentaje]
+            }))
+
+          })
+
+
+
+
+
+
+        }
+        ,
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })
+
+
+
+
+
+
+
+
+
+
   }
 
-  
+
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
 
     this.dialogService.open(ModificarRubroComponent, {
       header: rubro.rubro,
       width: '50%',
-      contentStyle: {overflow: 'auto'},
+      contentStyle: { overflow: 'auto' },
       data: {
         rubro,
-        fechaInicio:  this.proyectoFechaInicio,
-        fechaFin:     this.proyectoFechaFin
+        fechaInicio: this.proyectoFechaInicio,
+        fechaFin: this.proyectoFechaFin
       }
     })
-    .onClose.subscribe((result) => {
+      .onClose.subscribe((result) => {
 
-      if(result && result.rubro) {
+        if (result && result.rubro) {
 
-        const rubroRespuesta = result.rubro as Rubro
+          const rubroRespuesta = result.rubro as Rubro
 
-       
-        this.fechas(seccionIndex, rubroIndex).clear()
 
-        rubroRespuesta.fechas.forEach(fechaRegistro => {
-          this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-            id:         fechaRegistro.id,
-            mes:        fechaRegistro.mes,
-            anio:       fechaRegistro.anio,
-            porcentaje: fechaRegistro.porcentaje
-          }))
-        })
-      }
-    })
+          this.fechas(seccionIndex, rubroIndex).clear()
+
+          rubroRespuesta.fechas.forEach(fechaRegistro => {
+            this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+              id: fechaRegistro.id,
+              mes: fechaRegistro.mes,
+              anio: fechaRegistro.anio,
+              porcentaje: fechaRegistro.porcentaje
+            }))
+          })
+        }
+      })
   }
 
   /**getFiltrosVaues() {
