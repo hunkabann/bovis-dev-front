@@ -7,12 +7,12 @@
     <div class="row">
         <div class="col-4">
             <label for="proyecto">Proyecto:</label>
-            <p-dropdown id="proyecto" [options]="proyectos" placeholder="Seleccionar una proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'proyecto')" [(ngModel)]="idProyecto" optionValue="code" [filter]="true"
+            <p-dropdown id="proyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'proyecto')" [(ngModel)]="idProyecto" optionValue="code" [filter]="true"
                 filterBy="name"></p-dropdown>
         </div>
         <div class="col-4">
             <label for="empleado">Empleado:</label>
-            <p-dropdown id="empleado" [options]="empleados" placeholder="Seleccionar una empleado" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'empleado')" [(ngModel)]="idEmpleado" optionValue="code" [filter]="true"
+            <p-dropdown id="empleado" [options]="empleados" placeholder="Seleccionar un empleado" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'empleado')" [(ngModel)]="idEmpleado" optionValue="code" [filter]="true"
                 filterBy="name"></p-dropdown>
         </div>
         <div class="col-4">

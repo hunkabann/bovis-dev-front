@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { CostosEmpleadoResponse,UpPersonasResponse,PuestosResponse } from '../models/costos.model';
+import { CostosEmpleadoResponse,UpPersonasResponse,PuestosResponse,UpEmpleadoResponse } from '../models/costos.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,10 @@ export class CostosService {
 
   getPersonas() {
     return this.http.get<UpPersonasResponse>(`${this.baseUrl}api/Persona/Personas/true`);
+  }
+
+  getEmpleados() {
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
   }
 
   getPuestos() {
