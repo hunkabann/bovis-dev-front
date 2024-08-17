@@ -31,7 +31,7 @@
                 </p-dropdown>
             </div>                
         </div>
-        <div class="col-4">
+        <div class="col-3">
           <label for="proyecto">Proyecto:</label>
           <div class="">
             <p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="tablaPrincipal.filter(buscarProyectos(listaProyecto.value), 'proyecto', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
@@ -41,6 +41,25 @@
           </p-dropdown>
           </div>                
       </div>
+
+      <div class="col-3">
+        <label for="descripcion">Empresa:</label>
+        <div class="">
+            <p-dropdown #listaEmpresa [options]="empresas" placeholder="Seleccionar una empresa" (onChange)="tablaPrincipal.filter(buscarEmpresa(listaEmpresa.value), 'empresa', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
+            <!--ng-template let-option pTemplate="item">
+                <p-tag [value]="option.value" severity="success"></p-tag>
+            </ng-template-->
+        </p-dropdown>
+        </div>
+    </div>
+
+      <div class="col-3">
+        <label for="id_unidad_negocio">Unidad de negocio:</label>
+        <div class="">
+          <p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="tablaPrincipal.filter(lista.value, 'unidadNegocio', 'equals')" placeholder="Unidad de Negocio" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"></p-dropdown> 
+        </div>         
+               
+    </div>
 
       <!--div class="col-4">
         <label for="email">Fecha Inicio:</label>

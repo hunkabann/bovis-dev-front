@@ -33,6 +33,7 @@ export class EmpleadosPrincipalComponent implements OnInit {
 
   empleados:  UpEmpleado[] = []
   puestos:    Item[] = []
+  catUnidadNegocio: Item[] = []
   estados:    Item[] = [
     {label: 'Activo', value: true},
     {label: 'Inactivo', value: false}
@@ -91,13 +92,14 @@ export class EmpleadosPrincipalComponent implements OnInit {
       this.empleadosServ.getEmpleados(),
       this.empleadosServ.getPuestos(),
       this.empleadosServ.getProyectos(),
-      this.empleadosServ.getEmpresas()
+      this.empleadosServ.getEmpresas(),
+      this.empleadosServ.getCatUnidadNegocio()
     ])
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (value) => {
           
-          const [empleadosR, puestosR,proyectosR,EmplresaR] = value
+          const [empleadosR, puestosR,proyectosR,EmplresaR,UnidadNegcioR] = value
           //const [empleadosR, puestosR] = value
           this.empleados = empleadosR.data
           this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
@@ -106,6 +108,7 @@ export class EmpleadosPrincipalComponent implements OnInit {
           //this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
           this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.numProyecto.toString() + " - " + proyecto.nombre, label: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}` }))
           this.empresas = EmplresaR.data.map(empresa => ({value: empresa.empresa, label: empresa.empresa}))
+          this.catUnidadNegocio = UnidadNegcioR.data.map(unidadNegocio => ({value: unidadNegocio.descripcion, label: unidadNegocio.descripcion}))
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })

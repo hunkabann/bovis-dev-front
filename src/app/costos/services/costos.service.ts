@@ -37,4 +37,12 @@ export class CostosService {
   getProyectos() {
     return this.http.get<any>(`${this.baseUrl}api/pcs/proyectos/true`);
   }
+
+  getCatUnidadNegocio() {
+    return this.http.get<any>(`${this.baseUrl}api/catalogo/UnidadNegocio/`);
+  }
+
+  getEmpresas() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/empresas`);
+  }
 }

@@ -584,6 +584,8 @@ export class IpComponent implements OnInit {
 
     const worksheet = workbook.addWorksheet('Costo por Empleados')
     const worksheetStaffing = workbook.addWorksheet('Staffing')
+    const worksheetGastos = workbook.addWorksheet('Gastos')
+    const worksheetIngresos = workbook.addWorksheet('Ingresos')
 
     // Tìtulos Empleados
     this._setXLSXTitlesEmpleados(worksheet)
