@@ -17,6 +17,11 @@ import { Dropdown } from 'primeng/dropdown';
 import {TableModule} from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
+interface ICatalogo {
+  name: string;
+  value: string;
+}
+
 
 
 @Component({
@@ -50,6 +55,8 @@ export class CostoEmpleadoComponent implements OnInit {
   personass:    Opcion[] = []
   puestos:    Opcion[] = []
   proyectos:    Opcion[] = []
+  catUnidadNegocio: Opcion[] = []
+  empresas:    Opcion[] = []
   estados:    Item[] = [
     {label: 'Activo', value: true},
     {label: 'Inactivo', value: false}
@@ -97,13 +104,15 @@ export class CostoEmpleadoComponent implements OnInit {
     forkJoin([
       this.costosService.getEmpleados(),
       this.costosService.getPuestos(),
-      this.costosService.getProyectos()
+      this.costosService.getProyectos(),
+      this.costosService.getCatUnidadNegocio(),
+      this.costosService.getEmpresas()
     ])
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (value) => {
           
-          const [personasR, puestosR,proyectosR] = value
+          const [personasR, puestosR,proyectosR,unidadNegocioR,EmplresaR] = value
           //const [empleadosR, puestosR] = value 
           //this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: persona.chnombre_completo}))
           //this.personass = personasR.data.map(empleado => ({ code: empleado.nombre_persona.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
@@ -113,7 +122,9 @@ export class CostoEmpleadoComponent implements OnInit {
           //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
           this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.nombre, label: `${proyecto.numProyecto} -${proyecto.nombre}` }))
           //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
+          this.empresas = EmplresaR.data.map(empresa => ({value: empresa.empresa, label: `${empresa.rfc} -${empresa.empresa}`}))
           //this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
+          this.catUnidadNegocio = unidadNegocioR.data.map(unidadnegocio => ({ value: unidadnegocio.descripcion, label: `${unidadnegocio.descripcion}` }))
           
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -611,6 +622,27 @@ export class CostoEmpleadoComponent implements OnInit {
   }
 
   buscarProyectos(event: any) {
+    this.sharedService.cambiarEstado(false)
+    const id = event
+
+    
+
+    if(id === null){
+      return ;
+      
+    }else{
+      console.log ('id ------------------<<<<<<<<<<<<<<<<<<<<<'+id)
+
+    var arr = event.value.split('-'); //Note the space as well
+    console.log(arr); //Yields ["Apples", "Bananas", "Cherries"]
+      return arr;
+     
+    }
+
+    
+  }
+
+  buscarEmpresa(event: any) {
     this.sharedService.cambiarEstado(false)
     const id = event
 
