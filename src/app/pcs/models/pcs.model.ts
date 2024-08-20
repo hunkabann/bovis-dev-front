@@ -141,6 +141,7 @@ export interface Rubro {
     fechas:           Fecha[];
     numEmpleadoRrHh:    string;
     numProyecto:      number;
+    costoMensual:         number;
 }
 
 export interface SumaFecha {
@@ -229,4 +230,14 @@ export const encabezadosEmpleado = Object.freeze([
     {id: 'empleado', label: 'Empleado'},
     {id: 'costo', label: 'Costo'},
     {id: 'costoVenta', label: 'Costo de Venta'},
+  ])
+
+
+  export const encabezadosGastos = Object.freeze([
+    // {id: 'id', label: 'Id'},
+    //{id: 'numProyecto', label: 'Numero de proyecto'},
+    //{id: 'proyecto', label: 'Proyecto'},
+    {id: 'idseccion', label: 'Id Seccion'},
+    {id: 'seccion', label: 'Seccion'},
+    {id: 'subtotal', label: 'Subtotal'}, 
   ])

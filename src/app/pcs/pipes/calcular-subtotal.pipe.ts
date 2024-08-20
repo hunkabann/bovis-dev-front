@@ -8,7 +8,7 @@ import {formatCurrency, getCurrencySymbol} from '@angular/common';
 export class CalcularSubtotalPipe implements PipeTransform {
 
   transform(value: Fecha[], ...args: unknown[]): unknown {
-    console.log(Object.values(value));
+   // console.log(Object.values(value));
     
     let subtotal = 0
 
