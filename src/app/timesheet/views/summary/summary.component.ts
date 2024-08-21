@@ -128,7 +128,7 @@ export class SummaryComponent implements OnInit {
 
     this._setXLSXHeader(worksheet)
     
-    let row = 9
+    let row = 8
 
     row = this._setXLSXContent(worksheet, row)
 

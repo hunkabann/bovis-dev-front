@@ -452,8 +452,7 @@
                         <ng-template pTemplate="body" let-SumaFechas>
                             <tr>
                                
-                                <td  *ngIf="SumaFechas.mes === 1  ; then  thenfecha"></td>
-                                <ng-template #thenfecha>
+                                
                                     <td>{{SumaFechas.rubro}}</td>
                                     
                                     <td>{{SumaIngresosGasto}}</td>
@@ -462,7 +461,7 @@
                                     </td>
                                
                                     
-                                </ng-template>
+                               
                                 
                             </tr>
                             
