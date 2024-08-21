@@ -16,7 +16,8 @@
             <p-button label="Exportar Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportJsonToExcel()">
             </p-button>
         </p-toolbar>
-        <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" styleClass="p-datatable-striped">
+        <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" paginatorPosition="both" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]"
+        [rows]="10" styleClass="p-datatable-striped">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Count</th>

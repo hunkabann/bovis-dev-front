@@ -261,6 +261,9 @@ export class ControlComponent implements OnInit {
 
             this.SumaFechaGastos = sumaFecha.sumaFechas
 
+            const uniqueByGastosRubroAnio = [...new Map(this.SumaFechaGastos.map(item => [`${item.rubro}`, item])).values()];
+            this.SumaFechaGastos = uniqueByGastosRubroAnio;
+
 
 
           })
