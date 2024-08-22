@@ -6,7 +6,7 @@
     <div class="row">
         
       <div class="col-4">
-        <label for="unidad"><span class="required"></span></label>
+        <label for="unidad" class="d-flex mt-2">Unidad: <span class="required"></span></label>
         <!--input 
           id="unidad"
           pInputText
@@ -23,6 +23,7 @@
         placeholder="unidad"
         formControlName="unidad"
         optionValue="name"
+        class="full-width" 
         ></p-dropdown>
         <div *ngIf="esInvalido('unidad')">
           <small
