@@ -223,6 +223,7 @@ export const encabezadosEmpleado = Object.freeze([
     // {id: 'id', label: 'Id'},
     //{id: 'numProyecto', label: 'Numero de proyecto'},
     //{id: 'proyecto', label: 'Proyecto'},
+    {id: 'bandera', label: 'Bandera'},
     {id: 'fases', label: 'Fases'},
     {id: 'fechaIni', label: 'Fecha Inicial'},
     {id: 'fechaFin', label: 'Fecha Final'},    
@@ -239,5 +240,7 @@ export const encabezadosEmpleado = Object.freeze([
     //{id: 'proyecto', label: 'Proyecto'},
     {id: 'idseccion', label: 'Id Seccion'},
     {id: 'seccion', label: 'Seccion'},
-    {id: 'subtotal', label: 'Subtotal'}, 
+    {id: 'unidad', label: 'unidad'}, 
+    {id: 'cantidad', label: 'Cantidad'}, 
+    {id: 'rembolsable', label: 'Rembolsable'}, 
   ])

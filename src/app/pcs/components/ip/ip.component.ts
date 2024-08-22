@@ -852,7 +852,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
         const diferenciaMeses = differenceInCalendarMonths(new Date(this.fechaFin), new Date(this.fechaIni));
         const meses: Mes[] = []
   
-        let titulomes = 8
+        let titulomes = 9
         
         for (let i = 0; i <= diferenciaMeses; i++) {
           const fecha = addMonths(new Date(this.fechaIni), i)
@@ -910,9 +910,9 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
           //worksheet.getCell(row, 2).value = this.Nameproyecto
           //console.log('etapa.fase ------ ' + etapa.fase)
   
-          worksheet.getCell(row, 1).value = etapa.fase
-          worksheet.getCell(row, 2).value = etapa.fechaIni
-          worksheet.getCell(row, 3).value = etapa.fechaFin
+          worksheet.getCell(row, 2).value = etapa.fase
+          worksheet.getCell(row, 3).value = etapa.fechaIni
+          worksheet.getCell(row, 4).value = etapa.fechaFin
           
           row++
         }else{
@@ -938,18 +938,18 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
 
         //worksheet.getCell(row, 1).value = this.Numproyectos
        // worksheet.getCell(row, 2).value = this.Nameproyecto
-       worksheet.getCell(row, 1).value = etapa.fase
-        worksheet.getCell(row, 2).value = etapa.fechaIni
-        worksheet.getCell(row, 3).value = etapa.fechaFin
+       worksheet.getCell(row, 2).value = etapa.fase
+        worksheet.getCell(row, 3).value = etapa.fechaIni
+        worksheet.getCell(row, 4).value = etapa.fechaFin
        // console.log('etapa.fase ------ ' + etapa.fase)
 
        
-        worksheet.getCell(row, 4).value = empleado.numempleadoRrHh
-        worksheet.getCell(row, 5).value = empleado.empleado
-        worksheet.getCell(row, 6).value = empleado.cantidad
-        worksheet.getCell(row, 7).value = empleado.fee
+        worksheet.getCell(row, 5).value = empleado.numempleadoRrHh
+        worksheet.getCell(row, 6).value = empleado.empleado
+        worksheet.getCell(row, 7).value = empleado.cantidad
+        worksheet.getCell(row, 8).value = empleado.fee
         
-        let incrementa = 8
+        let incrementa = 9
 
           //row++
 
@@ -1046,7 +1046,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
         const diferenciaMeses = differenceInCalendarMonths(new Date(this.fechaFin), new Date(this.fechaIni));
         const meses: Mes[] = []
   
-        let titulomes = 4
+        let titulomes = 6
         
         for (let i = 0; i <= diferenciaMeses; i++) {
           const fecha = addMonths(new Date(this.fechaIni), i)
@@ -1200,7 +1200,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
 						  //this.sumaTotales = seccion.sumaFechas
 		  
 
-						  let incrementa = 4
+						  let incrementa = 6
 
 
 							//seccion.sumaFechas.forEach((sumaFecha) => {
@@ -1291,7 +1291,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
 			  }else{
 
 				//this.sumaTotales = seccion.sumaFechas
-        let incrementa = 4
+        let incrementa = 6
 
 					 // seccion.sumaFechas.forEach((sumaFecha) => {
 
