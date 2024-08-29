@@ -342,3 +342,8 @@ export const encabezados = Object.freeze([
   {id: 'costo', label: 'COSTO'},
   
 ])
+
+export interface Opcion {
+  value: string,
+  label: string
+}

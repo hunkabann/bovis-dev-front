@@ -11,13 +11,45 @@
         </div>
     </div>
 
+    
+
     <div *ngIf="data.length > 0">
+
+        <div class="row" style="margin-left: 5px;">
+
+            <div class="col-3">
+                  <label for="descripcion">Empleado:</label>
+                  <div class="">
+                      <p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar un Empleado" (onChange)="tablaSumary.filter(buscarempleados(listaPersona.value) , 'timesheet.empleado', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
+                      <!--ng-template let-option pTemplate="item">
+                          <p-tag [value]="option.value" severity="success"></p-tag>
+                      </ng-template-->
+                       </p-dropdown>
+                  </div>
+              </div>
+      
+          </div>
+
         <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none">
             <p-button label="Exportar Excel" icon="pi pi-file-excel" styleClass="p-button-success" (click)="exportJsonToExcel()">
             </p-button>
         </p-toolbar>
-        <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" paginatorPosition="both" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]"
-        [rows]="10" styleClass="p-datatable-striped">
+
+
+        <div class="table-container">
+        <p-table 
+                #tablaSumary 
+                class="tabla-filtro" 
+                [value]="data" 
+                [tableStyle]="{ 'min-width': '50rem' }" 
+                [paginator]="true" 
+                paginatorPosition="both" 
+                [showCurrentPageReport]="true" 
+                currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" 
+                [rowsPerPageOptions]="[10, 25, 50]"        
+                [rows]="10" 
+                styleClass="p-datatable-striped">
+
             <ng-template pTemplate="header">
                 <tr>
                     <th>Count</th>
@@ -63,7 +95,8 @@
                     <th [colSpan]="8"></th>
                     <th>{{totalPorcentaje}}%</th>
                     <th *ngFor="let proyecto of proyectos" [pTooltip]="proyecto.nombre">
-                        {{proyecto.dedicacion}}%
+                        {{proyecto.costo}}%
+                        <!--{{proyecto.dedicacion}}%-->
                     </th>
                 </tr>
             </ng-template>
@@ -79,11 +112,13 @@
                     <td>{{record.timesheet.responsable}}</td>
                     <td>{{record.timesheet | sumaPorcentajes}}</td>
                     <td *ngFor="let proyecto of record.participacion">
-                        {{proyecto.dedicacion <= 0 ? ''  : proyecto.dedicacion}}
+                        <!--{{proyecto.dedicacion <= 0 ? ''  : proyecto.dedicacion}}-->
+                        {{proyecto.costo <= 0 ? ''  : proyecto.costo}}
                         
                     </td>
                 </tr>
             </ng-template>
         </p-table>
+    </div>
     </div>
 </div>

@@ -14,6 +14,18 @@ import { SumaPorcentajesPipe } from './pipes/suma-porcentajes.pipe';
 import { AgregarProyectoComponent } from './views/agregar-proyecto/agregar-proyecto.component';
 import { DiasTimesheetComponent } from './views/dias-timesheet/dias-timesheet.component';
 import { ModificarFeriadosComponent } from './components/modificar-feriados/modificar-feriados.component';
+import { TableModule } from 'primeng/table';
+
+
+import { ToastModule } from 'primeng/toast';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
+import { ButtonModule } from 'primeng/button';
+import { ToolbarModule } from 'primeng/toolbar';
+import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @NgModule({
@@ -34,7 +46,19 @@ import { ModificarFeriadosComponent } from './components/modificar-feriados/modi
     PrimengModule,
     ReactiveFormsModule,
     FormsModule,
-    RadioButtonModule
+    RadioButtonModule,
+    TableModule,
+    ToastModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    InputNumberModule,
+    DropdownModule,
+    FormsModule,
+    ButtonModule,
+    ToolbarModule,
+    TagModule,
+    ProgressSpinnerModule,
+    CalendarModule
   ]
 })
 export class TimesheetModule { }
