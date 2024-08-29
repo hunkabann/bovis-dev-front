@@ -9,13 +9,16 @@
            
         
     <div class="col-3">
-        <label for="descripcion">Personas:</label>
+        <label for="descripcion">Empleado:</label>
         <div class="">
-            <p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar una persona" (onChange)="tablaPrincipal.filter(listaPersona.value, 'nombreCompletoEmpleado', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+            <p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar un Empleado" (onChange)="tablaPrincipal.filter(buscarempleados(listaPersona.value) , 'nombreCompletoEmpleado', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
             <!--ng-template let-option pTemplate="item">
                 <p-tag [value]="option.value" severity="success"></p-tag>
             </ng-template-->
-        </p-dropdown>
+             </p-dropdown>
+            
+            <!--p-dropdown #listaPersona id="empleado" [options]="personass" placeholder="Seleccionar un empleado" (onChange)="tablaPrincipal.filter(listaPersona, 'nombreCompletoEmpleado', 'equals')" [showClear]="true" [filter]="true" filterBy="name" optionLabel="name" appendTo="body"></p-dropdown-->
+       
         </div>
     </div>
         <div class="col-2">
@@ -28,16 +31,35 @@
                 </p-dropdown>
             </div>                
         </div>
-        <div class="col-4">
+        <div class="col-3">
           <label for="proyecto">Proyecto:</label>
           <div class="">
-            <p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="tablaPrincipal.filter(listaProyecto.value, 'proyecto', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+            <p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="tablaPrincipal.filter(buscarProyectos(listaProyecto.value), 'proyecto', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
               <!--ng-template let-option pTemplate="item">
                   <p-tag [value]="option.value" severity="success"></p-tag>
               </ng-template-->
           </p-dropdown>
           </div>                
       </div>
+
+      <div class="col-3">
+        <label for="descripcion">Empresa:</label>
+        <div class="">
+            <p-dropdown #listaEmpresa [options]="empresas" placeholder="Seleccionar una empresa" (onChange)="tablaPrincipal.filter(buscarEmpresa(listaEmpresa.value), 'empresa', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
+            <!--ng-template let-option pTemplate="item">
+                <p-tag [value]="option.value" severity="success"></p-tag>
+            </ng-template-->
+        </p-dropdown>
+        </div>
+    </div>
+
+      <div class="col-3">
+        <label for="id_unidad_negocio">Unidad de negocio:</label>
+        <div class="">
+          <p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="tablaPrincipal.filter(lista.value, 'unidadNegocio', 'equals')" placeholder="Unidad de Negocio" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"></p-dropdown> 
+        </div>         
+               
+    </div>
 
       <!--div class="col-4">
         <label for="email">Fecha Inicio:</label>
@@ -102,14 +124,14 @@
 
         
       
-              <ng-template pTemplate="caption">
+              <!--ng-template pTemplate="caption">
                 <div class="flex">
                     <span class="p-input-icon-left ml-auto">
-                        <!--i class="pi pi-search"></i-->
+                        <i class="pi pi-search"></i>
                         <input pInputText #buscador type="text" (input)="tablaPrincipal.filterGlobal(buscador.value, 'contains')" placeholder="        Buscar..." />
                     </span>
                 </div>
-              </ng-template>
+              </ng-template-->
             
       
         

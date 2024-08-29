@@ -30,6 +30,7 @@ export interface Empleado {
     empleado:           string;
     fechas:             Fecha[];
     aplicaTodosMeses:   boolean;
+    fee:                number;
     cantidad:           number;
 }
 
@@ -140,6 +141,7 @@ export interface Rubro {
     fechas:           Fecha[];
     numEmpleadoRrHh:    string;
     numProyecto:      number;
+    costoMensual:         number;
 }
 
 export interface SumaFecha {
@@ -204,3 +206,41 @@ export interface Salarios {
     previsto: Previsto;
     real:     Previsto;
 }
+
+export const encabezadosEmpleado = Object.freeze([
+    // {id: 'id', label: 'Id'},
+    {id: 'numEmpleadoRrHh', label: 'Número de empleado RRHH'},
+    {id: 'nombreCompletoEmpleado', label: 'Empleado'},
+    {id: 'costoMensualEmpleado', label: 'Costo Mensual'},
+  ])
+
+  export interface OpcionEmpleado {
+    name: string,
+    code: string
+  }
+
+  export const encabezadosStaffing = Object.freeze([
+    // {id: 'id', label: 'Id'},
+    //{id: 'numProyecto', label: 'Numero de proyecto'},
+    //{id: 'proyecto', label: 'Proyecto'},
+    {id: 'bandera', label: 'Bandera'},
+    {id: 'fases', label: 'Fases'},
+    {id: 'fechaIni', label: 'Fecha Inicial'},
+    {id: 'fechaFin', label: 'Fecha Final'},    
+    {id: 'numempleado', label: 'Numero Empleado'},
+    {id: 'empleado', label: 'Empleado'},
+    {id: 'costo', label: 'Costo'},
+    {id: 'costoVenta', label: 'Costo de Venta'},
+  ])
+
+
+  export const encabezadosGastos = Object.freeze([
+    // {id: 'id', label: 'Id'},
+    //{id: 'numProyecto', label: 'Numero de proyecto'},
+    //{id: 'proyecto', label: 'Proyecto'},
+    {id: 'idseccion', label: 'Id Seccion'},
+    {id: 'seccion', label: 'Seccion'},
+    {id: 'unidad', label: 'unidad'}, 
+    {id: 'cantidad', label: 'Cantidad'}, 
+    {id: 'rembolsable', label: 'Rembolsable'}, 
+  ])

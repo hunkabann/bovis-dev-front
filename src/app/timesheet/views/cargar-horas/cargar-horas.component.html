@@ -26,7 +26,7 @@
         <div class="grid">
             <div class="col">
                 <label for="empleado">Empleado:</label>
-                <p-dropdown id="empleado" [options]="empleados" placeholder="Seleccionar una empleado" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" formControlName="empleado" (onChange)="buscarProyectos($event)" [ngClass]="{'ng-invalid ng-dirty': esInvalido('empleado')}"
+                <p-dropdown id="empleado" [options]="empleados" placeholder="Seleccionar un empleado" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" formControlName="empleado" (onChange)="buscarProyectos($event)" [ngClass]="{'ng-invalid ng-dirty': esInvalido('empleado')}"
                     [filter]="true" filterBy="name"></p-dropdown>
                 <div *ngIf="esInvalido('empleado')">
                     <small class="error-msg">{{ obtenerMensajeError('empleado') }}</small>

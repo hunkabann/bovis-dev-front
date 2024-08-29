@@ -245,3 +245,91 @@ export interface Opcion {
   label: string
 }
 
+export interface OpcionEmp {
+  name: string,
+  code: string
+}
+
+export interface UpEmpleadoResponse {
+  data:          UpEmpleado[];
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+export interface UpEmpleado {
+  [key: string]:            any;
+  nunum_empleado_rr_hh:     number;
+  nukidpersona:             number;
+  nombre_persona:           string;
+  nukidtipo_empleado:       number;
+  chtipo_emplado:           string;
+  nukidcategoria:           number;
+  chcategoria:              string;
+  nukidtipo_contrato:       number;
+  chtipo_contrato:          string;
+  chcve_puesto:             number;
+  chpuesto:                 string;
+  nukidempresa:             number;
+  chempresa:                string;
+  chcalle:                  null;
+  nunumero_interior:        null;
+  nunumero_exterior:        null;
+  chcolonia:                null;
+  chalcaldia:               null;
+  nukidciudad:              number;
+  chciudad:                 string;
+  nukidestado:              number;
+  chestado:                 string;
+  chcp:                     null;
+  nukidpais:                number;
+  chpais:                   string;
+  nukidnivel_estudios:      number;
+  chnivel_estudios:         string;
+  nukidforma_pago:          number;
+  chforma_pago:             string;
+  nukidjornada:             number;
+  chjornada:                string;
+  nukiddepartamento:        number;
+  chdepartamento:           string;
+  nukidclasificacion:       number;
+  chclasificacion:          string;
+  nukidjefe_directo:        number;
+  chjefe_directo:           string;
+  nukidunidad_negocio:      number;
+  chunidad_negocio:         string;
+  nukidtipo_contrato_sat:   number;
+  chtipo_contrato_sat:      string;
+  nudescuento_pension:      number;
+  chporcentaje_pension:     'SI' | 'NO' | 'NA';
+  nunum_empleado:           number;
+  dtfecha_ingreso:          string;
+  dtfecha_salida:           string;
+  dtfecha_ultimo_reingreso: string;
+  chnss:                    string;
+  chemail_bovis:            string;
+  chexperiencias:           string;
+  chhabilidades:            string;
+  churl_repositorio:        string;
+  nusalario:                number;
+  nukidprofesion:           number;
+  chprofesion:              string;
+  nuantiguedad:             number;
+  nukidturno:               number;
+  chturno:                  string;
+  nuunidad_medica:          number;
+  chregistro_patronal:      string;
+  chcotizacion:             string;
+  nuduracion:               number;
+  boactivo:                 boolean;
+  bodescuento_pension:      boolean;
+  nuporcentaje_pension:     number;
+  nufondo_fijo:             number;
+  nucredito_infonavit:      string;
+  chtipo_descuento:         string;
+  nuvalor_descuento:        number;
+  nuno_empleado_noi:        string;
+  chrol:                    string;
+  nuproyecto_principal:     number;
+}
+

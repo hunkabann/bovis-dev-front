@@ -4,7 +4,7 @@ import { CostosService } from '../../services/costos.service';
 import { SharedService } from '../../../shared/services/shared.service';
 import { finalize, forkJoin } from 'rxjs';
 import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
-import { CostoEmpleado,encabezados,Beneficio,BeneficiosProyectos,Opcion } from '../../models/costos.model';
+import { CostoEmpleado,encabezados,Beneficio,BeneficiosProyectos,Opcion,OpcionEmp } from '../../models/costos.model';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { DatePipe } from '@angular/common';
@@ -16,6 +16,11 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { Dropdown } from 'primeng/dropdown';
 import {TableModule} from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+
+interface ICatalogo {
+  name: string;
+  value: string;
+}
 
 
 
@@ -50,6 +55,8 @@ export class CostoEmpleadoComponent implements OnInit {
   personass:    Opcion[] = []
   puestos:    Opcion[] = []
   proyectos:    Opcion[] = []
+  catUnidadNegocio: Opcion[] = []
+  empresas:    Opcion[] = []
   estados:    Item[] = [
     {label: 'Activo', value: true},
     {label: 'Inactivo', value: false}
@@ -95,24 +102,29 @@ export class CostoEmpleadoComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
 
     forkJoin([
-      this.costosService.getPersonas(),
+      this.costosService.getEmpleados(),
       this.costosService.getPuestos(),
-      this.costosService.getProyectos()
+      this.costosService.getProyectos(),
+      this.costosService.getCatUnidadNegocio(),
+      this.costosService.getEmpresas()
     ])
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (value) => {
           
-          const [personasR, puestosR,proyectosR] = value
+          const [personasR, puestosR,proyectosR,unidadNegocioR,EmplresaR] = value
           //const [empleadosR, puestosR] = value 
           //this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: persona.chnombre_completo}))
-          this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: `${persona.chnombre_completo}` }))
+          //this.personass = personasR.data.map(empleado => ({ code: empleado.nombre_persona.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+          this.personass = personasR.data.map(persona => ({value: persona.nombre_persona, label: `${persona.nunum_empleado_rr_hh.toString()} - ${persona.nombre_persona}` }))
          //this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
           this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: `${puesto.chpuesto}` }))
           //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
-          this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.nombre, label: `${proyecto.nombre}` }))
+          this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.nombre, label: `${proyecto.numProyecto} -${proyecto.nombre}` }))
           //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
+          this.empresas = EmplresaR.data.map(empresa => ({value: empresa.empresa, label: `${empresa.rfc} -${empresa.empresa}`}))
           //this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
+          this.catUnidadNegocio = unidadNegocioR.data.map(unidadnegocio => ({ value: unidadnegocio.descripcion, label: `${unidadnegocio.descripcion}` }))
           
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -588,7 +600,68 @@ export class CostoEmpleadoComponent implements OnInit {
     })
   }
 
-  
+  buscarempleados(event: any) {
+    this.sharedService.cambiarEstado(false)
+    const id = event
+
+    
+
+    if(id === null){
+      return ;
+      
+    }else{
+      console.log ('id ------------------<<<<<<<<<<<<<<<<<<<<<'+id)
+
+    var arr = event.value.split('-'); //Note the space as well
+    console.log(arr); //Yields ["Apples", "Bananas", "Cherries"]
+      return arr;
+     
+    }
+
+    
+  }
+
+  buscarProyectos(event: any) {
+    this.sharedService.cambiarEstado(false)
+    const id = event
+
+    
+
+    if(id === null){
+      return ;
+      
+    }else{
+      console.log ('id ------------------<<<<<<<<<<<<<<<<<<<<<'+id)
+
+    var arr = event.value.split('-'); //Note the space as well
+    console.log(arr); //Yields ["Apples", "Bananas", "Cherries"]
+      return arr;
+     
+    }
+
+    
+  }
+
+  buscarEmpresa(event: any) {
+    this.sharedService.cambiarEstado(false)
+    const id = event
+
+    
+
+    if(id === null){
+      return ;
+      
+    }else{
+      console.log ('id ------------------<<<<<<<<<<<<<<<<<<<<<'+id)
+
+    var arr = event.value.split('-'); //Note the space as well
+    console.log(arr); //Yields ["Apples", "Bananas", "Cherries"]
+      return arr;
+     
+    }
+
+    
+  }
   
 
 }

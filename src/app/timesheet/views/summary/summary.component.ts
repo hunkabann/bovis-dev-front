@@ -3,20 +3,21 @@ import { format } from 'date-fns';
 import { MessageService } from 'primeng/api';
 import { TimesheetService } from '../../services/timesheet.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
-import { finalize } from 'rxjs';
-import { Timesheet } from '../../models/timesheet.model';
+import { finalize, forkJoin } from 'rxjs';
+import { Timesheet,Opcion } from '../../models/timesheet.model';
 import * as XLSX from 'xlsx';
 
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 
-import { EXCEL_EXTENSION, PERCENTAGE_FORMAT } from 'src/utils/constants';
+import { TITLES,EXCEL_EXTENSION, PERCENTAGE_FORMAT } from 'src/utils/constants';
 import { es } from 'date-fns/locale';
 
 interface ProyectoShort {
   id:           number,
   nombre:       string,
-  dedicacion?:  number
+  //dedicacion?:  number
+  costo?:  number
 }
 
 
@@ -36,9 +37,12 @@ export class SummaryComponent implements OnInit {
 
   timeSheetService  = inject(TimesheetService)
   sharedService     = inject(SharedService)
+  messageService  = inject(MessageService)
 
   proyectos:  ProyectoShort[] = []
   data: Informacion[] = []
+
+  personass:    Opcion[] = []
 
   TotalTimeSheet: number = 0
 
@@ -48,30 +52,49 @@ export class SummaryComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
     this.timeSheetService.getCatProyectos(false)
       .subscribe(({data}) => {
-        this.proyectos = data.map(({numProyecto, nombre}) => ({id: numProyecto, nombre, dedicacion: 0 }))
+        //this.proyectos = data.map(({numProyecto, nombre}) => ({id: numProyecto, nombre, dedicacion: 0 }))
+        this.proyectos = data.map(({numProyecto, nombre}) => ({id: numProyecto, nombre, costo: 0 }))
         this.sharedService.cambiarEstado(false)
       })
+
+      forkJoin([
+        this.timeSheetService.getEmpleados()
+      ])
+        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+        .subscribe({
+          next: (value) => {
+            
+            const [personasR] = value
+           
+            this.personass = personasR.data.map(persona => ({value: persona.nombre_persona, label: `${persona.nunum_empleado_rr_hh.toString()} - ${persona.nombre_persona}` }))
+           
+            
+          },
+          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        })
   }
 
   get totalPorcentaje() {
     let total = 0
     this.data.forEach(({timesheet}) => {
       timesheet.proyectos.forEach(proyecto => {
-        total += Math.round(proyecto.tDedicacion)
-        console.log("proyecto.tDedicacion: " +proyecto.tDedicacion)
+        //total += Math.round(proyecto.tDedicacion)
+        total += Math.round(proyecto.costo)
+        //console.log("totalPorcentaje proyecto.costo: " +proyecto.costo)
       }
       
       )
     })
 
-    this.data.forEach(({timesheet}) => {
+    // se comenta por que otros no tiene costos
+   /* this.data.forEach(({timesheet}) => {
       timesheet.otros.forEach(otros => {
         total += Math.round(otros.tDedicacion)
-        console.log("otros.tDedicacion: " +otros.tDedicacion)
+        //console.log("otros.tDedicacion: " +otros.tDedicacion)
       }
       
       )
-    })
+    })*/
 
     this.TotalTimeSheet = Math.round(total)
 
@@ -95,9 +118,33 @@ export class SummaryComponent implements OnInit {
           participacion: this.proyectos.map((proyecto, index) => {
 
             const key = timesheet.proyectos.findIndex(({idProyecto}) => idProyecto === proyecto.id)
+            let costo = 0
+            if(key >= 0) {
+              //console.log("timesheet.proyectos[key].tDedicacion: "+timesheet.proyectos[key].costo)
+              costo += timesheet.proyectos[key].costo
+              //console.log("timesheet.otros[key].tDedicacion: "+timesheet.otros[key].)
+              //dedicacion += timesheet.otros[key].tDedicacion
+              this.proyectos[index].costo += costo
+
+                
+
+            }
+            return {
+              id:         proyecto.id,
+              nombre:     proyecto.nombre,
+              costo
+            }
+          })
+        }))
+
+        /*this.data = data.map(timesheet => ({
+          timesheet,
+          participacion: this.proyectos.map((proyecto, index) => {
+
+            const key = timesheet.proyectos.findIndex(({idProyecto}) => idProyecto === proyecto.id)
             let dedicacion = 0
             if(key >= 0) {
-              console.log("timesheet.proyectos[key].tDedicacion: "+timesheet.proyectos[key].tDedicacion)
+              //console.log("timesheet.proyectos[key].tDedicacion: "+timesheet.proyectos[key].tDedicacion)
               dedicacion += timesheet.proyectos[key].tDedicacion
               //console.log("timesheet.otros[key].tDedicacion: "+timesheet.otros[key].tDedicacion)
               //dedicacion += timesheet.otros[key].tDedicacion
@@ -112,7 +159,7 @@ export class SummaryComponent implements OnInit {
               dedicacion
             }
           })
-        }))
+        }))*/
         // console.log(this.proyectos)
       })
   }
@@ -128,7 +175,7 @@ export class SummaryComponent implements OnInit {
 
     this._setXLSXHeader(worksheet)
     
-    let row = 9
+    let row = 8
 
     row = this._setXLSXContent(worksheet, row)
 
@@ -211,22 +258,26 @@ export class SummaryComponent implements OnInit {
 
       record.participacion.forEach((proyecto, index) => {
         worksheet.getColumn(10 + index).width = 15
-        worksheet.getCell(row, 10 + index).value = this.getDecimal(proyecto.dedicacion) || ''
+        worksheet.getCell(row, 10 + index).value = this.getDecimal(proyecto.costo) || ''
         worksheet.getCell(row, 10 + index).numFmt = '0%';
-        totalTimesheet += +proyecto.dedicacion 
+        totalTimesheet += +proyecto.costo 
         
       })
 
       let total = 0
       record.timesheet.proyectos.forEach(proyecto => {
-        total += Math.round(proyecto.tDedicacion)
+        //total += Math.round(proyecto.tDedicacion)
+        total += Math.round(proyecto.costo)
       })
+
+      //se comenta por que no existe costo en otros
   
-      record.timesheet.otros.forEach(proyecto => {
+      /*record.timesheet.otros.forEach(proyecto => {
+        //total += Math.round(proyecto.tDedicacion)
         total += Math.round(proyecto.tDedicacion)
-      })
+      })*/
   
-      console.log("Valor de suma porcentajes: " + total)
+      //console.log("Valor de suma porcentajes: " + total)
     
 
       /*record.participacion.forEach((otros) => {
@@ -257,7 +308,7 @@ export class SummaryComponent implements OnInit {
     let indice = 10
     this.proyectos.forEach((proyecto, index) => {
 
-      worksheet.getCell(row, indice).value = this.getDecimal(proyecto.dedicacion)
+      worksheet.getCell(row, indice).value = this.getDecimal(proyecto.costo)
       worksheet.getCell(row, indice).numFmt = '0%';
       
       indice++
@@ -279,6 +330,23 @@ export class SummaryComponent implements OnInit {
   formateaValor(valor) {
     // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
     return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
+  }
+
+  buscarempleados(event: any) {
+    this.sharedService.cambiarEstado(false)
+    const id = event
+
+    if(id === null){
+      return ;
+      
+    }else{
+     var arr = event.value.split('-'); //Note the space as well
+      //console.log(arr); //Yields ["Apples", "Bananas", "Cherries"]
+      return arr;
+     
+    }
+
+    
   }
 
 }

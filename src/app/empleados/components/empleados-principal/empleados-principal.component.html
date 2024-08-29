@@ -34,16 +34,25 @@
                 </p-dropdown>
                 </div>
             </div>
-                <div class="col-3">
+                <div class="col-2">
                     <label for="puesto">Puesto:</label>
                     <div class="">
-                        <p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'chpuesto', 'equals')" placeholder="Puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                        <p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'chpuesto', 'equals')" placeholder="Seleccionar un Puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
                             <!--ng-template let-option pTemplate="item">
                                 <p-tag [value]="option.value" severity="success"></p-tag>
                             </ng-template-->
                         </p-dropdown>
                     </div>                
                 </div>
+
+                <div class="col-2">
+                    <label for="id_unidad_negocio">Unidad de negocio:</label>
+                    <div class="">
+                      <p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="tablaPrincipal.filter(lista.value, 'chunidad_negocio', 'equals')"  [showClear]="true" [filter]="true" filterBy="value" appendTo="body"></p-dropdown> 
+                    </div>         
+                           
+                </div>
+
                 <div class="col-1">
                     <label for="activo">Estado:</label>
                     <div class="">

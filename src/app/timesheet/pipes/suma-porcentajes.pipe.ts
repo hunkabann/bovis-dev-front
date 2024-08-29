@@ -9,12 +9,14 @@ export class SumaPorcentajesPipe implements PipeTransform {
   transform(timesheet: Timesheet, ...args: unknown[]): unknown {
     let total = 0
     timesheet.proyectos.forEach(proyecto => {
-      total += proyecto.tDedicacion
+      total += proyecto.costo
     })
 
-    timesheet.otros.forEach(proyecto => {
+    //se comenta por que no tiene costos otros
+
+   /* timesheet.otros.forEach(proyecto => {
       total += proyecto.tDedicacion
-    })
+    })*/
 
     return `${Math.round(total)}%`;
   }
