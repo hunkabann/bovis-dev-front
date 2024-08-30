@@ -494,6 +494,15 @@ export class ModificarComponent implements OnInit {
 
       })
       //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+      
+      this.proyectos.controls.forEach(proyecto => {
+        const costo = this.formateaValor( ( Number(proyecto.get('dias').value) / (this.form.value.dias - this.sumaOtros) ) * 100 )
+        proyecto.patchValue({
+          costo
+        })
+      })
+      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+
     }
 
   }

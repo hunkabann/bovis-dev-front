@@ -142,7 +142,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
             proyectosDiasJoin: Math.round(this.proyectoJoin.transform(ts.proyectos, 'proyectosDias')),
             otrosJoin: this.proyectoJoin.transform(ts.otros, 'otros', ts.dias_trabajo),
             otrosDiasJoin: this.proyectoJoin.transform(ts.otros, 'otrosDias'),
-            completado: ((this.proyectoJoin.transformCalcula(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transformCalcula(ts.otros, 'otros', ts.dias_trabajo))) < 100
+            completado: ((this.proyectoJoin.transformCalcula(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transformCalcula(ts.otros, 'otros', ts.dias_trabajo))) < 100 || ((this.proyectoJoin.transformCalcula(ts.proyectos, 'proyectos', ts.dias_trabajo)) + (this.proyectoJoin.transformCalcula(ts.otros, 'otros', ts.dias_trabajo))) > 100
           })).sort((a, b) => {
             if (a.completado === b.completado) {
               return 0
