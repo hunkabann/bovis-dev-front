@@ -501,6 +501,8 @@ export class ModificarComponent implements OnInit {
           costo
         })
       })
+      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+
     }
 
   }
