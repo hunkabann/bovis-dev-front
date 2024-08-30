@@ -488,19 +488,21 @@ export class ModificarComponent implements OnInit {
     if(seccion === 'proyectos') {
       this.proyectos.at(i).patchValue({
         diasCalc:  this.formateaValor((valor * this.form.value.dias) / 100) ,
-        //costo:      this.formateaValor( (valor * (this.form.value.dias + this.sumaOtros)) / 100 ),
+        costo:      this.formateaValor( (valor * (this.form.value.dias + this.sumaOtros)) / 100 ),
         dedicacion: valor,
         dias:        this.formateaValor((valor * this.form.value.dias) / 100)
 
       })
       //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
-
+      
       this.proyectos.controls.forEach(proyecto => {
         const costo = this.formateaValor( ( Number(proyecto.get('dias').value) / (this.form.value.dias - this.sumaOtros) ) * 100 )
         proyecto.patchValue({
           costo
         })
       })
+      //console.log("Dedicacion: "+ (valor / this.form.value.dias) * 100)
+
     }
 
   }
