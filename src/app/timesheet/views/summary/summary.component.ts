@@ -258,7 +258,7 @@ export class SummaryComponent implements OnInit {
 
       record.participacion.forEach((proyecto, index) => {
         worksheet.getColumn(10 + index).width = 15
-        worksheet.getCell(row, 10 + index).value = this.getDecimal(proyecto.costo) || ''
+        worksheet.getCell(row, 10 + index).value = this.getDecimal(this.formateaValor(proyecto.costo)) || ''
         worksheet.getCell(row, 10 + index).numFmt = '0%';
         totalTimesheet += +proyecto.costo 
         
@@ -267,7 +267,7 @@ export class SummaryComponent implements OnInit {
       let total = 0
       record.timesheet.proyectos.forEach(proyecto => {
         //total += Math.round(proyecto.tDedicacion)
-        total += Math.round(proyecto.costo)
+        total += proyecto.costo
       })
 
       //se comenta por que no existe costo en otros
