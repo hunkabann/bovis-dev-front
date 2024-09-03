@@ -339,6 +339,7 @@ export class EmpleadosPrincipalComponent implements OnInit {
       worksheet.getCell(row, 15).value = record.chemail_bovis
       worksheet.getCell(row, 16).value = record.nuantiguedad
       worksheet.getCell(row, 17).value = record.nufondo_fijo
+      worksheet.getCell(row, 18).value = record.boactivo === true ? 'Activo' : 'Inactivo'
       //worksheet.getCell(row, 18).value = record.responsable
       //worksheet.getCell(row, 19).value = record.tipoProyecto
       //worksheet.getCell(row, 20).value = record.tipoPy

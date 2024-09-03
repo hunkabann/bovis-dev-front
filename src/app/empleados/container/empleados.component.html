@@ -45,9 +45,24 @@
                     </div>                
                 </div>
 
+                <div class="col-3">
+                    <label for="IsEmpleado">Es Empleado:</label>
+                    <div class="">
+                        <p-dropdown #listaIsEmpleado [options]="IsEmpleado" (onChange)="tablaPrincipal.filter(listaIsEmpleado.value, 'boempleado', 'equals')" placeholder="Estatus" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                            <ng-template let-option pTemplate="item">
+                                <p-tag [value]="option.label" severity="success"></p-tag>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>                
+                </div>
+
 
             
         </div>
+
+        <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
+            <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+        </p-toolbar>
         
         <p-table #tablaPrincipal [value]="personas" [paginator]="true" [showCurrentPageReport]="true" paginatorPosition="both" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]" [rows]="10"
             [globalFilterFields]="['chnombre_completo', 'chrfc']" styleClass="p-datatable-striped">
