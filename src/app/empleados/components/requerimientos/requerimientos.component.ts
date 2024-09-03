@@ -4,12 +4,19 @@ import { MessageService } from 'primeng/api';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { EmpleadosService } from '../../services/empleados.service';
 import { Observable, finalize, forkJoin } from 'rxjs';
-import { FiltrosRequerimientos, Requerimiento } from '../../Models/empleados';
-import { SUBJECTS, TITLES } from 'src/utils/constants';
+import { FiltrosRequerimientos, Requerimiento,encabezadosRequerimiento } from '../../Models/empleados';
+import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
 import { Location } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Opcion } from 'src/models/general.model';
 import { UserService } from 'src/app/services/user.service';
+
+import * as XLSX from 'xlsx';
+import { formatCurrency } from 'src/helpers/helpers';
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-requerimientos',
@@ -40,6 +47,10 @@ export class RequerimientosComponent implements OnInit {
   
   requerimientoActual: number = null
   mostrarModal: boolean = false
+
+  today: Date = new Date();
+  pipe = new DatePipe('en-US');
+  todayWithPipe = null;
 
   form = this.fb.group({
     persona: ['', Validators.required]
@@ -147,6 +158,91 @@ export class RequerimientosComponent implements OnInit {
         next: ({data}) => this.proyectos = data.map(proyecto => ({name: proyecto.proyecto, code: proyecto.numProyecto.toString()})),
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
+  }
+
+  exportJsonToExcel(): void {
+
+    const workbook = new ExcelJS.Workbook()
+
+    const worksheet = workbook.addWorksheet('Detalle')
+
+    // Tìtulos
+    this._setXLSXTitles(worksheet)
+
+    // Encabezados
+    this._setXLSXHeader(worksheet)
+
+    let row = 5
+    // Contenido
+    row = this._setXLSXContent(worksheet, row)
+
+    // Contenido
+    //this._setXLSXContent(worksheet)
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+
+      //saveAs(blob, `FacturacionCancelacion_${Date.now()}${EXCEL_EXTENSION}`)
+      this.todayWithPipe = this.pipe.transform(Date.now(), 'dd_MM_yyyy');
+
+      saveAs(blob, `Empleados_` + this.todayWithPipe + `${EXCEL_EXTENSION}`)
+    });
+  }
+
+  _setXLSXTitles(worksheet: ExcelJS.Worksheet) {
+    const fillNota: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
+    //const fillNotaCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
+    const fillCobranza: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffa4ffa4' } }
+    const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
+
+
+    worksheet.getCell('F3').value = 'SUELDO'
+    worksheet.getCell('F3').fill = fillCobranza
+    worksheet.getCell('F3').alignment = alignment
+    worksheet.mergeCells('F3:G3')
+  }
+
+  _setXLSXHeader(worksheet: ExcelJS.Worksheet) {
+    const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
+    const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
+
+    encabezadosRequerimiento.forEach((encabezado, index) => {
+      let cell = worksheet.getCell(4, index + 1)
+      cell.value = encabezado.label
+      cell.fill = fill
+      cell.alignment = alignment
+    })
+  }
+
+  _setXLSXContent(worksheet: ExcelJS.Worksheet, row: number): number {
+
+    const fillCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
+    const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
+
+    this.data.forEach(record => {
+      //worksheet.getCell(row).fill = record.fechaCancelacion ? fillCancelada : fillFactura
+      //const col = row.getCell(row);
+
+      worksheet.getCell(row, 1).value = record.chcategoria
+      worksheet.getCell(row, 2).value = record.chpuesto
+      worksheet.getCell(row, 3).value = record.chnivel_estudios
+      worksheet.getCell(row, 4).value = record.chprofesion
+      worksheet.getCell(row, 5).value = record.chjornada
+      worksheet.getCell(row, 6).value = this.formatCurrency(record.nusueldo_min)
+      worksheet.getCell(row, 7).value = this.formatCurrency(record.nusueldo_max)
+
+      row++
+    });
+
+    return row
+
+  }
+
+  formatCurrency(valor: number) {
+    return valor.toLocaleString('es-MX', {
+      style: 'currency',
+      currency: 'MXN',
+    })
   }
 
 }
