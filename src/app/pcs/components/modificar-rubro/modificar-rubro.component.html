@@ -24,6 +24,7 @@
         formControlName="unidad"
         optionValue="name"
         class="full-width" 
+        [(ngModel)]="selectedUnidad"
         ></p-dropdown>
         <div *ngIf="esInvalido('unidad')">
           <small
