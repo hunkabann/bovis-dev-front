@@ -34,6 +34,8 @@ export class ModificarRubroComponent implements OnInit {
 
     selectedUnidades: Unid | undefined;
 
+    selectedUnidad: any;
+
     mes_ini: number
    ano_ini: number
 
@@ -69,15 +71,24 @@ export class ModificarRubroComponent implements OnInit {
     const numProyectos = this.config.data.numProyecto
 
     if(this.config.data) {
+      //console.log('valor de unidad ' + rubro.unidad )
       this.form.patchValue({
         idRubro:          rubro.idRubro,
-        unidad:           rubro.unidad?.toString(),
+        //unidad:           rubro.unidad?.toString(),
         cantidad:         rubro.cantidad?.toString(),
         reembolsable:     rubro.reembolsable || false,
         aplicaTodosMeses: rubro.aplicaTodosMeses || false,
         numProyecto:      numProyectos
       })
+
+      
+     
     }
+
+
+      this.selectedUnidad = rubro.unidad?.toString()
+      
+   
 
     const fechaInicio     = new Date(this.config.data.fechaInicio)
     const fechaFin        = new Date(this.config.data.fechaFin)

@@ -235,7 +235,10 @@ export class ControlComponent implements OnInit {
 
 
           this.Previsto = data.salarios.previsto
-          this.SumaFechaViaticos = data.viaticos.previsto.sumaFechas
+          //this.SumaFechaViaticos = data.viaticos.previsto.sumaFechas
+
+          this.SumaFechaViaticos = data.viaticos.real.sumaFechas
+
           // Remove the duplicate items
           const uniqueByRubroAnio = [...new Map(this.SumaFechaViaticos.map(item => [`${item.rubro}`, item])).values()];
           this.SumaFechaViaticos = uniqueByRubroAnio;
