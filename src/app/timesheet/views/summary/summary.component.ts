@@ -121,10 +121,10 @@ export class SummaryComponent implements OnInit {
             let costo = 0
             if(key >= 0) {
               //console.log("timesheet.proyectos[key].tDedicacion: "+timesheet.proyectos[key].costo)
-              costo += timesheet.proyectos[key].costo
+              costo += Math.round(timesheet.proyectos[key].costo)
               //console.log("timesheet.otros[key].tDedicacion: "+timesheet.otros[key].)
               //dedicacion += timesheet.otros[key].tDedicacion
-              this.proyectos[index].costo += costo
+              this.proyectos[index].costo += Math.round(costo)
 
                 
 
@@ -258,7 +258,7 @@ export class SummaryComponent implements OnInit {
 
       record.participacion.forEach((proyecto, index) => {
         worksheet.getColumn(10 + index).width = 15
-        worksheet.getCell(row, 10 + index).value = this.getDecimal(this.formateaValor(proyecto.costo)) || ''
+        worksheet.getCell(row, 10 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
         worksheet.getCell(row, 10 + index).numFmt = '0%';
         totalTimesheet += +proyecto.costo 
         
@@ -267,7 +267,7 @@ export class SummaryComponent implements OnInit {
       let total = 0
       record.timesheet.proyectos.forEach(proyecto => {
         //total += Math.round(proyecto.tDedicacion)
-        total += proyecto.costo
+        total += Math.round(proyecto.costo)
       })
 
       //se comenta por que no existe costo en otros
@@ -296,7 +296,7 @@ export class SummaryComponent implements OnInit {
       worksheet.getCell(row, 7).value = record.timesheet.empleado
       worksheet.getCell(row, 8).value = record.timesheet.responsable
      // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
-      worksheet.getCell(row, 9).value = this.getDecimal(total)
+      worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total))
       worksheet.getCell(row, 9).numFmt = '0%';
       row++
     });
@@ -308,7 +308,7 @@ export class SummaryComponent implements OnInit {
     let indice = 10
     this.proyectos.forEach((proyecto, index) => {
 
-      worksheet.getCell(row, indice).value = this.getDecimal(proyecto.costo)
+      worksheet.getCell(row, indice).value = this.getDecimal(Math.round(proyecto.costo))
       worksheet.getCell(row, indice).numFmt = '0%';
       
       indice++
