@@ -573,5 +573,35 @@ export const encabezados = Object.freeze([
   {id: 'chnss', label: 'Nss'},
   {id: 'chemail_bovis', label: 'Email Bovis'},
   {id: 'nuantiguedad', label: 'Antiguedad'},
-  {id: 'nufondo_fijo', label: 'Fondo fijo'}
+  {id: 'nufondo_fijo', label: 'Fondo fijo'},
+  {id: 'boActivo', label: 'Estatus'}
 ])
+
+export const encabezadosPersona = Object.freeze([
+  // {id: 'id', label: 'Id'},
+  {id: 'chnombre_completo', label: 'NOMBRE'},
+  {id: 'chrfc', label: 'RFC'},
+  {id: 'dtfecha_nacimiento', label: 'FECHA DE NACIMIENTO'},
+  {id: 'chemail', label: 'EMAIL'},
+  {id: 'chtelefono', label: 'TELEFONO'},
+  {id: 'chcelular', label: 'CELULAR'},
+  {id: 'chcurp', label: 'CURP'},
+  {id: 'chsexo', label: 'SEXO'},
+  {id: 'chtipo_persona', label: 'TIPO PERSONA'},
+  {id: 'chedo_civil', label: 'ESTADO CIVIL'},
+  {id: 'chtipo_sangre', label: 'TIPO DE SANGRE'},
+  {id: 'boempleado', label: 'ES EMPLEADO'}
+])
+
+export const encabezadosRequerimiento = Object.freeze([
+  // {id: 'id', label: 'Id'},
+  {id: 'chcategoria', label: 'CATEGORIA'},
+  {id: 'chpuesto', label: 'PUESTO'},
+  {id: 'chnivel_estudios', label: 'NIVEL DE ESTUDIOS'},
+  {id: 'chprofesion', label: 'PROFESION'},
+  {id: 'chjornada', label: 'JORNADA'},
+  {id: 'nusueldo_min', label: 'MINIMO'},
+  {id: 'nusueldo_max', label: 'MAXIMO'}
+])
+
+
