@@ -582,6 +582,7 @@ export class CostoEmpleadoComponent implements OnInit {
       worksheet.getCell(row, 76).value = this.formatCurrency(this.Proy_CostoTelefonia)
       worksheet.getCell(row, 77).value = this.formatCurrency(this.Proy_SvDirectivos)
       worksheet.getCell(row, 78).value = this.formatCurrency(this.Proy_FacturacionBpm)
+      worksheet.getCell(row, 79).value = this.formatCurrency(record.costoMensualEmpleado + this.Costomenualproy + record.costoMensualProyecto)
 
       
       //worksheet.getCell(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'FFC000':  '70AD47'}};

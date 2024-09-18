@@ -91,6 +91,8 @@ export interface Proyecto {
     chcontacto_correo?:               string;
     clientes:                         ClientePcs[];
     impuesto_nomina:                  number;
+    nukidunidadnegocio:               string;
+    chunidadnegocio:                  string;
 }
 
 export interface ClientePcs {
