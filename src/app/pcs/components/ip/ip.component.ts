@@ -74,6 +74,7 @@ export class IpComponent implements OnInit {
   listCatEstatusProyecto: Array<ICatalogo> = [];
   listEmpleados: Array<IEmpleadoNew> = [];
   empresas: Opcion[] = []
+  catUnidadNegocio: Opcion[] = []
 
   proyecto: Proyecto = null
   cargando: boolean = true
@@ -154,7 +155,8 @@ export class IpComponent implements OnInit {
     posicion_contacto: [null],
     telefono_contacto: [null],
     correo_contacto: [null],
-    impuesto_nomina: [0, [Validators.required]]
+    impuesto_nomina: [0, [Validators.required]],
+    id_unidad_negocio: [null]
   })
   
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
@@ -222,7 +224,8 @@ export class IpComponent implements OnInit {
                 posicion_contacto: proyectoData.chcontacto_posicion,
                 telefono_contacto: proyectoData.chcontacto_telefono,
                 correo_contacto: proyectoData.chcontacto_correo,
-                impuesto_nomina: proyectoData.impuesto_nomina
+                impuesto_nomina: proyectoData.impuesto_nomina,
+                id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
                 
               })
               this.actualizarTotalMeses()
@@ -279,7 +282,8 @@ export class IpComponent implements OnInit {
                 posicion_contacto: proyectoData.chcontacto_posicion,
                 telefono_contacto: proyectoData.chcontacto_telefono,
                 correo_contacto: proyectoData.chcontacto_correo,
-                impuesto_nomina: proyectoData.impuesto_nomina
+                impuesto_nomina: proyectoData.impuesto_nomina,
+                id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
                 
               })
               this.actualizarTotalMeses()
@@ -371,7 +375,8 @@ export class IpComponent implements OnInit {
                     posicion_contacto: proyectoData.chcontacto_posicion,
                     telefono_contacto: proyectoData.chcontacto_telefono,
                     correo_contacto: proyectoData.chcontacto_correo,
-                    impuesto_nomina: proyectoData.impuesto_nomina
+                    impuesto_nomina: proyectoData.impuesto_nomina,
+                    id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
                     
                   })
                   this.actualizarTotalMeses()
@@ -425,6 +430,12 @@ export class IpComponent implements OnInit {
       if (nuevo) {
         this.mostrarFormulario = true
       }
+
+      this.form.patchValue({
+        
+        impuesto_nomina: 3
+        
+      })
     });
   }
 
@@ -494,6 +505,19 @@ export class IpComponent implements OnInit {
     this.getEmpleados();
     this.getEmpleadosExcel();
     this.getCatEmpresas();
+    this.gettUnidadNegocio();
+  }
+
+  gettUnidadNegocio() {
+    this.catUnidadNegocio = []
+    this.cieService.getCatUnidadNegocio()
+      .subscribe({
+        next: ({ data }) => {
+         // this.catUnidadNegocio = data.map(unidadnegocio => ({ name: unidadnegocio.descripcion, code: `${unidadnegocio.id}` }))
+          this.catUnidadNegocio = data.map(unidadnegocio => ({ name: unidadnegocio.descripcion, code: unidadnegocio.id.toString() }))
+        },
+        error: (err) => this.catUnidadNegocio = []
+      })
   }
 
   getCatEmpresas() {
@@ -618,6 +642,8 @@ export class IpComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
+        console.log('valor de unidad de negocio  ------  ' + this.form.value.id_unidad_negocio)
+
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'El proyecto ha sido guardado.' })
           if (!this.catalogosService.esEdicion) {
 

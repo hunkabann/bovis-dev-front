@@ -123,4 +123,8 @@ export class CieService {
   cargarCuentasNuevas(body: any) {
     return this.http.post<CargaCuentasResponse>(`${this.baseUrl}api/Cie/Cuentas/Agregar`, body)
   }
+
+  getCatUnidadNegocio() {
+    return this.http.get<any>(`${this.baseUrl}api/catalogo/UnidadNegocio/`);
+  }
 }
