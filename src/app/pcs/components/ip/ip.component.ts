@@ -156,7 +156,7 @@ export class IpComponent implements OnInit {
     telefono_contacto: [null],
     correo_contacto: [null],
     impuesto_nomina: [0, [Validators.required]],
-    id_unidad_negocio: [null]
+    id_unidad_negocio: ['', [Validators.required]]
   })
   
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
@@ -493,10 +493,12 @@ export class IpComponent implements OnInit {
     let total_meses = 0
 
     if (this.form.value.fecha_inicio && this.form.value.fecha_fin) {
-      total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)
+      // total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)+1
+      total_meses = differenceInCalendarMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)
+      
     }
 
-    this.form.patchValue({ total_meses })
+    this.form.patchValue({ total_meses  })
   }
 
   poblarCombos() {
@@ -616,7 +618,8 @@ export class IpComponent implements OnInit {
     }
 
   getEmpleados() {
-    this.catServ.getDirectores().subscribe((directoresR) => {
+    //this.catServ.getDirectores().subscribe((directoresR) => {
+      this.catServ.getPersonalCLAVE().subscribe((directoresR) => {
       this.catEmpleados = directoresR.data.map(catEmpleados => ({ name: catEmpleados.nombre_persona, code: catEmpleados.nunum_empleado_rr_hh.toString() }))
       
 
