@@ -225,7 +225,7 @@ export class IpComponent implements OnInit {
                 telefono_contacto: proyectoData.chcontacto_telefono,
                 correo_contacto: proyectoData.chcontacto_correo,
                 impuesto_nomina: proyectoData.impuesto_nomina,
-                id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
+                id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
                 
               })
               this.actualizarTotalMeses()
@@ -283,7 +283,8 @@ export class IpComponent implements OnInit {
                 telefono_contacto: proyectoData.chcontacto_telefono,
                 correo_contacto: proyectoData.chcontacto_correo,
                 impuesto_nomina: proyectoData.impuesto_nomina,
-                id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
+                //id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
+                id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
                 
               })
               this.actualizarTotalMeses()
@@ -376,7 +377,8 @@ export class IpComponent implements OnInit {
                     telefono_contacto: proyectoData.chcontacto_telefono,
                     correo_contacto: proyectoData.chcontacto_correo,
                     impuesto_nomina: proyectoData.impuesto_nomina,
-                    id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
+                   // id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
+                   id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
                     
                   })
                   this.actualizarTotalMeses()
