@@ -188,7 +188,7 @@
 
                         <div class="row">
                             <div class="col-4">
-                                <label for="email">Inicio del proyecto: </label>
+                                <label for="email">Inicio del proyecto:  <span class="required"></span></label>
                                 <p-calendar [showIcon]="true" [style]="{
                 width: '100%',
                 display: 'inline-flex',
@@ -196,7 +196,7 @@
               }" dateFormat="dd/mm/yy" [disabled]="isConsulta" formControlName="fecha_inicio" (onSelect)="actualizarTotalMeses()"></p-calendar>
                             </div>
                             <div class="col-4">
-                                <label for="email">Fin del proyecto: </label>
+                                <label for="email">Fin del proyecto: <span class="required"></span></label>
                                 <p-calendar [showIcon]="true" [style]="{
                 width: '100%',
                 display: 'inline-flex',

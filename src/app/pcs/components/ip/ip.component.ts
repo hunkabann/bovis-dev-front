@@ -148,8 +148,8 @@ export class IpComponent implements OnInit {
     id_empresa: ['', [Validators.required]],
     id_director_ejecutivo: ['', [Validators.required]],
     costo_promedio_m2: [null],
-    fecha_inicio: [null],
-    fecha_fin: [null],
+    fecha_inicio: [null, [Validators.required]],
+    fecha_fin: [null, [Validators.required]],
     total_meses: [0],
     nombre_contacto: [null],
     posicion_contacto: [null],
@@ -203,7 +203,7 @@ export class IpComponent implements OnInit {
               this.form.patchValue({
                 num_proyecto: proyectoData.nunum_proyecto.toString(),
                 nombre_proyecto: proyectoData.chproyecto.toString(),
-                alcance: proyectoData.chalcance.toString(),
+                alcance: proyectoData.chalcance === '' || proyectoData.chalcance === null ? '' : proyectoData.chalcance.toString(),
                 codigo_postal: proyectoData.chcp,
                 ciudad: proyectoData.chciudad,
                 id_pais: proyectoData.nukidpais,
@@ -261,7 +261,7 @@ export class IpComponent implements OnInit {
               this.form.patchValue({
                 num_proyecto: proyectoData.nunum_proyecto.toString(),
                 nombre_proyecto: proyectoData.chproyecto.toString(),
-                alcance: proyectoData.chalcance.toString(),
+                alcance: proyectoData.chalcance === '' || proyectoData.chalcance === null ? '' : proyectoData.chalcance.toString(),
                 codigo_postal: proyectoData.chcp,
                 ciudad: proyectoData.chciudad,
                 id_pais: proyectoData.nukidpais,
