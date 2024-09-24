@@ -26,6 +26,10 @@ export class TimesheetService {
     return this.http.get<CatEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`)
   }
 
+  getCatTipoEmpleados() {
+    return this.http.get<any>(`${this.baseUrl}api/catalogo/TipoEmpleado/`);
+  }
+
   getEmpleadosByJefeEmail(email: string) {
     return this.http.get<CatEmpleadoResponse>(`${this.baseUrl}api/Timesheet/EmpleadosByResponsable/${email}`)
   }

@@ -24,6 +24,11 @@ interface EtapaEmpleado {
   FEE:                number
 }
 
+interface ICatalogo {
+  name: string;
+  value: string;
+}
+
 @Component({
   selector: 'app-modificar-empleado',
   templateUrl: './modificar-empleado.component.html',
@@ -48,6 +53,7 @@ export class ModificarEmpleadoComponent implements OnInit {
   empleados:          Opcion[] = []
   empleado:           Empleado = null
   FEEStaaafing:                number
+  catTipoEmpleados: ICatalogo[] = []
 
   mensajito: string;
 
@@ -110,7 +116,8 @@ export class ModificarEmpleadoComponent implements OnInit {
       })
 
       if(!data.empleado) {
-        this.cargarEmpleados()
+        this.cargarEmpleados(),
+        this.cargarTipoEmpleados()
       } else {
         this.empleado = data.empleado
 
@@ -239,6 +246,22 @@ export class ModificarEmpleadoComponent implements OnInit {
     })
   }
 
+  cargarTipoEmpleados() {
+        
+    this.sharedService.cambiarEstado(true)
+
+    this.timesheetService.getCatTipoEmpleados()
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: ({data}) => {
+        this.empleadosOriginal = data
+        //this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
+        this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+      },
+      error: (err) => this.closeDialog()
+    })
+  }
+
   cambiarValores() {
     this.fechas.controls.forEach((fecha, index) => {
       this.fechas.at(index).patchValue({
@@ -351,6 +374,14 @@ export class ModificarEmpleadoComponent implements OnInit {
   formateaValor(valor) {
     // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
     return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
+  }
+
+  setCatTipoEmpleado(data: any[]) {
+    data.forEach((element) => this.catTipoEmpleados.push({
+      name: String(element.descripcion),
+      value: String(element.id),
+    })
+    );
   }
 
 }
