@@ -20,7 +20,8 @@ interface EtapaEmpleado {
   empleado:           Empleado,
   num_proyecto:       number,
   aplicaTodosMeses:   boolean,
-  cantidad:           number
+  cantidad:           number,
+  FEE:                number
 }
 
 @Component({
@@ -46,6 +47,7 @@ export class ModificarEmpleadoComponent implements OnInit {
   empleadosOriginal:  EmpleadoTS[] = []
   empleados:          Opcion[] = []
   empleado:           Empleado = null
+  FEEStaaafing:                number
 
   mensajito: string;
 
@@ -72,6 +74,33 @@ export class ModificarEmpleadoComponent implements OnInit {
 
     const data = this.config.data as EtapaEmpleado
     if(data) {
+
+      /**console.log('valor Fee ------- ' + data.empleado.fee + '------ fase empleados Fee ------- ' + data.etapa.empleados[0].fee )
+      console.log('valor Fee2 ------- ' +  data.empleado.fee+' valor directo de Fee2 ------- ' + data.FEE )
+      console.log(Object.values(data.etapa.empleados));
+
+      console.log("Planet Name :- " + data.FEE);
+
+      for (const item of data.etapa.empleados) {
+        this.FEEStaaafing = item.fee;
+       console.log('this.FEEStaaafing ----------- ' + this.FEEStaaafing);
+     }
+
+      data.etapa.empleados.forEach(empleado => {
+
+        console.log('valor Fee empleados etapa ------- ' + empleado.fee  )
+          
+
+        
+      })
+
+      let i = 0
+      for (i = 0; i < data.etapa.empleados.length; i++) {
+        console.log(data.etapa.empleados[i]);
+      } 
+*/
+      
+
       this.form.patchValue({
         id_fase:          data.etapa.idFase,
         num_empleado:     data.empleado?.numempleadoRrHh || null,
@@ -84,7 +113,18 @@ export class ModificarEmpleadoComponent implements OnInit {
         this.cargarEmpleados()
       } else {
         this.empleado = data.empleado
-      
+
+
+     // console.log('data.empleado.fee ------- ' + data.empleado.fee + ' ------------ data.empleado.fee ------- ' + data.empleado?.fee )
+
+      if (data.FEE != null ) {
+        
+        this.form.patchValue({
+          FEE:                          this.formateaValor(data.FEE),
+          
+        })
+
+      } else {
 
         this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
         .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -124,6 +164,10 @@ export class ModificarEmpleadoComponent implements OnInit {
           },
           error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
         })
+        
+      }
+
+        
       }
 
       const fechaInicio     = new Date(data.etapa.fechaIni)
@@ -188,7 +232,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     .subscribe({
       next: ({data}) => {
         this.empleadosOriginal = data
-        this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
+        //this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
+        this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
       },
       error: (err) => this.closeDialog()
     })

@@ -155,6 +155,8 @@ export class StaffingPlanComponent implements OnInit {
       // Agregamos los empleados por cada etapa
       etapa.empleados.forEach((empleado, empleadoIndex) => {
 
+        //console.log('fee de empleados ----- ' +  empleado.fee)
+
         this.empleados(etapaIndex).push(this.fb.group({
           id:               empleado.id,
           idFase:           empleado.idFase,
@@ -162,7 +164,8 @@ export class StaffingPlanComponent implements OnInit {
           empleado:         empleado.empleado,
           fechas:           this.fb.array([]),
           aplicaTodosMeses: empleado.aplicaTodosMeses,
-          cantidad:         empleado.cantidad
+          cantidad:         empleado.cantidad,
+          FEE:         empleado.fee
         }))
 
         // Agreamos las fechas por empleado
@@ -224,7 +227,7 @@ export class StaffingPlanComponent implements OnInit {
       })
   }
 
-  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null) {
+  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null,FEE: number | null) {
     event.stopPropagation()
 
     this.dialogService.open(ModificarEmpleadoComponent, {
@@ -232,9 +235,11 @@ export class StaffingPlanComponent implements OnInit {
       width: '50%',
       contentStyle: {overflow: 'auto'},
       data: {
+        FEE,
         etapa,
         empleado,
         num_proyecto: this.form.value.numProyecto
+       
       }
     })
     .onClose.subscribe((result) => {
