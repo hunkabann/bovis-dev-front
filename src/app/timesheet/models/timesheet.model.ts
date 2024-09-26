@@ -173,6 +173,7 @@ export interface Timesheet {
   otrosJoin:          number;
   otrosDiasJoin:      number;
   completado?:        boolean;
+  dtfecha_salida:     string;
 }
 
 export interface Otro {

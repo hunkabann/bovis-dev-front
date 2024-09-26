@@ -46,6 +46,8 @@ export class SummaryComponent implements OnInit {
 
   TotalTimeSheet: number = 0
 
+  MesConsulta: number = 0
+
   constructor() { }
 
   ngOnInit(): void {
@@ -104,6 +106,8 @@ export class SummaryComponent implements OnInit {
   onSelectFecha(event: any) {
     const mes = format(event, 'M')
     const anio = format(event, 'Y')
+
+    this.MesConsulta = +mes
     
     this.sharedService.cambiarEstado(true)
     this.timeSheetService.getTimeSheetsPorFecha(+mes, +anio)
@@ -347,6 +351,43 @@ export class SummaryComponent implements OnInit {
     }
 
     
+  }
+
+  esElmismomes(fechacancela: string): boolean {
+    //console.log("fechaemi: " + fechaemi);
+    //console.log("fechacancela: " + fechacancela);
+    //let mdyEmi: String[] = fechaemi.split('-');
+
+    //console.log("Number(mdy[1]) - 1: " + (Number(mdyEmi[1])));
+    //let fIni: Date = this.parseDate(fechaemi);
+
+    if (fechacancela == null || fechacancela == "") {
+      // return true;
+
+      // Number(mdy[1])+""
+      if (this.MesConsulta == 0) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+
+      let mdyCancela: String[] = fechacancela.split('-');
+
+      // console.log("Number(mdy[1]) - 1: " + (Number(mdyCancela[1])));
+      let fFin: Date = this.parseDate(fechacancela);
+      if (this.MesConsulta == (Number(mdyCancela[1]))) {
+        return true;
+      } else {
+        return false;
+      }
+
+    }
+  }
+
+  parseDate(str: string): Date {
+    let mdy: String[] = str.split('-');
+    return new Date(Number(mdy[0]), Number(mdy[1]), Number(mdy[2]));
   }
 
 }
