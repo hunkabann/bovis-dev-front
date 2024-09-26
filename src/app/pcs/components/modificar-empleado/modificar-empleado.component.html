@@ -4,6 +4,27 @@
 <form [formGroup]="form" (ngSubmit)="guardar()">
 
     <div class="row">
+
+        <div class="col-12">
+            <label for="puesto">Puesto:</label>
+            <p-dropdown id="puesto" 
+                        [options]="catPuesto" 
+                        placeholder="Seleccionar un puesto" 
+                        optionLabel="name" 
+                        [showClear]="true" 
+                        [style]="{ width: '100%' }" 
+                        formControlName="puesto" 
+                        [ngClass]="{'ng-invalid ng-dirty':      esInvalido('puesto')}"
+                        optionValue="code"
+                        (onChange)="buscarEmpleados($event)"
+                ></p-dropdown>
+            <div *ngIf="esInvalido('puesto')">
+                <small class="error-msg">
+        {{ obtenerMensajeError('puesto') }}
+      </small>
+            </div>
+        </div>
+
         <div class="col-12">
             <label for="num_empleado">Empleado:</label>
             <ng-container *ngIf="empleado; else dropDown">

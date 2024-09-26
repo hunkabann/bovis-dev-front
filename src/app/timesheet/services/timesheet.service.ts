@@ -26,10 +26,18 @@ export class TimesheetService {
     return this.http.get<CatEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`)
   }
 
-  getCatTipoEmpleados() {
-    return this.http.get<any>(`${this.baseUrl}api/catalogo/TipoEmpleado/`);
+  getEmpleadosTIPO(idPuesto: number = 0) {
+    return this.http.get<CatEmpleadoResponse>(`${this.baseUrl}api/Empleado/Puesto/${idPuesto}`)
+  }
+  
+
+  getCatPuesto() {
+    return this.http.get<any>(`${this.baseUrl}api/catalogo/Puesto/true/`);
   }
 
+  //obtenerPuesto() {
+   // return this.http.get<ObtenerClientesResponse>(`${this.baseUrl}api/Catalogo/Puesto/true`)
+  //}
   getEmpleadosByJefeEmail(email: string) {
     return this.http.get<CatEmpleadoResponse>(`${this.baseUrl}api/Timesheet/EmpleadosByResponsable/${email}`)
   }
