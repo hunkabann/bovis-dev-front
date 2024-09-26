@@ -101,7 +101,7 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-record>
-                <tr>
+                <tr  [ngClass]="{'invalid-tr': esElmismomes(record.timesheet.dtfecha_salida) }">
                     <td>1</td>
                     <td>{{record.timesheet.coi_empresa}}</td>
                     <td>{{record.timesheet.noi_empresa}}</td>
