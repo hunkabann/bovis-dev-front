@@ -165,7 +165,8 @@ export class StaffingPlanComponent implements OnInit {
           fechas:           this.fb.array([]),
           aplicaTodosMeses: empleado.aplicaTodosMeses,
           cantidad:         empleado.cantidad,
-          FEE:         empleado.fee
+          FEE:         empleado.fee,
+          Puesto:         empleado.Puesto
         }))
 
         // Agreamos las fechas por empleado

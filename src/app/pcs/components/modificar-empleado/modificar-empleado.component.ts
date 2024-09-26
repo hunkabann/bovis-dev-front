@@ -4,7 +4,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { PcsService } from '../../services/pcs.service';
 import { FormArray, FormBuilder } from '@angular/forms';
-import { Empleado, Etapa, Fecha } from '../../models/pcs.model';
+import { Empleado, Etapa, Fecha,puesto } from '../../models/pcs.model';
 import { addMonths, differenceInCalendarMonths, differenceInMonths, format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
@@ -53,7 +53,10 @@ export class ModificarEmpleadoComponent implements OnInit {
   empleados:          Opcion[] = []
   empleado:           Empleado = null
   FEEStaaafing:                number
-  catTipoEmpleados: ICatalogo[] = []
+  catPuesto: Opcion[] = []
+  Puesto: puesto[] = []
+
+  //TipoEmpleado:  EmpleadoTS[] = []
 
   mensajito: string;
 
@@ -65,7 +68,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     ModificaSueldo:   [false],
     cantidad:         [0],
     FEE:              [0],
-    fechas:           this.fb.array([])
+    fechas:           this.fb.array([]),
+    puesto:     [null]
   })
 
   constructor() { }
@@ -112,13 +116,17 @@ export class ModificarEmpleadoComponent implements OnInit {
         num_empleado:     data.empleado?.numempleadoRrHh || null,
         num_proyecto:     data.num_proyecto || null,
         aplicaTodosMeses: data.empleado?.aplicaTodosMeses,
-        cantidad:         data.empleado?.cantidad
+        cantidad:         data.empleado?.cantidad,
+        puesto:         data.empleado?.Puesto
       })
 
       if(!data.empleado) {
         this.cargarEmpleados(),
         this.cargarTipoEmpleados()
       } else {
+
+        this.form.controls['puesto'].disable(); 
+
         this.empleado = data.empleado
 
 
@@ -214,7 +222,8 @@ export class ModificarEmpleadoComponent implements OnInit {
               fechas:             [],
               aplicaTodosMeses:   this.form.value.aplicaTodosMeses,
               cantidad:           this.form.value.cantidad,
-              fee:                null
+              fee:                null,
+              Puesto:                null
             }
           }
           const empleadoRespuesta: Empleado = {
@@ -227,6 +236,22 @@ export class ModificarEmpleadoComponent implements OnInit {
           this.ref.close({empleado: empleadoRespuesta})
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
+  }
+
+  buscarEmpleados(event: any) {
+
+    this.sharedService.cambiarEstado(true)
+
+    console.log('VALOR QUE LLEGA DEL COMBO -------- <<<< ' + event.value)
+
+    this.timesheetService.getEmpleadosTIPO(event.value)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({ data }) => {
+          this.setCatEmpleados(data)
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
   }
 
@@ -250,13 +275,13 @@ export class ModificarEmpleadoComponent implements OnInit {
         
     this.sharedService.cambiarEstado(true)
 
-    this.timesheetService.getCatTipoEmpleados()
+    this.timesheetService.getCatPuesto()
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: ({data}) => {
-        this.empleadosOriginal = data
+        this.Puesto = data
         //this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
-        this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+        this.catPuesto = this.Puesto.map(tipoempleado => ({code: tipoempleado.nukid_puesto.toString(), name: `${tipoempleado.chpuesto.toString()} ` }))
       },
       error: (err) => this.closeDialog()
     })
@@ -377,11 +402,20 @@ export class ModificarEmpleadoComponent implements OnInit {
   }
 
   setCatTipoEmpleado(data: any[]) {
-    data.forEach((element) => this.catTipoEmpleados.push({
+    data.forEach((element) => this.catPuesto.push({
       name: String(element.descripcion),
-      value: String(element.id),
+      code: String(element.id),
     })
     );
+  }
+
+  setCatEmpleados(data: any[]) {
+    this.empleados = []
+    data.forEach((element) => this.empleados.push({
+      name: String(element.nunum_empleado_rr_hh + ' - ' +element.nombre_persona),
+      code: String(element.nunum_empleado_rr_hh),
+    })
+    )
   }
 
 }
