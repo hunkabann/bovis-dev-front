@@ -32,6 +32,7 @@ export interface Empleado {
     aplicaTodosMeses:   boolean;
     fee:                number;
     cantidad:           number;
+    Puesto:             string;
 }
 
 export interface Fecha {
@@ -91,6 +92,8 @@ export interface Proyecto {
     chcontacto_correo?:               string;
     clientes:                         ClientePcs[];
     impuesto_nomina:                  number;
+    nukidunidadnegocio:               string;
+    chunidadnegocio:                  string;
 }
 
 export interface ClientePcs {
@@ -244,3 +247,13 @@ export const encabezadosEmpleado = Object.freeze([
     {id: 'cantidad', label: 'Cantidad'}, 
     {id: 'rembolsable', label: 'Rembolsable'}, 
   ])
+
+  export interface puesto {
+    nukid_puesto: number;
+    nukidnivel: number;
+    chpuesto:       string;
+    nusalario_min:   string;
+    nusalario_max:   string;
+    nusalario_prom:   string;
+    boactivo:    boolean;
+}

@@ -4,7 +4,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { PcsService } from '../../services/pcs.service';
 import { FormArray, FormBuilder } from '@angular/forms';
-import { Empleado, Etapa, Fecha } from '../../models/pcs.model';
+import { Empleado, Etapa, Fecha,puesto } from '../../models/pcs.model';
 import { addMonths, differenceInCalendarMonths, differenceInMonths, format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
@@ -20,7 +20,13 @@ interface EtapaEmpleado {
   empleado:           Empleado,
   num_proyecto:       number,
   aplicaTodosMeses:   boolean,
-  cantidad:           number
+  cantidad:           number,
+  FEE:                number
+}
+
+interface ICatalogo {
+  name: string;
+  value: string;
 }
 
 @Component({
@@ -46,6 +52,11 @@ export class ModificarEmpleadoComponent implements OnInit {
   empleadosOriginal:  EmpleadoTS[] = []
   empleados:          Opcion[] = []
   empleado:           Empleado = null
+  FEEStaaafing:                number
+  catPuesto: Opcion[] = []
+  Puesto: puesto[] = []
+
+  //TipoEmpleado:  EmpleadoTS[] = []
 
   mensajito: string;
 
@@ -57,7 +68,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     ModificaSueldo:   [false],
     cantidad:         [0],
     FEE:              [0],
-    fechas:           this.fb.array([])
+    fechas:           this.fb.array([]),
+    puesto:     [null]
   })
 
   constructor() { }
@@ -72,19 +84,62 @@ export class ModificarEmpleadoComponent implements OnInit {
 
     const data = this.config.data as EtapaEmpleado
     if(data) {
+
+      /**console.log('valor Fee ------- ' + data.empleado.fee + '------ fase empleados Fee ------- ' + data.etapa.empleados[0].fee )
+      console.log('valor Fee2 ------- ' +  data.empleado.fee+' valor directo de Fee2 ------- ' + data.FEE )
+      console.log(Object.values(data.etapa.empleados));
+
+      console.log("Planet Name :- " + data.FEE);
+
+      for (const item of data.etapa.empleados) {
+        this.FEEStaaafing = item.fee;
+       console.log('this.FEEStaaafing ----------- ' + this.FEEStaaafing);
+     }
+
+      data.etapa.empleados.forEach(empleado => {
+
+        console.log('valor Fee empleados etapa ------- ' + empleado.fee  )
+          
+
+        
+      })
+
+      let i = 0
+      for (i = 0; i < data.etapa.empleados.length; i++) {
+        console.log(data.etapa.empleados[i]);
+      } 
+*/
+      
+
       this.form.patchValue({
         id_fase:          data.etapa.idFase,
         num_empleado:     data.empleado?.numempleadoRrHh || null,
         num_proyecto:     data.num_proyecto || null,
         aplicaTodosMeses: data.empleado?.aplicaTodosMeses,
-        cantidad:         data.empleado?.cantidad
+        cantidad:         data.empleado?.cantidad,
+        puesto:         data.empleado?.Puesto
       })
 
       if(!data.empleado) {
-        this.cargarEmpleados()
+        this.cargarEmpleados(),
+        this.cargarTipoEmpleados()
       } else {
+
+        this.form.controls['puesto'].disable(); 
+
         this.empleado = data.empleado
-      
+
+
+     // console.log('data.empleado.fee ------- ' + data.empleado.fee + ' ------------ data.empleado.fee ------- ' + data.empleado?.fee )
+
+      if (data.FEE != null ) {
+        
+        this.form.patchValue({
+          FEE:                          this.formateaValor(data.FEE),
+          
+        })
+
+      } else {
 
         this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
         .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -124,6 +179,10 @@ export class ModificarEmpleadoComponent implements OnInit {
           },
           error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
         })
+        
+      }
+
+        
       }
 
       const fechaInicio     = new Date(data.etapa.fechaIni)
@@ -163,7 +222,8 @@ export class ModificarEmpleadoComponent implements OnInit {
               fechas:             [],
               aplicaTodosMeses:   this.form.value.aplicaTodosMeses,
               cantidad:           this.form.value.cantidad,
-              fee:                null
+              fee:                null,
+              Puesto:                null
             }
           }
           const empleadoRespuesta: Empleado = {
@@ -179,6 +239,22 @@ export class ModificarEmpleadoComponent implements OnInit {
       })
   }
 
+  buscarEmpleados(event: any) {
+
+    this.sharedService.cambiarEstado(true)
+
+    console.log('VALOR QUE LLEGA DEL COMBO -------- <<<< ' + event.value)
+
+    this.timesheetService.getEmpleadosTIPO(event.value)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({ data }) => {
+          this.setCatEmpleados(data)
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })
+  }
+
   cargarEmpleados() {
         
     this.sharedService.cambiarEstado(true)
@@ -188,7 +264,24 @@ export class ModificarEmpleadoComponent implements OnInit {
     .subscribe({
       next: ({data}) => {
         this.empleadosOriginal = data
-        this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
+        //this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
+        this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+      },
+      error: (err) => this.closeDialog()
+    })
+  }
+
+  cargarTipoEmpleados() {
+        
+    this.sharedService.cambiarEstado(true)
+
+    this.timesheetService.getCatPuesto()
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: ({data}) => {
+        this.Puesto = data
+        //this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
+        this.catPuesto = this.Puesto.map(tipoempleado => ({code: tipoempleado.nukid_puesto.toString(), name: `${tipoempleado.chpuesto.toString()} ` }))
       },
       error: (err) => this.closeDialog()
     })
@@ -306,6 +399,23 @@ export class ModificarEmpleadoComponent implements OnInit {
   formateaValor(valor) {
     // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
     return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
+  }
+
+  setCatTipoEmpleado(data: any[]) {
+    data.forEach((element) => this.catPuesto.push({
+      name: String(element.descripcion),
+      code: String(element.id),
+    })
+    );
+  }
+
+  setCatEmpleados(data: any[]) {
+    this.empleados = []
+    data.forEach((element) => this.empleados.push({
+      name: String(element.nunum_empleado_rr_hh + ' - ' +element.nombre_persona),
+      code: String(element.nunum_empleado_rr_hh),
+    })
+    )
   }
 
 }

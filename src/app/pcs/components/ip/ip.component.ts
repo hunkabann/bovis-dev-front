@@ -74,6 +74,7 @@ export class IpComponent implements OnInit {
   listCatEstatusProyecto: Array<ICatalogo> = [];
   listEmpleados: Array<IEmpleadoNew> = [];
   empresas: Opcion[] = []
+  catUnidadNegocio: Opcion[] = []
 
   proyecto: Proyecto = null
   cargando: boolean = true
@@ -147,14 +148,15 @@ export class IpComponent implements OnInit {
     id_empresa: ['', [Validators.required]],
     id_director_ejecutivo: ['', [Validators.required]],
     costo_promedio_m2: [null],
-    fecha_inicio: [null],
-    fecha_fin: [null],
+    fecha_inicio: [null, [Validators.required]],
+    fecha_fin: [null, [Validators.required]],
     total_meses: [0],
     nombre_contacto: [null],
     posicion_contacto: [null],
     telefono_contacto: [null],
     correo_contacto: [null],
-    impuesto_nomina: [0, [Validators.required]]
+    impuesto_nomina: [0, [Validators.required]],
+    id_unidad_negocio: ['', [Validators.required]]
   })
   
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
@@ -201,7 +203,7 @@ export class IpComponent implements OnInit {
               this.form.patchValue({
                 num_proyecto: proyectoData.nunum_proyecto.toString(),
                 nombre_proyecto: proyectoData.chproyecto.toString(),
-                alcance: proyectoData.chalcance.toString(),
+                alcance: proyectoData.chalcance === '' || proyectoData.chalcance === null ? '' : proyectoData.chalcance.toString(),
                 codigo_postal: proyectoData.chcp,
                 ciudad: proyectoData.chciudad,
                 id_pais: proyectoData.nukidpais,
@@ -222,7 +224,8 @@ export class IpComponent implements OnInit {
                 posicion_contacto: proyectoData.chcontacto_posicion,
                 telefono_contacto: proyectoData.chcontacto_telefono,
                 correo_contacto: proyectoData.chcontacto_correo,
-                impuesto_nomina: proyectoData.impuesto_nomina
+                impuesto_nomina: proyectoData.impuesto_nomina,
+                id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
                 
               })
               this.actualizarTotalMeses()
@@ -258,7 +261,7 @@ export class IpComponent implements OnInit {
               this.form.patchValue({
                 num_proyecto: proyectoData.nunum_proyecto.toString(),
                 nombre_proyecto: proyectoData.chproyecto.toString(),
-                alcance: proyectoData.chalcance.toString(),
+                alcance: proyectoData.chalcance === '' || proyectoData.chalcance === null ? '' : proyectoData.chalcance.toString(),
                 codigo_postal: proyectoData.chcp,
                 ciudad: proyectoData.chciudad,
                 id_pais: proyectoData.nukidpais,
@@ -279,7 +282,9 @@ export class IpComponent implements OnInit {
                 posicion_contacto: proyectoData.chcontacto_posicion,
                 telefono_contacto: proyectoData.chcontacto_telefono,
                 correo_contacto: proyectoData.chcontacto_correo,
-                impuesto_nomina: proyectoData.impuesto_nomina
+                impuesto_nomina: proyectoData.impuesto_nomina,
+                //id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
+                id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
                 
               })
               this.actualizarTotalMeses()
@@ -371,7 +376,9 @@ export class IpComponent implements OnInit {
                     posicion_contacto: proyectoData.chcontacto_posicion,
                     telefono_contacto: proyectoData.chcontacto_telefono,
                     correo_contacto: proyectoData.chcontacto_correo,
-                    impuesto_nomina: proyectoData.impuesto_nomina
+                    impuesto_nomina: proyectoData.impuesto_nomina,
+                   // id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
+                   id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
                     
                   })
                   this.actualizarTotalMeses()
@@ -425,6 +432,12 @@ export class IpComponent implements OnInit {
       if (nuevo) {
         this.mostrarFormulario = true
       }
+
+      this.form.patchValue({
+        
+        impuesto_nomina: 3
+        
+      })
     });
   }
 
@@ -480,10 +493,12 @@ export class IpComponent implements OnInit {
     let total_meses = 0
 
     if (this.form.value.fecha_inicio && this.form.value.fecha_fin) {
-      total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)
+      // total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)+1
+      total_meses = differenceInCalendarMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)
+      
     }
 
-    this.form.patchValue({ total_meses })
+    this.form.patchValue({ total_meses  })
   }
 
   poblarCombos() {
@@ -494,6 +509,19 @@ export class IpComponent implements OnInit {
     this.getEmpleados();
     this.getEmpleadosExcel();
     this.getCatEmpresas();
+    this.gettUnidadNegocio();
+  }
+
+  gettUnidadNegocio() {
+    this.catUnidadNegocio = []
+    this.cieService.getCatUnidadNegocio()
+      .subscribe({
+        next: ({ data }) => {
+         // this.catUnidadNegocio = data.map(unidadnegocio => ({ name: unidadnegocio.descripcion, code: `${unidadnegocio.id}` }))
+          this.catUnidadNegocio = data.map(unidadnegocio => ({ name: unidadnegocio.descripcion, code: unidadnegocio.id.toString() }))
+        },
+        error: (err) => this.catUnidadNegocio = []
+      })
   }
 
   getCatEmpresas() {
@@ -590,7 +618,8 @@ export class IpComponent implements OnInit {
     }
 
   getEmpleados() {
-    this.catServ.getDirectores().subscribe((directoresR) => {
+    //this.catServ.getDirectores().subscribe((directoresR) => {
+      this.catServ.getPersonalCLAVE().subscribe((directoresR) => {
       this.catEmpleados = directoresR.data.map(catEmpleados => ({ name: catEmpleados.nombre_persona, code: catEmpleados.nunum_empleado_rr_hh.toString() }))
       
 
@@ -618,6 +647,8 @@ export class IpComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
+        console.log('valor de unidad de negocio  ------  ' + this.form.value.id_unidad_negocio)
+
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'El proyecto ha sido guardado.' })
           if (!this.catalogosService.esEdicion) {
 

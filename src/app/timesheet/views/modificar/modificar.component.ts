@@ -31,6 +31,8 @@ export class ModificarComponent implements OnInit {
   codedialog: number
   cargando: boolean = true
 
+  empleados: Opcion[] = []
+
   timesheetService  = inject(TimesheetService)
   authService       = inject(MsalService)
   fb                = inject(FormBuilder)
@@ -192,16 +194,16 @@ export class ModificarComponent implements OnInit {
       })
     )
     .subscribe(([empleadoR, empleadosR, diasR]) => {
-      if(!empleadoR.success) {
-        this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: '¡No pudimos encontrar información del usuario responsable!' })
-      } else {
-        const {nukid_empleado, chnombre, chap_paterno} = empleadoR.data
-        this.form.patchValue({responsable: `${chnombre} ${chap_paterno}`})
-        this.form.patchValue({id_responsable: nukid_empleado})
-      }
+     // if(!empleadoR.success) {
+     //   this.messageService.add({ severity: 'error', summary: 'Oh no...', detail: '¡No pudimos encontrar información del usuario responsable!' })
+     // } else {
+     //   const {nukid_empleado, chnombre, chap_paterno} = empleadoR.data
+     //   this.form.patchValue({responsable: `${chnombre} ${chap_paterno}`})
+      //  this.form.patchValue({id_responsable: nukid_empleado})
+     // }
 
       //this.empleados = empleadosR.data.map(empleado => ({name: empleado.nombre_persona, code: empleado.nunum_empleado_rr_hh.toString()}))
-      //this.empleado = empleadosR.data.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+      this.empleados = empleadosR.data.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
 
       this.form.patchValue({dias: diasR.habiles})
       this.otros.at(0).patchValue({dias: diasR.feriados})

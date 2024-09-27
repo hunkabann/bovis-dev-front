@@ -190,11 +190,28 @@ export class ContratosRegistroComponent implements OnInit {
     let resultado = null
     let elemento = {...this.empleado}
 
+    console.log('nombreSplit ------------- ' + nombreSplit)
+
     const propiedades = nombreSplit
     propiedades.forEach(propiedad => {
-      elemento = elemento[propiedad]
+      console.log('elemento[propiedad] ' +  elemento[propiedad])
+      if(nombreSplit.toString() == 'chsexo'  ) {
+        if(elemento[propiedad].toString() == 'f'  ){
+          elemento = elemento[propiedad].replace('F','FEMENINO')
+        }else{
+          elemento = elemento[propiedad].replace('M','MASCULINO')
+        }
+        
+      }else{
+       // elemento = elemento[propiedad]
+       elemento = elemento[propiedad].toString().toUpperCase()
+      }
     })
     resultado = elemento || '-'
+
+    console.log('campoNombre ' + campoNombre)
+
+    console.log('pipe ------ ' +  pipe)
 
     if(pipe) {
       switch(pipe) {
@@ -205,11 +222,15 @@ export class ContratosRegistroComponent implements OnInit {
           })
           resultado = `${prevResultado} ${NumerosALetras(resultado)}`
           break
+          
         default:
           resultado += '-'
       }
     }
 
+    
+
+    
     return resultado
   };
 
