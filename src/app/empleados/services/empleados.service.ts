@@ -104,7 +104,7 @@ export class EmpleadosService {
   }
 
   getEmpleados() {
-    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/All/true`);
   }
 
   getEmpleado(id: number) {
