@@ -6,6 +6,7 @@ import { ContratosService } from '../services/contratos.service';
 import { finalize } from 'rxjs';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Hero, HEROES} from '../models/contratos.model';
 
 @Component({
   selector: 'app-registro-plantilla',
@@ -29,10 +30,14 @@ export class RegistroPlantillaComponent implements OnInit {
     titulo:               ['', Validators.required],
     template:             ['', Validators.required]
   })
+
+  contenido:  Hero[] = []
   
   constructor() { }
 
   ngOnInit(): void {
+
+    this.contenido = HEROES
 
     this.sharedService.cambiarEstado(true)
 
