@@ -13,12 +13,29 @@
         <div class="row">
             <div class="col-12">
                 <label for="titulo">Título:</label>
-                <input id="titulo" pInputText class="form-control" maxlength="50" formControlName="titulo" [ngClass]="{'ng-invalid ng-dirty': esInvalido('titulo')}">
+                <input id="titulo" pInputText class="form-control" maxlength="50" formControlName="titulo" [ngClass]="{'ng-invalid ng-dirty': esInvalido('titulo')}" >
                 <div *ngIf="esInvalido('titulo')">
                     <small class="error-msg">
               {{ obtenerMensajeError('titulo') }}
             </small>
                 </div>
+            </div>
+            <div class="col-12">
+                <label for="campito">Campo:</label>
+                <p-dropdown 
+                    id="campito" 
+                    [options]="campos"
+                    placeholder="Seleccionar una opcion" 
+                    optionLabel="label"
+                    [showClear]="true"
+                    [style]="{ width: '100%' }"
+                    formControlName="campito"
+                    [filter]="true" 
+                    filterBy="label"
+                    optionValue="value"
+                    (onChange)="buscarEmpleados($event)"
+                ></p-dropdown>
+                
             </div>
             <div class="col-12">
                 <label for="template">Plantilla:</label>

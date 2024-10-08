@@ -114,3 +114,8 @@ export const HEROES: Hero[] = [
 {nombre: 'chproyecto_principal', descripcion: 'Nombre del proyecto principal al que esta asignado ',valor: '111 Adecuaciones Piso 15' }
 ];
 
+export interface Item {
+  value: string,
+  label: string
+}
+

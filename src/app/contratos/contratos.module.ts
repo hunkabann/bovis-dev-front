@@ -15,6 +15,14 @@ import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { PintarValorPipe } from './pipes/pintar-valor.pipe';
 
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
+import { TagModule } from 'primeng/tag';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
+
 
 @NgModule({
   declarations: [
@@ -34,7 +42,14 @@ import { PintarValorPipe } from './pipes/pintar-valor.pipe';
     FormsModule,
     ButtonModule,
     RippleModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    InputNumberModule,
+    DropdownModule,
+    FormsModule,
+    TagModule,
+    ProgressSpinnerModule,
+    CalendarModule
   ],
   exports: [
     PintarValorPipe

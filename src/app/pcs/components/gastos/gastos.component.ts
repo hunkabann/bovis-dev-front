@@ -56,7 +56,7 @@ export class GastosComponent implements OnInit {
 
   cantidadMesesTranscurridos:        number
 
-  sumaTotales:        SumaFecha[] = []
+  //sumaTotales:        SumaFecha[] = []
 
    //private spinner: NgxSpinnerService
 
@@ -158,6 +158,33 @@ export class GastosComponent implements OnInit {
               
               if(seccion.seccion.includes('COSTOS DIRECTOS DE SALARIOS')){
 
+                this.costoMensualEmpleado =  0
+          
+
+                          // Agreamos las fechas por rubro
+                          rubro.fechas.forEach(fecha => {
+                          rubro.fechas.forEach(fecha => {
+                            this.sumacolumna += +fecha.porcentaje
+                          })
+                          this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
+
+                         //console.log('const total1 ------< ' + total)
+                         if( rubro.costoMensual != null ){
+                          this.costoMensualEmpleado = rubro.costoMensual
+                         }
+                         
+          
+                          this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+                            id:         fecha.id,
+                            mes:        fecha.mes,
+                            anio:       fecha.anio,
+                            porcentaje: this.formateaValor((fecha.porcentaje *this.costoMensualEmpleado)/100)
+                            //porcentaje: fecha.porcentaje
+                          }))
+                        })
+                       
+
+/**
                 this.costosService.getCostoID(rubro.numEmpleadoRrHh)
                 .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
                 .subscribe({
@@ -170,67 +197,20 @@ export class GastosComponent implements OnInit {
               
                       this.mensajito = message;
       
-                    if(this.mensajito.includes('No se encontraron registros de costos para el empleado') ){
+                      if(this.mensajito.includes('No se encontraron registros de costos para el empleado') ){
 
                      // console.log('message ' + message)
                      // console.log('es 0 ' + 0)
       
                       this.costoMensualEmpleado =  0
-                     /* this.total = rubro.fechas.reduce(
-                        (acc, obj) => acc + (obj.porcentaje *this.costoMensualEmpleado)/100,
-                        0
-                      );
-                      console.log('Total: ', this.total);
-                  
-                      //Calculamos el TOTAL
-                      this.cantidad = rubro.fechas.reduce(
-                        (add, obej) => add  +obej.porcentaje,
-                        0
-                      );
-                      console.log('cantidad: ', this.cantidad);*/
-                      this.sumaTotales = seccion.sumaFechas
-      
-
-                      const dato = this.sumaTotales;
-                         dato?.forEach(paso=>{
-                             console.log("paso.beneficio --------------> " +paso.sumaPorcentaje);
-                             //console.log("paso.cost-------------->> " +paso.costo);
-                
-                             //this.Costomenualproy += +paso.costo
-                
-                             //console.log("suma paso.cost-------------->> " +this.Costomenualproy);
-                            
-                         })
-
-/*
-                        seccion.sumaFechas.forEach((sumaFecha) => {
-
-                        //console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
-                      
-                        this.sumafechas(seccionIndex).push(this.fb.group({
-                          mes:        sumaFecha.mes,
-                          anio:       sumaFecha.anio,
-                          sumaFecha:  sumaFecha.sumaPorcentaje
-                        }))
-                      })*/
           
 
-                      // Agreamos las fechas por rubro
-                        rubro.fechas.forEach(fecha => {
-          
-          
-                         // console.log('fecha.porcentaje ------< ' + fecha.porcentaje  )
-                         // console.log('this.costoMensualEmpleado ------< ' +this.costoMensualEmpleado )
-                          //console.log('formula cuando es el porcentaje ------< ' + (fecha.porcentaje *this.costoMensualEmpleado)/100 )
-
-                          //const total = rubro.fechas.map(({porcentaje}) => porcentaje).reduce((acc, value) => acc + +value, 0);
-
+                          // Agreamos las fechas por rubro
+                          rubro.fechas.forEach(fecha => {
                           rubro.fechas.forEach(fecha => {
                             this.sumacolumna += +fecha.porcentaje
                           })
-
-                          
-          this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
+                          this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
                          //console.log('const total1 ------< ' + total)
                          
@@ -246,72 +226,26 @@ export class GastosComponent implements OnInit {
                        
       
                     }else{
-
-                      //console.log('message ' + message)
-                      //console.log('data.map(empleado => costoR.idCosto ) ' + data.map(empleado => costoR.idCosto))
-                      //console.log('array 0 data.map(empleado => costoR.costoMensualEmpleado ) ' +  data.map(empleado => costoR.costoMensualEmpleado )[0])
       
                       this.costoMensualEmpleado =  data.map(empleado => costoR.costoMensualEmpleado )[0]
 
-                      //this.sumaTotales = seccion.sumaFechas
-      
-
-                      const dato = this.sumaTotales;
-                         dato?.forEach(paso=>{
-                             //console.log("paso.beneficio --------------> " +paso.sumaPorcentaje);
-                             //console.log("paso.cost-------------->> " +paso.costo);
-                
-                             //this.Costomenualproy += +paso.costo
-                
-                             //console.log("suma paso.cost-------------->> " +this.Costomenualproy);
-                            
-                         })
-
-
-                        seccion.sumaFechas.forEach((sumaFecha) => {
-
-                        //console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
-                      
-                        this.sumafechas(seccionIndex).push(this.fb.group({
-                          mes:        sumaFecha.mes,
-                          anio:       sumaFecha.anio,
-                          sumaFecha:  sumaFecha.sumaPorcentaje
-                        }))
-                      })
                      
-                         /* this.total = rubro.fechas.reduce(
-                            (acc, obj) => acc + (obj.porcentaje *this.costoMensualEmpleado)/100,
-                            0
-                          );
-                          console.log('Total: ', this.total);
-                      
-                          //Calculamos el TOTAL
-                          this.cantidad = rubro.fechas.reduce(
-                            (add, obej) => add  +obej.porcentaje,
-                            0
-                          );
-                          console.log('cantidad: ', this.cantidad);*/
+
+                        seccion.sumaFechas.forEach((sumaFecha) => {this.sumafechas(seccionIndex).push(this.fb.group({
+                            mes:        sumaFecha.mes,
+                            anio:       sumaFecha.anio,
+                            sumaFecha:  sumaFecha.sumaPorcentaje
+                          }))
+                        })
+                     
+                         
 
                           rubro.fechas.forEach(fecha => {
                             this.sumacolumna += +fecha.porcentaje
                           })
 
-                      // Agreamos las fechas por rubro
+                        // Agreamos las fechas por rubro
                         rubro.fechas.forEach(fecha => {
-          
-          
-                         //console.log('fecha.porcentaje ------< ' + fecha.porcentaje  )
-                          //console.log('this.costoMensualEmpleado ------< ' +this.costoMensualEmpleado )
-                          //console.log('formula cuando es el porcentaje ------< ' + (fecha.porcentaje *this.costoMensualEmpleado)/100 )
-
-                          //this.sumacolumna = +(fecha.porcentaje *this.costoMensualEmpleado)/100
-
-                          //console.log('this.sumacolumna ------< ' + this.sumacolumna)
-
-                          //const total = rubro.fechas.map(({porcentaje}) => porcentaje).reduce((acc, value) => acc + +value, 0);
-
-                          
-          
                           this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
                             id:         fecha.id,
                             mes:        fecha.mes,
@@ -324,7 +258,7 @@ export class GastosComponent implements OnInit {
                         
       
                     }
-                  }
+                   }
 
                     
         
@@ -336,82 +270,38 @@ export class GastosComponent implements OnInit {
 
                   }
                   
-                })
-
-                //console.log('hace las operaciones por que entro al 2 ' )
-
-                 
+                  
+                })*/
 
               }else{
+                     
 
-                //this.sumaTotales = seccion.sumaFechas
-      
-
-                      const dato = this.sumaTotales;
-                         dato?.forEach(paso=>{
-                             //console.log("paso.beneficio --------------> " +paso.sumaPorcentaje);
-                             //console.log("paso.cost-------------->> " +paso.costo);
-                
-                             //this.Costomenualproy += +paso.costo
-                
-                             //console.log("suma paso.cost-------------->> " +this.Costomenualproy);
-                            
-                         })
-
-
-                        seccion.sumaFechas.forEach((sumaFecha) => {
-
-                        //console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
-                      
-                        this.sumafechas(seccionIndex).push(this.fb.group({
-                          mes:        sumaFecha.mes,
-                          anio:       sumaFecha.anio,
-                          sumaFecha:  sumaFecha.sumaPorcentaje
-                        }))
-                      })
+                        seccion.sumaFechas.forEach((sumaFecha) => {                      
+                          this.sumafechas(seccionIndex).push(this.fb.group({
+                            mes:        sumaFecha.mes,
+                            anio:       sumaFecha.anio,
+                            sumaFecha:  sumaFecha.sumaPorcentaje
+                          }))
+                        })
     
 
-                //console.log('No hace operaciones por que es diferente de 2' )
-                /*this.total = rubro.fechas.reduce(
-                  (acc, obj) => acc + (obj.porcentaje *this.costoMensualEmpleado)/100,
-                  0
-                );
-                console.log('Total: ', this.total);
-            
-                //Calculamos el TOTAL
-                this.cantidad = rubro.fechas.reduce(
-                  (add, obej) => add  +obej.porcentaje,
-                  0
-                );
-                console.log('cantidad: ', this.cantidad);
-*/
-                rubro.fechas.forEach(fecha => {
-                  this.sumacolumna += +fecha.porcentaje
-                })
+                
+                      rubro.fechas.forEach(fecha => {
+                        this.sumacolumna += +fecha.porcentaje
+                      })
                          
 
-                 // Agreamos las fechas por rubro
-              rubro.fechas.forEach(fecha => {
-                //this.sumacolumna  =0
+                       // Agreamos las fechas por rubro
+                      rubro.fechas.forEach(fecha => {
+                      this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+                        id:         fecha.id,
+                        mes:        fecha.mes,
+                        anio:       fecha.anio,
+                        porcentaje: fecha.porcentaje
+                      }))
+                    })
 
-                //this.sumacolumna += +fecha.porcentaje
-
-                
-
-                this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                  id:         fecha.id,
-                  mes:        fecha.mes,
-                  anio:       fecha.anio,
-                  porcentaje: fecha.porcentaje
-                }))
-              })
-
-             // const total = rubro.fechas.map(({porcentaje}) => porcentaje).reduce((acc, value) => acc + +value, 0);
-
-              //console.log('this.sumacolumna 3 ------< ' + total)
-              
-              
-
+            
               }
              
             })
