@@ -1525,7 +1525,7 @@ const bodyprovisionImpues = {
 }
 
 if(this.isProvisionImpuestosExpatsr){
-  this.empleadosService.ActualizaBeneficioCosto(bodyprovisionImpues,"/9/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaBeneficioCosto(bodyprovisionImpues,"/17/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -1604,7 +1604,7 @@ const bodyFringeExpats = {
 }
 
 if(this.isFringeExpats){
-  this.empleadosService.ActualizaBeneficioCosto(bodyFringeExpats,"/3007/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaBeneficioCosto(bodyFringeExpats,"/9/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -1864,7 +1864,7 @@ const bodyCostoIT = {
 }
 
 if(this.isCostoIt){
-  this.empleadosService.ActualizaBeneficioCosto(bodyCostoIT,"/1005/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaBeneficioCosto(bodyCostoIT,"/13/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -1942,7 +1942,7 @@ const bodyCosto_telefonia = {
 }
 
 if(this.isCostoTelefonia){
-  this.empleadosService.ActualizaBeneficioCosto(bodyCosto_telefonia,"/2005/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaBeneficioCosto(bodyCosto_telefonia,"/14/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2021,7 +2021,7 @@ const bodySV_Directivos = {
 }
 
 if(this.isSvDirectivos){
-  this.empleadosService.ActualizaBeneficioCosto(bodySV_Directivos,"/3005/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaBeneficioCosto(bodySV_Directivos,"/15/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
@@ -2099,7 +2099,7 @@ const bodyFacturacion_BPM = {
 }
 
 if(this.isFacturacionBpm){
-  this.empleadosService.ActualizaBeneficioCosto(bodyFacturacion_BPM,"/3006/"+this.form.controls['num_empleado'].value)
+  this.empleadosService.ActualizaBeneficioCosto(bodyFacturacion_BPM,"/16/"+this.form.controls['num_empleado'].value)
   .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
   .subscribe({
     next: (data) => {
