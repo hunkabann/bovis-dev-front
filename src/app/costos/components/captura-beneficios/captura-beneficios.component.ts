@@ -1520,7 +1520,7 @@ const bodyprovisionImpues = {
 
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "9",
+  IdBeneficio: "17",
   Costo: this.form.value.provision_impuestos_expats
 }
 
@@ -1599,7 +1599,7 @@ const bodyFringeExpats = {
 
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "3007",
+  IdBeneficio: "9",
   Costo: this.form.value.fringe_expats
 }
 
@@ -1859,7 +1859,7 @@ const bodyCostoIT = {
 
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "1005",
+  IdBeneficio: "13",
   Costo: this.form.value.costo_it
 }
 
@@ -1937,7 +1937,7 @@ const bodyCosto_telefonia = {
 
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "2005",
+  IdBeneficio: "14",
   Costo: this.form.value.costo_telefonia
 }
 
@@ -2016,7 +2016,7 @@ const bodySV_Directivos = {
 
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "3005",
+  IdBeneficio: "15",
   Costo: this.form.value.sv_directivos
 }
 
@@ -2094,7 +2094,7 @@ const bodyFacturacion_BPM = {
 
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "3006",
+  IdBeneficio: "16",
   Costo: this.form.value.facturacion_bpm
 }
 
@@ -2553,7 +2553,7 @@ const bodyProyectoprovisionImpues = {
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "9",
+  IdBeneficio: "17",
   nucostobeneficio: this.form.value.proy_provision_impuestos_expats
 }
 
@@ -2741,7 +2741,7 @@ const bodyProyectoCostoIT = {
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "1005",
+  IdBeneficio: "13",
   nucostobeneficio: this.form.value.proy_costo_it
 }
 
@@ -2787,7 +2787,7 @@ const bodyProyectoCosto_telefonia = {
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "2005",
+  IdBeneficio: "14",
   nucostobeneficio: this.form.value.proy_costo_telefonia
 }
 
@@ -2834,7 +2834,7 @@ const bodyProyectosSV_Directivos = {
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "3005",
+  IdBeneficio: "15",
   nucostobeneficio: this.form.value.proy_sv_directivos
 }
 
@@ -2880,7 +2880,7 @@ const bodyProyectoFacturacion_BPM = {
   //NumEmpleadoRrHh: this.form.value.num_empleado,
   NumProyecto: this.form.controls['proyecto'].value?.toString(),
   NumEmpleadoRrHh: this.form.controls['num_empleado'].value,
-  IdBeneficio: "3006",
+  IdBeneficio: "16",
   nucostobeneficio: this.form.value.proy_facturacion_bpm
 }
 
