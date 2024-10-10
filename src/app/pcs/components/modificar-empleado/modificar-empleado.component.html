@@ -103,7 +103,7 @@
                             ></p-inputSwitch>
                         </div>
                     </div>
-                </div>
+                    </div>
                 
                 <div class="col-6" *ngIf="form.value.aplicaTodosMeses">
                     <div class="form-group">
@@ -125,6 +125,17 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-4">
+                <div class="form-group">
+                    <label for="reembolsable">Reembolsable:</label>
+                    <div>
+                        <p-inputSwitch 
+                            formControlName="reembolsable"
+                        ></p-inputSwitch>
+                    </div>
+                </div>
+              </div>
         </div>
         
         <ng-container formArrayName="fechas">
