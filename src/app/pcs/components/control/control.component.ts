@@ -3,10 +3,10 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { PcsService } from '../../services/pcs.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
-import { obtenerMeses } from 'src/helpers/helpers';
+import { formatearInformacionControl, obtenerMeses } from 'src/helpers/helpers';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
-import { seccionesPCSControl, TITLES } from 'src/utils/constants';
+import { seccionesPCSControl, SUBJECTS, TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas, SeccionOpcion } from '../../models/pcs.model';
@@ -187,10 +187,14 @@ export class ControlComponent implements OnInit {
   // Sebastian's code
   cargarInformacionSeccion(event: any) {
     const { index } = event;
-    setTimeout(() => {
-      this.seccionesCargado[index] = true;
-      this.seccionesData[index] = this.seccionesOpciones[index];
-    }, 2000);
+    this.pcsService.obtenerInformacionSeccion(this.idproyecto, this.seccionesOpciones[index].slug)
+    .pipe(finalize(() => this.seccionesCargado[index] = true))
+    .subscribe({
+      next: (data) => {
+        this.seccionesData[index] = formatearInformacionControl(data?.data);;
+      },
+      error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+    });
   }
   // Sebastian's code
 

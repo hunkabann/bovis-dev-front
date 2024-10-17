@@ -519,46 +519,46 @@ export const emailsDatos = Object.freeze({
 export const seccionesPCSControl = Object.freeze([
   {
     titulo: 'SA SALARIOS',
-    clave: 'sa_salarios'
+    slug: 'sa_salarios'
   },
   {
     titulo: 'VA VIATICOS',
-    clave: 'va_viaticos'
+    slug: 'va_viaticos'
   },
   {
     titulo: 'GGA Condiciones Generales - Gasto General',
-    clave: 'gga_condiciones_generales'
+    slug: 'gga_condiciones_generales'
   },
   {
     titulo: 'GDPA Condiciones Generales - Gastos Directos de Proyecto',
-    clave: 'gdpa_condiciones_generales'
+    slug: 'gdpa_condiciones_generales'
   },
   {
     titulo: 'GOA Gastos Overhead',
-    clave: 'goa_gastos_overhead'
+    slug: 'goa_gastos_overhead'
   },
   {
     titulo: 'GA Gastos',
-    clave: 'ga_gastos'
+    slug: 'ga_gastos'
   },
   {
     titulo: 'F Ingresos',
-    clave: 'f_ingresos'
+    slug: 'f_ingresos'
   },
   {
     titulo: 'G Facturacion',
-    clave: 'g_facturacion'
+    slug: 'g_facturacion'
   },
   {
     titulo: 'H BIE(CIE)',
-    clave: 'h_bie_cie'
+    slug: 'h_bie_cie'
   },
   {
     titulo: 'COBRANZA',
-    clave: 'cobranza'
+    slug: 'cobranza'
   },
   {
     titulo: 'J Posicion Caja',
-    clave: 'j_posicion_caja'
+    slug: 'j_posicion_caja'
   }
 ]);

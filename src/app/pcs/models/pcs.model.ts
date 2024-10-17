@@ -260,5 +260,33 @@ export const encabezadosEmpleado = Object.freeze([
 
 export interface SeccionOpcion {
     titulo: string;
-    clave: string;
+    slug:   string;
+}
+
+export interface SeccionRespuesta {
+    data:          SeccionData;
+    success:       boolean;
+    message:       null;
+    transactionId: null;
+}
+
+export interface SeccionData {
+    seccion:            string;
+    hasChildren:        boolean;
+    previsto?:          SeccionRegistro;
+    real?:              SeccionRegistro;
+    subSecciones?:      SeccionRegistro[];
+}
+
+export interface SeccionRegistro {
+    seccion?:   string;
+    slug?:      string;
+    subTotal:   number;
+    fechas:     SeccionFecha[];
+}
+
+export interface SeccionFecha {
+    mes:        number;
+    anio:       number;
+    porcentaje: number;
 }
