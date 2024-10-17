@@ -257,3 +257,8 @@ export const encabezadosEmpleado = Object.freeze([
     nusalario_prom:   string;
     boactivo:    boolean;
 }
+
+export interface SeccionOpcion {
+    titulo: string;
+    clave: string;
+}

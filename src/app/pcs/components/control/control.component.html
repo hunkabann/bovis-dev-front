@@ -1,9 +1,4 @@
-<p-toast>
-</p-toast>
-
-<!--<div class="text-center" *ngIf="!proyectoSeleccionado; else cargandoView">
-  <p>Seleccione un proyecto y presione el botón <strong>Editar</strong>.</p>
-</div>-->
+<p-toast></p-toast>
 
 <div class="text-center" *ngIf="cargando; else principal">
     <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
@@ -12,71 +7,42 @@
 </div>
 
 <ng-template #principal>
-
     <div class="content" style="margin: 2%">
-        <ng-container [formGroup]="form" *ngIf="!cargando">
-
-
-            <!--ng-container formArrayName="secciones">
         
-        <p-accordion [activeIndex]="X" [formGroupName]="X" *ngFor="let seccion of secciones.controls; let X = index">
-            
-            <p-accordionTab>
-                
+        <!-- Sebastian's code -->
+        <p-accordion 
+            [multiple]="true" 
+            (onOpen)="cargarInformacionSeccion($event)"
+        >
+            <p-accordionTab *ngFor="let seccion of seccionesOpciones; let i = index">
                 <ng-template pTemplate="header">
                     <div class="d-flex justify-content-between align-items-center w-100">
                         <div class="title">
                             <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
-                            <span class="vertical-align-middle">{{seccion.value.codigo}} {{seccion.value.seccion}}</span>
+                            <span class="vertical-align-middle">{{ seccion.titulo }}</span>
                         </div>
                     </div>
                 </ng-template>
-                <ng-template  pTemplate="content">
-                    <p-table [value]="rubros(X).controls" [scrollable]="true" scrollHeight="400px">
-                        <ng-template pTemplate="header">
-                            
-                            <tr>
-                                
-                                    
-                                    <th>Nombre</th>
-                                    
-                                    <th>Subtotal</th>
-                                    <th *ngFor="let mesRegistro of mesesProyecto">
-                                        {{mesRegistro.desc | uppercase}} 
-                                    </th>
-                                    
-                                
-                                
-                                
-                            </tr>
+                <ng-template pTemplate="content">
+                    <div *ngIf="!seccionesCargado[i]; else contenido">
+                        Cargando...
+                    </div>
+                    <ng-template #contenido>
+                        <div *ngIf="!seccionesData[i]; else contenidoData">
+                            No se encontraron datos...
+                        </div>
+                        <ng-template #contenidoData>
+                            {{ seccionesData[i] | json }}
                         </ng-template>
-                        <ng-template pTemplate="body" let-norubro let-inoRubro="rowIndex" let-bus>
-                            <tr>
-                               
-                                
-                                    
-                                    <td>{{norubro.value.rubro}}</td>
-                                    <td>{{norubro.value.fechas | calcularSubtotal}}</td>
-                                    <td *ngFor="let mesRegistro of mesesProyecto">
-                                        {{norubro.value.fechas | porcentajeMes:mesRegistro}}
-                                    </td>
-                                    
-                               
-                               
-                                    
-                               
-                                
-                            </tr>
-                            
-                        </ng-template>
-                        
-                        
-                    </p-table>
+                    </ng-template>
                 </ng-template>
-                
             </p-accordionTab>
-        </p-accordion>
-    </ng-container-->
+        </p-accordion>        
+
+        <hr style="margin: 30px 0 30px 0;">
+        <!-- Sebastian's code -->
+
+        <ng-container [formGroup]="form" *ngIf="!cargando">
             <!-- SALARIOS -->
             <ng-container formArrayName="secciones">
 

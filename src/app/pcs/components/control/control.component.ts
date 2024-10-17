@@ -6,10 +6,10 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { obtenerMeses } from 'src/helpers/helpers';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
-import { TITLES } from 'src/utils/constants';
+import { seccionesPCSControl, TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas } from '../../models/pcs.model';
+import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas, SeccionOpcion } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 
 @Component({
@@ -70,6 +70,9 @@ export class ControlComponent implements OnInit {
   SumaIngresosViaticos = 0;
   SumaIngresosGasto = 0;
 
+  seccionesOpciones: SeccionOpcion[] = [...seccionesPCSControl];
+  seccionesCargado: boolean[] = [];
+  seccionesData: any[] = [];
 
   constructor() { }
 
@@ -181,6 +184,15 @@ export class ControlComponent implements OnInit {
 
   }
 
+  // Sebastian's code
+  cargarInformacionSeccion(event: any) {
+    const { index } = event;
+    setTimeout(() => {
+      this.seccionesCargado[index] = true;
+      this.seccionesData[index] = this.seccionesOpciones[index];
+    }, 2000);
+  }
+  // Sebastian's code
 
   cargarInformacionIngreso(numProyecto: number) {
 
