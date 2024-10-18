@@ -24,8 +24,8 @@
                     </div>
                 </ng-template>
                 <ng-template pTemplate="content">
-                    <div *ngIf="!seccionesCargado[i]; else contenido">
-                        Cargando...
+                    <div *ngIf="!seccionesCargado[i]; else contenido" class="text-center">
+                        <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
                     </div>
                     <ng-template #contenido>
                         <app-tabla-datos 
