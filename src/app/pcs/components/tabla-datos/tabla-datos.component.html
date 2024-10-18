@@ -1,0 +1,26 @@
+<div>
+    <div *ngIf="!data; else contenidoData">
+        No se encontraron datos...
+    </div>
+    <ng-template #contenidoData>
+        <p-table [value]="data.registros" [scrollable]="true" scrollHeight="400px">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th *ngFor="let encabezado of data.encabezados">
+                        {{ encabezado | uppercase }}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-registro>
+                <tr>
+                    <td *ngFor="let valor of registro">
+                        <p *ngIf="valor == 'Previsto' || valor == 'REAL'; else valorMoneda">{{ valor }}</p>
+                        <ng-template #valorMoneda>
+                            <p>{{ valor | currency }}</p>
+                        </ng-template>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+</div>
