@@ -41,7 +41,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { PorcentajeMesFacturaPipe } from './pipes/porcentaje-mes-factura.pipe';
 import { PorcentajeMesCobranzaPipe } from './pipes/porcentaje-mes-cobranza.pipe';
 import { porcentajeMesControlPipe } from './pipes/porcentaje-mes-control.pipe';
-import { TablaDatosComponent } from '../cps/components/tabla-datos/tabla-datos.component';
+import { TablaDatosComponent } from './components/tabla-datos/tabla-datos.component';
+import { SubseccionesAccordionComponent } from './components/subsecciones-accordion/subsecciones-accordion.component';
 
 
 @NgModule({
@@ -68,7 +69,8 @@ import { TablaDatosComponent } from '../cps/components/tabla-datos/tabla-datos.c
     PorcentajeMesFacturaPipe,
     PorcentajeMesCobranzaPipe,
     porcentajeMesControlPipe,
-    TablaDatosComponent
+    TablaDatosComponent,
+    SubseccionesAccordionComponent
   ],
   imports: [
     CommonModule,

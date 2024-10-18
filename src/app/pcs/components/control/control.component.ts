@@ -9,7 +9,7 @@ import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.comp
 import { seccionesPCSControl, SUBJECTS, TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas, SeccionOpcion } from '../../models/pcs.model';
+import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas, SeccionOpcion, SeccionRespuesta, SeccionFormateada } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 
 @Component({
@@ -184,19 +184,29 @@ export class ControlComponent implements OnInit {
 
   }
 
-  // Sebastian's code
   cargarInformacionSeccion(event: any) {
     const { index } = event;
     this.pcsService.obtenerInformacionSeccion(this.idproyecto, this.seccionesOpciones[index].slug)
     .pipe(finalize(() => this.seccionesCargado[index] = true))
     .subscribe({
-      next: (data) => {
-        this.seccionesData[index] = formatearInformacionControl(data?.data);;
+      next: (result) => {
+        const { data } = result as SeccionRespuesta;
+          if (data?.hasChildren) {
+            let subSecciones: SeccionFormateada[] = [];
+            data?.subsecciones?.forEach(subSeccion => {
+              subSecciones.push(formatearInformacionControl(subSeccion));
+            });
+            this.seccionesData[index] = {
+              hasChildren: true,
+              subSecciones
+            }; 
+          } else {
+            this.seccionesData[index] = formatearInformacionControl(data); 
+          }
       },
       error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
     });
   }
-  // Sebastian's code
 
   cargarInformacionIngreso(numProyecto: number) {
 

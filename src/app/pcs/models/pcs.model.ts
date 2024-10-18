@@ -275,7 +275,15 @@ export interface SeccionData {
     hasChildren:        boolean;
     previsto?:          SeccionRegistro;
     real?:              SeccionRegistro;
-    subSecciones?:      SeccionRegistro[];
+    subsecciones?:      SeccionSubseccion[];
+}
+
+export interface SeccionSubseccion {
+    hasChildren?:   boolean;
+    slug:           string;
+    seccion:        string;
+    previsto:       SeccionRegistro;
+    real:           SeccionRegistro;
 }
 
 export interface SeccionRegistro {
@@ -289,4 +297,11 @@ export interface SeccionFecha {
     mes:        number;
     anio:       number;
     porcentaje: number;
+}
+
+export interface SeccionFormateada {
+    hasChildren:    boolean;
+    seccion:        string;
+    encabezados:    string[]; 
+    registros:      string[]
 }

@@ -2,7 +2,7 @@
 import * as base64js from 'base64-js'
 import { addMonths, differenceInCalendarMonths, format} from 'date-fns';
 import { es } from 'date-fns/locale';
-import { SeccionData } from 'src/app/pcs/models/pcs.model';
+import { SeccionData, SeccionFormateada, SeccionSubseccion } from 'src/app/pcs/models/pcs.model';
 import { Mes } from 'src/models/general.model';
 
 
@@ -108,7 +108,7 @@ export const formatCurrency = (valor: number) => {
 /**
  * Función para dar formato a las tablas de PCS Control
  */
-export const formatearInformacionControl = (data: SeccionData) => {
+export const formatearInformacionControl = (data: SeccionData | SeccionSubseccion): SeccionFormateada | null => {
   
   // Paso 1: Unir y ordenar los meses y años de ambos arreglos
   const fechasCombinadas = [...data.previsto.fechas, ...data.real.fechas]
@@ -143,6 +143,11 @@ export const formatearInformacionControl = (data: SeccionData) => {
   
   registros.push(['REAL', data.real.subTotal || 0, ...valoresReal]);
   
-  return {encabezados, registros};
+  return {
+    hasChildren: data?.hasChildren || false,
+    seccion: data?.seccion,
+    encabezados, 
+    registros,
+  };
   
 }

@@ -28,7 +28,13 @@
                         Cargando...
                     </div>
                     <ng-template #contenido>
-                        <app-tabla-datos [data]="seccionesData[i]"></app-tabla-datos>
+                        <app-tabla-datos 
+                            [data]="seccionesData[i]"
+                            *ngIf="!seccionesData[i]?.hasChildren; else contenidoSubsecciones"
+                        ></app-tabla-datos>
+                        <ng-template #contenidoSubsecciones>
+                            <app-subsecciones-accordion [data]="seccionesData[i]"></app-subsecciones-accordion>
+                        </ng-template>
                     </ng-template>
                 </ng-template>
             </p-accordionTab>
