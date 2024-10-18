@@ -272,8 +272,6 @@ export class ControlComponent implements OnInit {
 
           let frutasverdes = ["Previsto", "Real"];
 
-          console.log('this.frutasverdes  =>  ' + frutasverdes.length)
-
           this.frutas = frutasverdes
 
 
