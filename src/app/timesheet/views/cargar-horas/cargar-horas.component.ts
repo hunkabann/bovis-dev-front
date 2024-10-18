@@ -167,7 +167,7 @@ export class CargarHorasComponent implements OnInit {
   get stringFechaNoPermitida(): string {
     let date: Date = new Date();
     //return (+date.getDate() > 13  && +date.getDate() < 31)                                          // validar administrador                        //validar cualquier usuario
-    this.visible  = (this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? (+date.getDate() > 27  && +date.getDate() < 31) : (+date.getDate() > 23  && +date.getDate() < 28))
+    this.visible  = (this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? (+date.getDate() > 27  && +date.getDate() < 31) : (+date.getDate() > 17  && +date.getDate() < 28))
 
     if(this.visible){
       this.stilovisible = 'hidden'
