@@ -45,22 +45,44 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-rubro let-iRubro="rowIndex">
-                            <tr>
-                                <td>
-                                    <div class="d-flex gap-2 justify-content-center">
-                                        <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro || seccion.value.idSeccion == 2 ">
-                                    <i class="pi pi-pencil vertical-align-middle"></i>
-                                </button>
-                                    </div>
-                                </td>
-                                <td>{{rubro.value.rubro}}</td>
-                                <td>{{rubro.value.unidad}}</td>
-                                <td>{{rubro.value.cantidad}}</td>
-                                <td>{{rubro.value.reembolsable ? 'Sí' : 'No'}}</td>
-                                <td>{{rubro.value.fechas | calcularSubtotal}}</td>
-                                <td *ngFor="let mesRegistro of mesesProyecto">
-                                    {{rubro.value.fechas | porcentajeMes:mesRegistro}}
-                                </td>
+                            <tr >
+                                <td *ngIf="seccion.value.idSeccion == 2; then empleados else elseimporte" ></td>
+                                <ng-template #empleados>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro || seccion.value.idSeccion == 2 ">
+                                        <i class="pi pi-pencil vertical-align-middle"></i>
+                                    </button>
+                                        </div>
+                                    </td>
+                                    <td>{{rubro.value.rubro}}</td>
+                                    <td>{{rubro.value.unidad}}</td>
+                                    <td>{{rubro.value.cantidad}}</td>
+                                    <td>{{rubro.value.reembolsable ? 'Sí' : 'No'}}</td>
+                                    <td>{{rubro.value.fechas | calcularSubtotal}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{rubro.value.fechas | calcularSubtotal:mesRegistro}}
+                                    </td>
+                                </ng-template>
+                                <ng-template #elseimporte>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center">
+                                            <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro || seccion.value.idSeccion == 2 ">
+                                        <i class="pi pi-pencil vertical-align-middle"></i>
+                                    </button>
+                                        </div>
+                                    </td>
+                                    <td>{{rubro.value.rubro}}</td>
+                                    <td>{{rubro.value.unidad}}</td>
+                                    <td>{{rubro.value.cantidad}}</td>
+                                    <td>{{rubro.value.reembolsable ? 'Sí' : 'No'}}</td>
+                                    <td>{{rubro.value.fechas | calcularSubtotal}}</td>
+                                    <td *ngFor="let mesRegistro of mesesProyecto">
+                                        {{rubro.value.fechas | porcentajeMes:mesRegistro}}
+                                    </td>
+                                </ng-template>
+
+                                
                             </tr>
                             
                         </ng-template>

@@ -68,10 +68,13 @@
         <p-toolbar styleClass="p-3 mt-5 mb-4 ">
             <div class="grid">
                 <div class="col flex-column justify-content-start">
-                    <h4 class="mt-2">Proyectos</h4>
+                    <h4 class="mt-2" >Proyectos</h4>
                 </div>
                 <div class="col  justify-content-end">
-                    <a title="Agregar proyecto" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" style="text-decoration: none;" (click)="agregarProyectoModal()"></a>
+                    
+                        <a id="botonagregar" title="Agregar proyecto" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" style="text-decoration: none; visibility: {{stringFechaNoPermitida}};" (click)="agregarProyectoModal()"  ></a>
+                  
+                    <!-- button title="Agregar proyecto" class="btn" style="text-decoration: none;padding: 0; border: none; "  [disabled]="FechaNoPermitida"><i pButton  icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" style="text-decoration: none;" (click)="agregarProyectoModal()"></i></button-->
                 </div>
             </div>
 
@@ -82,19 +85,19 @@
                     </div>
                     <div class="col-2 d-flex flex-column">
                         <label for="dias{{i}}">Días:</label>
-                        <p-inputNumber id="dias{{i}}" placeholder="0" formControlName="dias" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dias', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularPorcentajes($event, i, 'proyectos')"></p-inputNumber>
+                        <p-inputNumber [disabled]="FechaNoPermitida" id="dias{{i}}" placeholder="0" formControlName="dias" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dias', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularPorcentajes($event, i, 'proyectos')"></p-inputNumber>
                         <div *ngIf="esInvalidoEnArreglo(proyectos, 'dias', i)">
                             <small class="error-msg">{{ obtenerMensajeErrorEnArreglo(proyectos, 'dias', i) }}</small>
                         </div>
                     </div>
                     <div class="col-2" hidden="true">
                         <label for="diasCalc{{i}}">Días:</label>
-                        <input id="diasCalc{{i}}"  pInputText class="form-control" formControlName="diasCalc"  mode="decimal"  readonly [placeholder]="0.00" >
+                        <input [disabled]="FechaNoPermitida" id="diasCalc{{i}}"  pInputText class="form-control" formControlName="diasCalc"  mode="decimal"  readonly [placeholder]="0.00" >
                         
                     </div>
                     <div class="col-2 d-flex flex-column">
                         <label for="dedicacionCalc{{i}}">% Dedicación:</label>
-                        <p-inputNumber id="dedicacionCalc{{i}}" placeholder="0" formControlName="dedicacionCalc" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dedicacionCalc', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularDiasdedica($event, i, 'proyectos')"></p-inputNumber>
+                        <p-inputNumber [disabled]="FechaNoPermitida" id="dedicacionCalc{{i}}" placeholder="0" formControlName="dedicacionCalc" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalidoEnArreglo(proyectos, 'dedicacionCalc', i)}" [style]="{ width: '100%' }" (ngModelChange)="calcularDiasdedica($event, i, 'proyectos')"></p-inputNumber>
                         <div *ngIf="esInvalidoEnArreglo(proyectos, 'dias', i)">
                             <small class="error-msg">{{ obtenerMensajeErrorEnArreglo(proyectos, 'dias', i) }}</small>
                         </div>
@@ -102,11 +105,11 @@
                     </div>
                     <div class="col-2"  hidden="true">
                         <label for="dedicacion{{i}}">% Dedicación:</label>
-                        <input id="dedicacion{{i}}"   pInputText class="form-control" formControlName="dedicacion" mode="decimal" readonly [placeholder]="0.00" >
+                        <input [disabled]="FechaNoPermitida" id="dedicacion{{i}}"   pInputText class="form-control" formControlName="dedicacion" mode="decimal" readonly [placeholder]="0.00" >
                     </div>
                     <div class="col-2">
                         <label for="costo{{i}}">% Costo:</label>
-                        <input id="costo{{i}}" type="text" pInputText class="form-control" formControlName="costo" mode="decimal" readonly [placeholder]="0.00">
+                        <input [disabled]="FechaNoPermitida" id="costo{{i}}" type="text" pInputText class="form-control" formControlName="costo" mode="decimal" readonly [placeholder]="0.00">
                     </div>
                     <div class="col-1 d-flex justify-content-center align-items-center">
                         <a [title]="'Eliminar proyecto ' + proyecto.get('nombre').value" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" style="text-decoration: none;" (click)="eliminarProyecto(proyecto.get('id').value, i)"></a>
