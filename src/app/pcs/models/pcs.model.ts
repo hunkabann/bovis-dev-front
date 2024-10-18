@@ -33,6 +33,7 @@ export interface Empleado {
     fee:                number;
     cantidad:           number;
     Puesto:             string;
+    reembolsable:       boolean;
 }
 
 export interface Fecha {

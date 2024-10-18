@@ -44,6 +44,12 @@ export class CargarHorasComponent implements OnInit {
 
   diasHabiles: number = 0
 
+  fechahoy: number = 0
+
+  visible: boolean = true
+
+  stilovisible: string = ''
+
   form = this.fb.group({
     empleado:       ['', [Validators.required]],
     fecha:          [format(Date.now(), 'M/Y')],
@@ -55,6 +61,7 @@ export class CargarHorasComponent implements OnInit {
     dedicacion: [0],
     sabados:        ['NO'],
     proyectos:      this.fb.array([]),
+    botonagregar:   null,
     otros:          this.fb.array([
       this.fb.group({
         id:         ['feriado'],
@@ -157,6 +164,28 @@ export class CargarHorasComponent implements OnInit {
     return total
   }
 
+  get stringFechaNoPermitida(): string {
+    let date: Date = new Date();
+    //return (+date.getDate() > 13  && +date.getDate() < 31)                                          // validar administrador                        //validar cualquier usuario
+    this.visible  = (this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? (+date.getDate() > 27  && +date.getDate() < 31) : (+date.getDate() > 23  && +date.getDate() < 28))
+
+    if(this.visible){
+      this.stilovisible = 'hidden'
+      return this.stilovisible
+    }else{
+      this.stilovisible = 'visible'
+      return this.stilovisible
+    }
+  }
+
+  get FechaNoPermitida(): boolean {
+    let date: Date = new Date();
+    //return (+date.getDate() > 13  && +date.getDate() < 31)                                          // validar administrador                        //validar cualquier usuario
+    return(this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? (+date.getDate() > 14  && +date.getDate() < 31) : (+date.getDate() > 14  && +date.getDate() < 31))
+
+    
+  }
+
   ngOnInit(): void {
 
     this.sharedService.cambiarEstado(true)
@@ -175,7 +204,7 @@ export class CargarHorasComponent implements OnInit {
 
     forkJoin(([
       this.timesheetService.getEmpleadoInfo(localStorage.getItem('userMail') || ''),
-      this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? this.empleadosService.getEmpleados() : this.timesheetService.getEmpleadosByJefeEmail(localStorage.getItem('userMail') || ''),
+      this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? this.empleadosService.getEmpleadosActivos() : this.timesheetService.getEmpleadosByJefeEmail(localStorage.getItem('userMail') || ''),
       this.timesheetService.getDiasHabiles(+this.form.value.mes, +this.form.value.anio, this.form.value.sabados as SabadosOpciones)
     ]))
     .pipe(
@@ -380,7 +409,7 @@ export class CargarHorasComponent implements OnInit {
   
   agregarProyectoModal() {
 
-    const empleado = this.form.value.empleado
+      const empleado = this.form.value.empleado
 
     this.dialogService.open(AgregarProyectoComponent, {
       header: 'Agregar proyecto',
@@ -406,6 +435,10 @@ export class CargarHorasComponent implements OnInit {
         )
       }
     })
+
+    
+
+    
   }
 
   eliminarProyecto(idProyecto: number, i: number) {
