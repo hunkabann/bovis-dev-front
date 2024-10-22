@@ -354,7 +354,9 @@ export class ModificarComponent implements OnInit {
           dedicacion: [0],
           costo:      [proyecto.costo],
           diasCalc:      [0],
-          dedicacionCalc:      [proyecto.tDedicacion]
+          dedicacionCalc:      [proyecto.tDedicacion],
+          tsproyect:      [proyecto.idTimesheet_Proyecto]
+
         })
       )
       this.calcularPorcentajes(proyecto.dias, index, 'proyectos')
