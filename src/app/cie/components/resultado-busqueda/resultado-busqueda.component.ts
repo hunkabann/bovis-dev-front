@@ -216,6 +216,7 @@ export class ResultadoBusquedaComponent implements OnInit {
         worksheet.getCell(row, 11).value = formatCurrency(record.debe || 0)
         worksheet.getCell(row, 12).value = formatCurrency(record.haber || 0)
 
+        //ATC
         if (record.debe == null || "" + record.debe == '') {
           worksheet.getCell(row, 13).value = formatCurrency(record.movimiento * -1)
         } else {
