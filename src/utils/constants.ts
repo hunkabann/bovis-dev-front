@@ -510,8 +510,6 @@ export const emailsDatos = Object.freeze({
               El área de Recursos Humanos ha recibido su requerimiento de persoal y comenzará el proceso de búsqueda.
               Lo mantendremos al tanto de los avances.
               Saludos.`,
-    emailsTo: [
-      'jmmorales@hunkabann.com.mx'
-    ]
+    emailsTo: ['jmmorales@hunkabann.com.mx']
   }
 })
