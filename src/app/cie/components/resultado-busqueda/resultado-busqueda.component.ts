@@ -217,9 +217,10 @@ export class ResultadoBusquedaComponent implements OnInit {
         worksheet.getCell(row, 12).value = formatCurrency(record.haber || 0)
 
         if (record.debe == null || "" + record.debe == '') {
-          worksheet.getCell(row, 13).value = formatCurrency(record.movimiento || 0)
-        } else {
           worksheet.getCell(row, 13).value = formatCurrency(record.movimiento * -1)
+        } else {
+          worksheet.getCell(row, 13).value = formatCurrency(record.movimiento || 0)
+          
         }
       }
 
