@@ -178,7 +178,7 @@ export class CargarHorasComponent implements OnInit {
      console.log('cantidad de empleados otros --------- <<<<<  ' + this.empleados.length) 
      console.log(Object.values(this.empleados));
 
-      this.visible  = (this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? (+date.getDate() > 27  && +date.getDate() < 31) : (+date.getDate() > 17  && +date.getDate() < 28))
+      this.visible  = (this.empleados.length == 0 || this.empleados.length == 1 ? (+date.getDate() > 23  && +date.getDate() < 32) : (+date.getDate() > 26  && +date.getDate() < 32))
 
       if(this.visible){
         this.stilovisible = 'hidden'
@@ -199,15 +199,10 @@ export class CargarHorasComponent implements OnInit {
     if(this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador){
       return false                                   
     }else{
-
                                                                                                 // validar administrador                        //validar cualquier usuario
-      return(this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? (+date.getDate() > 14  && +date.getDate() < 31) : (+date.getDate() > 14  && +date.getDate() < 31))
-
-
+      //return(this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? (+date.getDate() > 14  && +date.getDate() < 31) : (+date.getDate() > 14  && +date.getDate() < 31))
+      return (this.empleados.length == 0 || this.empleados.length == 1 ? (+date.getDate() > 23  && +date.getDate() < 32) : (+date.getDate() > 26  && +date.getDate() < 32))
     }
-
-    
-    
   }
 
   ngOnInit(): void {

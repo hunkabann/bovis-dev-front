@@ -47,6 +47,12 @@ export class ModificarComponent implements OnInit {
   diasHabiles: number = 0
   timesheetID: number = 0
 
+  fechahoy: number = 0
+
+  visible: boolean = true
+
+  stilovisible: string = ''
+
   form = this.fb.group({
     id_time_sheet:  [0],
     empleado:       ['', [Validators.required]],
@@ -131,6 +137,47 @@ export class ModificarComponent implements OnInit {
       total += Number(control.get('dias').value)
     })
     return total
+  }
+
+  get stringFechaNoPermitida(): string {
+    let date: Date = new Date();
+
+    if(this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador){
+      console.log('cantidad de empleados admin --------- <<<<<  ' + this.empleados.length) 
+      console.log(Object.values(this.empleados));
+
+      this.stilovisible = 'visible'
+      return this.stilovisible                               
+    }else{
+
+     console.log('cantidad de empleados otros --------- <<<<<  ' + this.empleados.length) 
+     console.log(Object.values(this.empleados));
+
+      this.visible  = (this.empleados.length == 0 || this.empleados.length == 1 ? (+date.getDate() > 23  && +date.getDate() < 32) : (+date.getDate() > 26  && +date.getDate() < 32))
+
+      if(this.visible){
+        this.stilovisible = 'hidden'
+        return this.stilovisible
+      }else{
+        this.stilovisible = 'visible'
+        return this.stilovisible
+      }
+
+    }
+    //return (+date.getDate() > 13  && +date.getDate() < 31)                                          // validar administrador                        //validar cualquier usuario
+    
+  }
+
+  get FechaNoPermitida(): boolean {
+    let date: Date = new Date();
+    //return (+date.getDate() > 13  && +date.getDate() < 31)       
+    if(this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador){
+      return false                                   
+    }else{
+                                                                                                // validar administrador                        //validar cualquier usuario
+      //return(this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? (+date.getDate() > 14  && +date.getDate() < 31) : (+date.getDate() > 14  && +date.getDate() < 31))
+      return (this.empleados.length == 0 || this.empleados.length == 1 ? (+date.getDate() > 23  && +date.getDate() < 32) : (+date.getDate() > 26  && +date.getDate() < 32))
+    }
   }
 
   ngOnInit(): void {
