@@ -21,7 +21,8 @@ interface EtapaEmpleado {
   num_proyecto:       number,
   aplicaTodosMeses:   boolean,
   cantidad:           number,
-  FEE:                number
+  FEE:                number,
+  reembolsable:       boolean
 }
 
 interface ICatalogo {
@@ -69,7 +70,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     cantidad:         [0],
     FEE:              [0],
     fechas:           this.fb.array([]),
-    puesto:     [null]
+    puesto:     [null],
+    reembolsable: [false]
   })
 
   constructor() { }
@@ -117,7 +119,8 @@ export class ModificarEmpleadoComponent implements OnInit {
         num_proyecto:     data.num_proyecto || null,
         aplicaTodosMeses: data.empleado?.aplicaTodosMeses,
         cantidad:         data.empleado?.cantidad,
-        puesto:         data.empleado?.Puesto
+        puesto:         data.empleado?.Puesto,
+        reembolsable: data.empleado?.aplicaTodosMeses
       })
 
       if(!data.empleado) {
@@ -223,7 +226,8 @@ export class ModificarEmpleadoComponent implements OnInit {
               aplicaTodosMeses:   this.form.value.aplicaTodosMeses,
               cantidad:           this.form.value.cantidad,
               fee:                null,
-              Puesto:                null
+              Puesto:             null,
+              reembolsable:       this.form.value.reembolsable,
             }
           }
           const empleadoRespuesta: Empleado = {

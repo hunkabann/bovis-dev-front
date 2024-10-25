@@ -33,6 +33,7 @@ export interface Empleado {
     fee:                number;
     cantidad:           number;
     Puesto:             string;
+    reembolsable:       boolean;
 }
 
 export interface Fecha {
@@ -256,4 +257,52 @@ export const encabezadosEmpleado = Object.freeze([
     nusalario_max:   string;
     nusalario_prom:   string;
     boactivo:    boolean;
+}
+
+export interface SeccionOpcion {
+    titulo: string;
+    slug:   string;
+}
+
+export interface SeccionRespuesta {
+    data:          SeccionData;
+    success:       boolean;
+    message:       null;
+    transactionId: null;
+}
+
+export interface SeccionData {
+    seccion:            string;
+    hasChildren:        boolean;
+    previsto?:          SeccionRegistro;
+    real?:              SeccionRegistro;
+    subsecciones?:      SeccionSubseccion[];
+}
+
+export interface SeccionSubseccion {
+    hasChildren?:   boolean;
+    slug:           string;
+    seccion:        string;
+    previsto:       SeccionRegistro;
+    real:           SeccionRegistro;
+}
+
+export interface SeccionRegistro {
+    seccion?:   string;
+    slug?:      string;
+    subTotal:   number;
+    fechas:     SeccionFecha[];
+}
+
+export interface SeccionFecha {
+    mes:        number;
+    anio:       number;
+    porcentaje: number;
+}
+
+export interface SeccionFormateada {
+    hasChildren:    boolean;
+    seccion:        string;
+    encabezados:    string[]; 
+    registros:      string[]
 }

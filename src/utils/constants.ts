@@ -510,8 +510,53 @@ export const emailsDatos = Object.freeze({
               El área de Recursos Humanos ha recibido su requerimiento de persoal y comenzará el proceso de búsqueda.
               Lo mantendremos al tanto de los avances.
               Saludos.`,
-    emailsTo: [
-      'jmmorales@hunkabann.com.mx'
-    ]
+    emailsTo: ['jmmorales@hunkabann.com.mx']
   }
 })
+
+export const seccionesPCSControl = Object.freeze([
+  {
+    titulo: 'SA SALARIOS',
+    slug: 'sa_salarios'
+  },
+  {
+    titulo: 'VA VIATICOS',
+    slug: 'va_viaticos'
+  },
+  {
+    titulo: 'GGA Condiciones Generales - Gasto General',
+    slug: 'gga_condiciones_generales'
+  },
+  {
+    titulo: 'GDPA Condiciones Generales - Gastos Directos de Proyecto',
+    slug: 'gdpa_condiciones_generales'
+  },
+  {
+    titulo: 'GOA Gastos Overhead',
+    slug: 'goa_gastos_overhead'
+  },
+  {
+    titulo: 'GA Gastos',
+    slug: 'ga_gastos'
+  },
+  {
+    titulo: 'F Ingresos',
+    slug: 'f_ingresos'
+  },
+  {
+    titulo: 'G Facturacion',
+    slug: 'g_facturacion'
+  },
+  {
+    titulo: 'H BIE(CIE)',
+    slug: 'h_bie_cie'
+  },
+  {
+    titulo: 'COBRANZA',
+    slug: 'cobranza'
+  },
+  {
+    titulo: 'J Posicion Caja',
+    slug: 'j_posicion_caja'
+  }
+]);

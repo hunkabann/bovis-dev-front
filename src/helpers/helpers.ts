@@ -2,6 +2,7 @@
 import * as base64js from 'base64-js'
 import { addMonths, differenceInCalendarMonths, format} from 'date-fns';
 import { es } from 'date-fns/locale';
+import { SeccionData, SeccionFormateada, SeccionSubseccion } from 'src/app/pcs/models/pcs.model';
 import { Mes } from 'src/models/general.model';
 
 
@@ -102,4 +103,51 @@ export const formatCurrency = (valor: number) => {
     style: 'currency',
     currency: 'MXN',
   })
+}
+
+/**
+ * Función para dar formato a las tablas de PCS Control
+ */
+export const formatearInformacionControl = (data: SeccionData | SeccionSubseccion): SeccionFormateada | null => {
+  
+  // Paso 1: Unir y ordenar los meses y años de ambos arreglos
+  const fechasCombinadas = [...data.previsto.fechas, ...data.real.fechas]
+    .map(f => ({ mes: f.mes, anio: f.anio }))
+    .filter(
+      (v, i, a) => a.findIndex(t => t.mes === v.mes && t.anio === v.anio) === i
+    ) // Eliminar duplicados
+    .sort((a, b) => a.anio - b.anio || a.mes - b.mes); // Ordenar por año y luego por mes;
+  
+  // Paso 2: Crear los nombres de los meses en formato 'ENE/2024'
+  let encabezados = fechasCombinadas.map(f => {
+    const mesNombres = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+    return `${mesNombres[f.mes - 1]}/${f.anio}`;
+  });
+
+  encabezados = ['Nombre', 'Subtotal', ...encabezados];
+  
+  // Paso 3: Crear los valores correspondientes para "previsto" y "real"
+  let registros = [];
+
+  const valoresPrevisto = fechasCombinadas.map(f => {
+    const entry = data.previsto.fechas.find(e => e.mes === f.mes && e.anio === f.anio);
+    return entry ? entry.porcentaje : 0;
+  });
+
+  registros.push(['Previsto', data.previsto.subTotal || 0, ...valoresPrevisto]);
+  
+  const valoresReal = fechasCombinadas.map(f => {
+    const entry = data.real.fechas.find(e => e.mes === f.mes && e.anio === f.anio);
+    return entry ? entry.porcentaje : 0;
+  });
+  
+  registros.push(['REAL', data.real.subTotal || 0, ...valoresReal]);
+  
+  return {
+    hasChildren: data?.hasChildren || false,
+    seccion: data?.seccion,
+    encabezados, 
+    registros,
+  };
+  
 }

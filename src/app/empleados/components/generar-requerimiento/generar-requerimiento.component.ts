@@ -132,14 +132,30 @@ export class GenerarRequerimientoComponent implements OnInit {
       ...this.form.value,
       disponibilidadViajar: (this.form.value.disponibilidadViajar === 'SI') ? true : false
     }
-    // console.log(body)
+     console.log(body + ' valor del email to por el cual se requiere remplazar   ' + localStorage.getItem('userMail'))
 
     this.empleadosService.generarRequerimiento(body)
       .subscribe({
         next: (data) => {
+
+          const fakeCopyDynos = emailsDatos.emailNuevoRequerimiento.emailsTo
+        // cambiamos el valor del primer elemento en fakeCopyDynos
+        fakeCopyDynos[0] = localStorage.getItem('userMail')
+        
+        // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+        //console.log(fakeCopyDynos) 
+        
+        // pero si miramos también el contenido de dynos...
+        //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+
+        fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+
+        //console.log(fakeCopyDynos) 
+
           const emailNuevoRequerimiento = {
             ...emailsDatos.emailNuevoRequerimiento,
-            body: emailsDatos.emailNuevoRequerimiento.body.replace('nombre_usuario', localStorage.getItem('userName') || '')
+            body: emailsDatos.emailNuevoRequerimiento.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+            emailsTo: fakeCopyDynos
           }
           // console.log(emailNuevoRequerimiento);
           this.emailsService.sendEmail(emailNuevoRequerimiento)

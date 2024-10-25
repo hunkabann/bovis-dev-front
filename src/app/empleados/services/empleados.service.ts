@@ -248,4 +248,8 @@ export class EmpleadosService {
     return this.http.post<GenericResponse>(`${this.baseUrl}api/Beneficios/0`, body)
   }
 
+  getEmpleadosActivos() {
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
+  }
+
 }

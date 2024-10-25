@@ -48,6 +48,8 @@ export class SummaryComponent implements OnInit {
 
   MesConsulta: number = 0
 
+  fechaexcel: Date
+
   constructor() { }
 
   ngOnInit(): void {
@@ -104,8 +106,13 @@ export class SummaryComponent implements OnInit {
   }
 
   onSelectFecha(event: any) {
+    
     const mes = format(event, 'M')
     const anio = format(event, 'Y')
+
+    const newFecha = mes+'/02/'+anio+''.replace('/', ' ') // Importante reemplazarlo por un espacio
+
+    this.fechaexcel = new Date(newFecha) // Funciona
 
     this.MesConsulta = +mes
     
@@ -198,7 +205,7 @@ export class SummaryComponent implements OnInit {
     worksheet.getCell('G2').value = 'Resumen Mensual'
 
     worksheet.getCell('G4').value = 'Mes'
-    worksheet.getCell('H4').value = format(Date.now(), 'LLLL Y', { locale: es })
+    worksheet.getCell('H4').value = format(this.fechaexcel, 'LLLL Y', { locale: es })
 
     worksheet.getCell('G5').value = `Rev. 83- ${format(Date.now(), 'dd/MM/Y')}`
 
