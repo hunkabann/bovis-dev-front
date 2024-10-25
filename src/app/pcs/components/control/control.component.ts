@@ -3,13 +3,13 @@ import { FormArray, FormBuilder, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { PcsService } from '../../services/pcs.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
-import { obtenerMeses } from 'src/helpers/helpers';
+import { formatearInformacionControl, obtenerMeses } from 'src/helpers/helpers';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
-import { TITLES } from 'src/utils/constants';
+import { seccionesPCSControl, SUBJECTS, TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas } from '../../models/pcs.model';
+import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas, SeccionOpcion, SeccionRespuesta, SeccionFormateada } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 
 @Component({
@@ -70,6 +70,9 @@ export class ControlComponent implements OnInit {
   SumaIngresosViaticos = 0;
   SumaIngresosGasto = 0;
 
+  seccionesOpciones: SeccionOpcion[] = [...seccionesPCSControl];
+  seccionesCargado: boolean[] = [];
+  seccionesData: any[] = [];
 
   constructor() { }
 
@@ -181,6 +184,29 @@ export class ControlComponent implements OnInit {
 
   }
 
+  cargarInformacionSeccion(event: any) {
+    const { index } = event;
+    this.pcsService.obtenerInformacionSeccion(this.idproyecto, this.seccionesOpciones[index].slug)
+    .pipe(finalize(() => this.seccionesCargado[index] = true))
+    .subscribe({
+      next: (result) => {
+        const { data } = result as SeccionRespuesta;
+          if (data?.hasChildren) {
+            let subSecciones: SeccionFormateada[] = [];
+            data?.subsecciones?.forEach(subSeccion => {
+              subSecciones.push(formatearInformacionControl(subSeccion));
+            });
+            this.seccionesData[index] = {
+              hasChildren: true,
+              subSecciones
+            }; 
+          } else {
+            this.seccionesData[index] = formatearInformacionControl(data); 
+          }
+      },
+      error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+    });
+  }
 
   cargarInformacionIngreso(numProyecto: number) {
 
@@ -245,8 +271,6 @@ export class ControlComponent implements OnInit {
 
 
           let frutasverdes = ["Previsto", "Real"];
-
-          console.log('this.frutasverdes  =>  ' + frutasverdes.length)
 
           this.frutas = frutasverdes
 
