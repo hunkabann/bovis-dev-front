@@ -222,6 +222,7 @@ export class SummaryComponent implements OnInit {
   _setXLSXHeader(worksheet: ExcelJS.Worksheet) {
     
     const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } };
+    const fill_baja: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } };
 
     worksheet.getCell('A7').value = 'Count'	
 
@@ -241,8 +242,10 @@ export class SummaryComponent implements OnInit {
     worksheet.getCell('H7').fill = fill
     worksheet.getCell('I7').value = 'Total (%)'
     worksheet.getCell('I7').fill = fill
+    worksheet.getCell('J7').value = 'Baja'
+    worksheet.getCell('J7').fill = fill_baja
 
-    let indice = 10
+    let indice = 11
     this.proyectos.forEach((proyecto, index) => {
       
       let cell = worksheet.getCell(6, indice);
@@ -309,6 +312,13 @@ export class SummaryComponent implements OnInit {
      // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
       worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total))
       worksheet.getCell(row, 9).numFmt = '0%';
+      if(this.esElmismomes(record.timesheet.dtfecha_salida)){
+        worksheet.getCell(row, 10).value = 'SI'
+      }else{
+         worksheet.getCell(row, 10).value = 'NO'
+      }
+
+      worksheet.getRow(row).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: this.esElmismomes(record.timesheet.dtfecha_salida) ? 'ea899a' : 'ffffff' } };
       row++
     });
 
@@ -316,7 +326,7 @@ export class SummaryComponent implements OnInit {
   }
 
   _setXSLXFooter(worksheet: ExcelJS.Worksheet, row: number) {
-    let indice = 10
+    let indice = 11
     this.proyectos.forEach((proyecto, index) => {
 
       worksheet.getCell(row, indice).value = this.getDecimal(Math.round(proyecto.costo))

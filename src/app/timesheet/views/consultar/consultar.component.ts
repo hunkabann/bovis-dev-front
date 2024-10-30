@@ -188,10 +188,11 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
         if (totalDias > timesheet.dias_trabajo) {
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: `El número de días no puede ser mayor a ${timesheet.dias_trabajo}` })
         } else if (totalDias >= 0) {
-
           //selectedTimesheet.proyectos = timesheet.proyectos.map(proyecto => ({ ...proyecto, tDedicacion: this.formateaValor((proyecto.dias / timesheet.dias_trabajo) * 100) }))
+          //selectedTimesheet.proyectos = timesheet.proyectos.map(proyecto => ({ ...proyecto, tDedicacion: Math.round((proyecto.dias / timesheet.dias_trabajo) * 100 ), costo :(this.CalculaDedica * (timesheet.dias_trabajo + timesheet.otrosDiasJoin)) / 100}))
           selectedTimesheet.proyectos = timesheet.proyectos.map(proyecto => ({ ...proyecto, tDedicacion: Math.round((proyecto.dias / timesheet.dias_trabajo) * 100 )}))
-
+        
+          //(valor * (this.form.value.dias + this.sumaOtros)) / 100 
           const proyectoActualizado = timesheet.proyectos.at(proyectoIndex);
 
           this.sharedService.cambiarEstado(true)
@@ -202,8 +203,8 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
           this.timesheetService.cambiarDiasDedicacion({
             id_timesheet_proyecto: idTimesheetProyecto,
             num_dias: proyectoActualizado.dias,
-            num_dedicacion: Math.round(proyectoActualizado.tDedicacion)
-
+            num_dedicacion: Math.round(proyectoActualizado.tDedicacion),
+            num_otros: Math.round((proyectoActualizado.dias / (timesheet.dias_trabajo - timesheet.otrosDiasJoin)) * 100)
           })
             .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
             .subscribe({
@@ -338,6 +339,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
         } else if (totalDedica >= 0) {
 
           //selectedTimesheet.proyectos = timesheet.proyectos.map(proyecto => ({ ...proyecto, dias: this.formateaValor((+event.target.value * timesheet.dias_trabajo) / 100) }))
+          //selectedTimesheet.proyectos = timesheet.proyectos.map(proyecto => ({ ...proyecto, costo :(this.CalculaDedica * (timesheet.dias_trabajo + timesheet.otrosDiasJoin)) / 100}))
 
           const proyectoActualizado = timesheet.proyectos.at(proyectoIndex);
 
@@ -347,7 +349,8 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
           this.timesheetService.cambiarDiasDedicacion({
             id_timesheet_proyecto: idTimesheetProyecto,
             num_dias: proyectoActualizado.dias,
-            num_dedicacion: Math.round(proyectoActualizado.tDedicacion)
+            num_dedicacion: Math.round(proyectoActualizado.tDedicacion),
+            num_otros: Math.round((proyectoActualizado.tDedicacion * (timesheet.dias_trabajo + timesheet.otrosDiasJoin)) / 100)
           })
             .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
             .subscribe({
