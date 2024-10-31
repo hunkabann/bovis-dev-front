@@ -270,13 +270,15 @@ export class SummaryComponent implements OnInit {
 
       let totalTimesheet = 0
 
-      record.participacion.forEach((proyecto, index) => {
-        worksheet.getColumn(10 + index).width = 15
-        worksheet.getCell(row, 10 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
-        worksheet.getCell(row, 10 + index).numFmt = '0%';
-        totalTimesheet += +proyecto.costo 
-        
-      })
+      //ATC
+
+        record.participacion.forEach((proyecto, index) => {
+          worksheet.getColumn(11 + index).width = 15
+          worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
+          worksheet.getCell(row, 11 + index).numFmt = '0%';
+          totalTimesheet += +proyecto.costo 
+          
+        })
 
       let total = 0
       record.timesheet.proyectos.forEach(proyecto => {
