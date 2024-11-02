@@ -97,6 +97,7 @@ export class PuestoRegistroComponent implements OnInit {
   calcularPromedioMax(event: any,  seccion: string) {
     const valor = +event
    
+    console.log('Promedio Max: '+ (valor + this.form.value.nusalario_min) / 2)
       this.form.patchValue({
         nusalario_prom:  (valor + this.form.value.nusalario_min) / 2
         //costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ),
@@ -109,7 +110,7 @@ export class PuestoRegistroComponent implements OnInit {
 
   calcularPromedioMin(event: any,  seccion: string) {
     const valor = +event
-   
+    console.log('Promedio Min: '+ (valor + this.form.value.nusalario_max) / 2)
       this.form.patchValue({
         nusalario_prom:  (valor + this.form.value.nusalario_max) / 2
         //costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ),

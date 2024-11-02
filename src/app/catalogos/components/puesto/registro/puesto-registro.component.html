@@ -69,7 +69,7 @@
         
         <div class="col-12 d-flex flex-column">
             <label for="nusalario_prom">SALARIO PROMEDIO: </label>
-            <p-inputNumber id="nusalario_prom" placeholder="0" formControlName="nusalario_prom" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalido('nusalario_prom')}" [style]="{ width: '100%' }" (ngModelChange)="calcularPromedioMax($event, 'nusalario_prom')"></p-inputNumber>
+            <p-inputNumber id="nusalario_prom" placeholder="0" formControlName="nusalario_prom" locale="es-MX" mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="5" [ngClass]="{'ng-invalid ng-dirty': esInvalido('nusalario_prom')}" [style]="{ width: '100%' }" ></p-inputNumber>
             <div *ngIf="esInvalido('nusalario_prom')">
                 <small class="error-msg">
                     {{ obtenerMensajeError('nusalario_prom') }}
