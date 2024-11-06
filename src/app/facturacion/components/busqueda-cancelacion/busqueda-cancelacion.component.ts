@@ -87,6 +87,10 @@ export class BusquedaCancelacionComponent implements OnInit {
   ivaPagado: number = 0;
   TotalPagado: number = 0;
 
+  importeNC: number = 0;
+  ivaNC: number = 0;
+  TotalNC: number = 0;
+
   @ViewChild('dropDownProyecto') dropDownProyecto: Dropdown;
   @ViewChild('dropDownEmpresa') dropDownEmpresa: Dropdown;
   @ViewChild('dropDownCliente') dropDownCliente: Dropdown;
@@ -1043,7 +1047,7 @@ export class BusquedaCancelacionComponent implements OnInit {
     const fillCobranza: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffa4ffa4' } }
     const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
-    worksheet.getCell('Q2').value = 'Nota de crédito'
+    /**worksheet.getCell('Q2').value = 'Nota de crédito'
     worksheet.getCell('Q2').fill = fillNota
     worksheet.getCell('Q2').alignment = alignment
     worksheet.getCell('R2').value = 'Complemento de pago'
@@ -1051,7 +1055,7 @@ export class BusquedaCancelacionComponent implements OnInit {
     worksheet.getCell('R2').alignment = alignment
     worksheet.getCell('S2').value = 'Comprobantes Cancelados'
     worksheet.getCell('S2').fill = fillNotaCancelada
-    worksheet.getCell('S2').alignment = alignment
+    worksheet.getCell('S2').alignment = alignment*/
   }
 
   _setXLSXHeaderReporte(worksheet: ExcelJS.Worksheet) {
@@ -1082,20 +1086,23 @@ export class BusquedaCancelacionComponent implements OnInit {
 
        worksheet.getCell(row, 1).value = factura.numProyecto
       worksheet.getCell(row, 2).value = factura.cliente
-      worksheet.getCell(row, 3).value = factura.fechaEmision
+      let fechaemi = new Date(factura.fechaEmision);
+      //this.FechaIngre = this.pipe.transform(newDate, 'dd-MM-yyyy');
+      worksheet.getCell(row, 3).value = this.pipe.transform(fechaemi, 'dd-MM-yyyy')
 
       if (factura.cobranzas != null && factura.cobranzas.length > 0 && factura.fechaCancelacion == null) {
 
         factura.cobranzas.forEach(cobranza => {  
-          worksheet.getCell(row, 4).value = cobranza.c_FechaPago
+          let fechapago = new Date(cobranza.c_FechaPago);
+          worksheet.getCell(row, 4).value = this.pipe.transform(fechapago, 'dd-MM-yyyy')
           this.importePagado += +cobranza.base
           this.ivaPagado += +cobranza.c_IvaP
           this.TotalPagado += +cobranza.c_ImportePagado
         })
 
-        worksheet.getCell(row, 19).value = this.importePagado
-        worksheet.getCell(row, 20).value = this.ivaPagado
-        worksheet.getCell(row, 21).value = this.TotalPagado
+        worksheet.getCell(row, 19).value = this.formatCurrency(this.importePagado)
+        worksheet.getCell(row, 20).value = this.formatCurrency(this.ivaPagado)
+        worksheet.getCell(row, 21).value = this.formatCurrency(this.TotalPagado)
         
        
       }else{
@@ -1106,20 +1113,29 @@ export class BusquedaCancelacionComponent implements OnInit {
         worksheet.getCell(row, 21).value = 0
 
       }      
-      worksheet.getCell(row, 5).value = factura.fechaCancelacion
+      let fechacancela = new Date(factura.fechaCancelacion);
+      worksheet.getCell(row, 5).value = this.pipe.transform(fechacancela, 'dd-MM-yyyy')
 
       if (factura.notas != null && factura.notas.length > 0 ) {
 
         factura.notas.forEach(notas => {
           worksheet.getCell(row, 6).value = notas.nC_NotaCredito
-          worksheet.getCell(row, 7).value = notas.nC_FechaNotaCredito
-          if(factura.fechaCancelacion != null){
-            worksheet.getCell(row, 18).value = notas.nC_Importe
-          }else{
-            worksheet.getCell(row, 18).value = 0
-          }
+          let fechaNC = new Date(notas.nC_FechaNotaCredito);
+          worksheet.getCell(row, 7).value = this.pipe.transform(fechaNC, 'dd-MM-yyyy')
+
+          this.importeNC += +notas.nC_Importe
+          this.ivaNC += +notas.nC_Iva
+          this.TotalNC += +notas.nC_Total
+
           
         })
+
+        if(factura.fechaCancelacion != null){
+          worksheet.getCell(row, 18).value = this.formatCurrency(this.importeNC)
+        }else{
+          worksheet.getCell(row, 18).value = 0
+        }
+        
         
        
       }else{
@@ -1136,10 +1152,10 @@ export class BusquedaCancelacionComponent implements OnInit {
       if(factura.fechaCancelacion == null){
         worksheet.getCell(row, 11).value = factura.tipoCambio      
         worksheet.getCell(row, 12).value = 'importe en DOLARES'
-        worksheet.getCell(row, 13).value = factura.importe
-        worksheet.getCell(row, 14).value = factura.iva
-        worksheet.getCell(row, 15).value = factura.ivaRet
-        worksheet.getCell(row, 16).value = factura.total
+        worksheet.getCell(row, 13).value = this.formatCurrency(factura.importe)
+        worksheet.getCell(row, 14).value = this.formatCurrency(factura.iva)
+        worksheet.getCell(row, 15).value = this.formatCurrency(factura.ivaRet)
+        worksheet.getCell(row, 16).value = this.formatCurrency(factura.total)
       }else{
         worksheet.getCell(row, 11).value = 0  
         worksheet.getCell(row, 12).value = 0
@@ -1152,9 +1168,9 @@ export class BusquedaCancelacionComponent implements OnInit {
       worksheet.getCell(row, 17).value = factura.concepto
       
       if(factura.fechaCancelacion == null){
-        worksheet.getCell(row, 22).value = 'importePendientePorPagar'
-        worksheet.getCell(row, 23).value = 'IVAPendientePorPagar'
-        worksheet.getCell(row, 24).value = 'TOTALPendientePorPagar'
+        worksheet.getCell(row, 22).value = this.formatCurrency(factura.importe - (this.importePagado + this.importeNC))
+        worksheet.getCell(row, 23).value = this.formatCurrency(factura.iva - (this.ivaPagado + this.ivaNC))
+        worksheet.getCell(row, 24).value = this.formatCurrency(factura.total - (this.TotalPagado + this.TotalNC))
       }else{
         worksheet.getCell(row, 22).value = 0
         worksheet.getCell(row, 23).value = 0
