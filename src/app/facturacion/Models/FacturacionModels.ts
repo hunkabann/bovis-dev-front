@@ -56,6 +56,7 @@ export class BusquedaCancelacion{
   numProyecto: number;
   idTipoFactura: string;
   idMoneda: string;
+  cliente: string;
   importe: number;
   iva: number;
   ivaRet: number;
@@ -251,4 +252,34 @@ export const equivalenteFacturaCobranza = Object.freeze([
   {padre: 'fechaEmision', hijo: 'c_FechaPago'},
   {padre: 'fechaCancelacion', hijo: 'c_FechaCancelacion'},
   {id: 'numProyecto', padre: 'numProyecto'}
+])
+
+export const encabezadosReportes = Object.freeze([
+  // {id: 'id', label: 'Id'},
+  
+  {id: 'numProyecto', label: 'No. Proyecto'},
+  {id: 'cliente', label: 'CLIENTE'},
+  {id: 'fechaEmision', label: 'FECHA DE EMISIÓN'},
+  {id: 'c_FechaPago', label: 'FECHA DE PAGO'},
+  {id: 'fechaCancelacion', label: 'Fecha Cancelación'},  
+  {id: 'nC_NotaCredito', label: 'NO. DE NOTA CREDITO'},
+  {id: 'nC_FechaNotaCredito', label: 'FECHA NOTA DE CREDITO'},
+  {id: 'noFactura', label: 'NO. DE FACTURA'},
+  {id: 'idTipoFactura', label: 'Tipo'},
+  {id: 'idMoneda', label: 'MONEDA'},
+  {id: 'tipoCambio', label: 'TIPO DE CAMBIO'},
+  {id: 'importe', label: 'IMPORTE EN DOLARES'},
+  {id: 'importeEnPesos', label: 'IMPORTE'},
+  {id: 'iva', label: 'I.V.A.'},
+  {id: 'ivaRet', label: 'IVA RET'},
+  {id: 'total', label: 'TOTAL'},
+  {id: 'concepto', label: 'CONCEPTO'},
+  {id: 'totalNotasCredito', label: 'Total Notas Crédito'},
+  {id: 'totalCobranzas', label: 'Total Cobranzas'},
+  {id: 'ivaPAG', label: 'IVA PAGADO'},
+  {id: 'totalPAG', label: 'TOTAL PAGADO'},
+  {id: 'importePendientePorPagar', label: 'IMPORTE PENDIENTE POR PAGAR MXN(saldo)'},
+  {id: 'IVAPendientePorPagar', label: 'IVA PENDIENTE POR PAGAR MXN(saldo)'},
+  {id: 'TOTALPendientePorPagar', label: 'TOTAL PENDIENTE POR PAGAR MXN(saldo)'} 
+ 
 ])
