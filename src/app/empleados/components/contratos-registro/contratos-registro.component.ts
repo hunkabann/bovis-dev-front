@@ -13,10 +13,10 @@ import { error } from 'console';
 import { Opcion } from 'src/models/general.model';
 import { NumerosALetras } from 'src/helpers/numeroaletras';
 
-//const htmlToPdfmake = require("html-to-pdfmake")
-//const pdfMake = require('pdfmake')
-//const pdfFonts = require("pdfmake/build/vfs_fonts")
-//pdfMake.vfs = pdfFonts.pdfMake.vfs;
+const htmlToPdfmake = require("html-to-pdfmake")
+const pdfMake = require('pdfmake')
+const pdfFonts = require("pdfmake/build/vfs_fonts")
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-contratos-registro',
@@ -116,11 +116,11 @@ export class ContratosRegistroComponent implements OnInit {
 
     this.htmlForm = this.htmlForm.replace(regex, (match, captureText) => this.reemplazar(match, captureText, this.empleado))
     
-    //const html = htmlToPdfmake(this.htmlForm, {ignoreStyles:['font-family']})
+    const html = htmlToPdfmake(this.htmlForm, {ignoreStyles:['font-family']})
 
-    //const pdf = pdfMake.createPdf({content: html})
+    const pdf = pdfMake.createPdf({content: html})
 
-    //pdf.download(this.form.value.titulo)
+    pdf.download(this.form.value.titulo)
   }
 
   setearDatos(id: number) {
@@ -203,8 +203,8 @@ export class ContratosRegistroComponent implements OnInit {
         }
         
       }else{
-       // elemento = elemento[propiedad]
-       elemento = elemento[propiedad].toString().toUpperCase()
+        elemento = elemento[propiedad]
+       //elemento = elemento[propiedad].toString().toUpperCase()
       }
     })
     resultado = elemento || '-'
