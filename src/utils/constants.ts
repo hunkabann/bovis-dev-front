@@ -202,7 +202,8 @@ export const MENU = [
           items: [
             {
               label: 'Requerimientos',
-              routerLink: ['empleados/requerimientos'],
+              routerLink: ['timesheet/cargar-horas'],
+              //routerLink: ['empleados/requerimientos'],
               id: 'requerimientos',
               command: () =>
                 localStorage.setItem('pageTitle', 'Requerimientos'.toUpperCase()),
