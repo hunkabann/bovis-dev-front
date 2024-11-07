@@ -221,7 +221,7 @@ export class RequerimientosComponent implements OnInit {
 
     this.data.forEach(record => {
       //worksheet.getCell(row).fill = record.fechaCancelacion ? fillCancelada : fillFactura
-      //const col = row.getCell(row);
+   
 
       worksheet.getCell(row, 1).value = record.chcategoria
       worksheet.getCell(row, 2).value = record.chpuesto
