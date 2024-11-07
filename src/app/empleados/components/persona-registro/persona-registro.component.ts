@@ -96,7 +96,6 @@ export class PersonaRegistroComponent implements OnInit {
             .subscribe({
               next: ({data}) => {
                 this.esEmpleado = data.boempleado
-                // console.log(data)
                 this.form.patchValue({
                   id_persona:       data.nukidpersona,
                   nombre:           data.chnombre,

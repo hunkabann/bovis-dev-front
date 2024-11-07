@@ -43,8 +43,6 @@ export class EmpleadosPrincipalComponent implements OnInit {
   pipe = new DatePipe('en-US');
   todayWithPipe = null;
 
-  //allData: CieRegistro[] = []
-
   filtroProyectos: FiltroCancelacion[] = [];
   filtroEmpresas: FiltroCancelacion[] = [];
 
@@ -54,8 +52,7 @@ export class EmpleadosPrincipalComponent implements OnInit {
   listEmpresas: Empresas[] = [];
   opcionFiltro: number = 0;
 
-  //proyectos: Opcion[] = []
-  //empresas: Opcion[] = []
+
   proyectos:    Item[] = []
   empresas:    Item[] = []
 
