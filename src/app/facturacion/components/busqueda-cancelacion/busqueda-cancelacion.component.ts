@@ -11,7 +11,7 @@ import {
   encabezados,
   equivalenteFacturaCobranza,
   equivalenteFacturaNota,
-  facturaCancelacion,
+  facturaCancelacion,encabezadosReportes,
 } from '../../Models/FacturacionModels';
 import { FacturacionService } from '../../services/facturacion.service';
 import * as FileSaver from 'file-saver';
@@ -82,6 +82,14 @@ export class BusquedaCancelacionComponent implements OnInit {
   
   tipoCambio: number;
   totalRecords: number = 0;
+  
+  importePagado: number = 0;
+  ivaPagado: number = 0;
+  TotalPagado: number = 0;
+
+  importeNC: number = 0;
+  ivaNC: number = 0;
+  TotalNC: number = 0;
 
   @ViewChild('dropDownProyecto') dropDownProyecto: Dropdown;
   @ViewChild('dropDownEmpresa') dropDownEmpresa: Dropdown;
@@ -1003,6 +1011,517 @@ export class BusquedaCancelacionComponent implements OnInit {
 
     return mensaje
   }
+
+  exportJsonToExcelReporte(): void {
+
+    const workbook = new ExcelJS.Workbook()
+
+    const worksheet = workbook.addWorksheet('Detalle')
+
+    // Tìtulos
+    this._setXLSXTitlesReporte(worksheet)
+
+    // Encabezados
+    this._setXLSXHeaderReporte(worksheet)
+
+    let row = 5
+
+    // Contenido
+    this._setXLSXContentReporte(worksheet,row)
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+
+      //saveAs(blob, `FacturacionCancelacion_${Date.now()}${EXCEL_EXTENSION}`)
+      this.todayWithPipe = this.pipe.transform(Date.now(), 'dd_MM_yyyy');
+
+      saveAs(blob, `ReporteFacturacion_` + this.todayWithPipe + `${EXCEL_EXTENSION}`)
+    });
+
+  }
+
+  _setXLSXTitlesReporte(worksheet: ExcelJS.Worksheet) {
+
+    const fillNota: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ff91d2ff' } }
+    const fillNotaCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
+    const fillCobranza: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffa4ffa4' } }
+    const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
+
+    /**worksheet.getCell('Q2').value = 'Nota de crédito'
+    worksheet.getCell('Q2').fill = fillNota
+    worksheet.getCell('Q2').alignment = alignment
+    worksheet.getCell('R2').value = 'Complemento de pago'
+    worksheet.getCell('R2').fill = fillCobranza
+    worksheet.getCell('R2').alignment = alignment
+    worksheet.getCell('S2').value = 'Comprobantes Cancelados'
+    worksheet.getCell('S2').fill = fillNotaCancelada
+    worksheet.getCell('S2').alignment = alignment*/
+  }
+
+  _setXLSXHeaderReporte(worksheet: ExcelJS.Worksheet) {
+
+    const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
+    const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
+
+    encabezadosReportes.forEach((encabezado, index) => {
+      let cell = worksheet.getCell(4, index + 1)
+      cell.value = encabezado.label
+      cell.fill = fill
+      cell.alignment = alignment
+    })
+  }
+
+  _setXLSXContentReporte(worksheet: ExcelJS.Worksheet, row: number): number {
+
+    const fillCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
+    const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
+
+    this.listBusquedaCompleto.forEach(factura => {
+
+      this.importePagado = 0
+      this.ivaPagado = 0
+      this.TotalPagado  = 0
+     
+       // cell.fill = factura['fechaCancelacion'] ? fillNotaCancelada : fillFactura
+
+       worksheet.getCell(row, 1).value = factura.numProyecto
+      worksheet.getCell(row, 2).value = factura.cliente
+      let fechaemi = new Date(factura.fechaEmision);
+      //this.FechaIngre = this.pipe.transform(newDate, 'dd-MM-yyyy');
+      worksheet.getCell(row, 3).value = this.pipe.transform(fechaemi, 'dd-MM-yyyy')
+
+      if (factura.cobranzas != null && factura.cobranzas.length > 0 && factura.fechaCancelacion == null) {
+
+        factura.cobranzas.forEach(cobranza => {  
+          let fechapago = new Date(cobranza.c_FechaPago);
+          worksheet.getCell(row, 4).value = this.pipe.transform(fechapago, 'dd-MM-yyyy')
+          this.importePagado += +cobranza.base
+          this.ivaPagado += +cobranza.c_IvaP
+          this.TotalPagado += +cobranza.c_ImportePagado
+        })
+
+        worksheet.getCell(row, 19).value = this.formatCurrency(this.importePagado)
+        worksheet.getCell(row, 20).value = this.formatCurrency(this.ivaPagado)
+        worksheet.getCell(row, 21).value = this.formatCurrency(this.TotalPagado)
+        
+       
+      }else{
+
+        worksheet.getCell(row, 4).value = ''
+        worksheet.getCell(row, 19).value = 0
+        worksheet.getCell(row, 20).value = 0
+        worksheet.getCell(row, 21).value = 0
+
+      }      
+      let fechacancela = new Date(factura.fechaCancelacion);
+      worksheet.getCell(row, 5).value = this.pipe.transform(fechacancela, 'dd-MM-yyyy')
+
+      if (factura.notas != null && factura.notas.length > 0 ) {
+
+        factura.notas.forEach(notas => {
+          worksheet.getCell(row, 6).value = notas.nC_NotaCredito
+          let fechaNC = new Date(notas.nC_FechaNotaCredito);
+          worksheet.getCell(row, 7).value = this.pipe.transform(fechaNC, 'dd-MM-yyyy')
+
+          this.importeNC += +notas.nC_Importe
+          this.ivaNC += +notas.nC_Iva
+          this.TotalNC += +notas.nC_Total
+
+          
+        })
+
+        if(factura.fechaCancelacion != null){
+          worksheet.getCell(row, 18).value = this.formatCurrency(this.importeNC)
+        }else{
+          worksheet.getCell(row, 18).value = 0
+        }
+        
+        
+       
+      }else{
+
+        worksheet.getCell(row, 6).value = ''
+        worksheet.getCell(row, 7).value = ''
+        worksheet.getCell(row, 18).value = 0
+
+      }      
+
+      worksheet.getCell(row, 8).value = factura.noFactura
+      worksheet.getCell(row, 9).value = factura.idTipoFactura
+      worksheet.getCell(row, 10).value = factura.idMoneda
+      if(factura.fechaCancelacion == null){
+        worksheet.getCell(row, 11).value = factura.tipoCambio      
+        worksheet.getCell(row, 12).value = 'importe en DOLARES'
+        worksheet.getCell(row, 13).value = this.formatCurrency(factura.importe)
+        worksheet.getCell(row, 14).value = this.formatCurrency(factura.iva)
+        worksheet.getCell(row, 15).value = this.formatCurrency(factura.ivaRet)
+        worksheet.getCell(row, 16).value = this.formatCurrency(factura.total)
+      }else{
+        worksheet.getCell(row, 11).value = 0  
+        worksheet.getCell(row, 12).value = 0
+        worksheet.getCell(row, 13).value = 0
+        worksheet.getCell(row, 14).value = 0
+        worksheet.getCell(row, 15).value = 0
+        worksheet.getCell(row, 16).value = 0
+      }
+      
+      worksheet.getCell(row, 17).value = factura.concepto
+      
+      if(factura.fechaCancelacion == null){
+        worksheet.getCell(row, 22).value = this.formatCurrency(factura.importe - (this.importePagado + this.importeNC))
+        worksheet.getCell(row, 23).value = this.formatCurrency(factura.iva - (this.ivaPagado + this.ivaNC))
+        worksheet.getCell(row, 24).value = this.formatCurrency(factura.total - (this.TotalPagado + this.TotalNC))
+      }else{
+        worksheet.getCell(row, 22).value = 0
+        worksheet.getCell(row, 23).value = 0
+        worksheet.getCell(row, 24).value = 0
+      }
+      
+        
+    //})
+
+    //inicio atc
+/**
+    this.costos.forEach(record => {
+      //worksheet.getCell(row).fill = record.fechaCancelacion ? fillCancelada : fillFactura
+      //const col = row.getCell(row);
+
+      
+      
+      if(record.beneficios[0] == undefined){
+        this.Costomenualproy = 0
+
+        this.vivienda = 0
+        this.Automovil = 0
+        this.ViaticosaComprobar = 0
+        this.BonoAdicionalReubicacion = 0
+        this.Gasolina = 0
+        this.Casetas = 0
+        this.AyudaDeTransporte = 0
+        this.VuelosDeAvion = 0
+        this.ProvisionImpuestosExpatsr = 0
+        this.FringeExpats = 0
+        this.ProgramaDeEntretenimiento = 0
+        this.EventosEspeciales = 0
+        this.CostoIt = 0
+        this.CostoTelefonia = 0
+        this.SvDirectivos = 0
+        this.FacturacionBpm = 0
+        
+       
+        //console.log("Entra Aquio --------------> " +this.Costomenualproy);
+      }else{
+        //console.log("Entra Aquio --------------> " +record.beneficios[0].costo);
+        this.arraybeneficio = record.beneficios
+      
+
+      const dato = this.arraybeneficio;
+         dato?.forEach(paso=>{
+             //console.log("paso.beneficio --------------> " +paso.beneficio);
+             //console.log("paso.cost-------------->> " +paso.costo);
+
+             this.Costomenualproy += +paso.costo
+
+             if(paso.beneficio === "Automóvil"){
+              this.Automovil = paso.costo;
+            }
+            
+              if(paso.beneficio === "Vivienda"){
+
+                this.vivienda = paso.costo;
+            }
+
+            if(paso.beneficio === "Viáticos a comprobar"){
+
+              this.ViaticosaComprobar = paso.costo;
+            
+            }
+
+            if(paso.beneficio === "Bono Adicional"){
+
+              this.BonoAdicionalReubicacion = paso.costo;            
+            }
+
+            if(paso.beneficio === "Gasolina"){
+
+              this.Gasolina = paso.costo;
+            }
+
+            if(paso.beneficio === "Casetas"){
+
+              this.Casetas = paso.costo;
+            
+            }
+
+            if(paso.beneficio === "Ayuda de transporte"){
+
+              this.AyudaDeTransporte = paso.costo;
+            }
+
+            if(paso.beneficio === "Vuelos de avión"){
+
+              this.VuelosDeAvion = paso.costo;
+            }
+
+            if(paso.beneficio === "Provisión Impuestos Expats"){
+
+              this.ProvisionImpuestosExpatsr = paso.costo;
+            }
+
+            if(paso.beneficio === "Programa de entrenamiento"){
+
+              this.ProgramaDeEntretenimiento = paso.costo;
+            }
+
+            if(paso.beneficio === "Eventos especiales"){
+
+              this.EventosEspeciales = paso.costo;
+            }
+
+            if(paso.beneficio === "Costo IT"){
+
+              this.CostoIt = paso.costo;
+            }
+
+            if(paso.beneficio === "Costo telefonia"){
+
+              this.CostoTelefonia = paso.costo;
+            }
+
+            if(paso.beneficio === "S.V. Directivos"){
+
+              this.SvDirectivos = paso.costo;
+            }
+
+            if(paso.beneficio === "Facturación BPM"){
+
+              this.FacturacionBpm = paso.costo;
+            }
+
+            if(paso.beneficio === "Fringe Expats"){
+
+              this.FringeExpats = paso.costo;
+            
+            }
+
+            
+         })
+
+
+
+        // console.log("suma fuerapaso.cost-------------->> " +this.Costomenualproy);
+
+        this.arraybeneficiosProyectos = record.beneficiosproyecto
+      
+
+      const datoProyecto = this.arraybeneficiosProyectos;
+      datoProyecto?.forEach(pasoProyec=>{
+             //console.log("paso.beneficio --------------> " +paso.beneficio);
+             //console.log("paso.cost-------------->> " +paso.costo);
+
+             
+
+             if(pasoProyec.beneficio === "Automóvil"){
+              this.Proy_Automovil = pasoProyec.nucostobeneficio;
+            }
+            
+              if(pasoProyec.beneficio === "Vivienda"){
+
+                this.Proy_vivienda = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Viáticos a comprobar"){
+
+              this.Proy_ViaticosaComprobar = pasoProyec.nucostobeneficio;
+            
+            }
+
+            if(pasoProyec.beneficio === "Bono Adicional"){
+
+              this.Proy_BonoAdicionalReubicacion = pasoProyec.nucostobeneficio;            
+            }
+
+            if(pasoProyec.beneficio === "Gasolina"){
+
+              this.Proy_Gasolina = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Casetas"){
+
+              this.Proy_Casetas = pasoProyec.nucostobeneficio;
+            
+            }
+
+            if(pasoProyec.beneficio === "Ayuda de transporte"){
+
+              this.Proy_AyudaDeTransporte = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Vuelos de avión"){
+
+              this.Proy_VuelosDeAvion = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Provisión Impuestos Expats"){
+
+              this.Proy_ProvisionImpuestosExpatsr = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Programa de entrenamiento"){
+
+              this.Proy_ProgramaDeEntretenimiento = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Eventos especiales"){
+
+              this.Proy_EventosEspeciales = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Costo IT"){
+
+              this.Proy_CostoIt = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Costo telefonia"){
+
+              this.Proy_CostoTelefonia = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "S.V. Directivos"){
+
+              this.Proy_SvDirectivos = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Facturación BPM"){
+
+              this.Proy_FacturacionBpm = pasoProyec.nucostobeneficio;
+            }
+
+            if(pasoProyec.beneficio === "Fringe Expats"){
+
+              this.Proy_FringeExpats = pasoProyec.nucostobeneficio;
+            
+            }
+
+            
+         })
+
+      }
+      
+
+      worksheet.getCell(row, 1).value = record.numEmpleadoRrHh
+      worksheet.getCell(row, 2).value = record.numEmpleadoNoi
+      worksheet.getCell(row, 3).value = record.nombreCompletoEmpleado
+      worksheet.getCell(row, 4).value = record.ciudad
+      worksheet.getCell(row, 5).value = record.puesto
+     
+        worksheet.getCell(row, 6).value = record.proyecto
+     
+
+      worksheet.getCell(row, 7).value = this.formatCurrency(record.sueldoBrutoInflacion)
+      //worksheet.getCell(row, 8).value = this.formatCurrency(record.cargasSociales)
+     // worksheet.getCell(row, 9).value = this.formatCurrency(record.costoMensualEmpleado)
+      worksheet.getCell(row, 8).value = record.unidadNegocio
+      worksheet.getCell(row, 9).value = record.empresa
+      worksheet.getCell(row, 10).value = record.nombreJefe
+      let newDate = new Date(record.fechaIngreso);
+      this.FechaIngre = this.pipe.transform(newDate, 'dd-MM-yyyy');
+      worksheet.getCell(row, 11).value = this.FechaIngre
+      worksheet.getCell(row, 12).value = record.antiguedad
+      worksheet.getCell(row, 13).value = this.formatCurrency(record.avgDescuentoEmpleado)
+      worksheet.getCell(row, 14).value = this.formatCurrency(record.montoDescuentoMensual)
+      worksheet.getCell(row, 15).value = this.formatCurrency(record.sueldoNetoPercibidoMensual)
+      worksheet.getCell(row, 16).value = this.formatCurrency(record.retencionImss)
+      let numero_ispt = Number(record.ispt)
+      worksheet.getCell(row, 17).value = this.formatCurrency(numero_ispt)
+      //worksheet.getCell(row, 19).value = record.ispt
+      //worksheet.getCell(row, 20).value = this.formatCurrency(record.sueldoBrutoInflacion)
+      worksheet.getCell(row, 18).value =this.formatCurrency( record.anual)
+      worksheet.getCell(row, 19).value = this.formatCurrency(record.aguinaldoCantidadMeses)
+      worksheet.getCell(row, 20).value = this.formatCurrency(record.aguinaldoMontoProvisionMensual)
+      worksheet.getCell(row, 21).value = record.pvDiasVacasAnuales
+      worksheet.getCell(row, 22).value = this.formatCurrency(record.pvProvisionMensual)
+      worksheet.getCell(row, 23).value = this.formatCurrency(record.indemProvisionMensual)
+      worksheet.getCell(row, 24).value = this.formatCurrency(record.avgBonoAnualEstimado)
+      worksheet.getCell(row, 25).value = this.formatCurrency(record.bonoAnualProvisionMensual)
+      worksheet.getCell(row, 26).value = record.sgmmCostoTotalAnual
+      worksheet.getCell(row, 27).value = this.formatCurrency(record.sgmmCostoMensual)
+      worksheet.getCell(row, 28).value = this.formatCurrency(record.svCostoTotalAnual)
+      worksheet.getCell(row, 29).value = this.formatCurrency(record.svCostoMensual)
+      worksheet.getCell(row, 30).value = this.formatCurrency(record.vaidCostoMensual)
+      worksheet.getCell(row, 31).value = this.formatCurrency(record.vaidComisionCostoMensual)
+      worksheet.getCell(row, 32).value = this.formatCurrency(record.ptuProvision)
+      worksheet.getCell(row, 33).value = this.formatCurrency(record.impuesto3sNomina)
+      worksheet.getCell(row, 34).value = this.formatCurrency(record.imss)
+      worksheet.getCell(row, 35).value = this.formatCurrency(record.retiro2)
+      worksheet.getCell(row, 36).value = this.formatCurrency(record.cesantesVejez)
+      worksheet.getCell(row, 37).value = this.formatCurrency(record.infonavit)
+      worksheet.getCell(row, 38).value = this.formatCurrency(record.cargasSociales)
+      worksheet.getCell(row, 39).value = this.formatCurrency(record.costoMensualEmpleado+this.Costomenualproy)
+      worksheet.getCell(row, 40).value = this.formatCurrency(record.costoMensualProyecto)
+      worksheet.getCell(row, 41).value = this.formatCurrency(record.costoAnualEmpleado)
+      worksheet.getCell(row, 42).value = this.formatCurrency(record.costoSalarioBruto)
+      worksheet.getCell(row, 43).value = this.formatCurrency(record.costoSalarioNeto)
+      worksheet.getCell(row, 44).value = record.nuAnno
+      worksheet.getCell(row, 45).value = record.nuMes
+      let numero_salarioDiarioIntegrado = Number(record.salarioDiarioIntegrado)
+      worksheet.getCell(row, 46).value = this.formatCurrency(numero_salarioDiarioIntegrado)
+      //worksheet.getCell(row, 49).value = record.salarioDiarioIntegrado
+
+      //BENEFICIOS POR EMPLEADO
+
+      worksheet.getCell(row, 47).value = this.formatCurrency(this.vivienda)
+      worksheet.getCell(row, 48).value = this.formatCurrency(this.Automovil)
+      worksheet.getCell(row, 49).value = this.formatCurrency(this.ViaticosaComprobar)
+      worksheet.getCell(row, 50).value = this.formatCurrency(this.BonoAdicionalReubicacion)
+      worksheet.getCell(row, 51).value = this.formatCurrency(this.Gasolina)
+      worksheet.getCell(row, 52).value = this.formatCurrency(this.Casetas)
+      worksheet.getCell(row, 53).value = this.formatCurrency(this.AyudaDeTransporte)
+      worksheet.getCell(row, 54).value = this.formatCurrency(this.VuelosDeAvion)
+      worksheet.getCell(row, 55).value = this.formatCurrency(this.ProvisionImpuestosExpatsr)
+      worksheet.getCell(row, 56).value = this.formatCurrency(this.FringeExpats)
+      worksheet.getCell(row, 57).value = this.formatCurrency(this.ProgramaDeEntretenimiento)
+      worksheet.getCell(row, 58).value = this.formatCurrency(this.EventosEspeciales)
+      worksheet.getCell(row, 59).value = this.formatCurrency(this.CostoIt)
+      worksheet.getCell(row, 60).value = this.formatCurrency(this.CostoTelefonia)
+      worksheet.getCell(row, 61).value = this.formatCurrency(this.SvDirectivos)
+      worksheet.getCell(row, 62).value = this.formatCurrency(this.FacturacionBpm)
+
+      //BENEFICIOS POR PROYECTO
+
+      worksheet.getCell(row, 63).value = this.formatCurrency(this.Proy_vivienda)
+      worksheet.getCell(row, 64).value = this.formatCurrency(this.Proy_Automovil)
+      worksheet.getCell(row, 65).value = this.formatCurrency(this.Proy_ViaticosaComprobar)
+      worksheet.getCell(row, 66).value = this.formatCurrency(this.Proy_BonoAdicionalReubicacion)
+      worksheet.getCell(row, 67).value = this.formatCurrency(this.Proy_Gasolina)
+      worksheet.getCell(row, 68).value = this.formatCurrency(this.Proy_Casetas)
+      worksheet.getCell(row, 69).value = this.formatCurrency(this.Proy_AyudaDeTransporte)
+      worksheet.getCell(row, 70).value = this.formatCurrency(this.Proy_VuelosDeAvion)
+      worksheet.getCell(row, 71).value = this.formatCurrency(this.Proy_ProvisionImpuestosExpatsr)
+      worksheet.getCell(row, 72).value = this.formatCurrency(this.Proy_FringeExpats)
+      worksheet.getCell(row, 73).value = this.formatCurrency(this.Proy_ProgramaDeEntretenimiento)
+      worksheet.getCell(row, 74).value = this.formatCurrency(this.Proy_EventosEspeciales)
+      worksheet.getCell(row, 75).value = this.formatCurrency(this.Proy_CostoIt)
+      worksheet.getCell(row, 76).value = this.formatCurrency(this.Proy_CostoTelefonia)
+      worksheet.getCell(row, 77).value = this.formatCurrency(this.Proy_SvDirectivos)
+      worksheet.getCell(row, 78).value = this.formatCurrency(this.Proy_FacturacionBpm)
+      worksheet.getCell(row, 79).value = this.formatCurrency(record.costoMensualEmpleado + this.Costomenualproy + record.costoMensualProyecto)
+
+      
+      //worksheet.getCell(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'FFC000':  '70AD47'}};
+      //worksheet.getRow(row).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ? 'ea899a' : 'ffffff' } };
+*/
+      //fin atc
+      row++
+    });
+
+    return row
+
+  }
+
+
+
+
 }
 
 // public exportJsonToExcel(fileName: string = 'facturacion_cancelacion'): void {

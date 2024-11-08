@@ -202,6 +202,7 @@ export const MENU = [
           items: [
             {
               label: 'Requerimientos',
+              //routerLink: ['timesheet/cargar-horas'],
               routerLink: ['empleados/requerimientos'],
               id: 'requerimientos',
               command: () =>
