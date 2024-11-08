@@ -1151,7 +1151,7 @@ export class BusquedaCancelacionComponent implements OnInit {
       worksheet.getCell(row, 10).value = factura.idMoneda
       if(factura.fechaCancelacion == null){
         worksheet.getCell(row, 11).value = factura.tipoCambio      
-        worksheet.getCell(row, 12).value = 'importe en DOLARES'
+        worksheet.getCell(row, 12).value = factura.idMoneda === 'MXN' ? 0 : factura.importe * Number(factura.tipoCambio)
         worksheet.getCell(row, 13).value = this.formatCurrency(factura.importe)
         worksheet.getCell(row, 14).value = this.formatCurrency(factura.iva)
         worksheet.getCell(row, 15).value = this.formatCurrency(factura.ivaRet)
