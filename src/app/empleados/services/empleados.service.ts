@@ -236,6 +236,10 @@ export class EmpleadosService {
     return this.http.get<any>(`${this.baseUrl}api/pcs/proyectos/true`);
   }
 
+  getProyectosNoClose() {
+    return this.http.get<any>(`${this.baseUrl}api/pcs/ProyectosNoClose/true`);
+  }
+
   getEmpresas() {
     return this.http.get<any>(`${this.baseUrl}api/pcs/empresas`);
   }

@@ -88,7 +88,7 @@ export class EmpleadosPrincipalComponent implements OnInit {
     forkJoin([
       this.empleadosServ.getEmpleados(),
       this.empleadosServ.getPuestos(),
-      this.empleadosServ.getProyectos(),
+      this.empleadosServ.getProyectosNoClose(),
       this.empleadosServ.getEmpresas(),
       this.empleadosServ.getCatUnidadNegocio()
     ])

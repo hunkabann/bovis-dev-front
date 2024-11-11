@@ -28,14 +28,14 @@ export class AgregarProyectoComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log('entra ------ ' )
+    //console.log('entra ------ ' )
 
-    console.log('this.config.data.empleado.code ------ ' +this.config.data.code)
+   // console.log('this.config.data.empleado.code ------ ' +this.config.data.code)
 
     if (this.config.data.code) {
-      console.log('cuando existe informacion  ------ ' +this.config.data.code)
+      //console.log('cuando existe informacion  ------ ' +this.config.data.code)
       this.empleadoId = this.config.data.code
-      this.timesheetService.getProyectosFaltanEmpleado(this.empleadoId)
+      this.timesheetService.getProyectosFaltanEmpleadoNoClose(this.empleadoId)
         .subscribe({
           next: ({data}) => 
             //this.proyectos = data.map(data => ({name: data.proyecto.toString(), value: data.numProyecto.toString()})),
@@ -45,12 +45,12 @@ export class AgregarProyectoComponent implements OnInit {
         })
     } else {
 
-      console.log('this.config.data.empleado.code  ------ ' +this.config.data.empleado.code)
+      //console.log('this.config.data.empleado.code  ------ ' +this.config.data.empleado.code)
 
       if(this.config.data.empleado.code) {
-        console.log('cuando existe informacion del codigo empleado  ------ ' +this.config.data.empleado.code)
+       // console.log('cuando existe informacion del codigo empleado  ------ ' +this.config.data.empleado.code)
         this.empleadoId = this.config.data.empleado.code
-        this.timesheetService.getProyectosFaltanEmpleado(this.empleadoId)
+        this.timesheetService.getProyectosFaltanEmpleadoNoClose(this.empleadoId)
           .subscribe({
             next: ({data}) => 
               //this.proyectos = data.map(data => ({name: data.proyecto.toString(), value: data.numProyecto.toString()})),
