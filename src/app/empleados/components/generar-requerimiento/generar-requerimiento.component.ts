@@ -139,19 +139,19 @@ export class GenerarRequerimientoComponent implements OnInit {
         next: (data) => {
 
           const fakeCopyDynos = emailsDatos.emailNuevoRequerimiento.emailsTo
-        // cambiamos el valor del primer elemento en fakeCopyDynos
-        fakeCopyDynos[0] = localStorage.getItem('userMail')
-        
-        // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-        //console.log(fakeCopyDynos) 
-        
-        // pero si miramos también el contenido de dynos...
-        //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-
-        fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
-        //fakeCopyDynos.push('atc.isc@gmail.com')
-
-        //console.log(fakeCopyDynos) 
+          // cambiamos el valor del primer elemento en fakeCopyDynos
+          fakeCopyDynos[0] = localStorage.getItem('userMail')
+          
+          // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+          //console.log(fakeCopyDynos) 
+          
+          // pero si miramos también el contenido de dynos...
+          //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+  
+          fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+          //fakeCopyDynos.push('atc.isc@gmail.com')
+  
+          //console.log(fakeCopyDynos) 
 
           const emailNuevoRequerimiento = {
             ...emailsDatos.emailNuevoRequerimiento,
