@@ -509,8 +509,9 @@ export const emailsDatos = Object.freeze({
     subject:  'Requerimiento de personal',
     body:     `Buen día, nombre_usuario.  <br>
               El área de Recursos Humanos ha recibido su requerimiento de personal y comenzará el proceso de búsqueda. <br>
-              Lo mantendremos al tanto de los avances.  <br>
-              Saludos.`,
+              https://gestion.bovis.mx/#/empleados/requerimientos <br>
+              Lo mantendremos al tanto de los avances.  <br> 
+              Saludos. <br>`,
     emailsTo: ['jmmorales@hunkabann.com.mx']
   }
 })
@@ -561,3 +562,21 @@ export const seccionesPCSControl = Object.freeze([
     slug: 'j_posicion_caja'
   }
 ]);
+
+export const emailsAsignarRequerimientos = Object.freeze({
+  emailNuevoRequerimiento: {
+    subject:  'Asignar Requerimiento a persona',
+    body:     `Buen día, <br><br>
+ 
+              Le informamos que Recursos Humanos ha completado el trámite para el requerimiento ID_requerimiento en el que se solicitó un puesto_requerimiento. <br> <br>
+               
+              Para ver el detalle del requerimiento presione el siguiente enlace: <br> <br>
+               
+              https://gestion.bovis.mx/#/empleados/requerimientos <br> <br>
+               
+              Si tuviera alguna duda con este requerimiento, por favor contacte al personal de Recursos Humanos. <br> <br>
+               
+              Saludos. <br> <br>`,
+    emailsTo: ['jmmorales@hunkabann.com.mx']
+  }
+})

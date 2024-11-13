@@ -5,11 +5,12 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { EmpleadosService } from '../../services/empleados.service';
 import { Observable, finalize, forkJoin } from 'rxjs';
 import { FiltrosRequerimientos, Requerimiento,encabezadosRequerimiento } from '../../Models/empleados';
-import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
+import { SUBJECTS, TITLES,EXCEL_EXTENSION,emailsAsignarRequerimientos } from 'src/utils/constants';
 import { Location } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Opcion } from 'src/models/general.model';
 import { UserService } from 'src/app/services/user.service';
+import { EmailsService } from 'src/app/services/emails.service';
 
 import * as XLSX from 'xlsx';
 import { formatCurrency } from 'src/helpers/helpers';
@@ -34,6 +35,7 @@ export class RequerimientosComponent implements OnInit {
   fb                = inject(FormBuilder)
   router            = inject(Router)
   userService       = inject(UserService)
+  emailsService     = inject(EmailsService)
 
   directores: Opcion[] = []
   proyectos:  Opcion[] = []
@@ -47,6 +49,7 @@ export class RequerimientosComponent implements OnInit {
   
   requerimientoActual: number = null
   mostrarModal: boolean = false
+  puestoActual: string
 
   today: Date = new Date();
   pipe = new DatePipe('en-US');
@@ -110,6 +113,7 @@ export class RequerimientosComponent implements OnInit {
         this.requerimientoActual = requerimiento.nukidrequerimiento
         this.mostrarModal = true
         this.sharedService.cambiarEstado(false)
+        this.puestoActual = requerimiento.chpuesto
       }))
       .subscribe({
         next: ({data}) => {
@@ -124,6 +128,36 @@ export class RequerimientosComponent implements OnInit {
 
   asignarPersona() {
     this.router.navigate(['/empleados/registro-empleado'], {queryParams: {id_persona: this.form.value.persona, id_requerimiento: this.requerimientoActual}})
+    
+    const fakeCopyDynos = emailsAsignarRequerimientos.emailNuevoRequerimiento.emailsTo
+          // cambiamos el valor del primer elemento en fakeCopyDynos
+          fakeCopyDynos[0] = localStorage.getItem('userMail')
+          
+          // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+          //console.log(fakeCopyDynos) 
+          
+          // pero si miramos también el contenido de dynos...
+          //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+  
+          fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+          //fakeCopyDynos.push('atc.isc@gmail.com')
+  
+          //console.log(fakeCopyDynos) 
+
+          const emailNuevoRequerimiento = {
+            ...emailsAsignarRequerimientos.emailNuevoRequerimiento,
+            body: emailsAsignarRequerimientos.emailNuevoRequerimiento.body.replace('ID_requerimiento', this.requerimientoActual+'' || '').replace('puesto_requerimiento', this.puestoActual+'' || ''),
+            emailsTo: fakeCopyDynos
+          }
+          // console.log(emailNuevoRequerimiento);
+          this.emailsService.sendEmail(emailNuevoRequerimiento)
+            .pipe(finalize(() => {
+              this.form.reset()
+              this.sharedService.cambiarEstado(false)
+              this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+            }))
+            .subscribe()
+
   }
 
   onChangeFiltro(campo: string, {value: valor}: any) {
