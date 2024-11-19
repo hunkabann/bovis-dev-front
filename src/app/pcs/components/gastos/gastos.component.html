@@ -63,7 +63,7 @@
                                         <ng-template #thenrembolsableSi>
                                             <td>{{rubro.value.fechas | calcularSubtotal}}</td>
                                             <td *ngFor="let mesRegistro of mesesProyecto">
-                                                {{rubro.value.fechas | calcularSubtotal:mesRegistro}}
+                                                {{rubro.value.fechas | porcentajeMes:mesRegistro}}
                                             </td>
                                         </ng-template>
                                         <ng-template #thenrembolsableNo>
@@ -156,8 +156,8 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-rubro let-iRubro="rowIndex">
                             <tr >
-                                <td *ngIf="seccion.value.idSeccion == 2; then empleados else elseimporte" ></td>
-                                <ng-template #empleados>
+                                <td *ngIf="seccion.value.idSeccion == 2; then empleadosNO else elseimporteNO" ></td>
+                                <ng-template #empleadosNO>
                                     <td>
                                         <div class="d-flex gap-2 justify-content-center">
                                             <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro || seccion.value.idSeccion == 2 ">
@@ -173,7 +173,7 @@
                                         <ng-template #thenrembolsableSi>
                                             <td>{{rubro.value.fechas | calcularSubtotal}}</td>
                                             <td *ngFor="let mesRegistro of mesesProyecto">
-                                                {{rubro.value.fechas | calcularSubtotal:mesRegistro}}
+                                                {{rubro.value.fechas | porcentajeMes:mesRegistro}}
                                             </td>
                                         </ng-template>
                                         <ng-template #thenrembolsableNo>
@@ -181,7 +181,7 @@
                                             <td>{{0.0|currency}}</td>
                                         </ng-template>
                                 </ng-template>
-                                <ng-template #elseimporte>
+                                <ng-template #elseimporteNO>
                                     <td>
                                         <div class="d-flex gap-2 justify-content-center">
                                             <button title="Modificar rubro" type="button" class="btn btn-primary" (click)="modificarRubro(rubro.value, i, iRubro)" [disabled]="!rubro.value.idRubro || seccion.value.idSeccion == 2 ">

@@ -6,6 +6,16 @@
     <div class="row">
 
         <div class="col-12">
+            <label for="chcvenoi">CLAVE NOI:</label>
+            <input id="chcvenoi" pInputText class="form-control" maxlength="50" formControlName="chcvenoi" [ngClass]="{'ng-invalid ng-dirty': esInvalido('chcvenoi')}">
+            <div *ngIf="esInvalido('chcvenoi')">
+                <small class="error-msg">
+                    {{ obtenerMensajeError('chcvenoi') }}
+                </small>
+            </div>
+        </div>
+
+        <div class="col-12">
             <label for="chpuesto">PUESTO:</label>
             <input id="chpuesto" pInputText class="form-control" maxlength="50" formControlName="chpuesto" [ngClass]="{'ng-invalid ng-dirty': esInvalido('chpuesto')}">
             <div *ngIf="esInvalido('chpuesto')">
