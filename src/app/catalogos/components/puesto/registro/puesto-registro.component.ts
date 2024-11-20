@@ -29,6 +29,7 @@ export class PuestoRegistroComponent implements OnInit {
   form = this.fb.group({
     nukid_puesto:   [null],
     nukidnivel:      [0, Validators.required],
+    chcvenoi:          ['', Validators.required],
     chpuesto:          ['', Validators.required],
     nusalario_min:          [0, Validators.required],
     nusalario_max:          [0, Validators.required],
@@ -50,6 +51,7 @@ export class PuestoRegistroComponent implements OnInit {
       this.form.patchValue({
         nukid_puesto: cliente.nukid_puesto,
         nukidnivel: cliente.nukidnivel,
+        chcvenoi: cliente.chcvenoi,
         chpuesto:    cliente.chpuesto,
         nusalario_min:    cliente.nusalario_min,
         nusalario_max:    cliente.nusalario_max,
