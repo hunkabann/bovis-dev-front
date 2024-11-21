@@ -56,7 +56,7 @@
       <div class="col-3">
         <label for="id_unidad_negocio">Unidad de negocio:</label>
         <div class="">
-          <p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="tablaPrincipal.filter(lista.value, 'unidadNegocio', 'equals')" placeholder="Unidad de Negocio" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"></p-dropdown> 
+          <p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="tablaPrincipal.filter(listaUnidad.value, 'unidadNegocio', 'equals')" placeholder="Unidad de Negocio" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"></p-dropdown> 
         </div>         
                
     </div>
