@@ -100,6 +100,11 @@ export class TimesheetService {
     return this.http.get<EmpleadoTNoProyectos>(`${this.baseUrl}api/Timesheet/NotProyectosByEmpleado/${empleadoId}`)
   }
 
+  //atc 11-11-2024
+  getProyectosFaltanEmpleadoNoClose(empleadoId: number) {
+    return this.http.get<EmpleadoTNoProyectos>(`${this.baseUrl}api/Timesheet/NotProyectosByEmpleadoNoClose/${empleadoId}`)
+  }
+
   agregarProyecto(body: any) {
     return this.http.post<GenericResponse>(`${this.baseUrl}api/Timesheet/ProyectoEmpleado`, body)
   }
