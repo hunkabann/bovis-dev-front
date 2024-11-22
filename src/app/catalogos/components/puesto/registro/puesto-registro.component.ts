@@ -29,7 +29,7 @@ export class PuestoRegistroComponent implements OnInit {
   form = this.fb.group({
     nukid_puesto:   [null],
     nukidnivel:      [0, Validators.required],
-    chcvenoi:          ['', Validators.required],
+    chcvenoi:          [''],
     chpuesto:          ['', Validators.required],
     nusalario_min:          [0, Validators.required],
     nusalario_max:          [0, Validators.required],
