@@ -525,7 +525,8 @@ export class CostoEmpleadoComponent implements OnInit {
       worksheet.getCell(row, 12).value = record.antiguedad
       worksheet.getCell(row, 13).value = this.formatCurrency(record.avgDescuentoEmpleado)
       worksheet.getCell(row, 14).value = this.formatCurrency(record.montoDescuentoMensual)
-      worksheet.getCell(row, 15).value = this.formatCurrency(record.sueldoNetoPercibidoMensual)
+      console.log('valor de sueldo ------>>>>    ' + record.sueldoNetoPercibidoMensual)
+      worksheet.getCell(row, 15).value = record.sueldoNetoPercibidoMensual == null ? 0 : this.formatCurrency(record.sueldoNetoPercibidoMensual)
       worksheet.getCell(row, 16).value = this.formatCurrency(record.retencionImss)
       let numero_ispt = Number(record.ispt)
       worksheet.getCell(row, 17).value = this.formatCurrency(numero_ispt)
