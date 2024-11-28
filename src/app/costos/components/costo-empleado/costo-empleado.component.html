@@ -11,7 +11,8 @@
     <div class="col-3">
         <label for="descripcion">Empleado:</label>
         <div class="">
-            <p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar un Empleado" (onChange)="tablaPrincipal.filter(buscarempleados(listaPersona.value) , 'nombreCompletoEmpleado', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
+            <!--p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar un Empleado" (onChange)="onChangeCombo($event, 1)" (onChange)="tablaPrincipal.filter(buscarempleados(listaPersona.value) , 'nombreCompletoEmpleado', 'equals')" [showClear]="true" #dropDownEmpleado [filter]="true" filterBy="label"  optionLabel="label" appendTo="body"-->
+            <p-dropdown #listaPersona [options]="personass" placeholder="Seleccionar un Empleado" (onChange)="onChangeCombo($event, 1)"  [showClear]="true" #dropDownEmpleado [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
             <!--ng-template let-option pTemplate="item">
                 <p-tag [value]="option.value" severity="success"></p-tag>
             </ng-template-->
@@ -24,7 +25,8 @@
         <div class="col-2">
             <label for="puesto">Puesto:</label>
             <div class="">
-                <p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'puesto', 'equals')" placeholder="puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body">
+                <!--p-dropdown #lista [options]="puestos" (onChange)="onChangeCombo($event, 2)"  (onChange)="tablaPrincipal.filter(lista.value, 'puesto', 'equals')" placeholder="puesto" #dropDownPuesto [showClear]="true" [filter]="true" filterBy="value" appendTo="body"-->
+                  <p-dropdown #lista [options]="puestos" (onChange)="onChangeCombo($event, 2)" placeholder="puesto" #dropDownPuesto [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
                     <!--ng-template let-option pTemplate="item">
                         <p-tag [value]="option.value" severity="success"></p-tag>
                     </ng-template-->
@@ -34,7 +36,8 @@
         <div class="col-3">
           <label for="proyecto">Proyecto:</label>
           <div class="">
-            <p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="tablaPrincipal.filter(buscarProyectos(listaProyecto.value), 'proyecto', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
+            <!--p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="onChangeCombo($event, 3)"  (onChange)="tablaPrincipal.filter(buscarProyectos(listaProyecto.value), 'proyecto', 'equals')" [showClear]="true" #dropDownProyecto [filter]="true" filterBy="label"  optionLabel="label" appendTo="body"-->
+              <p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="onChangeCombo($event, 3)"  [showClear]="true" #dropDownProyecto [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
               <!--ng-template let-option pTemplate="item">
                   <p-tag [value]="option.value" severity="success"></p-tag>
               </ng-template-->
@@ -45,7 +48,8 @@
       <div class="col-3">
         <label for="descripcion">Empresa:</label>
         <div class="">
-            <p-dropdown #listaEmpresa [options]="empresas" placeholder="Seleccionar una empresa" (onChange)="tablaPrincipal.filter(buscarEmpresa(listaEmpresa.value), 'empresa', 'equals')" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
+            <!--p-dropdown #listaEmpresa [options]="empresas" placeholder="Seleccionar una empresa" (onChange)="onChangeCombo($event, 4)" (onChange)="tablaPrincipal.filter(buscarEmpresa(listaEmpresa.value), 'empresa', 'equals')" [showClear]="true" #dropDownEmpresa [filter]="true" filterBy="label"  optionLabel="label" appendTo="body"-->
+              <p-dropdown #listaEmpresa [options]="empresas" placeholder="Seleccionar una empresa" (onChange)="onChangeCombo($event, 4)"  [showClear]="true" #dropDownEmpresa [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
             <!--ng-template let-option pTemplate="item">
                 <p-tag [value]="option.value" severity="success"></p-tag>
             </ng-template-->
@@ -56,9 +60,16 @@
       <div class="col-3">
         <label for="id_unidad_negocio">Unidad de negocio:</label>
         <div class="">
-          <p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="tablaPrincipal.filter(listaUnidad.value, 'unidadNegocio', 'equals')" placeholder="Unidad de Negocio" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"></p-dropdown> 
-        </div>         
-               
+          <!--p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="onChangeCombo($event, 5)" (onChange)="tablaPrincipal.filter(listaUnidad.value, 'unidadNegocio', 'equals')" placeholder="Unidad de Negocio" [showClear]="true" #dropDownUnidadNegocio [filter]="true" filterBy="value" appendTo="body"></p-dropdown--> 
+          <p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="onChangeCombo($event, 5)" [showClear]="true" #dropDownUnidadNegocio [filter]="true" filterBy="label"  optionLabel="label" appendTo="body"></p-dropdown> 
+        </div>               
+      </div>
+
+      <div class="row">
+        <div class="col-12 d-flex justify-content-center align-items-center gap-2">
+            <button type="button" class="btn btn-dark" (click)="clearFiltros()"><i class="fas fa-eraser"></i> Limpiar filtros</button>
+            <button type="button" class="btn btn-primary" (click)="busqueda()"><i class="fas fa-save"></i> Buscar</button>
+        </div>
     </div>
 
       <!--div class="col-4">
