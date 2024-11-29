@@ -96,6 +96,22 @@ export class CostoEmpleadoComponent implements OnInit {
   Proy_SvDirectivos = 0;
   Proy_FacturacionBpm = 0;
 
+  @ViewChild('dropDownEmpleado') dropDownEmpleado: Dropdown;
+  @ViewChild('dropDownPuesto') dropDownPuesto: Dropdown;
+  @ViewChild('dropDownProyecto') dropDownProyecto: Dropdown;
+  @ViewChild('dropDownEmpresa') dropDownEmpresa: Dropdown;  
+  @ViewChild('dropDownUnidadNegocio') dropDownUnidadNegocio: Dropdown;
+
+  isClear: boolean = false;
+  filtroValue: number;
+
+  IDEmpleado: string = '0';
+  IDPuesto: number = 0;
+  IDProyecto: number = 0;
+  IDEmpresa: number = 0;
+  IDUnidadNegocio: number = 0;
+
+  opcionFiltro: number = 0;
   constructor() { }
 
   ngOnInit(): void {
@@ -116,21 +132,23 @@ export class CostoEmpleadoComponent implements OnInit {
           //const [empleadosR, puestosR] = value 
           //this.personass = personasR.data.map(persona => ({value: persona.chnombre_completo, label: persona.chnombre_completo}))
           //this.personass = personasR.data.map(empleado => ({ code: empleado.nombre_persona.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
-          this.personass = personasR.data.map(persona => ({value: persona.nombre_persona, label: `${persona.nunum_empleado_rr_hh.toString()} - ${persona.nombre_persona}` }))
+          this.personass = personasR.data.map(persona => ({value: persona.nunum_empleado_rr_hh.toString(), label: `${persona.nunum_empleado_rr_hh.toString()} - ${persona.nombre_persona}` }))
          //this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
-          this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: `${puesto.chpuesto}` }))
+          this.puestos = puestosR.data.map(puesto => ({value: puesto.nukid_puesto.toString(), label: `${puesto.nukid_puesto} - ${puesto.chpuesto}` }))
           //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
-          this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.nombre, label: `${proyecto.numProyecto} -${proyecto.nombre}` }))
+          this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.numProyecto, label: `${proyecto.numProyecto} -${proyecto.nombre}` }))
+          this.catUnidadNegocio = unidadNegocioR.data.map(unidadnegocio => ({ value: unidadnegocio.id.toString(), label: `${unidadnegocio.id.toString()} -${unidadnegocio.descripcion}` }))
+          
           //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
-          this.empresas = EmplresaR.data.map(empresa => ({value: empresa.empresa, label: `${empresa.rfc} -${empresa.empresa}`}))
+          this.empresas = EmplresaR.data.map(empresa => ({value: empresa.idEmpresa, label: `${empresa.rfc} -${empresa.empresa}`}))
           //this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
-          this.catUnidadNegocio = unidadNegocioR.data.map(unidadnegocio => ({ value: unidadnegocio.descripcion, label: `${unidadnegocio.descripcion}` }))
+         
           
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
 
-    this.costosService.getCostosEmpleado()
+    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
@@ -507,7 +525,8 @@ export class CostoEmpleadoComponent implements OnInit {
       worksheet.getCell(row, 12).value = record.antiguedad
       worksheet.getCell(row, 13).value = this.formatCurrency(record.avgDescuentoEmpleado)
       worksheet.getCell(row, 14).value = this.formatCurrency(record.montoDescuentoMensual)
-      worksheet.getCell(row, 15).value = this.formatCurrency(record.sueldoNetoPercibidoMensual)
+      console.log('valor de sueldo ------>>>>    ' + record.sueldoNetoPercibidoMensual)
+      worksheet.getCell(row, 15).value = record.sueldoNetoPercibidoMensual == null ? 0 : this.formatCurrency(record.sueldoNetoPercibidoMensual)
       worksheet.getCell(row, 16).value = this.formatCurrency(record.retencionImss)
       let numero_ispt = Number(record.ispt)
       worksheet.getCell(row, 17).value = this.formatCurrency(numero_ispt)
@@ -663,6 +682,104 @@ export class CostoEmpleadoComponent implements OnInit {
 
     
   }
+
+  onChangeCombo(event: any, opcion: number) {
+    console.log('event :' + event);
+    console.log(event.value);
+    if (event.value != null) {
+      this.isClear = true;
+      this.disableFiltros(opcion, event.value['value']);
+       this.opcionFiltro = opcion;
+      //this.fechaFin = new Date();
+      this.filtroValue = event.value['value'];
+      console.log(this.filtroValue);
+    } else {
+      this.isClear = false;
+    }
+  }
+
+  disableFiltros(opcion: number, value: number) {
+    switch (opcion) {
+      case 1:
+        this.IDEmpleado = value + '';
+        // this.isDisableEmpresa = true;
+        // this.isDisableCliente = true;
+        break;
+      case 2:
+        this.IDPuesto = value;
+        // this.isDisableProyecto = true;
+        // this.isDisableCliente = true;
+        break;
+      case 3:
+        this.IDProyecto = value;
+        // this.isDisableProyecto = true;
+        // this.isDisableEmpresa = true;
+        break;
+      case 4:
+        this.IDEmpresa= value;
+          // this.isDisableProyecto = true;
+          // this.isDisableEmpresa = true;
+        break;
+      case 5:
+        this.IDUnidadNegocio= value;
+            // this.isDisableProyecto = true;
+            // this.isDisableEmpresa = true;
+        break;
+    }
+  }
+
+  clearFiltros() {
+    this.dropDownProyecto.clear(null);
+    this.dropDownEmpresa.clear(null);
+    this.dropDownPuesto.clear(null);
+    this.dropDownEmpleado.clear(null);
+    this.dropDownUnidadNegocio.clear(null);
+
+    /*#elsetotalthis.isDisableProyecto = false;
+    this.isDisableEmpresa = false;
+    this.isDisableCliente = false;
+
+    this.fechaInicio = null;
+    this.fechaFin = null;
+
+    this.noFactura = null
+
+    this.IDProyecto = null
+    this.IDEmpresa = null
+    this.IDCliente = null
+
+    this.opcionFiltro = 0;*/
+
+    this.IDEmpleado= '0';
+    this.IDPuesto = 0;
+    this.IDProyecto = 0;
+    this.IDEmpresa = 0;
+    this.IDUnidadNegocio = 0;
+
+
+    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({data}) => {
+          this.costos = data
+        },
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
+      
+  }
+
+  busqueda() {
+    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({data}) => {
+          this.costos = data
+        },
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
+  }
+
+  
   
 
 }
