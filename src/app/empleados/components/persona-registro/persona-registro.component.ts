@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,inject } from '@angular/core';
 import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
 import { CatPersona, Catalogo, Empleado, Persona } from '../../Models/empleados';
 import { EmpleadosService } from '../../services/empleados.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { finalize, forkJoin } from 'rxjs';
-import { CALENDAR, SUBJECTS, TITLES, errorsArray } from 'src/utils/constants';
+import { CALENDAR, SUBJECTS, TITLES, errorsArray,emailsAsignarPersona } from 'src/utils/constants';
 import { FormBuilder, Validators } from '@angular/forms';
 import { format } from 'date-fns';
+import { EmailsService } from 'src/app/services/emails.service';
 
 interface ICatalogo {
   name: string;
@@ -35,6 +36,8 @@ export class PersonaRegistroComponent implements OnInit {
   mensajeCamposRequeridos: string = '';
   esActualizacion = false
   esEmpleado = false
+
+  emailsService     = inject(EmailsService)
 
   form = this.fb.group({
     id_persona:       [null],
@@ -184,6 +187,36 @@ export class PersonaRegistroComponent implements OnInit {
       .subscribe({
         next: (data) => {
           // console.log(data)
+
+          const fakeCopyDynos = emailsAsignarPersona.emailNuevoPersona.emailsTo
+          // cambiamos el valor del primer elemento en fakeCopyDynos
+          fakeCopyDynos[0] = localStorage.getItem('userMail')
+          
+          // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+          //console.log(fakeCopyDynos) 
+          
+          // pero si miramos también el contenido de dynos...
+          //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+  
+          //fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+          fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+  
+          //console.log(fakeCopyDynos) 
+
+          const emailNuevoRequerimiento = {
+            ...emailsAsignarPersona.emailNuevoPersona,
+            body: emailsAsignarPersona.emailNuevoPersona.body.replace('nombre_usuario', localStorage.getItem('userName') +'' || ''),
+            emailsTo: fakeCopyDynos
+          }
+          // console.log(emailNuevoRequerimiento);
+          this.emailsService.sendEmail(emailNuevoRequerimiento)
+            .pipe(finalize(() => {
+              this.form.reset()
+              this.sharedService.cambiarEstado(false)
+              this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+            }))
+            .subscribe()
+
           this.form.reset()
           this.router.navigate(['/empleados/persona'], {queryParams: {success: true}});
         },

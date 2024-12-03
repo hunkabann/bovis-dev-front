@@ -580,3 +580,18 @@ export const emailsAsignarRequerimientos = Object.freeze({
     emailsTo: ['jmmorales@hunkabann.com.mx']
   }
 })
+
+export const emailsAsignarPersona = Object.freeze({
+  emailNuevoPersona: {
+    subject:  'Nueva alta de Persona',
+    body:     `Buen día, nombre_usuario.  <br><br>
+ 
+              El área de Recursos Humanos ha recibido su requerimiento de persoal y comenzará el proceso de búsqueda. <br> <br>
+               
+              Lo mantendremos al tanto de los avances <br> <br>
+               
+              Saludos. <br> <br>`,
+               
+    emailsTo: ['jmmorales@hunkabann.com.mx']
+  }
+})
