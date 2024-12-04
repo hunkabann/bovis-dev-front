@@ -35,8 +35,8 @@ export class EmpleadosPrincipalComponent implements OnInit {
   puestos:    Item[] = []
   catUnidadNegocio: Item[] = []
   estados:    Item[] = [
-    {label: 'Activo', value: true},
-    {label: 'Inactivo', value: false}
+    {label: 'Activo', value: 1},
+    {label: 'Inactivo', value: 2}
   ]
 
   today: Date = new Date();
@@ -50,7 +50,7 @@ export class EmpleadosPrincipalComponent implements OnInit {
 
   listProyectos: Proyectos[] = [];
   listEmpresas: Empresas[] = [];
-  opcionFiltro: number = 0;
+  //opcionFiltro: number = 0;
 
 
   proyectos:    Item[] = []
@@ -61,14 +61,31 @@ export class EmpleadosPrincipalComponent implements OnInit {
   isDisableCliente: boolean = false;
   isClear: boolean = false;
 
-  @ViewChild('dropDownProyecto') dropDownProyecto: Dropdown;
-  @ViewChild('dropDownEmpresa') dropDownEmpresa: Dropdown;
+  //@ViewChild('dropDownProyecto') dropDownProyecto: Dropdown;
+  //@ViewChild('dropDownEmpresa') dropDownEmpresa: Dropdown;
 
 
-  IDProyecto: number;
-  IDEmpresa: number;
+  //IDProyecto: number;
+  //IDEmpresa: number;
   IDCliente: number;
   filtroValue: number;
+
+  @ViewChild('dropDownEstado') dropDownEstado: Dropdown;
+  @ViewChild('dropDownPuesto') dropDownPuesto: Dropdown;
+  @ViewChild('dropDownProyecto') dropDownProyecto: Dropdown;
+  @ViewChild('dropDownEmpresa') dropDownEmpresa: Dropdown;  
+  @ViewChild('dropDownUnidadNegocio') dropDownUnidadNegocio: Dropdown;
+
+  //isClear: boolean = false;
+  //filtroValue: number;
+
+  IDEstado: number = 0;
+  IDPuesto: number = 0;
+  IDProyecto: number = 0;
+  IDEmpresa: number = 0;
+  IDUnidadNegocio: number = 0;
+
+  opcionFiltro: number = 0;
 
   constructor( 
     private empleadosServ: EmpleadosService,
@@ -86,7 +103,7 @@ export class EmpleadosPrincipalComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
 
     forkJoin([
-      this.empleadosServ.getEmpleados(),
+      this.empleadosServ.getEmpleadosAllFiltro(this.IDEstado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio),
       this.empleadosServ.getPuestos(),
       this.empleadosServ.getProyectosNoClose(),
       this.empleadosServ.getEmpresas(),
@@ -99,13 +116,22 @@ export class EmpleadosPrincipalComponent implements OnInit {
           const [empleadosR, puestosR,proyectosR,EmplresaR,UnidadNegcioR] = value
           //const [empleadosR, puestosR] = value
           this.empleados = empleadosR.data
-          this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
+          //this.puestos = puestosR.data.map(puesto => ({value: puesto.chpuesto, label: puesto.chpuesto}))
           //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
           //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
           //this.proyectos = proyectosR.data.map(proyecto => ({value: proyecto.nombre, label: proyecto.nombre }))
-          this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.numProyecto.toString() + " - " + proyecto.nombre, label: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}` }))
-          this.empresas = EmplresaR.data.map(empresa => ({value: empresa.empresa, label: empresa.empresa}))
-          this.catUnidadNegocio = UnidadNegcioR.data.map(unidadNegocio => ({value: unidadNegocio.descripcion, label: unidadNegocio.descripcion}))
+          //this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.numProyecto.toString() + " - " + proyecto.nombre, label: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}` }))
+          //this.empresas = EmplresaR.data.map(empresa => ({value: empresa.empresa, label: empresa.empresa}))
+          //this.catUnidadNegocio = UnidadNegcioR.data.map(unidadNegocio => ({value: unidadNegocio.descripcion, label: unidadNegocio.descripcion}))
+          
+
+          this.puestos = puestosR.data.map(puesto => ({value: puesto.nukid_puesto.toString(), label: `${puesto.nukid_puesto} - ${puesto.chpuesto}` }))
+          //this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto} - ${proyecto.nombre}` }))
+          this.proyectos = proyectosR.data.map(proyecto => ({ value: proyecto.numProyecto, label: `${proyecto.numProyecto} -${proyecto.nombre}` }))
+          this.catUnidadNegocio = UnidadNegcioR.data.map(unidadnegocio => ({ value: unidadnegocio.id.toString(), label: `${unidadnegocio.id.toString()} -${unidadnegocio.descripcion}` }))
+          
+          //this.empresas = EmplresaR.data.map(empresa => ({ code: empresa.idEmpresa.toString(), name: `${empresa.empresa}` }))
+          this.empresas = EmplresaR.data.map(empresa => ({value: empresa.idEmpresa, label: `${empresa.rfc} -${empresa.empresa}`}))
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
@@ -215,7 +241,7 @@ export class EmpleadosPrincipalComponent implements OnInit {
     if (event.value != null) {
       this.isClear = true;
       this.disableFiltros(opcion, event.value['value']);
-      //this. = opcion;
+       this.opcionFiltro = opcion;
       //this.fechaFin = new Date();
       this.filtroValue = event.value['value'];
       console.log(this.filtroValue);
@@ -237,30 +263,72 @@ export class EmpleadosPrincipalComponent implements OnInit {
         // this.isDisableCliente = true;
         break;
       case 3:
-        this.IDCliente = value;
+        this.IDPuesto = value;
         // this.isDisableProyecto = true;
         // this.isDisableEmpresa = true;
         break;
+      case 4:
+          this.IDUnidadNegocio = value;
+          // this.isDisableProyecto = true;
+          // this.isDisableEmpresa = true;
+          break;
+      case 5:
+            this.IDEstado = value;
+            // this.isDisableProyecto = true;
+            // this.isDisableEmpresa = true;
+            break;
     }
   }
 
   clearFiltros() {
     this.dropDownProyecto.clear(null);
     this.dropDownEmpresa.clear(null);
+    this.dropDownPuesto.clear(null);
+    this.dropDownEstado.clear(null);
+    this.dropDownUnidadNegocio.clear(null);
 
-    this.isDisableProyecto = false;
+    /*#elsetotalthis.isDisableProyecto = false;
     this.isDisableEmpresa = false;
     this.isDisableCliente = false;
 
-    //this.fechaInicio = null;
-    //this.fechaFin = null;
+    this.fechaInicio = null;
+    this.fechaFin = null;
 
-    
+    this.noFactura = null
 
     this.IDProyecto = null
     this.IDEmpresa = null
-    
-    this.opcionFiltro = 0;
+    this.IDCliente = null
+
+    this.opcionFiltro = 0;*/
+
+    this.IDEstado = 0;
+    this.IDPuesto = 0;
+    this.IDProyecto = 0;
+    this.IDEmpresa = 0;
+    this.IDUnidadNegocio = 0;
+
+
+    this.empleadosServ.getEmpleadosAllFiltro(this.IDEstado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({data}) => {
+          this.empleados = data
+        },
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
+      
+  }
+
+  busqueda() {
+    this.empleadosServ.getEmpleadosAllFiltro(this.IDEstado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({data}) => {
+          this.empleados = data
+        },
+        error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+      })
   }
 
   exportJsonToExcel(): void {

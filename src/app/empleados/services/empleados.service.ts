@@ -256,4 +256,8 @@ export class EmpleadosService {
     return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
   }
 
+  getEmpleadosAllFiltro(idEstado: number,idPuesto: number,idProyecto: number,idEmpresa: number,IDUnidadNegocio: number) {
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/AllFiltro/true/${idEstado}/${idPuesto}/${idProyecto}/${idEmpresa}/${IDUnidadNegocio}`);
+  }
+
 }

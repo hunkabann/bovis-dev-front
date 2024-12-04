@@ -192,7 +192,7 @@ export class GenerarRequerimientoComponent implements OnInit {
     this.empleadosService.getProyectosPorDirector(value)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
-        next: ({data}) => this.proyectos = data.map(proyecto => ({name: proyecto.proyecto, code: proyecto.numProyecto.toString()})),
+        next: ({data}) => this.proyectos = data.map(proyecto => ({name: proyecto.numProyecto.toString() + ' - ' +proyecto.proyecto, code: proyecto.numProyecto.toString()})),
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
   }
