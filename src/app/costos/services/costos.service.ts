@@ -14,8 +14,8 @@ export class CostosService {
 
   constructor() { }
 
-  getCostosEmpleado(idEmpleado: string,idPuesto: number,idProyecto: number,idEmpresa: number,IDUnidadNegocio: number) {
-    return this.http.get<CostosEmpleadoResponse>(`${ this.baseUrl }api/Costo/costos/0/${idEmpleado}/${idPuesto}/${idProyecto}/${idEmpresa}/${IDUnidadNegocio}`)
+  getCostosEmpleado(idEmpleado: string,idPuesto: number,idProyecto: number,idEmpresa: number,IDUnidadNegocio: number,DtFechaIni: string,DtFechaFin: string) {
+    return this.http.get<CostosEmpleadoResponse>(`${ this.baseUrl }api/Costo/costos/0/${idEmpleado}/${idPuesto}/${idProyecto}/${idEmpresa}/${IDUnidadNegocio}/${DtFechaIni}/${DtFechaFin}`)
   }
 
   getCostoID(id: string) {
