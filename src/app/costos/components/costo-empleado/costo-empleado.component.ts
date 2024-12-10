@@ -156,7 +156,7 @@ export class CostoEmpleadoComponent implements OnInit {
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
 
-    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
+    this.costosService.getCostosEmpleado(true,this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
@@ -774,7 +774,7 @@ export class CostoEmpleadoComponent implements OnInit {
      this.fetchIni= '1900-01-01'
 
 
-    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
+    this.costosService.getCostosEmpleado(true,this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
@@ -813,7 +813,7 @@ export class CostoEmpleadoComponent implements OnInit {
     console.log('FECHA INICIAL --- >> ' + this.fetchIni)
     console.log('FECHA FINAL --- >> ' + this.fetchFin)
 
-    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
+    this.costosService.getCostosEmpleado(false,this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
