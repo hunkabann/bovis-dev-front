@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { EmpleadosService } from 'src/app/empleados/services/empleados.service';
 import { FacturacionService } from 'src/app/facturacion/services/facturacion.service';
 import { ModificarComponent } from '../modificar/modificar.component';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { DialogService } from 'primeng/dynamicdialog';
 
@@ -41,6 +42,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   empleadosService = inject(EmpleadosService)
   facturacionService = inject(FacturacionService)
   dialogService     = inject(DialogService)
+  fb                = inject(FormBuilder)
 
   empleados: Opcion[] = []
   proyectos: Opcion[] = []
@@ -65,6 +67,14 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   todayWithPipe = null;
 
   indexcolum: number
+
+  form = this.fb.group({
+    id_input_proyecto:                 [null],
+    id_input_dedicacion:                 [null]
+
+  })
+
+  readonly = null;
 
   constructor() { }
 
@@ -122,7 +132,49 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   buscarRegistros(event: any, tipo: string) {
     this.sharedService.cambiarEstado(true)
 
-    console.log('this.mes '+ this.mes);
+    
+
+    console.log('this.mes '+ this.mes + ' FORMATEA EL MES ' + event.value);
+
+    let birthday = new Date(this.mes);
+
+    console.log(birthday.getMonth()+1)
+
+    
+
+    //this.form.controls['id_input_proyecto'].disable();
+    //this.form.controls['id_input_dedicacion'].disable();
+
+ 
+    //this.readonly = false;
+
+    //document.getElementById("input").style.visibility = "collapse";
+    //deshabilitar
+    let fecha = new Date();
+
+    //console.log('FECHA HOY   ' + fecha);
+    
+
+    let desdeStr = `${fecha.getFullYear()}-${fecha.getMonth()+1}-${fecha.getDate()}`;
+
+    //console.log('ANIO ' + `${fecha.getFullYear()}`);
+    //console.log('MES ' + `${fecha.getMonth()+1}`);
+    //console.log('FECHA ARMADA   ' + desdeStr);
+
+    
+
+    if(+`${fecha.getDate()}` >= 3){
+     
+      if(birthday.getMonth()+1 < +`${fecha.getMonth()+1}`){
+        this.readonly= true;
+      }else{
+        this.readonly= false;
+      }
+
+    }else{
+      this.readonly= false;
+    }
+ 
     
 
     const mesFormateado = this.mes ? +format(this.mes, 'M') : 0
@@ -282,6 +334,7 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   }
 
   cambiarParticipacionDedica(timesheet: Timesheet, idTimesheetProyecto: number, event: any) {
+
     
 
     //console.log("Valor de dedicación: " + +event.target.value)
