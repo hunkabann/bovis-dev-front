@@ -35,11 +35,12 @@ export class AgregarProyectoComponent implements OnInit {
     if (this.config.data.code) {
       //console.log('cuando existe informacion  ------ ' +this.config.data.code)
       this.empleadoId = this.config.data.code
-      this.timesheetService.getProyectosFaltanEmpleadoNoClose(this.empleadoId)
+      //this.timesheetService.getProyectosFaltanEmpleadoNoClose(this.empleadoId)
+      this.timesheetService.getProyectosFaltanEmpleado(this.empleadoId)
         .subscribe({
           next: ({data}) => 
-            //this.proyectos = data.map(data => ({name: data.proyecto.toString(), value: data.numProyecto.toString()})),
-            this.proyectos = data.map(proyecto => ({ name: proyecto.numProyecto.toString() + " - " + proyecto.proyecto.toString(), value: `${proyecto.numProyecto.toString()} - ${proyecto.proyecto.toString()}` })),
+            this.proyectos = data.map(data => ({name: data.proyecto.toString(), value: data.numProyecto.toString()})),
+            //this.proyectos = data.map(proyecto => ({ name: proyecto.numProyecto.toString() + " - " + proyecto.proyecto.toString(), value: `${proyecto.numProyecto.toString()} - ${proyecto.proyecto.toString()}` })),
           
           error: (err) => {}
         })
@@ -50,11 +51,12 @@ export class AgregarProyectoComponent implements OnInit {
       if(this.config.data.empleado.code) {
        // console.log('cuando existe informacion del codigo empleado  ------ ' +this.config.data.empleado.code)
         this.empleadoId = this.config.data.empleado.code
-        this.timesheetService.getProyectosFaltanEmpleadoNoClose(this.empleadoId)
+        //this.timesheetService.getProyectosFaltanEmpleadoNoClose(this.empleadoId)
+        this.timesheetService.getProyectosFaltanEmpleado(this.empleadoId)
           .subscribe({
             next: ({data}) => 
-              //this.proyectos = data.map(data => ({name: data.proyecto.toString(), value: data.numProyecto.toString()})),
-              this.proyectos = data.map(proyecto => ({ name: proyecto.numProyecto.toString() + " - " + proyecto.proyecto.toString(), value: `${proyecto.numProyecto.toString()} - ${proyecto.proyecto.toString()}` })),
+              this.proyectos = data.map(data => ({name: data.proyecto.toString(), value: data.numProyecto.toString()})),
+             // this.proyectos = data.map(proyecto => ({ name: proyecto.numProyecto.toString() + " - " + proyecto.proyecto.toString(), value: `${proyecto.numProyecto.toString()} - ${proyecto.proyecto.toString()}` })),
             error: (err) => {}
           })
       } else {
@@ -83,16 +85,17 @@ export class AgregarProyectoComponent implements OnInit {
       //console.log('valor del split' + arr[0]);
       //console.log('valor del split' + arr[1]);
 
-     // this.timesheetService.agregarProyecto({id_empleado: this.empleadoId, id_proyecto: event.value})
-      this.timesheetService.agregarProyecto({id_empleado: this.empleadoId, id_proyecto: arr[0].trim()})
+      this.timesheetService.agregarProyecto({id_empleado: this.empleadoId, id_proyecto: event.value})
+      //this.timesheetService.agregarProyecto({id_empleado: this.empleadoId, id_proyecto: arr[0].trim()})
         .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
         .subscribe({
           next: (data) => {
             this.ref.close({exito: true, registro: {
-              //proyectoId:     event.value,
-              //proyectoNombre: this.proyectos.find(data => data.value === event.value).name
-              proyectoId:     arr[0].trim(),
-              proyectoNombre: arr[1]
+              proyectoId:     event.value,
+              proyectoNombre: this.proyectos.find(data => data.value === event.value).name
+             // tsproyect:
+              //proyectoId:     arr[0].trim(),
+              //proyectoNombre: arr[1]
             }})
           },
           error: (err) => this.ref.close({exito: false,registro:null})
