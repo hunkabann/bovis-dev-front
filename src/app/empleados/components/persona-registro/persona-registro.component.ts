@@ -187,8 +187,9 @@ export class PersonaRegistroComponent implements OnInit {
       .subscribe({
         next: (data) => {
           // console.log(data)
+          if(this.esActualizacion){
 
-          const fakeCopyDynos = emailsAsignarPersona.emailNuevoPersona.emailsTo
+            const fakeCopyDynos = emailsAsignarPersona.emailNuevoPersona.emailsTo
           // cambiamos el valor del primer elemento en fakeCopyDynos
           fakeCopyDynos[0] = localStorage.getItem('userMail')
           
@@ -213,9 +214,43 @@ export class PersonaRegistroComponent implements OnInit {
             .pipe(finalize(() => {
               this.form.reset()
               this.sharedService.cambiarEstado(false)
-              this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+              //this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
             }))
             .subscribe()
+
+          }else{
+
+            const fakeCopyDynos = emailsAsignarPersona.emailActualizaPersona.emailsTo
+          // cambiamos el valor del primer elemento en fakeCopyDynos
+          fakeCopyDynos[0] = localStorage.getItem('userMail')
+          
+          // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+          //console.log(fakeCopyDynos) 
+          
+          // pero si miramos también el contenido de dynos...
+          //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+  
+          //fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+          fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+  
+          //console.log(fakeCopyDynos) 
+
+          const emailNuevoRequerimiento = {
+            ...emailsAsignarPersona.emailActualizaPersona,
+            body: emailsAsignarPersona.emailActualizaPersona.body.replace('nombre_usuario', localStorage.getItem('userName') +'' || ''),
+            emailsTo: fakeCopyDynos
+          }
+          // console.log(emailNuevoRequerimiento);
+          this.emailsService.sendEmail(emailNuevoRequerimiento)
+            .pipe(finalize(() => {
+              this.form.reset()
+              this.sharedService.cambiarEstado(false)
+             // this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+            }))
+            .subscribe()
+
+          }
+          
 
           this.form.reset()
           this.router.navigate(['/empleados/persona'], {queryParams: {success: true}});

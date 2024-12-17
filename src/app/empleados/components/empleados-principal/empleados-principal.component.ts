@@ -1,10 +1,10 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnInit,ViewChild,inject } from '@angular/core';
 import { EmpleadosService } from '../../services/empleados.service';
 import { CatEmpleado, UpEmpleado,Empresas, Proyectos,Busqueda,encabezados } from '../../Models/empleados';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { finalize, forkJoin } from 'rxjs';
 import { MessageService } from 'primeng/api';
-import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
+import { SUBJECTS, TITLES,EXCEL_EXTENSION,emailsDatosEmpleados } from 'src/utils/constants';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Item,Opcion } from 'src/models/general.model';
@@ -17,6 +17,7 @@ import { formatCurrency } from 'src/helpers/helpers';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { DatePipe } from '@angular/common';
+import { EmailsService } from 'src/app/services/emails.service';
 
 interface FiltroCancelacion {
   name: string;
@@ -42,6 +43,8 @@ export class EmpleadosPrincipalComponent implements OnInit {
   today: Date = new Date();
   pipe = new DatePipe('en-US');
   todayWithPipe = null;
+
+    emailsService     = inject(EmailsService)
 
   filtroProyectos: FiltroCancelacion[] = [];
   filtroEmpresas: FiltroCancelacion[] = [];
@@ -155,9 +158,46 @@ export class EmpleadosPrincipalComponent implements OnInit {
   }
   
   toggleActivo(id: number, activo: boolean) {
+    //aqui se manda correo de la matriz 3
     console.log(activo)
     const index = this.empleados.findIndex(({nunum_empleado_rr_hh}) => nunum_empleado_rr_hh === id)
     if(index >= 0) {
+      
+      if(!activo){
+        // ENVIO DE CORREO CUANDO ES inactivo el empleado
+                        
+                        const fakeCopyDynos = emailsDatosEmpleados.emailInactivoEmpleado.emailsTo
+                                // cambiamos el valor del primer elemento en fakeCopyDynos
+                                fakeCopyDynos[0] = localStorage.getItem('userMail')
+                                
+                                // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+                                //console.log(fakeCopyDynos) 
+                                
+                                // pero si miramos también el contenido de dynos...
+                                //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+                        
+                                fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+                                //fakeCopyDynos.push('atc.isc@gmail.com')
+                        
+                                //console.log(fakeCopyDynos) 
+                      
+                                const emailNuevoRequerimiento = {
+                                  ...emailsDatosEmpleados.emailInactivoEmpleado,
+                                  body: emailsDatosEmpleados.emailInactivoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                                  emailsTo: fakeCopyDynos
+                                }
+                                // console.log(emailNuevoRequerimiento);
+                                this.emailsService.sendEmail(emailNuevoRequerimiento)
+                                  .pipe(finalize(() => {
+                                    //this.form.reset()
+                                    this.sharedService.cambiarEstado(false)
+                                   // this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+                                  }))
+                                  .subscribe()
+        
+                      //
+      }
+
       this.sharedService.cambiarEstado(true)
       this.empleadosServ.toggleEstado(!activo, id, false)
         .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
