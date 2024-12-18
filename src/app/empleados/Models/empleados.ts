@@ -309,8 +309,11 @@ export interface UpEmpleado {
   chporcentaje_pension:     'SI' | 'NO' | 'NA';
   nunum_empleado:           number;
   dtfecha_ingreso:          string;
+  dtfecha_ingresoLetras:          string;
   dtfecha_salida:           string;
+  dtfecha_salidaLetras:           string;
   dtfecha_ultimo_reingreso: string;
+  dtfecha_ultimo_reingresoLetras: string;
   chnss:                    string;
   chemail_bovis:            string;
   chexperiencias:           string;
@@ -338,6 +341,8 @@ export interface UpEmpleado {
   nuproyecto_principal:     number;
   experiencias:             Experiencia[];
   habilidades:              Habilidad[];
+  dtvigenciaLetras: string;
+  dtvigencia90Letras: string;
 }
 
 export interface TurnoResponse {
