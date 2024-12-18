@@ -144,6 +144,8 @@ export class ContratosRegistroComponent implements OnInit {
 
         this.empleado = empleadoR.data
 
+    
+
         Object.entries(empleadoR.data).forEach(entry => {
           const [code, name] = entry
           if(!Array.isArray(name)) {
@@ -157,9 +159,14 @@ export class ContratosRegistroComponent implements OnInit {
 
   changeTemplate(event: any) {
     const index = this.plantillas.findIndex(plantilla => plantilla.idContratoTemplate === event.value)
+
+    const regex = /{([^}]+)}/g;
+
+    //this.htmlForm = this.plantillas.at(index).template.replace(regex, (match, captureText) => this.reemplazar(match, captureText, this.empleado))
     if(index >= 0) {
       this.form.patchValue({
-        contrato: this.plantillas.at(index).template
+        //contrato: this.plantillas.at(index).template
+        contrato: this.plantillas.at(index).template.replace(regex, (match, captureText) => this.reemplazar(match, captureText, this.empleado))
       })
     }
   }
