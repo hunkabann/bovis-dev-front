@@ -204,7 +204,14 @@
           <td>{{costo.cargasSociales|currency}}</td>
           <td>{{costo.costoMensualEmpleado|currency}}</td>
           <td>{{costo.fechaActualizacion|date:'d/MM/yyyy'}}</td>
-          <td>{{costo.regHistorico}}</td>
+          <td *ngIf="costo.regHistorico; then thenfecha else elsefecha"> </td>
+                    <ng-template #thenfecha>
+                        <td>SI</td>
+                    </ng-template>
+                    <ng-template #elsefecha>
+                        <td>NO</td>
+                    </ng-template>
+          <!--td>{{costo.regHistorico}}</td-->
         </tr>
       </ng-template>
     </p-table>
