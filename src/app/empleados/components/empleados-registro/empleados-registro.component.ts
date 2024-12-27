@@ -439,8 +439,8 @@ export class EmpleadosRegistroComponent implements OnInit {
                         // pero si miramos también el contenido de dynos...
                         //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
                 
-                        fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
-                        //fakeCopyDynos.push('atc.isc@gmail.com')
+                        //fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+                        fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
                 
                         //console.log(fakeCopyDynos) 
               
@@ -519,8 +519,8 @@ export class EmpleadosRegistroComponent implements OnInit {
               // pero si miramos también el contenido de dynos...
               //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
       
-              fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
-              //fakeCopyDynos.push('atc.isc@gmail.com')
+              //fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+              fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
       
               //console.log(fakeCopyDynos) 
     
