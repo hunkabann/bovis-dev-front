@@ -50,6 +50,11 @@ export class SummaryComponent implements OnInit {
 
   fechaexcel: Date
 
+  masde100: number = 0
+
+  menosde100: number = 0
+
+
   constructor() { }
 
   ngOnInit(): void {
@@ -272,13 +277,7 @@ export class SummaryComponent implements OnInit {
 
       //ATC
 
-        record.participacion.forEach((proyecto, index) => {
-          worksheet.getColumn(11 + index).width = 15
-          worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
-          worksheet.getCell(row, 11 + index).numFmt = '0%';
-          totalTimesheet += +proyecto.costo 
-          
-        })
+        
 
       let total = 0
       record.timesheet.proyectos.forEach(proyecto => {
@@ -286,6 +285,8 @@ export class SummaryComponent implements OnInit {
         total += Math.round(proyecto.costo)
       })
 
+
+      
       //se comenta por que no existe costo en otros
   
       /*record.timesheet.otros.forEach(proyecto => {
@@ -302,26 +303,257 @@ export class SummaryComponent implements OnInit {
         
       })*/
 
-      
-      worksheet.getCell(row, 1).value = 1
-      worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
-      worksheet.getCell(row, 3).value = record.timesheet.noi_empresa
-      worksheet.getCell(row, 4).value = record.timesheet.noi_empleado
-      worksheet.getCell(row, 5).value = record.timesheet.num_empleado
-      worksheet.getCell(row, 6).value = 1
-      worksheet.getCell(row, 7).value = record.timesheet.empleado
-      worksheet.getCell(row, 8).value = record.timesheet.responsable
-     // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
-      worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total))
-      worksheet.getCell(row, 9).numFmt = '0%';
-      if(this.esElmismomes(record.timesheet.dtfecha_salida)){
-        worksheet.getCell(row, 10).value = 'SI'
-      }else{
-         worksheet.getCell(row, 10).value = 'NO'
-      }
+
+        //console.log("this.getDecimal(Math.round(total)) "+ this.getDecimal(Math.round(total)))
+        //console.log("Math.round(total) "+ Math.round(total))
+        //console.log("total "+ total)
+        this.getDecimal(Math.round(total))
+
+        if(this.getDecimal(Math.round(total)) == 0){
+
+          //console.log("ES IGUAL QUE 0: "+ this.getDecimal(Math.round(total)))
+          record.participacion.forEach((proyecto, index) => {
+            worksheet.getColumn(11 + index).width = 15
+            //console.log("this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) "+ this.getDecimal(this.formateaValor(Math.round(proyecto.costo))))
+            worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
+            worksheet.getCell(row, 11 + index).numFmt = '0%';
+            totalTimesheet += +proyecto.costo 
+            
+          })
+        
+        worksheet.getCell(row, 1).value = 1
+        worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
+        worksheet.getCell(row, 3).value = record.timesheet.noi_empresa
+        worksheet.getCell(row, 4).value = record.timesheet.noi_empleado
+        worksheet.getCell(row, 5).value = record.timesheet.num_empleado
+        worksheet.getCell(row, 6).value = 1
+        worksheet.getCell(row, 7).value = record.timesheet.empleado
+        worksheet.getCell(row, 8).value = record.timesheet.responsable
+       // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+        worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total))
+        //worksheet.getCell(row, 9).value = Math.round(total)
+        worksheet.getCell(row, 9).numFmt = '0%';
+        if(this.esElmismomes(record.timesheet.dtfecha_salida)){
+          worksheet.getCell(row, 10).value = 'SI'
+        }else{
+           worksheet.getCell(row, 10).value = 'NO'
+        }
+        }else{
+
+          if(this.getDecimal(Math.round(total)) == 1){
+           // console.log("ES IGUAL QUE 100: "+ this.getDecimal(Math.round(total)))
+            record.participacion.forEach((proyecto, index) => {
+              worksheet.getColumn(11 + index).width = 15
+              worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
+              worksheet.getCell(row, 11 + index).numFmt = '0%';
+              totalTimesheet += +proyecto.costo 
+              
+            })
+          
+          worksheet.getCell(row, 1).value = 1
+          worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
+          worksheet.getCell(row, 3).value = record.timesheet.noi_empresa
+          worksheet.getCell(row, 4).value = record.timesheet.noi_empleado
+          worksheet.getCell(row, 5).value = record.timesheet.num_empleado
+          worksheet.getCell(row, 6).value = 1
+          worksheet.getCell(row, 7).value = record.timesheet.empleado
+          worksheet.getCell(row, 8).value = record.timesheet.responsable
+         // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+          worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total))
+          //worksheet.getCell(row, 9).value = Math.round(total)
+          worksheet.getCell(row, 9).numFmt = '0%';
+          if(this.esElmismomes(record.timesheet.dtfecha_salida)){
+            worksheet.getCell(row, 10).value = 'SI'
+          }else{
+             worksheet.getCell(row, 10).value = 'NO'
+          }
+          }else{
+            if(this.getDecimal(Math.round(total)) > 1){
+              //console.log("this.getDecimal(Math.round(total)) "+ this.getDecimal(Math.round(total)))
+              //console.log("Math.round(total) "+ Math.round(total))
+              //console.log("total "+ total)
+              //console.log("ES MAYOR QUE 100: "+ this.getDecimal(Math.round(total-1)))
+
+              if(this.masde100 > 0){
+
+                record.participacion.forEach((proyecto, index) => {
+                  worksheet.getColumn(11 + index).width = 15
+                  //console.log("this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) "+ this.getDecimal(this.formateaValor(Math.round(proyecto.costo))))
+                  worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
+                  worksheet.getCell(row, 11 + index).numFmt = '0%';
+                  totalTimesheet += +proyecto.costo 
+                  
+                })
+              
+                worksheet.getCell(row, 1).value = 1
+                worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
+                worksheet.getCell(row, 3).value = record.timesheet.noi_empresa
+                worksheet.getCell(row, 4).value = record.timesheet.noi_empleado
+                worksheet.getCell(row, 5).value = record.timesheet.num_empleado
+                worksheet.getCell(row, 6).value = 1
+                worksheet.getCell(row, 7).value = record.timesheet.empleado
+                worksheet.getCell(row, 8).value = record.timesheet.responsable
+               // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+                worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total))
+                //worksheet.getCell(row, 9).value = Math.round(total)
+                worksheet.getCell(row, 9).numFmt = '0%';
+                if(this.esElmismomes(record.timesheet.dtfecha_salida)){
+                  worksheet.getCell(row, 10).value = 'SI'
+                }else{
+                   worksheet.getCell(row, 10).value = 'NO'
+                }
+
+              }else{
+
+                record.participacion.forEach((proyecto, index) => {
+                  worksheet.getColumn(11 + index).width = 15
+                  //console.log("this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) "+ this.getDecimal(this.formateaValor(Math.round(proyecto.costo))))
+                  if(this.masde100 > 0){
+                    //if(proyecto.costo > 0.05){
+
+                      worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
+                      worksheet.getCell(row, 11 + index).numFmt = '0%';
+
+                     // this.menosde100++
+                   // }
+
+                  }else{
+                    if(proyecto.costo > 0.05){
+
+                      worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo-1))) || ''
+                      worksheet.getCell(row, 11 + index).numFmt = '0%';
+
+                      this.masde100++
+                    }
+                  }
+                  
+                  
+                  totalTimesheet += +proyecto.costo 
+                  
+                })
+              
+                worksheet.getCell(row, 1).value = 1
+                worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
+                worksheet.getCell(row, 3).value = record.timesheet.noi_empresa
+                worksheet.getCell(row, 4).value = record.timesheet.noi_empleado
+                worksheet.getCell(row, 5).value = record.timesheet.num_empleado
+                worksheet.getCell(row, 6).value = 1
+                worksheet.getCell(row, 7).value = record.timesheet.empleado
+                worksheet.getCell(row, 8).value = record.timesheet.responsable
+               // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+                worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total-1))
+                //worksheet.getCell(row, 9).value = Math.round(total)
+                worksheet.getCell(row, 9).numFmt = '0%';
+                if(this.esElmismomes(record.timesheet.dtfecha_salida)){
+                  worksheet.getCell(row, 10).value = 'SI'
+                }else{
+                   worksheet.getCell(row, 10).value = 'NO'
+                }
+
+              }
+
+            }else{
+              if(this.getDecimal(Math.round(total)) < 1){
+                //console.log("this.getDecimal(Math.round(total)) "+ this.getDecimal(Math.round(total)))
+                //console.log("Math.round(total) "+ Math.round(total))
+                //console.log("total "+ total)
+                //console.log("ES MENOR QUE 100: "+ this.getDecimal(Math.round(total+1)))
+
+                if(this.menosde100 > 0){
+
+                  record.participacion.forEach((proyecto, index) => {
+                    worksheet.getColumn(11 + index).width = 15
+                    //console.log("this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) "+ this.getDecimal(this.formateaValor(Math.round(proyecto.costo))))
+                    worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
+                    worksheet.getCell(row, 11 + index).numFmt = '0%';
+                    totalTimesheet += +proyecto.costo 
+                    
+                  })
+                
+                  worksheet.getCell(row, 1).value = 1
+                  worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
+                  worksheet.getCell(row, 3).value = record.timesheet.noi_empresa
+                  worksheet.getCell(row, 4).value = record.timesheet.noi_empleado
+                  worksheet.getCell(row, 5).value = record.timesheet.num_empleado
+                  worksheet.getCell(row, 6).value = 1
+                  worksheet.getCell(row, 7).value = record.timesheet.empleado
+                  worksheet.getCell(row, 8).value = record.timesheet.responsable
+                 // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+                  worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total))
+                  //worksheet.getCell(row, 9).value = Math.round(total)
+                  worksheet.getCell(row, 9).numFmt = '0%';
+                  if(this.esElmismomes(record.timesheet.dtfecha_salida)){
+                    worksheet.getCell(row, 10).value = 'SI'
+                  }else{
+                     worksheet.getCell(row, 10).value = 'NO'
+                  }
+
+                }else{
+
+                  record.participacion.forEach((proyecto, index) => {
+                    worksheet.getColumn(11 + index).width = 15
+                    //console.log("this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) "+ this.getDecimal(this.formateaValor(Math.round(proyecto.costo))))
+                    if(this.menosde100 > 0){
+                      //if(proyecto.costo > 0.05){
+
+                        worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo))) || ''
+                        worksheet.getCell(row, 11 + index).numFmt = '0%';
+  
+                       // this.menosde100++
+                     // }
+
+                    }else{
+                      if(proyecto.costo > 0.05){
+
+                        worksheet.getCell(row, 11 + index).value = this.getDecimal(this.formateaValor(Math.round(proyecto.costo+1))) || ''
+                        worksheet.getCell(row, 11 + index).numFmt = '0%';
+  
+                        this.menosde100++
+                      }
+                    }
+                    
+                    
+                    totalTimesheet += +proyecto.costo 
+                    
+                  })
+                
+                  worksheet.getCell(row, 1).value = 1
+                  worksheet.getCell(row, 2).value = record.timesheet.coi_empresa
+                  worksheet.getCell(row, 3).value = record.timesheet.noi_empresa
+                  worksheet.getCell(row, 4).value = record.timesheet.noi_empleado
+                  worksheet.getCell(row, 5).value = record.timesheet.num_empleado
+                  worksheet.getCell(row, 6).value = 1
+                  worksheet.getCell(row, 7).value = record.timesheet.empleado
+                  worksheet.getCell(row, 8).value = record.timesheet.responsable
+                 // worksheet.getCell(row, 9).value = this.getDecimal(totalTimesheet)
+                  worksheet.getCell(row, 9).value = this.getDecimal(Math.round(total+1))
+                  //worksheet.getCell(row, 9).value = Math.round(total)
+                  worksheet.getCell(row, 9).numFmt = '0%';
+                  if(this.esElmismomes(record.timesheet.dtfecha_salida)){
+                    worksheet.getCell(row, 10).value = 'SI'
+                  }else{
+                     worksheet.getCell(row, 10).value = 'NO'
+                  }
+
+                }
+
+                            
+                
+              }
+            }
+          }
+
+        }
+
+        
+
+
+        
 
       worksheet.getRow(row).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: this.esElmismomes(record.timesheet.dtfecha_salida) ? 'ea899a' : 'ffffff' } };
       row++
+      this.menosde100 = 0
+      this.masde100 = 0
     });
 
     return row
@@ -331,7 +563,8 @@ export class SummaryComponent implements OnInit {
     let indice = 11
     this.proyectos.forEach((proyecto, index) => {
 
-      worksheet.getCell(row, indice).value = this.getDecimal(Math.round(proyecto.costo))
+     // worksheet.getCell(row, indice).value = this.getDecimal(Math.round(proyecto.costo))
+      worksheet.getCell(row, indice).value = Math.round(proyecto.costo)
       worksheet.getCell(row, indice).numFmt = '0%';
       
       indice++
