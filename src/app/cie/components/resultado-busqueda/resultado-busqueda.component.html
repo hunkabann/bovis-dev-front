@@ -46,6 +46,7 @@
     <div class="d-flex flex-column gap-2">
         <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="totalRegistros > 0">
             <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+            <p-button icon="pi pi-file-excel" label="Exportar Excel Costo Ingreso" styleClass="p-button-success" (click)="exportJsonToExcelCostoIngreso()"></p-button>
         </p-toolbar>
         <p-table [value]="data" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [showCurrentPageReport]="true" [totalRecords]="totalRegistros" [lazy]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50, 100]"
             [rows]="noRegistros" [loading]="loading" paginatorPosition="both" (onLazyLoad)="loadData($event)">
