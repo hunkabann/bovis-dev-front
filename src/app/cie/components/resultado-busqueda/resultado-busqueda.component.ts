@@ -3,7 +3,7 @@ import { LazyLoadEvent, MessageService, PrimeNGConfig } from 'primeng/api';
 import { CieService } from '../../services/cie.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { CALENDAR, EXCEL_EXTENSION, TITLES, cieHeaders, cieHeadersFieldsLazy } from 'src/utils/constants';
-import { CieRegistro, encabezados } from '../../models/cie.models';
+import { CieRegistro, encabezados,encabezadosCostosIngresos } from '../../models/cie.models';
 import { finalize, forkJoin } from 'rxjs';
 import { Opcion } from 'src/models/general.model';
 import { format } from 'date-fns';
@@ -467,6 +467,142 @@ export class ResultadoBusquedaComponent implements OnInit {
 
     ];
   }
+
+  exportJsonToExcelCostoIngreso(fileName: string = 'COSTOINGRESO'): void {
+    this.sharedService.cambiarEstado(true)
+
+    let mes = null
+    let anio = null
+    let mesFin = null
+    let anioFin = null
+
+    if (this.fechas && this.fechas.length > 0) {
+      if (this.fechas[0]) {
+        mes = +format(this.fechas[0], 'M')
+        anio = +format(this.fechas[0], 'Y')
+      }
+      if (this.fechas[1]) {
+        mesFin = +format(this.fechas[1], 'M')
+        anioFin = +format(this.fechas[1], 'Y')
+      }
+    }
+
+    this.cieService.getAllRegistros(
+      this.cuenta,
+      mes,
+      anio,
+      mesFin,
+      anioFin,
+      this.concepto,
+      this.empresa,
+      this.numProyecto,
+      this.responsable,
+      this.clasificacionPY,
+      -1,
+      -1,
+      null,
+      'DESC'
+    )
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: (data) => {
+          this.allData = data['data']['registros'];
+
+          const workbook = new ExcelJS.Workbook();
+          const worksheet = workbook.addWorksheet('Detalle');
+          // Tìtulos
+          this._setXLSXTitlesCostoIngreso(worksheet)
+          this._setXLSXHeaderCostoIngreso(worksheet)
+          let row = 5
+
+          row = this._setXLSXContentCostoIngreso(worksheet, row)
+          workbook.xlsx.writeBuffer().then((buffer) => {
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            saveAs(blob, `COSTOINGRESO_${Date.now()}${EXCEL_EXTENSION}`);
+          });
+
+          
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })
+
+  }
+
+  _setXLSXTitlesCostoIngreso(worksheet: ExcelJS.Worksheet) {
+  }
+
+  _setXLSXHeaderCostoIngreso(worksheet: ExcelJS.Worksheet) {
+    const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF4681CB' } }
+    const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
+
+    encabezadosCostosIngresos.forEach((encabezado, index) => {
+      let cell = worksheet.getCell(4, index + 1)
+      cell.value = encabezado.label
+      cell.fill = fill
+      cell.alignment = alignment
+    })
+  }
+
+  _setXLSXContentCostoIngreso(worksheet: ExcelJS.Worksheet, row: number): number {
+
+    const fillCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
+    const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
+
+    this.allData.forEach(record => {
+      //worksheet.getCell(row).fill = record.fechaCancelacion ? fillCancelada : fillFactura
+      //const col = row.getCell(row);
+
+      worksheet.getCell(row, 1).value = record.nombreCuenta
+      worksheet.getCell(row, 2).value = record.cuenta
+      worksheet.getCell(row, 3).value = record.tipoPoliza
+      worksheet.getCell(row, 4).value = record.numero
+      worksheet.getCell(row, 5).value = record.fecha
+     // if (record.fechaCancelacion == null || record.fechaCancelacion == '') {
+     //   worksheet.getCell(row, 6).value = record.mes
+     // } else {
+     //   worksheet.getCell(row, 6).value = this.regresames(record.fechaCancelacion)
+     // }
+
+      worksheet.getCell(row, 6).value = record.concepto
+      worksheet.getCell(row, 7).value = record.centroCostos
+      worksheet.getCell(row, 8).value = record.proyecto
+      if (!this.esElmismomes(record.fecha, record.fechaCancelacion)) {
+        worksheet.getCell(row, 9).value = formatCurrency(0)
+        worksheet.getCell(row, 10).value = formatCurrency(0)
+        worksheet.getCell(row, 11).value = formatCurrency(0)
+        worksheet.getCell(row, 12).value = formatCurrency(0)
+      } else {
+        worksheet.getCell(row, 9).value = formatCurrency(record.saldoInicial || 0)
+        worksheet.getCell(row, 10).value = formatCurrency(record.debe || 0)
+        worksheet.getCell(row, 11).value = formatCurrency(record.haber || 0)
+
+        //ATC
+        if (record.debe == null || "" + record.debe == '') {
+          worksheet.getCell(row, 12).value = formatCurrency(record.movimiento * -1)
+        } else {
+          worksheet.getCell(row, 12).value = formatCurrency(record.movimiento || 0)
+          
+        }
+      }
+
+      worksheet.getCell(row, 13).value = record.empresa
+      worksheet.getCell(row, 14).value = record.proyecto
+      worksheet.getCell(row, 15).value = record.tipoCuenta
+      worksheet.getCell(row, 16).value = record.edoResultados
+      worksheet.getCell(row, 17).value = record.responsable
+      worksheet.getCell(row, 18).value = record.tipoProyecto
+      //worksheet.getCell(row, 20).value = record.tipoPy
+      //worksheet.getCell(row, 21).value = record.clasificacionPy
+      //worksheet.getCell(row).fill = {  type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ?  'FFC000':  '70AD47'}};
+      worksheet.getRow(row).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: record.fechaCancelacion ? 'ea899a' : 'ffffff' } };
+      row++
+    });
+
+    return row
+
+  }
+
+  
 
 }
 

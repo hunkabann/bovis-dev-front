@@ -65,6 +65,22 @@
         </div>               
       </div>
 
+      
+            <div class="col-4">
+                <label for="email">Fecha Inicio:</label>
+                <div class="">
+                    <p-calendar [showIcon]="true" styleClass="w-full" dateFormat="dd/mm/yy" [maxDate]="maxDate" [(ngModel)]="fechaInicio"></p-calendar>
+                    <!-- [disabled]="isConsulta" -->
+                </div>
+            </div>
+            <div class="col-4">
+                <label for="email">Fecha Fin:</label>
+                <div class="">
+                    <p-calendar [showIcon]="true" styleClass="w-full" dateFormat="dd/mm/yy" [maxDate]="maxDate" [(ngModel)]="fechaFin"></p-calendar>
+                    <!-- [disabled]="isConsulta" -->
+                </div>
+            </div>
+
       <div class="row">
         <div class="col-12 d-flex justify-content-center align-items-center gap-2">
             <button type="button" class="btn btn-dark" (click)="clearFiltros()"><i class="fas fa-eraser"></i> Limpiar filtros</button>
@@ -163,6 +179,8 @@
           <th pSortableColumn="sueldoBruto"><div class="d-flex align-items-center">SUELDO BRUTO (inflación %) <p-sortIcon field="sueldoBruto"></p-sortIcon></div></th>
           <th pSortableColumn="cargasSociales"><div class="d-flex align-items-center">CARGAS SOCIALES <p-sortIcon field="cargasSociales"></p-sortIcon></div></th>
           <th pSortableColumn="falta"><div class="d-flex align-items-center">Costo Mensual Empleado <p-sortIcon field="falta"></p-sortIcon></div></th>
+          <th pSortableColumn="fechaActualizacion"><div class="d-flex align-items-center">Fecha Actualización<p-sortIcon field="fechaActualizacion"></p-sortIcon></div></th>
+          <th pSortableColumn="regHistorico"><div class="d-flex align-items-center">Historico <p-sortIcon field="regHistorico"></p-sortIcon></div></th>
           
         </tr>
       </ng-template>
@@ -185,6 +203,15 @@
           <td>{{costo.sueldoBrutoInflacion|currency}}</td>
           <td>{{costo.cargasSociales|currency}}</td>
           <td>{{costo.costoMensualEmpleado|currency}}</td>
+          <td>{{costo.fechaActualizacion|date:'d/MM/yyyy'}}</td>
+          <td *ngIf="costo.regHistorico; then thenfecha else elsefecha"> </td>
+                    <ng-template #thenfecha>
+                        <td>SI</td>
+                    </ng-template>
+                    <ng-template #elsefecha>
+                        <td>NO</td>
+                    </ng-template>
+          <!--td>{{costo.regHistorico}}</td-->
         </tr>
       </ng-template>
     </p-table>

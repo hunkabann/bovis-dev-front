@@ -42,8 +42,16 @@ export class CostoEmpleadoComponent implements OnInit {
   FechaIngre = null;
 
   maxDate: Date;
-  fechaInicio: Date;
-  fechaFin: Date;
+  fechaInicio: Date = null;
+  fechaFin: Date = null;
+
+  fetchIni: string  = '1900-01-01';
+
+  today1 = new Date();
+  datePipe1 = new DatePipe('en-IN');
+      //return datePipe.transform(today, 'dd/MM/yyyy');
+  fetchFin: string  = this.datePipe1.transform(this.today1, 'yyyy-MM-dd');
+  
 
   costos: CostoEmpleado[] = []
 
@@ -148,7 +156,7 @@ export class CostoEmpleadoComponent implements OnInit {
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
 
-    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio)
+    this.costosService.getCostosEmpleado(true,this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
@@ -739,8 +747,7 @@ export class CostoEmpleadoComponent implements OnInit {
     this.isDisableEmpresa = false;
     this.isDisableCliente = false;
 
-    this.fechaInicio = null;
-    this.fechaFin = null;
+    
 
     this.noFactura = null
 
@@ -750,14 +757,24 @@ export class CostoEmpleadoComponent implements OnInit {
 
     this.opcionFiltro = 0;*/
 
+    this.fechaInicio = null;
+    this.fechaFin = null;
+
     this.IDEmpleado= '0';
     this.IDPuesto = 0;
     this.IDProyecto = 0;
     this.IDEmpresa = 0;
     this.IDUnidadNegocio = 0;
 
+    const today = new Date();
+      const datePipe = new DatePipe('en-IN');
+      //return datePipe.transform(today, 'dd/MM/yyyy');
+      this.fetchFin= datePipe.transform(today, 'yyyy-MM-dd')
 
-    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio)
+     this.fetchIni= '1900-01-01'
+
+
+    this.costosService.getCostosEmpleado(true,this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
@@ -769,7 +786,34 @@ export class CostoEmpleadoComponent implements OnInit {
   }
 
   busqueda() {
-    this.costosService.getCostosEmpleado(this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio)
+    if (this.fechaFin != null) {
+      let utcFin = this.fechaFin.toJSON().slice(0, 10).replace(/-/g, '-');
+      this.fetchFin= utcFin
+      //objBusqueda.fechaFin = utcFin;
+    } else {
+      
+      //objBusqueda.fechaFin = utc;
+      const today = new Date();
+      const datePipe = new DatePipe('en-IN');
+      //return datePipe.transform(today, 'dd/MM/yyyy');
+      this.fetchFin= datePipe.transform(today, 'yyyy-MM-dd')
+    }
+
+    if (this.fechaInicio != null) {
+      let utcInicio = this.fechaInicio
+        .toJSON()
+        .slice(0, 10)
+        .replace(/-/g, '-');
+      //objBusqueda.fechaIni = utcInicio;
+      this.fetchIni= utcInicio
+    }else{
+      this.fetchIni= '1900-01-01'
+    }
+
+    console.log('FECHA INICIAL --- >> ' + this.fetchIni)
+    console.log('FECHA FINAL --- >> ' + this.fetchFin)
+
+    this.costosService.getCostosEmpleado(false,this.IDEmpleado,this.IDPuesto,this.IDProyecto,this.IDEmpresa,this.IDUnidadNegocio,this.fetchIni,this.fetchFin)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {

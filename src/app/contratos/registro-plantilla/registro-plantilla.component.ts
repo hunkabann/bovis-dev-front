@@ -86,8 +86,11 @@ export class RegistroPlantillaComponent implements OnInit {
   	{label: 'chtipo_contrato_sat', value: '{chtipo_contrato_sat}'},
   	{label: 'nunum_empleado', value: '{nunum_empleado}'},
   	{label: 'dtfecha_ingreso', value: '{dtfecha_ingreso}'},
+    {label: 'dtfecha_ingresoLetras', value: '{dtfecha_ingresoLetras}'},
   	{label: 'dtfecha_salida', value: '{dtfecha_salida}'},
+    {label: 'dtfecha_salidaLetras', value: '{dtfecha_salidaLetras}'},
   	{label: 'dtfecha_ultimo_reingreso', value: '{dtfecha_ultimo_reingreso}'},
+    {label: 'dtfecha_ultimo_reingresoLetras', value: '{dtfecha_ultimo_reingresoLetras}'},
   	{label: 'chnss', value: '{chnss}'},
   	{label: 'chemail_bovis', value: '{chemail_bovis}'},
   	{label: 'salarioenLetras', value: '{salarioenLetras}'},
@@ -117,7 +120,9 @@ export class RegistroPlantillaComponent implements OnInit {
   	{label: 'chexperiencias', value: '{chexperiencias}'},
   	{label: 'chhabilidades', value: '{chhabilidades}'},
   	{label: 'nuproyecto_principal', value: '{nuproyecto_principal}'},
-  	{label: 'chproyecto_principal', value: '{chproyecto_principal}'}
+  	{label: 'chproyecto_principal', value: '{chproyecto_principal}'},
+    {label: 'dtvigenciaLetras', value: '{dtvigenciaLetras}'},
+    {label: 'dtvigencia90Letras', value: '{dtvigencia90Letras}'}
   ]
   
   constructor() { }

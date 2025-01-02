@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,inject } from '@angular/core';
 // import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CatEmpleado, Catalogo, Empleado, Puesto } from '../../Models/empleados';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
 import { EmpleadosService } from '../../services/empleados.service';
-import { CALENDAR, SUBJECTS, TITLES, errorsArray } from 'src/utils/constants';
+import { CALENDAR, SUBJECTS, TITLES, errorsArray,emailsDatosEmpleados } from 'src/utils/constants';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { finalize, forkJoin } from 'rxjs';
@@ -12,6 +12,7 @@ import { CieService } from 'src/app/cie/services/cie.service';
 import { Opcion } from 'src/models/general.model';
 import { differenceInCalendarYears, format } from 'date-fns';
 import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
+import { EmailsService } from 'src/app/services/emails.service';
 
 async function sleep(ms: number): Promise<void> {
   return new Promise(
@@ -34,6 +35,8 @@ export class EmpleadosRegistroComponent implements OnInit {
   esActualizacion = false
 
   EmpleadoTieneerror = false
+
+    emailsService     = inject(EmailsService)
 
   catPersonas: ICatalogo[] = []
   catTipoEmpleados: ICatalogo[] = []
@@ -423,6 +426,40 @@ export class EmpleadosRegistroComponent implements OnInit {
                 }
               })
 
+
+              // ENVIO DE CORREO CUANDO ES NUEVO EMPLEADO
+                
+                const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
+                        // cambiamos el valor del primer elemento en fakeCopyDynos
+                        fakeCopyDynos[0] = localStorage.getItem('userMail')
+                        
+                        // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+                        //console.log(fakeCopyDynos) 
+                        
+                        // pero si miramos también el contenido de dynos...
+                        //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+                
+                        //fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+                        fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+                
+                        //console.log(fakeCopyDynos) 
+              
+                        const emailNuevoRequerimiento = {
+                          ...emailsDatosEmpleados.emailNuevoEmpleado,
+                          body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                          emailsTo: fakeCopyDynos
+                        }
+                        // console.log(emailNuevoRequerimiento);
+                        this.emailsService.sendEmail(emailNuevoRequerimiento)
+                          .pipe(finalize(() => {
+                            this.form.reset()
+                            this.sharedService.cambiarEstado(false)
+                            this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+                          }))
+                          .subscribe()
+
+              //
+
           } else {
             let bodyCostoEmpleadoactualiza = {
               idCostoEmpleado: null,
@@ -469,6 +506,39 @@ export class EmpleadosRegistroComponent implements OnInit {
                   this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
                 }
               })
+
+              // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
+                
+              const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
+              // cambiamos el valor del primer elemento en fakeCopyDynos
+              fakeCopyDynos[0] = localStorage.getItem('userMail')
+              
+              // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+              //console.log(fakeCopyDynos) 
+              
+              // pero si miramos también el contenido de dynos...
+              //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+      
+              //fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+              fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+      
+              //console.log(fakeCopyDynos) 
+    
+              const emailNuevoRequerimiento = {
+                ...emailsDatosEmpleados.emailActualizaEmpleado,
+                body: emailsDatosEmpleados.emailActualizaEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                emailsTo: fakeCopyDynos
+              }
+              // console.log(emailNuevoRequerimiento);
+              this.emailsService.sendEmail(emailNuevoRequerimiento)
+                .pipe(finalize(() => {
+                  this.form.reset()
+                  this.sharedService.cambiarEstado(false)
+                  this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+                }))
+                .subscribe()
+
+    //
           }
 
 

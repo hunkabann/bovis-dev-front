@@ -84,7 +84,7 @@
                     <div class="form-group" *ngFor="let proyecto of ts.proyectos">
                         <!--label><strong>{{proyecto.descripcion}}: {{proyecto.tDedicacion}} %</strong></label-->
                         <label><strong>{{proyecto.descripcion}}</strong></label>
-                        <input pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}" [style]="{ width: '100%' }" mode="decimal" />
+                        <input id="id_input_proyecto"  pInputText class="form-control" (change)="cambiarParticipacion(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.dias}}" [style]="{ width: '100%' }" mode="decimal"  [readonly]="readonly"/>
                          
                     </div>
                     
@@ -107,7 +107,7 @@
                     <div class="form-group" *ngFor="let proyecto of ts.proyectos">
                         <label><strong>% Dedicación</strong></label>
                         <!--input pInputText class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion| number: '1.2-2' }}" [style]="{ width: '100%' }" mode="decimal" /-->
-                        <input type="number" class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }"  pattern="[0-9]"/>
+                        <input id="id_input_dedicacion"  type="number" class="form-control" (change)="cambiarParticipacionDedica(ts, proyecto.idTimesheet_Proyecto, $event)" value="{{proyecto.tDedicacion}}" [style]="{ width: '100%' }"  pattern="[0-9]" [readonly]="readonly"/>
                     </div>
 
                     <hr>
