@@ -139,8 +139,8 @@ export class RequerimientosComponent implements OnInit {
           // pero si miramos también el contenido de dynos...
           //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
   
-          //fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
-          fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+          fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+          //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
   
           //console.log(fakeCopyDynos) 
 
