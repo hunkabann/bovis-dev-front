@@ -412,10 +412,74 @@ export class EmpleadosRegistroComponent implements OnInit {
               .subscribe({
                 next: (data) => {
                   this.form.reset()
+
+                  // ENVIO DE CORREO CUANDO ES NUEVO EMPLEADO
+                
+                const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
+                // cambiamos el valor del primer elemento en fakeCopyDynos
+                fakeCopyDynos[0] = localStorage.getItem('userMail')
+                
+                // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+                //console.log(fakeCopyDynos) 
+                
+                // pero si miramos también el contenido de dynos...
+                //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+        
+                //fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
+                fakeCopyDynos.push('jmmorales@hunkabann.com.mx') 
+        
+                //console.log(fakeCopyDynos) 
+      
+                const emailNuevoRequerimiento = {
+                  ...emailsDatosEmpleados.emailNuevoEmpleado,
+                  body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                  emailsTo: fakeCopyDynos
+                }
+                // console.log(emailNuevoRequerimiento);
+                this.emailsService.sendEmail(emailNuevoRequerimiento)
+                  .pipe(finalize(() => {
+                    this.form.reset()
+                    this.sharedService.cambiarEstado(false)
+                    this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+                  }))
+                  .subscribe()
+
                   this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                 },
                 error: (err) => {
                   if(err.error.text.includes('Se creó nuevo registro con id:') ){
+
+                    // ENVIO DE CORREO CUANDO ES NUEVO EMPLEADO
+                
+                const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
+                // cambiamos el valor del primer elemento en fakeCopyDynos
+                fakeCopyDynos[0] = localStorage.getItem('userMail')
+                
+                // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+                //console.log(fakeCopyDynos) 
+                
+                // pero si miramos también el contenido de dynos...
+                //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+        
+                //fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
+                fakeCopyDynos.push('jmmorales@hunkabann.com.mx') 
+        
+                //console.log(fakeCopyDynos) 
+      
+                const emailNuevoRequerimiento = {
+                  ...emailsDatosEmpleados.emailNuevoEmpleado,
+                  body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                  emailsTo: fakeCopyDynos
+                }
+                // console.log(emailNuevoRequerimiento);
+                this.emailsService.sendEmail(emailNuevoRequerimiento)
+                  .pipe(finalize(() => {
+                    this.form.reset()
+                    this.sharedService.cambiarEstado(false)
+                    this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+                  }))
+                  .subscribe()
+
                     Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
                     console.log("Errores = "+ err.error.text)
                   }else{
@@ -427,36 +491,7 @@ export class EmpleadosRegistroComponent implements OnInit {
               })
 
 
-              // ENVIO DE CORREO CUANDO ES NUEVO EMPLEADO
-                
-                const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
-                        // cambiamos el valor del primer elemento en fakeCopyDynos
-                        fakeCopyDynos[0] = localStorage.getItem('userMail')
-                        
-                        // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-                        //console.log(fakeCopyDynos) 
-                        
-                        // pero si miramos también el contenido de dynos...
-                        //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-                
-                        fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
-                        //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
-                
-                        //console.log(fakeCopyDynos) 
               
-                        const emailNuevoRequerimiento = {
-                          ...emailsDatosEmpleados.emailNuevoEmpleado,
-                          body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
-                          emailsTo: fakeCopyDynos
-                        }
-                        // console.log(emailNuevoRequerimiento);
-                        this.emailsService.sendEmail(emailNuevoRequerimiento)
-                          .pipe(finalize(() => {
-                            this.form.reset()
-                            this.sharedService.cambiarEstado(false)
-                            this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
-                          }))
-                          .subscribe()
 
               //
 
@@ -486,10 +521,74 @@ export class EmpleadosRegistroComponent implements OnInit {
                       .subscribe({
                         next: (data) => {
                           this.form.reset()
+
+                          // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
+                
+                            const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
+                            // cambiamos el valor del primer elemento en fakeCopyDynos
+                            fakeCopyDynos[0] = localStorage.getItem('userMail')
+                            
+                            // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+                            //console.log(fakeCopyDynos) 
+                            
+                            // pero si miramos también el contenido de dynos...
+                            //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+                    
+                            //fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
+                            fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+                    
+                            //console.log(fakeCopyDynos) 
+                  
+                            const emailNuevoRequerimiento = {
+                              ...emailsDatosEmpleados.emailActualizaEmpleado,
+                              body: emailsDatosEmpleados.emailActualizaEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                              emailsTo: fakeCopyDynos
+                            }
+                            // console.log(emailNuevoRequerimiento);
+                            this.emailsService.sendEmail(emailNuevoRequerimiento)
+                              .pipe(finalize(() => {
+                                this.form.reset()
+                                this.sharedService.cambiarEstado(false)
+                                this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+                              }))
+                              .subscribe()
+
                           this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                         },
                         error: (err) => {
                           if(err.error.text.includes('Actualización del registro de costos:') ){
+
+                            // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
+                
+                              const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
+                              // cambiamos el valor del primer elemento en fakeCopyDynos
+                              fakeCopyDynos[0] = localStorage.getItem('userMail')
+                              
+                              // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+                              //console.log(fakeCopyDynos) 
+                              
+                              // pero si miramos también el contenido de dynos...
+                              //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+                      
+                              //fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
+                              fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+                      
+                              //console.log(fakeCopyDynos) 
+                    
+                              const emailNuevoRequerimiento = {
+                                ...emailsDatosEmpleados.emailActualizaEmpleado,
+                                body: emailsDatosEmpleados.emailActualizaEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                                emailsTo: fakeCopyDynos
+                              }
+                              // console.log(emailNuevoRequerimiento);
+                              this.emailsService.sendEmail(emailNuevoRequerimiento)
+                                .pipe(finalize(() => {
+                                  this.form.reset()
+                                  this.sharedService.cambiarEstado(false)
+                                  this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+                                }))
+                                .subscribe()
+
                             Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
                             console.log("Errores = "+ err.error.text)
                           }else{
@@ -507,36 +606,7 @@ export class EmpleadosRegistroComponent implements OnInit {
                 }
               })
 
-              // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
-                
-              const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
-              // cambiamos el valor del primer elemento en fakeCopyDynos
-              fakeCopyDynos[0] = localStorage.getItem('userMail')
               
-              // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-              //console.log(fakeCopyDynos) 
-              
-              // pero si miramos también el contenido de dynos...
-              //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-      
-              fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
-              //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
-      
-              //console.log(fakeCopyDynos) 
-    
-              const emailNuevoRequerimiento = {
-                ...emailsDatosEmpleados.emailActualizaEmpleado,
-                body: emailsDatosEmpleados.emailActualizaEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
-                emailsTo: fakeCopyDynos
-              }
-              // console.log(emailNuevoRequerimiento);
-              this.emailsService.sendEmail(emailNuevoRequerimiento)
-                .pipe(finalize(() => {
-                  this.form.reset()
-                  this.sharedService.cambiarEstado(false)
-                  this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
-                }))
-                .subscribe()
 
     //
           }
