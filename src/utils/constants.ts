@@ -315,6 +315,13 @@ export const MENU = [
               command: () =>
                 localStorage.setItem('pageTitle', 'CIE'.toUpperCase()),
             },
+            {
+              label: 'CIE – Costo Ingreso',
+              routerLink: ['cie/costo-ingreso'],
+              id: 'resultado',
+              command: () =>
+                localStorage.setItem('pageTitle', 'CIE'.toUpperCase()),
+            },
           ],
         },
       ],
