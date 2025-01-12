@@ -26,35 +26,34 @@ import { Injectable } from '@angular/core';
 
 export class GastosComponent implements OnInit {
 
-  dialogService = inject(DialogService)
-  fb = inject(FormBuilder)
-  messageService = inject(MessageService)
-  pcsService = inject(PcsService)
-  sharedService = inject(SharedService)
-  catalogosService = inject(CatalogosService)
-  costosService = inject(CostosService)
+  dialogService = inject(DialogService);
+  fb = inject(FormBuilder);
+  messageService = inject(MessageService);
+  pcsService = inject(PcsService);
+  sharedService = inject(SharedService);
+  catalogosService = inject(CatalogosService);
+  costosService = inject(CostosService);
 
+  cargando: boolean = true;
+  proyectoSeleccionado: boolean = false;
+  mesesProyecto: Mes[] = [];
 
-  cargando: boolean = true
-  proyectoSeleccionado: boolean = false
-  mesesProyecto: Mes[] = []
-
-  proyectoFechaInicio: Date
-  proyectoFechaFin: Date
-  numProyectorubro: number
+  proyectoFechaInicio: Date;
+  proyectoFechaFin: Date;
+  numProyectorubro: number;
 
   idproyecto: number;
 
   costoMensualEmpleado: number;
 
-  sumacolumna: number
+  sumacolumna: number;
 
-  total: number
-  cantidad: number
+  total: number;
+  cantidad: number;
 
   mensajito: string;
 
-  cantidadMesesTranscurridos: number
+  cantidadMesesTranscurridos: number;
 
   //sumaTotales:        SumaFecha[] = []
   //private spinner: NgxSpinnerService
@@ -65,54 +64,54 @@ export class GastosComponent implements OnInit {
     numProyecto: [0, Validators.required],
     secciones: this.fb.array([]),
     etapas: this.fb.array([])
-  })
+  });
 
 
   get secciones() {
-    return this.form.get('secciones') as FormArray
+    return this.form.get('secciones') as FormArray;
   }
 
   rubros(seccionIndex: number) {
-    return (this.secciones.at(seccionIndex).get('rubros') as FormArray)
+    return (this.secciones.at(seccionIndex).get('rubros') as FormArray);
   }
 
   fechas(seccionIndex: number, rubroIndex: number) {
-    return (this.rubros(seccionIndex).at(rubroIndex).get('fechas') as FormArray)
+    return (this.rubros(seccionIndex).at(rubroIndex).get('fechas') as FormArray);
   }
 
   sumafechas(seccionIndex: number) {
-    return (this.secciones.at(seccionIndex).get('sumaFechas') as FormArray)
+    return (this.secciones.at(seccionIndex).get('sumaFechas') as FormArray);
   }
 
 
   async ngOnInit(): Promise<void> {
-    this.pcsService.cambiarEstadoBotonNuevo(false)
+    this.pcsService.cambiarEstadoBotonNuevo(false);
 
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
         if (params.proyecto) {
-          this.idproyecto = params.proyecto
+          this.idproyecto = params.proyecto;
         }
-      })
+      });
 
     if (this.idproyecto) {
       //console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
-      this.cargando = true
-      this.numProyectorubro = this.idproyecto
-      this.cargarInformacion(this.idproyecto)
+      this.cargando = true;
+      this.numProyectorubro = this.idproyecto;
+      this.cargarInformacion(this.idproyecto);
     } else {
       this.pcsService.obtenerIdProyecto()
         .subscribe(numProyecto => {
-          this.proyectoSeleccionado = true
+          this.proyectoSeleccionado = true;
           if (numProyecto) {
             // this.sharedService.cambiarEstado(true)
-            this.cargando = true
-            this.numProyectorubro = numProyecto
-            this.cargarInformacion(numProyecto)
+            this.cargando = true;
+            this.numProyectorubro = numProyecto;
+            this.cargarInformacion(numProyecto);
           } else {
             console.log('No hay proyecto');
           }
-        })
+        });
     }
   }
 
@@ -147,6 +146,13 @@ export class GastosComponent implements OnInit {
     return totalPorcentaje;
   }
 
+  filterReembolsables(rubros: any[]): any[] {
+    return rubros.filter(rubro => rubro.value.reembolsable === true);
+  }
+
+  filterNoReembolsables(rubros: any[]): any[] {
+    return rubros.filter(rubro => rubro.value.reembolsable === false || rubro.value.reembolsable === null);
+  }
 
   async cargarInformacion(numProyecto: number) {
 
@@ -154,8 +160,8 @@ export class GastosComponent implements OnInit {
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
         next: async ({ data }) => {
-          this.proyectoFechaInicio = new Date(data.fechaIni)
-          this.proyectoFechaFin = new Date(data.fechaFin)
+          this.proyectoFechaInicio = new Date(data.fechaIni);
+          this.proyectoFechaFin = new Date(data.fechaFin);
 
           this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin);
 
@@ -217,6 +223,7 @@ export class GastosComponent implements OnInit {
                     // console.log('Agregando registro:', mesRegistro, 'con porcentaje:', mesRegistro.porcentaje);
                     this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
                       id: mesRegistro.id,
+                      rubroReembolsable: rubro.reembolsable,
                       mes: mesRegistro.mes,
                       anio: mesRegistro.anio,
                       porcentaje: mesRegistro.porcentaje,
@@ -226,6 +233,7 @@ export class GastosComponent implements OnInit {
                     // console.log('Agregando registro:', mes, 'con porcentaje:', 0);
                     this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
                       id: 0,
+                      rubroReembolsable: rubro.reembolsable,
                       mes: mes.mes,
                       anio: mes.anio,
                       porcentaje: 0,
@@ -255,7 +263,7 @@ export class GastosComponent implements OnInit {
           }))
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-      })
+      });
 
 
     this.catalogosService.obtenerParametros()
@@ -266,7 +274,7 @@ export class GastosComponent implements OnInit {
           this.idproyecto = params.proyecto
           // console.log("else params.proyecto:" + params.proyecto)
         }
-      })
+      });
   }
 
 
@@ -292,7 +300,7 @@ export class GastosComponent implements OnInit {
         this.rubros(seccionIndex).at(rubroIndex).patchValue({
           unidad: rubroRespuesta.unidad,
           cantidad: rubroRespuesta.cantidad,
-          reembolsable: reembolsable, //rubroRespuesta.reembolsable,
+          reembolsable: rubroRespuesta.reembolsable,
           aplicaTodosMeses: rubroRespuesta.aplicaTodosMeses,
         });
 
@@ -310,8 +318,10 @@ export class GastosComponent implements OnInit {
             porcentaje: fechaRegistro.porcentaje,
           }));
         });
+
+        this.cargarInformacion(this.numProyectorubro); 
       }
-    })
+    });
   }
 
   formateaValor(valor) {

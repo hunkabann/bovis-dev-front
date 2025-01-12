@@ -33,7 +33,8 @@
                             </div>
                         </ng-template>
                         <ng-template pTemplate="content">
-                            <p-table [value]="rubros(i).controls" [scrollable]="true" scrollHeight="400px">
+                            <!-- <p-table [value]="rubros(i).controls" [scrollable]="true" scrollHeight="400px"> -->
+                            <p-table [value]="filterReembolsables(rubros(i).controls)" [scrollable]="true" scrollHeight="400px">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <th width="100px">Opciones</th>
@@ -159,7 +160,8 @@
                             </div>
                         </ng-template>
                         <ng-template pTemplate="content">
-                            <p-table [value]="rubros(i).controls" [scrollable]="true" scrollHeight="400px">
+                            <!-- <p-table [value]="rubros(i).controls" [scrollable]="true" scrollHeight="400px"> -->
+                                <p-table [value]="filterNoReembolsables(rubros(i).controls)" [scrollable]="true" scrollHeight="400px">
                                 <ng-template pTemplate="header">
                                     <tr>
                                         <th width="100px">Opciones</th>
