@@ -181,10 +181,6 @@ export class GastosComponent implements OnInit {
 
                 // Agreamos las fechas por rubro
                 rubro.fechas.forEach(fecha => {
-                  // rubro.fechas.forEach(fecha => {
-                  //   this.sumacolumna += +fecha.porcentaje
-                  // });
-
                   if (rubro.costoMensual != null) {
                     this.costoMensualEmpleado = rubro.costoMensual;
                   }
@@ -197,72 +193,6 @@ export class GastosComponent implements OnInit {
                     //porcentaje: fecha.porcentaje
                   }));
                 });
-
-
-                /**
-                                this.costosService.getCostoID(rubro.numEmpleadoRrHh)
-                                .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-                                .subscribe({
-                                  next: ({data,message}) => {
-                                    const [costoR] = data
-                                    if(message != null  ){
-                                      this.mensajito = message;
-                                      if(this.mensajito.includes('No se encontraron registros de costos para el empleado') ){
-                                     // console.log('message ' + message)
-                                     // console.log('es 0 ' + 0)
-
-                                      this.costoMensualEmpleado =  0
-                                          // Agreamos las fechas por rubro
-                                          rubro.fechas.forEach(fecha => {
-                                          rubro.fechas.forEach(fecha => {
-                                            this.sumacolumna += +fecha.porcentaje
-                                          })
-                                          this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
-                                         //console.log('const total1 ------< ' + total)
-
-                                          this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                                            id:         fecha.id,
-                                            mes:        fecha.mes,
-                                            anio:       fecha.anio,
-                                            porcentaje: (fecha.porcentaje *this.costoMensualEmpleado)/100
-                                            //porcentaje: fecha.porcentaje
-                                          }))
-                                        })
-                                    }else{
-                                      this.costoMensualEmpleado =  data.map(empleado => costoR.costoMensualEmpleado )[0]
-                                        seccion.sumaFechas.forEach((sumaFecha) => {this.sumafechas(seccionIndex).push(this.fb.group({
-                                            mes:        sumaFecha.mes,
-                                            anio:       sumaFecha.anio,
-                                            sumaFecha:  sumaFecha.sumaPorcentaje
-                                          }))
-                                        })
-                                          rubro.fechas.forEach(fecha => {
-                                            this.sumacolumna += +fecha.porcentaje
-                                          })
-
-                                        // Agreamos las fechas por rubro
-                                        rubro.fechas.forEach(fecha => {
-                                          this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                                            id:         fecha.id,
-                                            mes:        fecha.mes,
-                                            anio:       fecha.anio,
-                                            porcentaje: (fecha.porcentaje *this.costoMensualEmpleado)/100
-                                            //porcentaje: fecha.porcentaje
-                                          }))
-                                        })
-                                    }
-                                    }
-                                  },
-                                  error: (err) => {
-                                    //console.log("error cuando no Existe registro de costos --------------> " +err.error.text);
-                                    //this.costoMensualEmpleado = 0
-                                    //this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-
-                                  }
-
-
-                                })*/
-
               } else {
                 // seccion.sumaFechas.forEach((sumaFecha) => {
                 //   this.sumafechas(seccionIndex).push(this.fb.group({
@@ -385,7 +315,6 @@ export class GastosComponent implements OnInit {
   }
 
   formateaValor(valor) {
-    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
     return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
 
