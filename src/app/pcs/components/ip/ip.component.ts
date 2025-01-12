@@ -2,21 +2,21 @@ import { Component, OnInit, inject } from '@angular/core';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ICatalogo, ICatalogoCliente, ICatalogoCombos, IEmpleado, IEmpleadoNew } from '../../models/ip';
 import { CatalogosService } from '../../services/catalogos.service';
-import { FormBuilder, Validators,FormArray } from '@angular/forms';
+import { FormBuilder, Validators, FormArray } from '@angular/forms';
 import { PcsService } from '../../services/pcs.service';
-import { TITLES, errorsArray,EXCEL_EXTENSION  } from 'src/utils/constants';
+import { TITLES, errorsArray, EXCEL_EXTENSION } from 'src/utils/constants';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { finalize } from 'rxjs';
-import { differenceInMonths, format,differenceInCalendarMonths,addMonths } from 'date-fns';
-import { Proyecto,encabezadosEmpleado ,OpcionEmpleado,encabezadosStaffing,encabezadosGastos} from '../../models/pcs.model';
-import {CostoEmpleado, CostosEmpleadoResponse} from '../../models/ip';
+import { differenceInMonths, format, differenceInCalendarMonths, addMonths } from 'date-fns';
+import { Proyecto, encabezadosEmpleado, OpcionEmpleado, encabezadosStaffing, encabezadosGastos } from '../../models/pcs.model';
+import { CostoEmpleado, CostosEmpleadoResponse } from '../../models/ip';
 import { Opcion } from 'src/models/general.model';
 import { CieService } from 'src/app/cie/services/cie.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { DatePipe } from '@angular/common';
-import { Empleado, Etapa, EtapasPorProyectoData,GastosIngresosSeccionesData,SumaFecha } from '../../models/pcs.model';
+import { Empleado, Etapa, EtapasPorProyectoData, GastosIngresosSeccionesData, SumaFecha } from '../../models/pcs.model';
 import { obtenerMeses, } from 'src/helpers/helpers';
 import { CostosService } from 'src/app/costos/services/costos.service';
 import { CalcularSubtotalPipe } from 'src/app/pcs/pipes/calcular-subtotal.pipe';
@@ -34,7 +34,7 @@ import { Mes } from 'src/models/general.model';
 })
 export class IpComponent implements OnInit {
 
-  costosService   = inject(CostosService)
+  costosService = inject(CostosService)
 
   today: Date = new Date();
   pipe = new DatePipe('en-US');
@@ -53,10 +53,10 @@ export class IpComponent implements OnInit {
 
   //mensajito: string;
 
-  cantidadMesesTranscurridos:        number
+  cantidadMesesTranscurridos: number
 
-  sumaTotales:        SumaFecha[] = []
-  mesesProyecto:        Mes[] = []
+  sumaTotales: SumaFecha[] = []
+  mesesProyecto: Mes[] = []
 
   empleado: CostoEmpleado[] = []
 
@@ -86,27 +86,27 @@ export class IpComponent implements OnInit {
   fechaIni: string;
   fechaFin: string;
 
-  proyectoFechaInicio:  Date
-  proyectoFechaFin:     Date
+  proyectoFechaInicio: Date
+  proyectoFechaFin: Date
 
   form2 = this.fb.group({
-    numProyecto:  [0, Validators.required],
-    etapas:       this.fb.array([])
+    numProyecto: [0, Validators.required],
+    etapas: this.fb.array([])
   })
 
-  form23= this.fb.group({
-    numProyecto:  [0, Validators.required],
-    secciones:    this.fb.array([])
+  form23 = this.fb.group({
+    numProyecto: [0, Validators.required],
+    secciones: this.fb.array([])
   })
 
   get etapas() {
     return this.form2.get('etapas') as FormArray
   }
-  
+
   empleados(etapaIndex: number) {
     return (this.etapas.at(etapaIndex).get('empleados') as FormArray)
   }
-  
+
   fechas(etapaIndex: number, empleadoIndex: number) {
     return (this.empleados(etapaIndex).at(empleadoIndex).get('fechas') as FormArray)
   }
@@ -114,7 +114,7 @@ export class IpComponent implements OnInit {
   get secciones() {
     return this.form23.get('secciones') as FormArray
   }
-  
+
   Seccionrubros(seccionIndex: number) {
     return (this.secciones.at(seccionIndex).get('rubros') as FormArray)
   }
@@ -122,7 +122,7 @@ export class IpComponent implements OnInit {
   Seccionfechas(seccionIndex: number, rubroIndex: number) {
     return (this.Seccionrubros(seccionIndex).at(rubroIndex).get('fechas') as FormArray)
   }
-  
+
   sumafechas(seccionIndex: number) {
     return (this.secciones.at(seccionIndex).get('sumaFechas') as FormArray)
   }
@@ -158,7 +158,7 @@ export class IpComponent implements OnInit {
     impuesto_nomina: [0, [Validators.required]],
     id_unidad_negocio: ['', [Validators.required]]
   })
-  
+
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   catalogosService = inject(CatalogosService)
@@ -175,68 +175,68 @@ export class IpComponent implements OnInit {
           this.cargando = false
           this.form.reset()
 
-         // console.log("params.proyecto:" + params.proyecto)
-        }else{
+          // console.log("params.proyecto:" + params.proyecto)
+        } else {
           this.idproyecto = params.proyecto
           //console.log("else params.proyecto:" + params.proyecto)
 
           this.mostrarFormulario = true
-      // this.sharedService.cambiarEstado(true)
-      // this.cargando = true
-      this.pcsService.obtenerProyectoPorId(this.idproyecto)
-        .pipe(finalize(() => {
-          // this.sharedService.cambiarEstado(false)
-          this.cargando = false
-        }))
-        .subscribe({
-          next: ({ data }) => {
-            //console.log(data)
-            if (data.length >= 0) {
-              const [proyectoData] = data
-              const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
+          // this.sharedService.cambiarEstado(true)
+          // this.cargando = true
+          this.pcsService.obtenerProyectoPorId(this.idproyecto)
+            .pipe(finalize(() => {
+              // this.sharedService.cambiarEstado(false)
+              this.cargando = false
+            }))
+            .subscribe({
+              next: ({ data }) => {
+                //console.log(data)
+                if (data.length >= 0) {
+                  const [proyectoData] = data
+                  const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
 
-              this.Numproyectos =   proyectoData.nunum_proyecto.toString()
-              this.Nameproyecto =   proyectoData.chproyecto.toString()
-              this.fechaIni =   proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null
-              this.fechaFin =   proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null
+                  this.Numproyectos = proyectoData.nunum_proyecto.toString()
+                  this.Nameproyecto = proyectoData.chproyecto.toString()
+                  this.fechaIni = proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null
+                  this.fechaFin = proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null
 
-              this.form.patchValue({
-                num_proyecto: proyectoData.nunum_proyecto.toString(),
-                nombre_proyecto: proyectoData.chproyecto.toString(),
-                alcance: proyectoData.chalcance === '' || proyectoData.chalcance === null ? '' : proyectoData.chalcance.toString(),
-                codigo_postal: proyectoData.chcp,
-                ciudad: proyectoData.chciudad,
-                id_pais: proyectoData.nukidpais,
-                id_estatus: proyectoData.nukidestatus,
-                id_sector: proyectoData.nukidsector,
-                id_tipo_proyecto: proyectoData.nukidtipo_proyecto,
-                id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
-                id_responsable_construccion: proyectoData.nukidresponsable_construccion,
-                id_responsable_ehs: proyectoData.nukidresponsable_ehs,
-                id_responsable_supervisor: proyectoData.nukidresponsable_supervisor,
-                ids_clientes,
-                id_empresa: proyectoData.nukidempresa.toString(),
-                id_director_ejecutivo: proyectoData.nukiddirector_ejecutivo.toString(),
-                costo_promedio_m2: proyectoData.nucosto_promedio_m2,
-                fecha_inicio: proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
-                fecha_fin: proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
-                nombre_contacto: proyectoData.chcontacto_nombre,
-                posicion_contacto: proyectoData.chcontacto_posicion,
-                telefono_contacto: proyectoData.chcontacto_telefono,
-                correo_contacto: proyectoData.chcontacto_correo,
-                impuesto_nomina: proyectoData.impuesto_nomina,
-                id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
-                
-              })
-              this.actualizarTotalMeses()
-            }
-          },
-          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-        })
+                  this.form.patchValue({
+                    num_proyecto: proyectoData.nunum_proyecto.toString(),
+                    nombre_proyecto: proyectoData.chproyecto.toString(),
+                    alcance: proyectoData.chalcance === '' || proyectoData.chalcance === null ? '' : proyectoData.chalcance.toString(),
+                    codigo_postal: proyectoData.chcp,
+                    ciudad: proyectoData.chciudad,
+                    id_pais: proyectoData.nukidpais,
+                    id_estatus: proyectoData.nukidestatus,
+                    id_sector: proyectoData.nukidsector,
+                    id_tipo_proyecto: proyectoData.nukidtipo_proyecto,
+                    id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
+                    id_responsable_construccion: proyectoData.nukidresponsable_construccion,
+                    id_responsable_ehs: proyectoData.nukidresponsable_ehs,
+                    id_responsable_supervisor: proyectoData.nukidresponsable_supervisor,
+                    ids_clientes,
+                    id_empresa: proyectoData.nukidempresa.toString(),
+                    id_director_ejecutivo: proyectoData.nukiddirector_ejecutivo.toString(),
+                    costo_promedio_m2: proyectoData.nucosto_promedio_m2,
+                    fecha_inicio: proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
+                    fecha_fin: proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
+                    nombre_contacto: proyectoData.chcontacto_nombre,
+                    posicion_contacto: proyectoData.chcontacto_posicion,
+                    telefono_contacto: proyectoData.chcontacto_telefono,
+                    correo_contacto: proyectoData.chcontacto_correo,
+                    impuesto_nomina: proyectoData.impuesto_nomina,
+                    id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
+
+                  })
+                  this.actualizarTotalMeses()
+                }
+              },
+              error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+            })
         }
       })
 
-     if (this.idproyecto){
+    if (this.idproyecto) {
       //console.log("Entro al this.idproyecto " + this.idproyecto)
       this.mostrarFormulario = true
       // this.sharedService.cambiarEstado(true)
@@ -253,11 +253,11 @@ export class IpComponent implements OnInit {
               const [proyectoData] = data
               const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
 
-              this.Numproyectos =   proyectoData.nunum_proyecto.toString()
-              this.Nameproyecto =   proyectoData.chproyecto.toString()
-              this.fechaIni =   proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null
-              this.fechaFin =   proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null
-              
+              this.Numproyectos = proyectoData.nunum_proyecto.toString()
+              this.Nameproyecto = proyectoData.chproyecto.toString()
+              this.fechaIni = proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null
+              this.fechaFin = proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null
+
               this.form.patchValue({
                 num_proyecto: proyectoData.nunum_proyecto.toString(),
                 nombre_proyecto: proyectoData.chproyecto.toString(),
@@ -285,7 +285,7 @@ export class IpComponent implements OnInit {
                 impuesto_nomina: proyectoData.impuesto_nomina,
                 //id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
                 id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
-                
+
               })
               this.actualizarTotalMeses()
             }
@@ -293,139 +293,139 @@ export class IpComponent implements OnInit {
           error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
         })
 
-        // INICIA LLAMADO A STAFFING
-        this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
-          .pipe(finalize(() => {
-            // this.sharedService.cambiarEstado(false)
-            //this.proyectoSeleccionado = true
-            //this.cargando = false
-          }))
-          .subscribe({
-            next: ({data}) => this.etapasdata = data,
-            error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-          })
-
-        //TERMINA LLAMADO A STAFFING
-
-        //INICIA LLAMADO A GASTOS
-
-        this.pcsService.obtenerGastosIngresosSecciones(this.idproyecto)
-        .pipe(finalize(() => this.cargando = false))
+      // INICIA LLAMADO A STAFFING
+      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+        .pipe(finalize(() => {
+          // this.sharedService.cambiarEstado(false)
+          //this.proyectoSeleccionado = true
+          //this.cargando = false
+        }))
         .subscribe({
-          next: ({data}) => {
-          
-            this.Gastosdata = data
-          
-          },
-          error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
+          next: ({ data }) => this.etapasdata = data,
+          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
         })
 
-        //TERMINA LLAMADO A GASTOS
+      //TERMINA LLAMADO A STAFFING
 
-    
-     }else{
+      //INICIA LLAMADO A GASTOS
+
+      this.pcsService.obtenerGastosIngresosSecciones(this.idproyecto)
+        .pipe(finalize(() => this.cargando = false))
+        .subscribe({
+          next: ({ data }) => {
+
+            this.Gastosdata = data
+
+          },
+          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+        })
+
+      //TERMINA LLAMADO A GASTOS
+
+
+    } else {
 
       this.pcsService.obtenerIdProyecto()
-      .subscribe(numProyecto => {
-        // this.proyectoSeleccionado = true
-        // this.form.reset()
-        // this.etapas.clear()
-        if (numProyecto) {
-          //console.log("Entro al numero de proyecto " + numProyecto)
-          this.mostrarFormulario = true
-          // this.sharedService.cambiarEstado(true)
-          // this.cargando = true
-          this.pcsService.obtenerProyectoPorId(numProyecto)
-            .pipe(finalize(() => {
-              // this.sharedService.cambiarEstado(false)
-              this.cargando = false
-            }))
-            .subscribe({
-              next: ({ data }) => {
-                //console.log(data)
-                if (data.length >= 0) {
-                  const [proyectoData] = data
-                  const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
+        .subscribe(numProyecto => {
+          // this.proyectoSeleccionado = true
+          // this.form.reset()
+          // this.etapas.clear()
+          if (numProyecto) {
+            //console.log("Entro al numero de proyecto " + numProyecto)
+            this.mostrarFormulario = true
+            // this.sharedService.cambiarEstado(true)
+            // this.cargando = true
+            this.pcsService.obtenerProyectoPorId(numProyecto)
+              .pipe(finalize(() => {
+                // this.sharedService.cambiarEstado(false)
+                this.cargando = false
+              }))
+              .subscribe({
+                next: ({ data }) => {
+                  //console.log(data)
+                  if (data.length >= 0) {
+                    const [proyectoData] = data
+                    const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
 
-                  this.Numproyectos =   proyectoData.nunum_proyecto.toString()
-                  this.Nameproyecto =   proyectoData.chproyecto.toString()
-                  this.fechaIni =   proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null
-                  this.fechaFin =   proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null
+                    this.Numproyectos = proyectoData.nunum_proyecto.toString()
+                    this.Nameproyecto = proyectoData.chproyecto.toString()
+                    this.fechaIni = proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null
+                    this.fechaFin = proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null
 
-                  this.form.patchValue({
-                    num_proyecto: proyectoData.nunum_proyecto.toString(),
-                    nombre_proyecto: proyectoData.chproyecto.toString(),
-                    alcance: proyectoData.chalcance.toString(),
-                    codigo_postal: proyectoData.chcp,
-                    ciudad: proyectoData.chciudad,
-                    id_pais: proyectoData.nukidpais,
-                    id_estatus: proyectoData.nukidestatus,
-                    id_sector: proyectoData.nukidsector,
-                    id_tipo_proyecto: proyectoData.nukidtipo_proyecto,
-                    id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
-                    id_responsable_construccion: proyectoData.nukidresponsable_construccion,
-                    id_responsable_ehs: proyectoData.nukidresponsable_ehs,
-                    id_responsable_supervisor: proyectoData.nukidresponsable_supervisor,
-                    ids_clientes,
-                    id_empresa: proyectoData.nukidempresa.toString(),
-                    id_director_ejecutivo: proyectoData.nukiddirector_ejecutivo.toString(),
-                    costo_promedio_m2: proyectoData.nucosto_promedio_m2,
-                    fecha_inicio: proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
-                    fecha_fin: proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
-                    nombre_contacto: proyectoData.chcontacto_nombre,
-                    posicion_contacto: proyectoData.chcontacto_posicion,
-                    telefono_contacto: proyectoData.chcontacto_telefono,
-                    correo_contacto: proyectoData.chcontacto_correo,
-                    impuesto_nomina: proyectoData.impuesto_nomina,
-                   // id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
-                   id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
-                    
-                  })
-                  this.actualizarTotalMeses()
-                }
-              },
-              error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-            })
+                    this.form.patchValue({
+                      num_proyecto: proyectoData.nunum_proyecto.toString(),
+                      nombre_proyecto: proyectoData.chproyecto.toString(),
+                      alcance: proyectoData.chalcance.toString(),
+                      codigo_postal: proyectoData.chcp,
+                      ciudad: proyectoData.chciudad,
+                      id_pais: proyectoData.nukidpais,
+                      id_estatus: proyectoData.nukidestatus,
+                      id_sector: proyectoData.nukidsector,
+                      id_tipo_proyecto: proyectoData.nukidtipo_proyecto,
+                      id_responsable_preconstruccion: proyectoData.nukidresponsable_preconstruccion,
+                      id_responsable_construccion: proyectoData.nukidresponsable_construccion,
+                      id_responsable_ehs: proyectoData.nukidresponsable_ehs,
+                      id_responsable_supervisor: proyectoData.nukidresponsable_supervisor,
+                      ids_clientes,
+                      id_empresa: proyectoData.nukidempresa.toString(),
+                      id_director_ejecutivo: proyectoData.nukiddirector_ejecutivo.toString(),
+                      costo_promedio_m2: proyectoData.nucosto_promedio_m2,
+                      fecha_inicio: proyectoData.dtfecha_ini != '' ? new Date(proyectoData.dtfecha_ini) as any : null,
+                      fecha_fin: proyectoData.dtfecha_fin != '' ? new Date(proyectoData.dtfecha_fin) as any : null,
+                      nombre_contacto: proyectoData.chcontacto_nombre,
+                      posicion_contacto: proyectoData.chcontacto_posicion,
+                      telefono_contacto: proyectoData.chcontacto_telefono,
+                      correo_contacto: proyectoData.chcontacto_correo,
+                      impuesto_nomina: proyectoData.impuesto_nomina,
+                      // id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
+                      id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString()
+
+                    })
+                    this.actualizarTotalMeses()
+                  }
+                },
+                error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+              })
 
 
             //INICIA LLAMADO A STAFFING
             this.pcsService.obtenerEtapasPorProyecto(numProyecto)
-          .pipe(finalize(() => {
-            // this.sharedService.cambiarEstado(false)
-            //this.proyectoSeleccionado = true
-           // this.cargando = false
-          }))
-          .subscribe({
-            next: ({data}) => this.etapasdata = data,
-            error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-          })
+              .pipe(finalize(() => {
+                // this.sharedService.cambiarEstado(false)
+                //this.proyectoSeleccionado = true
+                // this.cargando = false
+              }))
+              .subscribe({
+                next: ({ data }) => this.etapasdata = data,
+                error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+              })
 
-          //TERMINA LLAMADO A STAFFING  
+            //TERMINA LLAMADO A STAFFING
 
-          //INICIA LLAMADO A GASTOS
+            //INICIA LLAMADO A GASTOS
 
-          this.pcsService.obtenerGastosIngresosSecciones(numProyecto)
-          .pipe(finalize(() => this.cargando = false))
-          .subscribe({
-            next: ({data}) => {
-            
-              this.Gastosdata = data
-            
-            },
-            error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-          })
+            this.pcsService.obtenerGastosIngresosSecciones(numProyecto)
+              .pipe(finalize(() => this.cargando = false))
+              .subscribe({
+                next: ({ data }) => {
 
-          //TERMINA LLAMADO A GASTOS
+                  this.Gastosdata = data
 
-        } else  {
-          // console.log('No hay proyecto');
+                },
+                error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+              })
+
+            //TERMINA LLAMADO A GASTOS
+
+          } else {
+            // console.log('No hay proyecto');
           }
-        
-      })
 
-     }
+        })
 
-    
+    }
+
+
 
     this.activatedRoute.queryParams.subscribe(params => {
       const nuevo = params['nuevo']
@@ -434,9 +434,9 @@ export class IpComponent implements OnInit {
       }
 
       this.form.patchValue({
-        
+
         impuesto_nomina: 3
-        
+
       })
     });
   }
@@ -495,10 +495,10 @@ export class IpComponent implements OnInit {
     if (this.form.value.fecha_inicio && this.form.value.fecha_fin) {
       // total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)+1
       total_meses = differenceInCalendarMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)
-      
+
     }
 
-    this.form.patchValue({ total_meses  })
+    this.form.patchValue({ total_meses })
   }
 
   poblarCombos() {
@@ -517,7 +517,7 @@ export class IpComponent implements OnInit {
     this.cieService.getCatUnidadNegocio()
       .subscribe({
         next: ({ data }) => {
-         // this.catUnidadNegocio = data.map(unidadnegocio => ({ name: unidadnegocio.descripcion, code: `${unidadnegocio.id}` }))
+          // this.catUnidadNegocio = data.map(unidadnegocio => ({ name: unidadnegocio.descripcion, code: `${unidadnegocio.id}` }))
           this.catUnidadNegocio = data.map(unidadnegocio => ({ name: unidadnegocio.descripcion, code: unidadnegocio.id.toString() }))
         },
         error: (err) => this.catUnidadNegocio = []
@@ -609,19 +609,19 @@ export class IpComponent implements OnInit {
     });
   }*/
 
-    getEmpleadosExcel() {
-      this.listEmpleados = [];
-      this.catServ.getEmpleadosExcel().subscribe((data) => {
-        this.empleado = data.data
-        console.log('array data costo por empleado ------ ' + data.data)
-      });
-    }
+  getEmpleadosExcel() {
+    this.listEmpleados = [];
+    this.catServ.getEmpleadosExcel().subscribe((data) => {
+      this.empleado = data.data
+      console.log('array data costo por empleado ------ ' + data.data)
+    });
+  }
 
   getEmpleados() {
     //this.catServ.getDirectores().subscribe((directoresR) => {
-      this.catServ.getPersonalCLAVE().subscribe((directoresR) => {
+    this.catServ.getPersonalCLAVE().subscribe((directoresR) => {
       this.catEmpleados = directoresR.data.map(catEmpleados => ({ name: catEmpleados.nombre_persona, code: catEmpleados.nunum_empleado_rr_hh.toString() }))
-      
+
 
     });
 
@@ -647,7 +647,7 @@ export class IpComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: (data) => {
-        console.log('valor de unidad de negocio  ------  ' + this.form.value.id_unidad_negocio)
+          console.log('valor de unidad de negocio  ------  ' + this.form.value.id_unidad_negocio)
 
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'El proyecto ha sido guardado.' })
           if (!this.catalogosService.esEdicion) {
@@ -691,7 +691,7 @@ export class IpComponent implements OnInit {
   }
 
 
-  exportJsonToExcel(): void {
+  async exportJsonToExcel(): Promise<void> {
 
     const workbook = new ExcelJS.Workbook()
 
@@ -721,9 +721,9 @@ export class IpComponent implements OnInit {
     this._setXLSXHeaderStaffing(worksheetStaffing)
 
     let rows = 5
-    
+
     // Contenido Staffing
-    rows = this._setXLSXContentStaffing(worksheetStaffing, rows)
+    rows = await this._setXLSXContentStaffing(worksheetStaffing, rows)
 
     //Seccion Gastos para excel
 
@@ -734,12 +734,12 @@ export class IpComponent implements OnInit {
     this._setXLSXHeaderGastos(worksheetGastos)
 
     let row_Gastos = 5
-    
+
     // Contenido Staffing
 
-    
-    
-row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
+
+
+    row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
 
     // Contenido
     //this._setXLSXContent(worksheet)
@@ -779,7 +779,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
     worksheet.getCell('P3').alignment = alignment
     worksheet.mergeCells('P3:R3')*/
 
-    
+
 
   }
 
@@ -810,7 +810,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
       worksheet.getCell(row, 2).value = record.nombreCompletoEmpleado
       worksheet.getCell(row, 3).value = record.costoMensualEmpleado
 
-     
+
       row++
     });
 
@@ -845,7 +845,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
     worksheet.getCell('P3').alignment = alignment
     worksheet.mergeCells('P3:R3')*/
 
-    
+
 
   }
 
@@ -859,49 +859,49 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
       cell.fill = fill
       cell.alignment = alignment
 
-      let cell1 = worksheet.getCell(1,1)
+      let cell1 = worksheet.getCell(1, 1)
 
-          cell1.value = 'Numero proyecto'
-          cell1.fill = fill
-          cell1.alignment = alignment
-          worksheet.getCell(2, 1).value = this.Numproyectos
+      cell1.value = 'Numero proyecto'
+      cell1.fill = fill
+      cell1.alignment = alignment
+      worksheet.getCell(2, 1).value = this.Numproyectos
 
-          let cell3 = worksheet.getCell(1,2)
+      let cell3 = worksheet.getCell(1, 2)
 
-          cell3.value = 'Nombre del proyecto'
-          cell3.fill = fill
-          cell3.alignment = alignment
-          worksheet.getCell(2, 2).value = this.Nameproyecto
-          
-         
+      cell3.value = 'Nombre del proyecto'
+      cell3.fill = fill
+      cell3.alignment = alignment
+      worksheet.getCell(2, 2).value = this.Nameproyecto
+
+
 
       this.etapasdata.etapas.forEach((etapa, etapaIndex) => {
 
-        
+
         //worksheet.getCell(row, 6).value = this.Nameproyecto
-  
+
         const diferenciaMeses = differenceInCalendarMonths(new Date(this.fechaFin), new Date(this.fechaIni));
         const meses: Mes[] = []
-  
+
         let titulomes = 9
-        
+
         for (let i = 0; i <= diferenciaMeses; i++) {
           const fecha = addMonths(new Date(this.fechaIni), i)
-          const mes   = +format(fecha, 'M')
-          const anio  = +format(fecha, 'Y')
-          const desc  = format(fecha, 'LLL/Y', {locale: es})
-          let cell2 = worksheet.getCell(4,titulomes)
+          const mes = +format(fecha, 'M')
+          const anio = +format(fecha, 'Y')
+          const desc = format(fecha, 'LLL/Y', { locale: es })
+          let cell2 = worksheet.getCell(4, titulomes)
 
           cell2.value = desc
           cell2.fill = fill
           cell2.alignment = alignment
 
-         
-          
-  
+
+
+
           titulomes++
           meses.push({
-            mes:  mes,
+            mes: mes,
             anio: anio,
             desc: desc
           })
@@ -911,7 +911,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
     })
   }
 
-  _setXLSXContentStaffing(worksheet: ExcelJS.Worksheet, row: number): number {
+  async _setXLSXContentStaffing(worksheet: ExcelJS.Worksheet, row: number): Promise<number> {
 
     const fillCancelada: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ea899a' } }
     const fillFactura: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ffffff' } }
@@ -919,85 +919,76 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
     const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'ff91d2ff' } }
     const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
-      this.etapasdata.etapas.forEach((etapa, etapaIndex) => {
+    this.etapasdata.etapas.map(async (etapa, etapaIndex) => {
+      this.etapas.push(this.fb.group({
+        idFase: etapa.idFase,
+        orden: etapa.orden,
+        fase: etapa.fase,
+        fechaIni: etapa.fechaIni,
+        fechaFin: etapa.fechaFin,
+        empleados: this.fb.array([]),
+        meses: this.fb.array(await obtenerMeses(new Date(etapa.fechaIni), new Date(etapa.fechaFin)))
+      }))
 
-      
-        this.etapas.push(this.fb.group({
-          idFase:       etapa.idFase,
-          orden:        etapa.orden,
-          fase:         etapa.fase,
-          fechaIni:     etapa.fechaIni,
-          fechaFin:     etapa.fechaFin,
-          empleados:    this.fb.array([]),
-          meses:        this.fb.array(obtenerMeses(new Date(etapa.fechaIni), new Date(etapa.fechaFin)))
-        }))
 
-        
-        
+      if (etapa.empleados === null || etapa.empleados.length === 0) {
+        //console.log('etapa.empleados ------  vacia el tamaño es -- ' + etapa.empleados.length )
+        //worksheet.getCell(row, 1).value = this.Numproyectos
+        //worksheet.getCell(row, 2).value = this.Nameproyecto
+        //console.log('etapa.fase ------ ' + etapa.fase)
 
-        if(etapa.empleados === null || etapa.empleados.length === 0 ){
-          //console.log('etapa.empleados ------  vacia el tamaño es -- ' + etapa.empleados.length )
-          //worksheet.getCell(row, 1).value = this.Numproyectos
-          //worksheet.getCell(row, 2).value = this.Nameproyecto
-          //console.log('etapa.fase ------ ' + etapa.fase)
-  
-          worksheet.getCell(row, 2).value = etapa.fase
-          worksheet.getCell(row, 3).value = etapa.fechaIni
-          worksheet.getCell(row, 4).value = etapa.fechaFin
-          
-          row++
-        }else{
-         // console.log('etapa.empleados ------ ' +etapa.empleados)
-        }
+        worksheet.getCell(row, 2).value = etapa.fase
+        worksheet.getCell(row, 3).value = etapa.fechaIni
+        worksheet.getCell(row, 4).value = etapa.fechaFin
 
-       
+        row++
+      } else {
+        // console.log('etapa.empleados ------ ' +etapa.empleados)
+      }
 
       // Agregamos los empleados por cada etapa
       etapa.empleados.forEach((empleado, empleadoIndex) => {
-
-       
-
         this.empleados(etapaIndex).push(this.fb.group({
-          id:               empleado.id,
-          idFase:           empleado.idFase,
-          numempleadoRrHh:  empleado.numempleadoRrHh,
-          empleado:         empleado.empleado,
-          fechas:           this.fb.array([]),
+          id: empleado.id,
+          idFase: empleado.idFase,
+          numempleadoRrHh: empleado.numempleadoRrHh,
+          empleado: empleado.empleado,
+          fechas: this.fb.array([]),
           aplicaTodosMeses: empleado.aplicaTodosMeses,
-          cantidad:         empleado.cantidad
+          cantidad: empleado.cantidad
         }))
 
         //worksheet.getCell(row, 1).value = this.Numproyectos
-       // worksheet.getCell(row, 2).value = this.Nameproyecto
-       worksheet.getCell(row, 2).value = etapa.fase
+        // worksheet.getCell(row, 2).value = this.Nameproyecto
+        worksheet.getCell(row, 2).value = etapa.fase
         worksheet.getCell(row, 3).value = etapa.fechaIni
         worksheet.getCell(row, 4).value = etapa.fechaFin
-       // console.log('etapa.fase ------ ' + etapa.fase)
+        // console.log('etapa.fase ------ ' + etapa.fase)
 
-       
+
         worksheet.getCell(row, 5).value = empleado.numempleadoRrHh
         worksheet.getCell(row, 6).value = empleado.empleado
         worksheet.getCell(row, 7).value = empleado.cantidad
         worksheet.getCell(row, 8).value = empleado.fee
-        
+
         let incrementa = 9
 
-          //row++
+        //row++
 
         // Agreamos las fechas por empleado
         empleado.fechas.forEach(fecha => {
-          
-          
+
+
           //console.log('valor incrementable de columna--- ' + incrementa +' fecha.mes fecha.anio ------ ' + fecha.porcentaje)
-          
+
           worksheet.getCell(row, incrementa).value = fecha.porcentaje
-          
+
           incrementa++
 
           this.fechas(etapaIndex, empleadoIndex).push(this.fb.group({
-            id:         fecha.id,
-            mes:        fecha.mes,
-            anio:       fecha.anio,
+            id: fecha.id,
+            mes: fecha.mes,
+            anio: fecha.anio,
             porcentaje: fecha.porcentaje
           }))
         })
@@ -1011,7 +1002,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
 
   }
 
-//Termina carga de Staffing
+  //Termina carga de Staffing
 
 
   //Inicia carga de gastos
@@ -1039,7 +1030,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
     worksheet.getCell('P3').alignment = alignment
     worksheet.mergeCells('P3:R3')*/
 
-    
+
 
   }
 
@@ -1053,49 +1044,49 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
       cell.fill = fill
       cell.alignment = alignment
 
-      let cell1 = worksheet.getCell(1,1)
+      let cell1 = worksheet.getCell(1, 1)
 
-          cell1.value = 'Numero proyecto'
-          cell1.fill = fill
-          cell1.alignment = alignment
-          worksheet.getCell(2, 1).value = this.Numproyectos
+      cell1.value = 'Numero proyecto'
+      cell1.fill = fill
+      cell1.alignment = alignment
+      worksheet.getCell(2, 1).value = this.Numproyectos
 
-          let cell3 = worksheet.getCell(1,2)
+      let cell3 = worksheet.getCell(1, 2)
 
-          cell3.value = 'Nombre del proyecto'
-          cell3.fill = fill
-          cell3.alignment = alignment
-          worksheet.getCell(2, 2).value = this.Nameproyecto
-          
-         
+      cell3.value = 'Nombre del proyecto'
+      cell3.fill = fill
+      cell3.alignment = alignment
+      worksheet.getCell(2, 2).value = this.Nameproyecto
+
+
 
       this.etapasdata.etapas.forEach((etapa, etapaIndex) => {
 
-        
+
         //worksheet.getCell(row, 6).value = this.Nameproyecto
-  
+
         const diferenciaMeses = differenceInCalendarMonths(new Date(this.fechaFin), new Date(this.fechaIni));
         const meses: Mes[] = []
-  
+
         let titulomes = 6
-        
+
         for (let i = 0; i <= diferenciaMeses; i++) {
           const fecha = addMonths(new Date(this.fechaIni), i)
-          const mes   = +format(fecha, 'M')
-          const anio  = +format(fecha, 'Y')
-          const desc  = format(fecha, 'LLL/Y', {locale: es})
-          let cell2 = worksheet.getCell(4,titulomes)
+          const mes = +format(fecha, 'M')
+          const anio = +format(fecha, 'Y')
+          const desc = format(fecha, 'LLL/Y', { locale: es })
+          let cell2 = worksheet.getCell(4, titulomes)
 
           cell2.value = desc
           cell2.fill = fill
           cell2.alignment = alignment
 
-         
-          
-  
+
+
+
           titulomes++
           meses.push({
-            mes:  mes,
+            mes: mes,
             anio: anio,
             desc: desc
           })
@@ -1113,259 +1104,254 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
     const fill: ExcelJS.Fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '9B9B9B' } }
     const alignment: Partial<ExcelJS.Alignment> = { vertical: 'middle', horizontal: 'center', wrapText: true }
 
-      this.Gastosdata.secciones.forEach((seccion, seccionIndex) => {
-            
-        this.secciones.push(this.fb.group({
-          idSeccion:  [seccion.idSeccion],
-          codigo:     [seccion.codigo],
-          seccion:    [seccion.seccion],
-          rubros:     this.fb.array([]),
-          sumaFechas:     this.fb.array([])
+    this.Gastosdata.secciones.forEach((seccion, seccionIndex) => {
+
+      this.secciones.push(this.fb.group({
+        idSeccion: [seccion.idSeccion],
+        codigo: [seccion.codigo],
+        seccion: [seccion.seccion],
+        rubros: this.fb.array([]),
+        sumaFechas: this.fb.array([])
+      }))
+      let cell1 = worksheet.getCell(row, 1)
+      cell1.value = seccion.codigo
+      cell1.fill = fill
+      let cell2 = worksheet.getCell(row, 2)
+      cell2.value = seccion.seccion
+      cell2.fill = fill
+
+      row++
+
+      seccion.rubros.forEach((rubro, rubroIndex) => {
+
+
+
+        // Agregamos los rubros por seccion
+        this.Seccionrubros(seccionIndex).push(this.fb.group({
+          ...rubro,
+          fechas: this.fb.array([])
         }))
-        let cell1 = worksheet.getCell(row, 1)
-            cell1.value = seccion.codigo
-            cell1.fill = fill
-        let cell2 = worksheet.getCell(row, 2)        
-          cell2.value = seccion.seccion
-          cell2.fill = fill
 
-        row++
-        
-		  seccion.rubros.forEach((rubro, rubroIndex) => {
-
-
-
-			  // Agregamos los rubros por seccion
-			  this.Seccionrubros(seccionIndex).push(this.fb.group({
-				...rubro,
-				fechas:   this.fb.array([])
-			  }))
-        
         worksheet.getCell(row, 2).value = rubro.rubro
 
         console.log('rubro.rubro ------ ' + rubro.rubro)
 
-        
-			  
-			  if(seccion.seccion.includes('COSTOS DIRECTOS DE SALARIOS')){
 
-				//this.costosService.getCostoID(rubro.numEmpleadoRrHh)
-				//.pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-				//.subscribe({
-				//  next: ({data,message}) => {
-		
-				//	const [costoR] = data
-				   
 
-					//if(message != null  ){
-			  
-					 // this.mensajito = message;
-	  
-					//	if(this.mensajito.includes('No se encontraron registros de costos para el empleado') ){
+        if (seccion.seccion.includes('COSTOS DIRECTOS DE SALARIOS')) {
 
-		  
-						 // this.costoMensualEmpleado =  0
-						
-						//  this.sumaTotales = seccion.sumaFechas
-		  
-             
+          //this.costosService.getCostoID(rubro.numEmpleadoRrHh)
+          //.pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          //.subscribe({
+          //  next: ({data,message}) => {
+
+          //	const [costoR] = data
+
+
+          //if(message != null  ){
+
+          // this.mensajito = message;
+
+          //	if(this.mensajito.includes('No se encontraron registros de costos para el empleado') ){
+
+
+          // this.costoMensualEmpleado =  0
+
+          //  this.sumaTotales = seccion.sumaFechas
+
+
 
           //    let incrementa = 4
 
-              
+          // this.delay(1200000);
 
-              
-						  
-
-             // this.delay(1200000);
-
-             //   console.log('Inicio de la función de prueba.');
-              //    this.sleep(120000);    //Dormimos la ejecución durante 2 Minutos
-                  
-                
-                //  console.log('Hello');
-            //  setTimeout(() => { // Agreamos las fechas por rubro
-             ///   rubro.fechas.forEach(fecha => {
-              
-              
-            //      rubro.fechas.forEach(fecha => {
-              //    this.sumacolumna += +fecha.porcentaje
-                //  })
-              
-                  //console.log(row +'--  3 if no se encontraron registros para el empleado this.sumacolumna.toString() ------ ' + this.sumacolumna.toString())
-              
-                  //worksheet.getCell(row, 3).value = this.sumacolumna.toString()
-                  
-                  //this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
-              
-                  
-              
-                 //console.log('const total1 ------< ' + total)
-             //    console.log(row +' --  '+ incrementa +' -- if no se encontraron registros para el empleado (fecha.porcentaje *this.costoMensualEmpleado)/100 ------ ' + this.formatCurrency((fecha.porcentaje *rubro.costoMensual)/100))
-            //     worksheet.getCell(row, incrementa).value = this.formatCurrency((fecha.porcentaje *rubro.costoMensual)/100)
-              
-             //    incrementa++
-              
-             //     this.Seccionfechas(seccionIndex, rubroIndex).push(this.fb.group({
-             //     id:         fecha.id,
-             //     mes:        fecha.mes,
-             //     anio:       fecha.anio,
-             //     porcentaje: this.formatCurrency((fecha.porcentaje *rubro.costoMensual)/100)
-                  //porcentaje: fecha.porcentaje
-              //    }))
-              
-                  
-             //   }) }, 180000);
-             // console.log('Goodbye!');
-             // console.log('Fin de la función de prueba.');
-              
-		  
-						//}else{
-
-						  //console.log('message ' + message)
-						  //console.log('data.map(empleado => costoR.idCosto ) ' + data.map(empleado => costoR.idCosto))
-						  //console.log('array 0 data.map(empleado => costoR.costoMensualEmpleado ) ' +  data.map(empleado => costoR.costoMensualEmpleado )[0])
-		  
-						  //this.costoMensualEmpleado =  data.map(empleado => costoR.costoMensualEmpleado )[0]
-
-						  //this.sumaTotales = seccion.sumaFechas
-		  
-
-						  let incrementa = 6
+          //   console.log('Inicio de la función de prueba.');
+          //    this.sleep(120000);    //Dormimos la ejecución durante 2 Minutos
 
 
-							//seccion.sumaFechas.forEach((sumaFecha) => {
+          //  console.log('Hello');
+          //  setTimeout(() => { // Agreamos las fechas por rubro
+          ///   rubro.fechas.forEach(fecha => {
 
-								//console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
-						  
-							//  this.sumafechas(seccionIndex).push(this.fb.group({
-							//	mes:        sumaFecha.mes,
-							//	anio:       sumaFecha.anio,
-							//	sumaFecha:  sumaFecha.sumaPorcentaje
-						//	  }))
-						//	})
-						 
 
-							 // rubro.fechas.forEach(fecha => {
-								//this.sumacolumna += +fecha.porcentaje
-							 //})
+          //      rubro.fechas.forEach(fecha => {
+          //    this.sumacolumna += +fecha.porcentaje
+          //  })
 
-               // console.log(row +'--  3 else no se encontraron registros para el empleado this.sumacolumna.toString() ------ ' + this.sumacolumna.toString())
-                //worksheet.getCell(row, 3).value = this.sumacolumna.toString()
-                
-               // this.delay(1200000);
+          //console.log(row +'--  3 if no se encontraron registros para el empleado this.sumacolumna.toString() ------ ' + this.sumacolumna.toString())
 
-                //console.log('Inicio de la función de prueba.');
-                //  this.sleep(120000);    //Dormimos la ejecución durante 2 Minutos
-                  
-                
-                //  console.log('Hello');
-             // setTimeout(() => { // Agreamos las fechas por rubro
-                rubro.fechas.forEach(fecha => {
-              
-              
-                  rubro.fechas.forEach(fecha => {
-                  this.sumacolumna += +fecha.porcentaje
-                  })
-              
-                  //console.log(row +'--  3 if no se encontraron registros para el empleado this.sumacolumna.toString() ------ ' + this.sumacolumna.toString())
-              
-                  //worksheet.getCell(row, 3).value = this.sumacolumna.toString()
-                  
-                  this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
-              
-                  
-              
-                 //console.log('const total1 ------< ' + total)
-                 console.log(row +' --  '+ incrementa +' -- if (fecha.porcentaje *this.costoMensualEmpleado)/100 ------ ' + this.formatCurrency((fecha.porcentaje *rubro.costoMensual)/100))
-                 worksheet.getCell(row, incrementa).value = this.formatCurrency((fecha.porcentaje *rubro.costoMensual)/100)
-              
-                 incrementa++
-              
-                  this.Seccionfechas(seccionIndex, rubroIndex).push(this.fb.group({
-                  id:         fecha.id,
-                  mes:        fecha.mes,
-                  anio:       fecha.anio,
-                  porcentaje: this.formatCurrency((fecha.porcentaje * rubro.costoMensual)/100)
-                  //porcentaje: fecha.porcentaje
-                  }))
-              
-                  
-                }) 
-              //}, 180000);
-             // console.log('Goodbye!');
-             // console.log('Fin de la función de prueba.');
+          //worksheet.getCell(row, 3).value = this.sumacolumna.toString()
 
-             
-		  
-						//}
+          //this.mesesProyecto        = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
-           
-				 // }
 
-					
-		
-				 // },
-				 // error: (err) => {
-					//console.log("error cuando no Existe registro de costos --------------> " +err.error.text);
-					//this.costoMensualEmpleado = 0
-					//this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
 
-				//  }
-				  
-				//})
+          //console.log('const total1 ------< ' + total)
+          //    console.log(row +' --  '+ incrementa +' -- if no se encontraron registros para el empleado (fecha.porcentaje *this.costoMensualEmpleado)/100 ------ ' + this.formatCurrency((fecha.porcentaje *rubro.costoMensual)/100))
+          //     worksheet.getCell(row, incrementa).value = this.formatCurrency((fecha.porcentaje *rubro.costoMensual)/100)
 
-				//console.log('hace las operaciones por que entro al 2 ' )
+          //    incrementa++
 
-				 
+          //     this.Seccionfechas(seccionIndex, rubroIndex).push(this.fb.group({
+          //     id:         fecha.id,
+          //     mes:        fecha.mes,
+          //     anio:       fecha.anio,
+          //     porcentaje: this.formatCurrency((fecha.porcentaje *rubro.costoMensual)/100)
+          //porcentaje: fecha.porcentaje
+          //    }))
 
-			  }else{
 
-				//this.sumaTotales = seccion.sumaFechas
-        let incrementa = 6
+          //   }) }, 180000);
+          // console.log('Goodbye!');
+          // console.log('Fin de la función de prueba.');
 
-					 // seccion.sumaFechas.forEach((sumaFecha) => {
 
-						//console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
-					  
-  						   				
-						 
-            //console.log(row +'--  3 diferente a costo directos de salarios this.sumacolumna.toString() ------ ' + this.sumacolumna.toString())
+          //}else{
+
+          //console.log('message ' + message)
+          //console.log('data.map(empleado => costoR.idCosto ) ' + data.map(empleado => costoR.idCosto))
+          //console.log('array 0 data.map(empleado => costoR.costoMensualEmpleado ) ' +  data.map(empleado => costoR.costoMensualEmpleado )[0])
+
+          //this.costoMensualEmpleado =  data.map(empleado => costoR.costoMensualEmpleado )[0]
+
+          //this.sumaTotales = seccion.sumaFechas
+
+
+          let incrementa = 6
+
+
+          //seccion.sumaFechas.forEach((sumaFecha) => {
+
+          //console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
+
+          //  this.sumafechas(seccionIndex).push(this.fb.group({
+          //	mes:        sumaFecha.mes,
+          //	anio:       sumaFecha.anio,
+          //	sumaFecha:  sumaFecha.sumaPorcentaje
+          //	  }))
+          //	})
+
+
+          // rubro.fechas.forEach(fecha => {
+          //this.sumacolumna += +fecha.porcentaje
+          //})
+
+          // console.log(row +'--  3 else no se encontraron registros para el empleado this.sumacolumna.toString() ------ ' + this.sumacolumna.toString())
+          //worksheet.getCell(row, 3).value = this.sumacolumna.toString()
+
+          // this.delay(1200000);
+
+          //console.log('Inicio de la función de prueba.');
+          //  this.sleep(120000);    //Dormimos la ejecución durante 2 Minutos
+
+
+          //  console.log('Hello');
+          // setTimeout(() => { // Agreamos las fechas por rubro
+          rubro.fechas.map(async fecha => {
+
+
+            rubro.fechas.forEach(fecha => {
+              this.sumacolumna += +fecha.porcentaje
+            })
+
+            //console.log(row +'--  3 if no se encontraron registros para el empleado this.sumacolumna.toString() ------ ' + this.sumacolumna.toString())
+
             //worksheet.getCell(row, 3).value = this.sumacolumna.toString()
-            
-                
-            // Agreamos las fechas por rubro
-           
-             
 
-				 // Agreamos las fechas por rubro
-				  rubro.fechas.forEach(fecha => {
+            this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
+
+
+
+            //console.log('const total1 ------< ' + total)
+            console.log(row + ' --  ' + incrementa + ' -- if (fecha.porcentaje *this.costoMensualEmpleado)/100 ------ ' + this.formatCurrency((fecha.porcentaje * rubro.costoMensual) / 100))
+            worksheet.getCell(row, incrementa).value = this.formatCurrency((fecha.porcentaje * rubro.costoMensual) / 100)
+
+            incrementa++
+
+            this.Seccionfechas(seccionIndex, rubroIndex).push(this.fb.group({
+              id: fecha.id,
+              mes: fecha.mes,
+              anio: fecha.anio,
+              porcentaje: this.formatCurrency((fecha.porcentaje * rubro.costoMensual) / 100)
+              //porcentaje: fecha.porcentaje
+            }))
+
+
+          })
+          //}, 180000);
+          // console.log('Goodbye!');
+          // console.log('Fin de la función de prueba.');
+
+
+
+          //}
+
+
+          // }
+
+
+
+          // },
+          // error: (err) => {
+          //console.log("error cuando no Existe registro de costos --------------> " +err.error.text);
+          //this.costoMensualEmpleado = 0
+          //this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+          //  }
+
+          //})
+
+          //console.log('hace las operaciones por que entro al 2 ' )
+
+
+
+        } else {
+
+          //this.sumaTotales = seccion.sumaFechas
+          let incrementa = 6
+
+          // seccion.sumaFechas.forEach((sumaFecha) => {
+
+          //console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
+
+
+
+          //console.log(row +'--  3 diferente a costo directos de salarios this.sumacolumna.toString() ------ ' + this.sumacolumna.toString())
+          //worksheet.getCell(row, 3).value = this.sumacolumna.toString()
+
+
+          // Agreamos las fechas por rubro
+
+
+
+          // Agreamos las fechas por rubro
+          rubro.fechas.forEach(fecha => {
 
             worksheet.getCell(row, incrementa).value = fecha.porcentaje
 
-           // console.log(row +' --  '+ incrementa +' -- diferente a costo directos de salarios fecha.porcentaje ------ ' + fecha.porcentaje)
-        
+            // console.log(row +' --  '+ incrementa +' -- diferente a costo directos de salarios fecha.porcentaje ------ ' + fecha.porcentaje)
+
             incrementa++
 
-  					this.Seccionfechas(seccionIndex, rubroIndex).push(this.fb.group({
-  					  id:         fecha.id,
-  					  mes:        fecha.mes,
-  					  anio:       fecha.anio,
-  					  porcentaje: fecha.porcentaje
-  					})
-          
-          )
-				  })
+            this.Seccionfechas(seccionIndex, rubroIndex).push(this.fb.group({
+              id: fecha.id,
+              mes: fecha.mes,
+              anio: fecha.anio,
+              porcentaje: fecha.porcentaje
+            })
 
-			  }
+            )
+          })
+
+        }
         row++
-			})
-
-      
-        
       })
-  
-  
+
+
+
+    })
+
+
 
     return row
 
@@ -1373,7 +1359,7 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
 
   //Termina carga de gastos
 
-  
+
 
   formatCurrency(valor: number) {
     return valor.toLocaleString('es-MX', {
@@ -1387,8 +1373,8 @@ row_Gastos = this._setXLSXContentGastos(worksheetGastos, row_Gastos)
   }
 
   async delay(ms: number) {
-    await new Promise(resolve => setTimeout(()=>resolve, ms)).then(()=>console.log("fired"));
-}
+    await new Promise(resolve => setTimeout(() => resolve, ms)).then(() => console.log("fired"));
+  }
 
 
 }

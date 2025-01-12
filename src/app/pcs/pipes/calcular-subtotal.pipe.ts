@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Fecha } from '../models/pcs.model';
-import {formatCurrency, getCurrencySymbol} from '@angular/common';
+import { formatCurrency, getCurrencySymbol } from '@angular/common';
 
 @Pipe({
   name: 'calcularSubtotal'
@@ -8,8 +8,8 @@ import {formatCurrency, getCurrencySymbol} from '@angular/common';
 export class CalcularSubtotalPipe implements PipeTransform {
 
   transform(value: Fecha[], ...args: unknown[]): unknown {
-   // console.log(Object.values(value));
-    
+    // console.log(Object.values(value));
+
     let subtotal = 0
 
     value.forEach(fecha => {
@@ -21,10 +21,8 @@ export class CalcularSubtotalPipe implements PipeTransform {
 
 
   formateaValor(valor) {
-    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
     return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
-
 }
 
 
