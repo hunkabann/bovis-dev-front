@@ -7,14 +7,14 @@ import { Fecha } from '../models/pcs.model';
 export class calcularSubtotalStaffingPipe implements PipeTransform {
 
   transform(value: Fecha[], ...args: unknown[]): unknown {
-    
+
     let subtotal = 0
 
     value.forEach(fecha => {
       subtotal += +fecha.porcentaje
     })
 
-    return subtotal/100
+    return subtotal / 100
   }
 
 }
