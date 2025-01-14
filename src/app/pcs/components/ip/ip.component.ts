@@ -493,8 +493,8 @@ export class IpComponent implements OnInit {
     let total_meses = 0
 
     if (this.form.value.fecha_inicio && this.form.value.fecha_fin) {
-      // total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)+1
-      total_meses = differenceInCalendarMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)
+       total_meses = differenceInMonths(this.form.value.fecha_fin, this.form.value.fecha_inicio)+1
+      //total_meses = differenceInCalendarMonths(this.form.value.fecha_fin+1, this.form.value.fecha_inicio)
 
     }
 
