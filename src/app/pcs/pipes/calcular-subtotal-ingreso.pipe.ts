@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { GastosIngresosTotales } from '../models/pcs.model';
-import {formatCurrency, getCurrencySymbol} from '@angular/common';
+import { formatCurrency, getCurrencySymbol } from '@angular/common';
 
 @Pipe({
   name: 'calcularSubtotalIngreso'
@@ -10,16 +10,16 @@ export class CalcularSubtotalIngresoPipe implements PipeTransform {
   arraybeneficio: GastosIngresosTotales[] = []
 
   transform(value: GastosIngresosTotales[], ...args: unknown[]): unknown {
-    
+
     let subtotal = 0
 
 
-    this.arraybeneficio  = value
+    this.arraybeneficio = value
 
     const dato = value;
-    dato?.forEach(paso=>{
+    dato?.forEach(paso => {
 
-      console.log("paso.cost-------------->> " +paso.totalPorcentaje);
+      console.log("paso.cost-------------->> " + paso.totalPorcentaje);
 
     })
 

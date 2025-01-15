@@ -12,6 +12,7 @@ import { ModificarRegistroComponent } from './components/modificar-registro/modi
 import { RegistrosCargadosComponent } from './components/registros-cargados/registros-cargados.component';
 import { CuentasCargadasComponent } from './components/cuentas-cargadas/cuentas-cargadas.component';
 import { ProyectosFaltantesComponent } from './components/proyectos-faltantes/proyectos-faltantes.component';
+import { CostoIngresoComponent } from './components/costo-ingreso/costo-ingreso.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { ProyectosFaltantesComponent } from './components/proyectos-faltantes/pr
     ModificarRegistroComponent,
     RegistrosCargadosComponent,
     CuentasCargadasComponent,
-    ProyectosFaltantesComponent
+    ProyectosFaltantesComponent,
+    CostoIngresoComponent
   ],
   imports: [
     CommonModule,

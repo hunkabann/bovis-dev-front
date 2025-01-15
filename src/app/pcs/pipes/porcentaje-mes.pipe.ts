@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Fecha } from '../models/pcs.model';
 import { Mes } from 'src/models/general.model';
-import {formatCurrency, getCurrencySymbol} from '@angular/common';
+import { formatCurrency, getCurrencySymbol } from '@angular/common';
 
 @Pipe({
   name: 'porcentajeMes'
@@ -9,32 +9,21 @@ import {formatCurrency, getCurrencySymbol} from '@angular/common';
 export class PorcentajeMesPipe implements PipeTransform {
 
   transform(value: Fecha[], ...args: unknown[]): unknown {
-    const [mesRegistro] = args as Array<Mes>
-    
-    const mes = value.find(info => info.mes == mesRegistro.mes)
+    const [mesRegistro] = args as Array<Mes>;
+    const fecha = value.find(fecha => fecha.mes == mesRegistro.mes && fecha.anio == mesRegistro.anio);
 
-    //console.log(' mes ------>> ' + mes.mes)
+    if (fecha && fecha.porcentaje > 0) {
+      return this.formateaValor(formatCurrency(fecha.porcentaje, 'en-US', getCurrencySymbol('USD', 'wide')))
 
-    const anio  = value.find(info =>info.anio == mesRegistro.anio)
+      const porcentaje = Number(fecha.porcentaje);
+      return isNaN(porcentaje) ? 0 : porcentaje;
+    }
 
-   // console.log(' anio ------>> ' + anio.anio)
-
-   
-
-      if(mes && anio && mes.porcentaje > 0) {
-
-        //console.log(' mes.porcentaje ------>> ' + mes.porcentaje)
-        //return this.formateaValor(formatCurrency(mes.porcentaje, 'en-US', getCurrencySymbol('USD', 'wide')))
-        return mes.porcentaje
-      }
-
-    return '-';
+    return this.formateaValor(formatCurrency(0, 'en-US', getCurrencySymbol('USD', 'wide')))
+    return 0;
   }
-  
+
   formateaValor(valor) {
-    // si no es un número devuelve el valor, o lo convierte a número con 4 decimales
     return isNaN(valor) ? valor : parseFloat(valor).toFixed(2);
   }
-
-
 }

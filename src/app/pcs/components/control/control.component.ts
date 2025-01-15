@@ -184,28 +184,29 @@ export class ControlComponent implements OnInit {
 
   }
 
-  cargarInformacionSeccion(event: any) {
+  async cargarInformacionSeccion(event: any) {
     const { index } = event;
     this.pcsService.obtenerInformacionSeccion(this.idproyecto, this.seccionesOpciones[index].slug)
-    .pipe(finalize(() => this.seccionesCargado[index] = true))
-    .subscribe({
-      next: (result) => {
-        const { data } = result as SeccionRespuesta;
+      .pipe(finalize(() => this.seccionesCargado[index] = true))
+      .subscribe({
+        next: async (result) => {
+          const { data } = result as SeccionRespuesta;
           if (data?.hasChildren) {
             let subSecciones: SeccionFormateada[] = [];
-            data?.subsecciones?.forEach(subSeccion => {
-              subSecciones.push(formatearInformacionControl(subSeccion));
+            data?.subsecciones?.map(async subSeccion => {
+              let subSeccionData = await formatearInformacionControl(subSeccion);
+              subSecciones.push(subSeccionData);
             });
             this.seccionesData[index] = {
               hasChildren: true,
               subSecciones
-            }; 
+            };
           } else {
-            this.seccionesData[index] = formatearInformacionControl(data); 
+            this.seccionesData[index] = await formatearInformacionControl(data);
           }
-      },
-      error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
-    });
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+      });
   }
 
   cargarInformacionIngreso(numProyecto: number) {
@@ -214,29 +215,22 @@ export class ControlComponent implements OnInit {
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
         next: ({ data }) => {
-
           this.proyectoFechaInicio = new Date(data.fechaIni)
           this.proyectoFechaFin = new Date(data.fechaFin)
 
           console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
           console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)
-
-
-
-        }
-        ,
+        },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
 
   }
 
-  cargarInformacion(numProyecto: number) {
-
-
+  async cargarInformacion(numProyecto: number) {
     this.pcsService.obtenerGastosControlSalarios(numProyecto, 'Control')
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
-        next: ({ data }) => {
+        next: async ({ data }) => {
 
           console.log('data.salarios: ' + data.salarios)
           console.log('data.salarios.previsto: ' + data.salarios.previsto)
@@ -254,7 +248,7 @@ export class ControlComponent implements OnInit {
           console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
           console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)
 
-          this.mesesProyecto = obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
+          this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
           this.SumaFecha = data.salarios.previsto.sumaFechas
           this.SumaFechaRealSalarios = data.salarios.real.sumaFechas
