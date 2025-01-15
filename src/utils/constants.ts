@@ -619,7 +619,7 @@ export const emailsDatosEmpleados = Object.freeze({
   emailNuevoEmpleado: {
     subject:  'Nuevo empleado',
     body:     `Buen día, nombre_usuario.  <br>
-              El área de Recursos Humanos ha recibido su requerimiento de personal y comenzará el proceso de búsqueda. <br>
+              El área de Recursos Humanos ha recibido su registro de nuevo empleado y comenzará el proceso de búsqueda. <br>
               Lo mantendremos al tanto de los avances.  <br> 
               Saludos. <br>`,
     emailsTo: ['jmmorales@hunkabann.com.mx']
@@ -628,7 +628,7 @@ export const emailsDatosEmpleados = Object.freeze({
   emailActualizaEmpleado: {
     subject:  'Actualizacion empleado',
     body:     `Buen día, nombre_usuario.  <br>
-              El área de Recursos Humanos ha recibido una actualización a su requerimiento de personal y comenzará el proceso de búsqueda. <br>
+              El área de Recursos Humanos ha recibido una actualización del empleado y comenzará el proceso de búsqueda. <br>
               Lo mantendremos al tanto de los avances.  <br> 
               Saludos. <br>`,
     emailsTo: ['jmmorales@hunkabann.com.mx']
