@@ -3,7 +3,7 @@ import { LazyLoadEvent, MessageService, PrimeNGConfig } from 'primeng/api';
 import { CieService } from '../../services/cie.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { CALENDAR, EXCEL_EXTENSION, TITLES, cieHeaders, cieHeadersFieldsLazy } from 'src/utils/constants';
-import { CieRegistro, encabezados,encabezadosCostosIngresos } from '../../models/cie.models';
+import { CieRegistro, encabezados, encabezadosCostosIngresos } from '../../models/cie.models';
 import { finalize, forkJoin } from 'rxjs';
 import { Opcion } from 'src/models/general.model';
 import { format } from 'date-fns';
@@ -63,6 +63,8 @@ export class ResultadoBusquedaComponent implements OnInit {
   totalRegistros = 0
   loading: boolean = false
 
+  inputsDisabled: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -73,17 +75,27 @@ export class ResultadoBusquedaComponent implements OnInit {
   }
 
   verificarEstado() {
-
     this.activatedRoute.queryParams.subscribe(params => {
       // Access query parameters
-      const success = params['success']
+      const success = params['success'];
+      const month = params['month'];
+      const year = params['year'];
+      const numproject = params['projectnum'];
 
       if (success) {
         Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
+        const urlWithoutQueryParams = this.location.path().split('?')[0];
+        this.location.replaceState(urlWithoutQueryParams);
+      } else if (month && year && numproject) {
+        const startDate = new Date(year, month - 1, 1);
+        const endDate = new Date(year, month, 0);
+        this.fechas = [startDate, endDate];
+        this.numProyecto = numproject;
+
+        this.inputsDisabled = true;
+        this.filtrar();
       }
 
-      const urlWithoutQueryParams = this.location.path().split('?')[0];
-      this.location.replaceState(urlWithoutQueryParams);
     });
   }
 
@@ -221,7 +233,7 @@ export class ResultadoBusquedaComponent implements OnInit {
           worksheet.getCell(row, 13).value = formatCurrency(record.movimiento * -1)
         } else {
           worksheet.getCell(row, 13).value = formatCurrency(record.movimiento || 0)
-          
+
         }
       }
 
@@ -521,7 +533,7 @@ export class ResultadoBusquedaComponent implements OnInit {
             saveAs(blob, `COSTOINGRESO_${Date.now()}${EXCEL_EXTENSION}`);
           });
 
-          
+
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })
@@ -557,11 +569,11 @@ export class ResultadoBusquedaComponent implements OnInit {
       worksheet.getCell(row, 3).value = record.tipoPoliza
       worksheet.getCell(row, 4).value = record.numero
       worksheet.getCell(row, 5).value = record.fecha
-     // if (record.fechaCancelacion == null || record.fechaCancelacion == '') {
-     //   worksheet.getCell(row, 6).value = record.mes
-     // } else {
-     //   worksheet.getCell(row, 6).value = this.regresames(record.fechaCancelacion)
-     // }
+      // if (record.fechaCancelacion == null || record.fechaCancelacion == '') {
+      //   worksheet.getCell(row, 6).value = record.mes
+      // } else {
+      //   worksheet.getCell(row, 6).value = this.regresames(record.fechaCancelacion)
+      // }
 
       worksheet.getCell(row, 6).value = record.concepto
       worksheet.getCell(row, 7).value = record.centroCostos
@@ -581,7 +593,7 @@ export class ResultadoBusquedaComponent implements OnInit {
           worksheet.getCell(row, 12).value = formatCurrency(record.movimiento * -1)
         } else {
           worksheet.getCell(row, 12).value = formatCurrency(record.movimiento || 0)
-          
+
         }
       }
 
@@ -602,7 +614,7 @@ export class ResultadoBusquedaComponent implements OnInit {
 
   }
 
-  
+
 
 }
 
