@@ -84,34 +84,33 @@ export class ControlComponent implements OnInit {
   })
 
   get secciones() {
-    return this.form.get('secciones') as FormArray
+    return this.form.get('secciones') as FormArray;
   }
 
   rubros(seccionIndex: number) {
-    return (this.secciones.at(seccionIndex).get('rubros') as FormArray)
+    return (this.secciones.at(seccionIndex).get('rubros') as FormArray);
   }
 
   fechas(seccionIndex: number, rubroIndex: number) {
-    return (this.rubros(seccionIndex).at(rubroIndex).get('fechas') as FormArray)
+    return (this.rubros(seccionIndex).at(rubroIndex).get('fechas') as FormArray);
   }
 
   fechasIngreso(seccionIndex: number) {
-    return (this.secciones.at(seccionIndex).get('totales') as FormArray)
+    return (this.secciones.at(seccionIndex).get('totales') as FormArray);
   }
 
   get totals() {
-    return this.form.get('totales') as FormArray
+    return this.form.get('totales') as FormArray;
   }
 
 
 
   get fechasControlSalarios() {
-    return this.form.get('sumaFechas') as FormArray
+    return this.form.get('sumaFechas') as FormArray;
   }
 
 
   ngOnInit(): void {
-
     this.pcsService.cambiarEstadoBotonNuevo(false)
 
     this.catalogosService.obtenerParametros()
@@ -124,29 +123,24 @@ export class ControlComponent implements OnInit {
           this.idproyecto = params.proyecto
           console.log("else params.proyecto:" + params.proyecto)
         }
-      })
+      });
 
     if (this.idproyecto) {
       console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
-
       this.cargando = true
       this.cargarInformacionIngreso(this.idproyecto)
       this.cargarInformacion(this.idproyecto)
       /**for(let i = 0; i < 3; i++) {
-
-        console.log("valor de i -------------- " + i) 
-        
+        console.log("valor de i -------------- " + i)
         if(i > 1){
           this.isrembolsable  = true
           this.rembolsable = "REMBOLSABLE"
-         }else{
+        }else{
           this.isrembolsable  = false
           this.rembolsable = "NO REMBOLSABLE"
-         }
-  
-         console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
-      
-      
+        }
+
+        console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
         i++
         }*/
     } else {
@@ -159,29 +153,23 @@ export class ControlComponent implements OnInit {
             this.cargarInformacionIngreso(numProyecto)
             this.cargarInformacion(numProyecto)
             /**for(let i = 0; i < 3; i++) {
-  
-              console.log("valor de i -------------- " + i) 
-              
+              console.log("valor de i -------------- " + i)
               if(i > 1){
                 this.isrembolsable  = true
                 this.rembolsable = "REMBOLSABLE"
-               }else{
+              }else{
                 this.isrembolsable  = false
                 this.rembolsable = "NO REMBOLSABLE"
-               }
-        
-               console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
-            
-           
+              }
+
+              console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
               i++
               }*/
           } else {
             console.log('No hay proyecto');
           }
-        })
+        });
     }
-
-
   }
 
   async cargarInformacionSeccion(event: any) {
@@ -194,7 +182,9 @@ export class ControlComponent implements OnInit {
           if (data?.hasChildren) {
             let subSecciones: SeccionFormateada[] = [];
             data?.subsecciones?.map(async subSeccion => {
-              let subSeccionData = await formatearInformacionControl(subSeccion);
+              let subSeccionData = await formatearInformacionControl(subSeccion, this.idproyecto);
+              console.log("SubSecciones Data:", subSeccionData);
+
               subSecciones.push(subSeccionData);
             });
             this.seccionesData[index] = {
@@ -202,15 +192,16 @@ export class ControlComponent implements OnInit {
               subSecciones
             };
           } else {
-            this.seccionesData[index] = await formatearInformacionControl(data);
+            this.seccionesData[index] = await formatearInformacionControl(data, this.idproyecto);
+            console.log("Secciones Data:", this.seccionesData[index]);
           }
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
       });
+
   }
 
   cargarInformacionIngreso(numProyecto: number) {
-
     this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'gastos')
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
@@ -222,8 +213,7 @@ export class ControlComponent implements OnInit {
           console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-      })
-
+      });
   }
 
   async cargarInformacion(numProyecto: number) {
@@ -231,19 +221,16 @@ export class ControlComponent implements OnInit {
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
         next: async ({ data }) => {
-
           console.log('data.salarios: ' + data.salarios)
           console.log('data.salarios.previsto: ' + data.salarios.previsto)
           console.log('data.salarios.previsto.subTotal: ' + data.salarios.previsto.subTotal)
           console.log('data.salarios suma fecha: ' + data.salarios.previsto.sumaFechas)
 
           // data.salarios.previsto.sumaFechas.forEach((sumaFecha) => {
-
           //  console.log('sumaFecha.mes  =>  ' + sumaFecha.mes)
           //   console.log('sumaFecha.anio  =>  ' + sumaFecha.anio)
           //   console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
-
-          //  })
+          //  });
 
           console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
           console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)
@@ -252,7 +239,6 @@ export class ControlComponent implements OnInit {
 
           this.SumaFecha = data.salarios.previsto.sumaFechas
           this.SumaFechaRealSalarios = data.salarios.real.sumaFechas
-
 
           this.Previsto = data.salarios.previsto
           //this.SumaFechaViaticos = data.viaticos.previsto.sumaFechas
@@ -265,65 +251,35 @@ export class ControlComponent implements OnInit {
 
 
           let frutasverdes = ["Previsto", "Real"];
-
           this.frutas = frutasverdes
-
-
-
           this.SumaIngresos = data.salarios.previsto.subTotal
           this.SumaIngresosReal = data.salarios.real.subTotal
           this.SumaIngresosViaticos = data.viaticos.previsto.subTotal
 
           data.gastos.previstos.forEach((sumaFecha) => {
-
             console.log('this.SumaFechaSalarios  =>  ' + this.SumaFecha.length)
-
             this.SumaIngresosGasto = sumaFecha.subTotal
-
             this.SumaFechaGastos = sumaFecha.sumaFechas
 
             const uniqueByGastosRubroAnio = [...new Map(this.SumaFechaGastos.map(item => [`${item.rubro}`, item])).values()];
             this.SumaFechaGastos = uniqueByGastosRubroAnio;
-
-
-
-          })
+          });
 
           data.salarios.previsto.sumaFechas.forEach((seccion) => {
-
             this.fechasControlSalarios.push(this.fb.group({
               rubro: [seccion.rubro],
               mes: [seccion.mes],
               anio: [seccion.anio],
               sumaPorcentaje: [seccion.sumaPorcentaje]
-            }))
-
-          })
-
-
-
-
-
-
-        }
-        ,
+            }));
+          });
+        },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-      })
-
-
-
-
-
-
-
-
-
-
+      });
   }
 
 
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
-
     this.dialogService.open(ModificarRubroComponent, {
       header: rubro.rubro,
       width: '50%',
@@ -333,37 +289,39 @@ export class ControlComponent implements OnInit {
         fechaInicio: this.proyectoFechaInicio,
         fechaFin: this.proyectoFechaFin
       }
-    })
-      .onClose.subscribe((result) => {
+    }).onClose.subscribe((result) => {
 
-        if (result && result.rubro) {
+      if (result && result.rubro) {
+        const rubroRespuesta = result.rubro as Rubro
+        this.fechas(seccionIndex, rubroIndex).clear();
 
-          const rubroRespuesta = result.rubro as Rubro
-
-
-          this.fechas(seccionIndex, rubroIndex).clear()
-
-          rubroRespuesta.fechas.forEach(fechaRegistro => {
-            this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-              id: fechaRegistro.id,
-              mes: fechaRegistro.mes,
-              anio: fechaRegistro.anio,
-              porcentaje: fechaRegistro.porcentaje
-            }))
-          })
-        }
-      })
+        rubroRespuesta.fechas.forEach(fechaRegistro => {
+          this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+            id: fechaRegistro.id,
+            mes: fechaRegistro.mes,
+            anio: fechaRegistro.anio,
+            porcentaje: fechaRegistro.porcentaje
+          }));
+        });
+      }
+    });
   }
+
+  isNumber(value: any): boolean {
+    console.log('value: ' + value);
+    return typeof value === 'number' || (!isNaN(parseFloat(value)) && isFinite(value));
+  }
+
 
   /**getFiltrosVaues() {
     let objBusqueda: Busqueda = new Busqueda();
 
-   
-    
+
+
     console.log('factura this.idproyecto   ----- '+ this.idproyecto)
     //objBusqueda.idProyecto = this.idproyecto;
     objBusqueda.idProyecto = 229;
-    
+
 
     // switch (this.opcionFiltro) {
     //   case 1:

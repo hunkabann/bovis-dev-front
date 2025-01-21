@@ -1,4 +1,4 @@
-<p-toast></p-toast>
+<!-- <p-toast></p-toast>
 
 <div class="text-center" *ngIf="cargando; else principal">
     <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
@@ -8,10 +8,7 @@
 
 <ng-template #principal>
     <div class="content" style="margin: 2%">
-        <p-accordion 
-            [multiple]="true" 
-            (onOpen)="cargarInformacionSeccion($event)"
-        >
+        <p-accordion [multiple]="true" (onOpen)="cargarInformacionSeccion($event)">
             <p-accordionTab *ngFor="let seccion of seccionesOpciones; let i = index">
                 <ng-template pTemplate="header">
                     <div class="d-flex justify-content-between align-items-center w-100">
@@ -26,16 +23,121 @@
                         <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
                     </div>
                     <ng-template #contenido>
-                        <app-tabla-datos 
-                            [data]="seccionesData[i]"
-                            *ngIf="!seccionesData[i]?.hasChildren; else contenidoSubsecciones"
-                        ></app-tabla-datos>
+                        <app-tabla-datos [data]="seccionesData[i]"
+                            *ngIf="!seccionesData[i]?.hasChildren; else contenidoSubsecciones"></app-tabla-datos>
                         <ng-template #contenidoSubsecciones>
                             <app-subsecciones-accordion [data]="seccionesData[i]"></app-subsecciones-accordion>
                         </ng-template>
                     </ng-template>
                 </ng-template>
             </p-accordionTab>
-        </p-accordion>        
+        </p-accordion>
+    </div>
+</ng-template> -->
+
+
+
+<p-toast></p-toast>
+
+<div class="text-center" *ngIf="cargando; else principal">
+    <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+    <p>Cargando Control...</p>
+    <p><strong>Un momento.</strong></p>
+</div>
+
+<ng-template #principal>
+    <div class="content" style="margin: 2%">
+        <p-accordion [multiple]="true" (onOpen)="cargarInformacionSeccion($event)">
+            <p-accordionTab *ngFor="let seccion of seccionesOpciones; let i = index">
+                <ng-template pTemplate="header">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="title">
+                            <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                            <span class="vertical-align-middle">
+                                {{ seccion.titulo }}
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <div *ngIf="!seccionesCargado[i]; else contenido" class="text-center">
+                        <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+                    </div>
+                    <ng-template #contenido>
+                        <table class="table custom-table" *ngIf="seccionesData[i]">
+                            <thead>
+                                <tr>
+                                    <th *ngFor="let encabezado of seccionesData[i].encabezados">
+                                        {{ encabezado }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let registro of seccionesData[i].registros">
+                                    <td>
+                                        {{ registro[0] }}
+                                    </td>
+                                    <td>
+                                        {{ registro[1] | currency:'USD':'symbol':'1.2-2' }}
+                                    </td>
+                                    <td *ngFor="let item of registro.slice(2)">
+                                        <ng-container *ngIf="isNumber(item.valor); else plainText">
+                                            <a *ngIf="item.url; else plainNumber" [href]="item.url" target="_blank"
+                                                class="link-cell">
+                                                {{ item.valor | currency:'USD':'symbol':'1.2-2' }}
+                                            </a>
+                                            <ng-template #plainNumber>
+                                                {{ item.valor | currency:'USD':'symbol':'1.2-2' }}
+                                            </ng-template>
+                                        </ng-container>
+                                        <ng-template #plainText>
+                                            {{ item.valor }}
+                                        </ng-template>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Mostrar subsecciones si existen -->
+                        <ng-container *ngIf="seccionesData[i]?.hasChildren">
+                            <div *ngFor="let subseccion of seccionesData[i]">
+                                <h5>
+                                    {{ subseccion.titulo }}
+                                </h5>
+                                <table class="table custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th *ngFor="let encabezado of subseccion.encabezados">
+                                                {{ encabezado }}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let registro of subseccion.registros">
+                                            <td>
+                                                {{ registro[0] }}
+                                            </td>
+                                            <td>
+                                                {{ registro[1] | currency:'USD':'symbol':'1.2-2' }}
+                                            </td>
+                                            <td *ngFor="let item of registro.slice(2)">
+                                                <ng-container *ngIf="isNumber(item.valor); else plainTextSub">
+                                                    <a *ngIf="item.url" [href]="item.url" target="_blank">
+                                                        {{ item.valor | currency:'USD':'symbol':'1.2-2' }}
+                                                    </a>
+                                                </ng-container>
+                                                <ng-template #plainTextSub>
+                                                    {{ item.valor }}
+                                                </ng-template>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </ng-container>
+                    </ng-template>
+                </ng-template>
+            </p-accordionTab>
+        </p-accordion>
     </div>
 </ng-template>
