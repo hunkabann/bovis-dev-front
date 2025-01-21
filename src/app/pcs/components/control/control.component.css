@@ -33,3 +33,7 @@
     color: #0255af;
     text-decoration: none;
 }
+
+.overflow-x {
+    overflow-x: auto;
+}
