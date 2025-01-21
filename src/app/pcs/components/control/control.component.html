@@ -80,10 +80,10 @@
                                         <td>
                                             {{ registro[0] }}
                                         </td>
-                                        <td>
+                                        <td class="text-right">
                                             {{ registro[1] | currency:'USD':'symbol':'1.2-2' }}
                                         </td>
-                                        <td *ngFor="let item of registro.slice(2)">
+                                        <td *ngFor="let item of registro.slice(2)" class="text-right">
                                             <ng-container *ngIf="isNumber(item.valor); else plainText">
                                                 <a *ngIf="item.url; else plainNumber" [href]="item.url" target="_blank"
                                                     class="link-cell">
@@ -120,10 +120,10 @@
                                                 <td>
                                                     {{ registro[0] }}
                                                 </td>
-                                                <td>
+                                                <td class="text-right">
                                                     {{ registro[1] | currency:'USD':'symbol':'1.2-2' }}
                                                 </td>
-                                                <td *ngFor="let item of registro.slice(2)">
+                                                <td *ngFor="let item of registro.slice(2)" class="text-right">
                                                     <ng-container *ngIf="isNumber(item.valor); else plainTextSub">
                                                         <a *ngIf="item.url" [href]="item.url" target="_blank">
                                                             {{ item.valor | currency:'USD':'symbol':'1.2-2' }}
