@@ -136,7 +136,11 @@ export const formatearInformacionControl = (data: SeccionData | SeccionSubseccio
     return { valor, url };
   });
 
-  registros.push(['Previsto', data.previsto.subTotal || 0, ...valoresPrevisto]);
+  registros.push([
+    { valor: 'Previsto'}, 
+    { valor: data.previsto.subTotal || 0 }, 
+    ...valoresPrevisto
+  ]);
 
   const valoresReal = fechasCombinadas.map(f => {
     const entry = data.real.fechas.find(e => e.mes === f.mes && e.anio === f.anio);
@@ -145,7 +149,11 @@ export const formatearInformacionControl = (data: SeccionData | SeccionSubseccio
     return { valor, url };
   });
 
-  registros.push(['REAL', data.real.subTotal || 0, ...valoresReal]);
+  registros.push([
+    { valor: 'REAL' },
+    { valor: data.real.subTotal || 0 }, 
+    ...valoresReal
+  ]);
 
   return {
     hasChildren: data?.hasChildren || false,
