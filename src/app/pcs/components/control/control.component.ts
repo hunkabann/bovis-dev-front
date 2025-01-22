@@ -118,15 +118,12 @@ export class ControlComponent implements OnInit {
 
         if (!params.proyecto) {
 
-          console.log("params.proyecto:" + params.proyecto)
         } else {
           this.idproyecto = params.proyecto
-          console.log("else params.proyecto:" + params.proyecto)
         }
       });
 
     if (this.idproyecto) {
-      console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
       this.cargando = true
       this.cargarInformacionIngreso(this.idproyecto)
       this.cargarInformacion(this.idproyecto)
@@ -183,7 +180,6 @@ export class ControlComponent implements OnInit {
             let subSecciones: SeccionFormateada[] = [];
             data?.subsecciones?.map(async subSeccion => {
               let subSeccionData = await formatearInformacionControl(subSeccion, this.idproyecto);
-              console.log("SubSecciones Data:", subSeccionData);
 
               subSecciones.push(subSeccionData);
             });
@@ -193,7 +189,6 @@ export class ControlComponent implements OnInit {
             };
           } else {
             this.seccionesData[index] = await formatearInformacionControl(data, this.idproyecto);
-            console.log("Secciones Data:", this.seccionesData[index]);
           }
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
@@ -209,8 +204,6 @@ export class ControlComponent implements OnInit {
           this.proyectoFechaInicio = new Date(data.fechaIni)
           this.proyectoFechaFin = new Date(data.fechaFin)
 
-          console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
-          console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       });
@@ -221,10 +214,6 @@ export class ControlComponent implements OnInit {
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
         next: async ({ data }) => {
-          console.log('data.salarios: ' + data.salarios)
-          console.log('data.salarios.previsto: ' + data.salarios.previsto)
-          console.log('data.salarios.previsto.subTotal: ' + data.salarios.previsto.subTotal)
-          console.log('data.salarios suma fecha: ' + data.salarios.previsto.sumaFechas)
 
           // data.salarios.previsto.sumaFechas.forEach((sumaFecha) => {
           //  console.log('sumaFecha.mes  =>  ' + sumaFecha.mes)
@@ -232,8 +221,6 @@ export class ControlComponent implements OnInit {
           //   console.log('sumaFecha.sumaPorcentaje  =>  ' + sumaFecha.sumaPorcentaje)
           //  });
 
-          console.log('this.proyectoFechaInicio: ' + this.proyectoFechaInicio)
-          console.log('this.proyectoFechaFin: ' + this.proyectoFechaFin)
 
           this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
 
@@ -257,7 +244,6 @@ export class ControlComponent implements OnInit {
           this.SumaIngresosViaticos = data.viaticos.previsto.subTotal
 
           data.gastos.previstos.forEach((sumaFecha) => {
-            console.log('this.SumaFechaSalarios  =>  ' + this.SumaFecha.length)
             this.SumaIngresosGasto = sumaFecha.subTotal
             this.SumaFechaGastos = sumaFecha.sumaFechas
 
@@ -308,7 +294,6 @@ export class ControlComponent implements OnInit {
   }
 
   isNumber(value: any): boolean {
-    console.log('value: ' + value);
     return typeof value === 'number' || (!isNaN(parseFloat(value)) && isFinite(value));
   }
 
