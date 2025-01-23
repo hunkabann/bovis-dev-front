@@ -39,8 +39,8 @@ export class AgregarProyectoComponent implements OnInit {
       this.timesheetService.getProyectosFaltanEmpleado(this.empleadoId)
         .subscribe({
           next: ({data}) => 
-            this.proyectos = data.map(data => ({name: data.proyecto.toString(), value: data.numProyecto.toString()})),
-            //this.proyectos = data.map(proyecto => ({ name: proyecto.numProyecto.toString() + " - " + proyecto.proyecto.toString(), value: `${proyecto.numProyecto.toString()} - ${proyecto.proyecto.toString()}` })),
+            //this.proyectos = data.map(data => ({name: data.proyecto.toString(), value: data.numProyecto.toString()})),
+             this.proyectos = data.map(proyecto => ({ name: proyecto.numProyecto.toString() + " - " + proyecto.proyecto.toString(), value: `${proyecto.numProyecto.toString()}` })),
           
           error: (err) => {}
         })
