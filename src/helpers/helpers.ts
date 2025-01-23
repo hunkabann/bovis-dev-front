@@ -132,7 +132,8 @@ export const formatearInformacionControl = (data: SeccionData | SeccionSubseccio
   const valoresPrevisto = fechasCombinadas.map(f => {
     const entry = data.previsto.fechas.find(e => e.mes === f.mes && e.anio === f.anio);
     const valor = entry ? entry.porcentaje : 0;
-    const url = `/#/cie/resultado-busqueda?month=${f.mes}&year=${f.anio}&projectnum=${idProyecto}`;
+    const clasificacionPY = entry ? entry.clasificacionPY : '';
+    const url = `/#/cie/resultado-busqueda?month=${f.mes}&year=${f.anio}&projectnum=${idProyecto}&clasificacionPY=${clasificacionPY}`;
     return { valor, url };
   });
 
@@ -145,7 +146,8 @@ export const formatearInformacionControl = (data: SeccionData | SeccionSubseccio
   const valoresReal = fechasCombinadas.map(f => {
     const entry = data.real.fechas.find(e => e.mes === f.mes && e.anio === f.anio);
     const valor = entry ? entry.porcentaje : 0;
-    const url = `/#/cie/resultado-busqueda?month=${f.mes}&year=${f.anio}&projectnum=${idProyecto}`;
+    const clasificacionPY = entry ? entry.clasificacionPY : '';
+    const url = `/#/cie/resultado-busqueda?month=${f.mes}&year=${f.anio}&projectnum=${idProyecto}&clasificacionPY=${clasificacionPY}`;
     return { valor, url };
   });
 

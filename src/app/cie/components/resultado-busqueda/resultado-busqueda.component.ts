@@ -81,6 +81,7 @@ export class ResultadoBusquedaComponent implements OnInit {
       const month = params['month'];
       const year = params['year'];
       const numproject = params['projectnum'];
+      const clasificacionPY = params['clasificacionPY'];
 
       if (success) {
         Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
@@ -91,6 +92,7 @@ export class ResultadoBusquedaComponent implements OnInit {
         const endDate = new Date(year, month, 0);
         this.fechas = [startDate, endDate];
         this.numProyecto = numproject;
+        this.clasificacionPY = clasificacionPY;
 
         this.inputsDisabled = true;
         this.filtrar();
