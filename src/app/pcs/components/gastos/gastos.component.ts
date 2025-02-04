@@ -156,6 +156,9 @@ export class GastosComponent implements OnInit {
 
   async cargarInformacion(numProyecto: number) {
 
+    this.mesesProyecto = null;
+    this.secciones.clear();
+
     this.pcsService.obtenerGastosIngresosSecciones(numProyecto)
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
