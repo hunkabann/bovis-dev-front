@@ -288,7 +288,7 @@
             {{ empleado.boactivo ? 'Activo' : 'Inactivo' }}
           </td> -->
                     <td class="text-center">
-                        <p-inputSwitch [ngModel]="empleado.boactivo" (click)="toggleActivo(empleado.nunum_empleado_rr_hh, empleado.boactivo)" [readonly]="true"></p-inputSwitch>
+                        <p-inputSwitch [ngModel]="empleado.boactivo" (click)="toggleActivo(empleado.nunum_empleado_rr_hh, empleado.boactivo,empleado.nombre_persona)" [readonly]="true"></p-inputSwitch>
                     </td>
                     <td>
                         <div class="d-flex gap-2">
