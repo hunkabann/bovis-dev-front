@@ -385,7 +385,7 @@ export class EmpleadosRegistroComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
 
     let texto = !this.esActualizacion ? 'Guardando' : 'Actualizando';
-    Promise.resolve().then(() => this.messageService.add({ severity: 'info', summary: texto + ' registro', detail: 'Espere un momento...' }))
+    Promise.resolve().then(() => this.messageService.add({ key: 'save_message', severity: 'info', summary: texto + ' registro', detail: 'Espere un momento...', sticky: true }));
 
     const body = {
       ...this.form.value,
@@ -395,17 +395,6 @@ export class EmpleadosRegistroComponent implements OnInit {
       fecha_salida: this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida || null), 'yyyy/MM/dd') : null,
       fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
     }
-    //console.log('format(new Date(this.form.value.fecha_salida || null),  ---- ' + format(new Date(this.form.value.fecha_salida || null), 'Y/MM/dd'))
-    //console.log("Date.parse(data.dtfecha_salida)) : " + Date.parse(this.form.value.fecha_salida))
-    //          console.log("new date) : " + new Date(Date.parse(this.form.value.fecha_salida)) + " ------------ "+ new Date(this.form.value.fecha_salida))
-    //        console.log("data.dtfecha_salida: ----------------->> " + this.form.value.fecha_salida)
-    //      console.log("newFecha_Salida: ----------------->> " + this.form.value.fecha_salida)
-
-    //console.log("new Date().toLocaleDateString('en-US'): ----------------->> " + new Date(this.form.value.fecha_salida).toLocaleDateString('en-US'))
-
-
-    // console.log("format(new Date(this.form.value.fecha_salida || null), 'Y/MM/dd'): ----------------->> " + format(new Date(this.form.value.fecha_salida || null), 'yyyy/MM/dd'))
-
 
     this.empleadosServ.guardarEmpleado(body, this.esActualizacion)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -413,7 +402,7 @@ export class EmpleadosRegistroComponent implements OnInit {
         next: (data) => {
           //this.form.reset()
           //this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
-          this.EmpleadoTieneerror = false
+          this.EmpleadoTieneerror = false;
 
           if (!this.esActualizacion) {
             const bodyCostoEmpleado = {
@@ -428,20 +417,11 @@ export class EmpleadosRegistroComponent implements OnInit {
                 next: (data) => {
                   this.form.reset()
 
-                  const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
+                  const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo;
                   // cambiamos el valor del primer elemento en fakeCopyDynos
-                  fakeCopyDynos[0] = localStorage.getItem('userMail')
-
-                  // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-                  //console.log(fakeCopyDynos) 
-
-                  // pero si miramos también el contenido de dynos...
-                  //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-
+                  fakeCopyDynos[0] = localStorage.getItem('userMail');
                   fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
-                  //fakeCopyDynos.push('jmmorales@hunkabann.com.mx') 
-
-                  //console.log(fakeCopyDynos) 
+                  //fakeCopyDynos.push('jmmorales@hunkabann.com.mx');
 
                   const emailNuevoRequerimiento = {
                     ...emailsDatosEmpleados.emailNuevoEmpleado,
@@ -455,51 +435,41 @@ export class EmpleadosRegistroComponent implements OnInit {
                       this.sharedService.cambiarEstado(false)
                       this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
                     }))
-                    .subscribe()
+                    .subscribe();
 
                   //termina envio de correo de nuevo empleado
-
                   this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                 },
                 error: (err) => {
                   if (err.error.text.includes('Se creó nuevo registro con id:')) {
-                    const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
+                    const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo;
                     // cambiamos el valor del primer elemento en fakeCopyDynos
-                    fakeCopyDynos[0] = localStorage.getItem('userMail')
-
-                    // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-                    //console.log(fakeCopyDynos) 
-
-                    // pero si miramos también el contenido de dynos...
-                    //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-
-                    fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
-                    //fakeCopyDynos.push('jmmorales@hunkabann.com.mx') 
-
-                    //console.log(fakeCopyDynos) 
+                    fakeCopyDynos[0] = localStorage.getItem('userMail');
+                    fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx');
+                    //fakeCopyDynos.push('jmmorales@hunkabann.com.mx');
 
                     const emailNuevoRequerimiento = {
                       ...emailsDatosEmpleados.emailNuevoEmpleado,
                       body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
                       emailsTo: fakeCopyDynos
                     }
-                    // console.log(emailNuevoRequerimiento);
+
                     this.emailsService.sendEmail(emailNuevoRequerimiento)
                       .pipe(finalize(() => {
                         this.form.reset()
                         this.sharedService.cambiarEstado(false)
                         this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
                       }))
-                      .subscribe()
+                      .subscribe();
 
                     //termina envio de correo de nuevo empleado
-
-                    Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
-                    console.log("Errores = " + err.error.text)
+                    this.messageService.clear('save_message');
+                    Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }));
+                    console.error("Errores = " + err.error.text);
                   } else {
                     //this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
                     this.messageService.add({ severity: 'error', summary: "guardarCostoEmpleadoActualiza()  registro components", detail: err.error })
-                    console.log("Diferente error: " + err.error.text)
+                    console.error("Diferente error: " + err.error.text);
                   }
                 }
               });
@@ -528,36 +498,27 @@ export class EmpleadosRegistroComponent implements OnInit {
                       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
                       .subscribe({
                         next: (data) => {
-                          this.form.reset()
+                          this.form.reset();
                           // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
-                          const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
+                          const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo;
                           // cambiamos el valor del primer elemento en fakeCopyDynos
-                          fakeCopyDynos[0] = localStorage.getItem('userMail')
-
-                          // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-                          //console.log(fakeCopyDynos) 
-
-                          // pero si miramos también el contenido de dynos...
-                          //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-
-                          fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
-                          //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
-
-                          //console.log(fakeCopyDynos) 
+                          fakeCopyDynos[0] = localStorage.getItem('userMail');
+                          fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx');
+                          //fakeCopyDynos.push('jmmorales@hunkabann.com.mx');
 
                           const emailNuevoRequerimiento = {
                             ...emailsDatosEmpleados.emailActualizaEmpleado,
                             body: emailsDatosEmpleados.emailActualizaEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
                             emailsTo: fakeCopyDynos
                           }
-                          // console.log(emailNuevoRequerimiento);
+
                           this.emailsService.sendEmail(emailNuevoRequerimiento)
                             .pipe(finalize(() => {
                               this.form.reset()
                               this.sharedService.cambiarEstado(false)
                               this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
                             }))
-                            .subscribe()
+                            .subscribe();
 
                           //termina envio de correo actualiza
                           this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
@@ -565,65 +526,52 @@ export class EmpleadosRegistroComponent implements OnInit {
                         error: (err) => {
                           if (err.error.text.includes('Actualización del registro de costos:')) {
                             // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
-                            const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
+                            const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo;
                             // cambiamos el valor del primer elemento en fakeCopyDynos
-                            fakeCopyDynos[0] = localStorage.getItem('userMail')
-
-                            // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-                            //console.log(fakeCopyDynos) 
-
-                            // pero si miramos también el contenido de dynos...
-                            //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-
-                            fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
-                            //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
-
-                            //console.log(fakeCopyDynos) 
+                            fakeCopyDynos[0] = localStorage.getItem('userMail');
+                            fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx');
+                            //fakeCopyDynos.push('jmmorales@hunkabann.com.mx');
 
                             const emailNuevoRequerimiento = {
                               ...emailsDatosEmpleados.emailActualizaEmpleado,
                               body: emailsDatosEmpleados.emailActualizaEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
                               emailsTo: fakeCopyDynos
                             }
-                            // console.log(emailNuevoRequerimiento);
+
                             this.emailsService.sendEmail(emailNuevoRequerimiento)
                               .pipe(finalize(() => {
                                 this.form.reset()
                                 this.sharedService.cambiarEstado(false)
-                                this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
+                                this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                               }))
-                              .subscribe()
+                              .subscribe();
 
                             //termina envio de correo actualiza
-
-                            Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
-                            console.log("Errores = " + err.error.text)
+                            this.messageService.clear('save_message');
+                            Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }));
+                            console.error("Errores = " + err.error.text);
                           } else {
-                            this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
-                            console.log("Diferente error: " + err.error.text)
+                            this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message });
+                            console.error("Diferente error: " + err.error.text);
                           }
 
                           //this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
                         }
-                      })
+                      });
                   }
                 },
                 error: (err) => {
-                  this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+                  this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
                 }
               });
           }
-
-
-
-
         },
         error: (err) => {
-          console.log(" err.error --------->>>>>>> " + err.error)
-          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-          this.EmpleadoTieneerror = true
+          console.error(" err.error --------->>>>>>> " + err.error);
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
+          this.EmpleadoTieneerror = true;
         }
-      })
+      });
 
 
     /*

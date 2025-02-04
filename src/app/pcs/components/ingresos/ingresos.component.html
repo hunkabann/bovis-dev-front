@@ -14,9 +14,13 @@
 <ng-template #principal>
     <div class="content" style="margin: 2%">
         <ng-container [formGroup]="form" *ngIf="!cargando">
+
+
+
             <div class="main-container">
                 <h1>REMBOLSABLE</h1>
             </div>
+
             <ng-container formArrayName="secciones">
                 <p-accordion [activeIndex]="i" [formGroupName]="i"
                     *ngFor="let seccion of secciones.controls; let i = index">
@@ -67,9 +71,12 @@
                 </p-accordion>
             </ng-container>
 
+
+
             <div class="main-container">
                 <h1>NO REMBOLSABLE</h1>
             </div>
+
             <ng-container formArrayName="secciones">
                 <p-accordion [activeIndex]="X" [formGroupName]="X"
                     *ngFor="let seccion of secciones.controls; let X = index">
@@ -121,6 +128,8 @@
                 </p-accordion>
             </ng-container>
 
+
+
             <div class="main-container">
                 <h1>INGRESO</h1>
             </div>
@@ -166,6 +175,8 @@
                     </p-accordionTab>
                 </p-accordion>
             </ng-container>
+
+
 
             <div class="main-container">
                 <h1>FACTURA</h1>
@@ -213,9 +224,12 @@
                 </p-accordion>
             </ng-container>
 
+
+
             <div class="main-container">
                 <h1>COBRANZA</h1>
             </div>
+
             <ng-container formArrayName="secciones">
                 <p-accordion>
                     <p-accordionTab>
@@ -256,7 +270,6 @@
                         </ng-template>
                     </p-accordionTab>
                 </p-accordion>
-
             </ng-container>
         </ng-container>
     </div>
