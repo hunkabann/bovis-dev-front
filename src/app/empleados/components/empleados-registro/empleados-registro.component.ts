@@ -1,10 +1,10 @@
-import { Component, OnInit,inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 // import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CatEmpleado, Catalogo, Empleado, Puesto } from '../../Models/empleados';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Message, MessageService, PrimeNGConfig } from 'primeng/api';
 import { EmpleadosService } from '../../services/empleados.service';
-import { CALENDAR, SUBJECTS, TITLES, errorsArray,emailsDatosEmpleados } from 'src/utils/constants';
+import { CALENDAR, SUBJECTS, TITLES, errorsArray, emailsDatosEmpleados } from 'src/utils/constants';
 import { AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { finalize, forkJoin } from 'rxjs';
@@ -36,7 +36,7 @@ export class EmpleadosRegistroComponent implements OnInit {
 
   EmpleadoTieneerror = false
 
-    emailsService     = inject(EmailsService)
+  emailsService = inject(EmailsService)
 
   catPersonas: ICatalogo[] = []
   catTipoEmpleados: ICatalogo[] = []
@@ -238,18 +238,17 @@ export class EmpleadosRegistroComponent implements OnInit {
             .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
             .subscribe({
               next: ({ data }) => {
-                 //console.log("data.dtfecha_salida: ----------------->> " + data.dtfecha_salida)
-                 const newFecha_Ingreso = data.dtfecha_ingreso.replace('-', ' ') // Importante reemplazarlo por un espacio
-                 const newFecha_Salida = data.dtfecha_salida.replace('-', ' ') // Importante reemplazarlo por un espacio
-                 const newFecha_UltimoRegis = data.dtfecha_ultimo_reingreso.replace('-', ' ') // Importante reemplazarlo por un espacio
+                //console.log("data.dtfecha_salida: ----------------->> " + data.dtfecha_salida)
+                const newFecha_Ingreso = data.dtfecha_ingreso.replace('-', ' ') // Importante reemplazarlo por un espacio
+                const newFecha_Salida = data.dtfecha_salida.replace('-', ' ') // Importante reemplazarlo por un espacio
+                const newFecha_UltimoRegis = data.dtfecha_ultimo_reingreso.replace('-', ' ') // Importante reemplazarlo por un espacio
                 //console.log("newFecha_Salida: ----------------->> " + newFecha_Salida)
 
-               // Funciona
+                // Funciona
                 // console.log("Date.parse(data.dtfecha_salida)) : " + Date.parse(data.dtfecha_salida))
                 // console.log("new date) : " + new Date(Date.parse(data.dtfecha_salida)) + " ------------ "+ new Date(newFecha_Salida))
                 const habilidades = data.habilidades.map(habilidad => habilidad.idHabilidad.toString())
                 const experiencias = data.experiencias.map(experiencia => experiencia.idExperiencia.toString())
-
 
                 this.form.patchValue({
                   num_empleado_rr_hh: data.nunum_empleado_rr_hh?.toString(),
@@ -279,8 +278,8 @@ export class EmpleadosRegistroComponent implements OnInit {
                   // id_tipo_contrato_sat:   data.nukidtipo_contrato_sat?.toString(),
                   // num_empleado:           data.nunum_empleado?.toString(),
                   fecha_ingreso: new Date(newFecha_Ingreso) as any,
-                  fecha_salida: data.dtfecha_salida != '' ? new Date(data.dtfecha_salida) as any : null,
-                  fecha_ultimo_reingreso: data.dtfecha_ultimo_reingreso != '' ? new Date(newFecha_UltimoRegis) as any : null,
+                  fecha_salida: data.dtfecha_salida && data.dtfecha_salida != '' ? new Date(newFecha_Salida) as any : null,
+                  fecha_ultimo_reingreso: data.dtfecha_ultimo_reingreso && data.dtfecha_ultimo_reingreso != '' ? new Date(newFecha_UltimoRegis) as any : null,
                   nss: data.chnss?.toString(),
                   email_bovis: data.chemail_bovis,
                   url_repo: data.churl_repositorio,
@@ -390,20 +389,20 @@ export class EmpleadosRegistroComponent implements OnInit {
       fecha_ingreso: format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
       //fecha_salida: this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida), 'Y/MM/dd') : null,
       //fecha_salida: format(new Date(this.form.value.fecha_salida || null), 'Y/MM/dd'),
-      fecha_salida: format(new Date(this.form.value.fecha_salida || null), 'yyyy/MM/dd'),
+      fecha_salida: this.form.value.fecha_salida ? format(new Date(this.form.value.fecha_salida || null), 'yyyy/MM/dd') : null,
       fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
     }
-     //console.log('format(new Date(this.form.value.fecha_salida || null),  ---- ' + format(new Date(this.form.value.fecha_salida || null), 'Y/MM/dd'))
-     //console.log("Date.parse(data.dtfecha_salida)) : " + Date.parse(this.form.value.fecha_salida))
-       //          console.log("new date) : " + new Date(Date.parse(this.form.value.fecha_salida)) + " ------------ "+ new Date(this.form.value.fecha_salida))
-         //        console.log("data.dtfecha_salida: ----------------->> " + this.form.value.fecha_salida)
-           //      console.log("newFecha_Salida: ----------------->> " + this.form.value.fecha_salida)
+    //console.log('format(new Date(this.form.value.fecha_salida || null),  ---- ' + format(new Date(this.form.value.fecha_salida || null), 'Y/MM/dd'))
+    //console.log("Date.parse(data.dtfecha_salida)) : " + Date.parse(this.form.value.fecha_salida))
+    //          console.log("new date) : " + new Date(Date.parse(this.form.value.fecha_salida)) + " ------------ "+ new Date(this.form.value.fecha_salida))
+    //        console.log("data.dtfecha_salida: ----------------->> " + this.form.value.fecha_salida)
+    //      console.log("newFecha_Salida: ----------------->> " + this.form.value.fecha_salida)
 
-                 //console.log("new Date().toLocaleDateString('en-US'): ----------------->> " + new Date(this.form.value.fecha_salida).toLocaleDateString('en-US'))
-                 
+    //console.log("new Date().toLocaleDateString('en-US'): ----------------->> " + new Date(this.form.value.fecha_salida).toLocaleDateString('en-US'))
 
-                // console.log("format(new Date(this.form.value.fecha_salida || null), 'Y/MM/dd'): ----------------->> " + format(new Date(this.form.value.fecha_salida || null), 'yyyy/MM/dd'))
-                 
+
+    // console.log("format(new Date(this.form.value.fecha_salida || null), 'Y/MM/dd'): ----------------->> " + format(new Date(this.form.value.fecha_salida || null), 'yyyy/MM/dd'))
+
 
     this.empleadosServ.guardarEmpleado(body, this.esActualizacion)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -413,8 +412,6 @@ export class EmpleadosRegistroComponent implements OnInit {
           //this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
           this.EmpleadoTieneerror = false
 
-
-
           if (!this.esActualizacion) {
             const bodyCostoEmpleado = {
               numEmpleadoRrHh: this.form.value.num_empleado_rr_hh,
@@ -422,99 +419,94 @@ export class EmpleadosRegistroComponent implements OnInit {
               cotizacion: this.form.value.cotizacion// 1,
             }
 
-            
-
             this.empleadosServ.guardarCostoEmpleado(bodyCostoEmpleado, this.esActualizacion)
               .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
               .subscribe({
                 next: (data) => {
-                  this.form.reset()         
-                
+                  this.form.reset()
+
                   const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
-                // cambiamos el valor del primer elemento en fakeCopyDynos
-                fakeCopyDynos[0] = localStorage.getItem('userMail')
-                
-                // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-                //console.log(fakeCopyDynos) 
-                
-                // pero si miramos también el contenido de dynos...
-                //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-        
-                fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
-                //fakeCopyDynos.push('jmmorales@hunkabann.com.mx') 
-        
-                //console.log(fakeCopyDynos) 
-      
-                const emailNuevoRequerimiento = {
-                  ...emailsDatosEmpleados.emailNuevoEmpleado,
-                  body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
-                  emailsTo: fakeCopyDynos
-                }
-                // console.log(emailNuevoRequerimiento);
-                this.emailsService.sendEmail(emailNuevoRequerimiento)
-                  .pipe(finalize(() => {
-                    this.form.reset()
-                    this.sharedService.cambiarEstado(false)
-                    this.router.navigate(['/empleados/empleado-pri'], {queryParams: {success: true}})
-                  }))
-                  .subscribe()
+                  // cambiamos el valor del primer elemento en fakeCopyDynos
+                  fakeCopyDynos[0] = localStorage.getItem('userMail')
+
+                  // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+                  //console.log(fakeCopyDynos) 
+
+                  // pero si miramos también el contenido de dynos...
+                  //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+
+                  fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
+                  //fakeCopyDynos.push('jmmorales@hunkabann.com.mx') 
+
+                  //console.log(fakeCopyDynos) 
+
+                  const emailNuevoRequerimiento = {
+                    ...emailsDatosEmpleados.emailNuevoEmpleado,
+                    body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                    emailsTo: fakeCopyDynos
+                  }
+                  // console.log(emailNuevoRequerimiento);
+                  this.emailsService.sendEmail(emailNuevoRequerimiento)
+                    .pipe(finalize(() => {
+                      this.form.reset()
+                      this.sharedService.cambiarEstado(false)
+                      this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
+                    }))
+                    .subscribe()
 
                   //termina envio de correo de nuevo empleado
 
                   this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                 },
                 error: (err) => {
-                  if(err.error.text.includes('Se creó nuevo registro con id:') ){
+                  if (err.error.text.includes('Se creó nuevo registro con id:')) {
 
                     const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
-                // cambiamos el valor del primer elemento en fakeCopyDynos
-                fakeCopyDynos[0] = localStorage.getItem('userMail')
-                
-                // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
-                //console.log(fakeCopyDynos) 
-                
-                // pero si miramos también el contenido de dynos...
-                //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-        
-                fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
-                //fakeCopyDynos.push('jmmorales@hunkabann.com.mx') 
-        
-                //console.log(fakeCopyDynos) 
-      
-                const emailNuevoRequerimiento = {
-                  ...emailsDatosEmpleados.emailNuevoEmpleado,
-                  body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
-                  emailsTo: fakeCopyDynos
-                }
-                // console.log(emailNuevoRequerimiento);
-                this.emailsService.sendEmail(emailNuevoRequerimiento)
-                  .pipe(finalize(() => {
-                    this.form.reset()
-                    this.sharedService.cambiarEstado(false)
-                    this.router.navigate(['/empleados/empleado-pri'], {queryParams: {success: true}})
-                  }))
-                  .subscribe()
+                    // cambiamos el valor del primer elemento en fakeCopyDynos
+                    fakeCopyDynos[0] = localStorage.getItem('userMail')
 
-                  //termina envio de correo de nuevo empleado
+                    // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
+                    //console.log(fakeCopyDynos) 
+
+                    // pero si miramos también el contenido de dynos...
+                    //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
+
+                    fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
+                    //fakeCopyDynos.push('jmmorales@hunkabann.com.mx') 
+
+                    //console.log(fakeCopyDynos) 
+
+                    const emailNuevoRequerimiento = {
+                      ...emailsDatosEmpleados.emailNuevoEmpleado,
+                      body: emailsDatosEmpleados.emailNuevoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                      emailsTo: fakeCopyDynos
+                    }
+                    // console.log(emailNuevoRequerimiento);
+                    this.emailsService.sendEmail(emailNuevoRequerimiento)
+                      .pipe(finalize(() => {
+                        this.form.reset()
+                        this.sharedService.cambiarEstado(false)
+                        this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
+                      }))
+                      .subscribe()
+
+                    //termina envio de correo de nuevo empleado
 
                     Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
-                    console.log("Errores = "+ err.error.text)
-                  }else{
+                    console.log("Errores = " + err.error.text)
+                  } else {
                     //this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
                     this.messageService.add({ severity: 'error', summary: "guardarCostoEmpleadoActualiza()  registro components", detail: err.error })
-                    console.log("Diferente error: "+ err.error.text)
+                    console.log("Diferente error: " + err.error.text)
                   }
                 }
               })
 
-
-              
-
-              //
+            //
 
           } else {
 
-            
+
 
             let bodyCostoEmpleadoactualiza = {
               idCostoEmpleado: null,
@@ -522,8 +514,8 @@ export class EmpleadosRegistroComponent implements OnInit {
               nuAnno: 2023,
               nuMes: 12,
               fechaIngreso: this.form.value.fecha_ingreso,
-              sueldoBruto: this.form.value.salario ,
-              numProyecto: this.form.value.num_proyecto_principal ,
+              sueldoBruto: this.form.value.salario,
+              numProyecto: this.form.value.num_proyecto_principal,
               cotizacion: this.form.value.cotizacion
             }
 
@@ -542,22 +534,22 @@ export class EmpleadosRegistroComponent implements OnInit {
                         next: (data) => {
                           this.form.reset()
                           // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
-                
+
                           const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
                           // cambiamos el valor del primer elemento en fakeCopyDynos
                           fakeCopyDynos[0] = localStorage.getItem('userMail')
-                          
+
                           // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
                           //console.log(fakeCopyDynos) 
-                          
+
                           // pero si miramos también el contenido de dynos...
                           //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-                  
+
                           fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
                           //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
-                  
+
                           //console.log(fakeCopyDynos) 
-                
+
                           const emailNuevoRequerimiento = {
                             ...emailsDatosEmpleados.emailActualizaEmpleado,
                             body: emailsDatosEmpleados.emailActualizaEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
@@ -568,33 +560,33 @@ export class EmpleadosRegistroComponent implements OnInit {
                             .pipe(finalize(() => {
                               this.form.reset()
                               this.sharedService.cambiarEstado(false)
-                              this.router.navigate(['/empleados/empleado-pri'], {queryParams: {success: true}})
+                              this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
                             }))
                             .subscribe()
-              
-                            //termina envio de correo actualiza
+
+                          //termina envio de correo actualiza
                           this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                         },
                         error: (err) => {
-                          if(err.error.text.includes('Actualización del registro de costos:') ){
+                          if (err.error.text.includes('Actualización del registro de costos:')) {
 
                             // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
-                
+
                             const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
                             // cambiamos el valor del primer elemento en fakeCopyDynos
                             fakeCopyDynos[0] = localStorage.getItem('userMail')
-                            
+
                             // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
                             //console.log(fakeCopyDynos) 
-                            
+
                             // pero si miramos también el contenido de dynos...
                             //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
-                    
+
                             fakeCopyDynos.push('dl-bovis-gestion-cambio-proyecto@bovis.mx')
                             //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
-                    
+
                             //console.log(fakeCopyDynos) 
-                  
+
                             const emailNuevoRequerimiento = {
                               ...emailsDatosEmpleados.emailActualizaEmpleado,
                               body: emailsDatosEmpleados.emailActualizaEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
@@ -605,19 +597,19 @@ export class EmpleadosRegistroComponent implements OnInit {
                               .pipe(finalize(() => {
                                 this.form.reset()
                                 this.sharedService.cambiarEstado(false)
-                                this.router.navigate(['/empleados/empleado-pri'], {queryParams: {success: true}})
+                                this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
                               }))
                               .subscribe()
-                
-                              //termina envio de correo actualiza
+
+                            //termina envio de correo actualiza
 
                             Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }))
-                            console.log("Errores = "+ err.error.text)
-                          }else{
+                            console.log("Errores = " + err.error.text)
+                          } else {
                             this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
-                            console.log("Diferente error: "+ err.error.text)
+                            console.log("Diferente error: " + err.error.text)
                           }
-                         
+
                           //this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
                         }
                       })
@@ -628,9 +620,9 @@ export class EmpleadosRegistroComponent implements OnInit {
                 }
               })
 
-              
 
-    //
+
+            //
           }
 
 
@@ -761,7 +753,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: `${element.chnombre} ${element.chap_paterno} ${element.chap_materno || ''}`,
       value: String(element.nukidpersona),
     })
-    )
+    );
   }
 
   setCatTipoEmpleado(data: any[]) {
@@ -777,7 +769,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.descripcion),
       value: String(element.id),
     })
-    )
+    );
   }
 
   setCatTipoContratos(data: any[]) {
@@ -785,7 +777,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.chve_contrato),
       value: String(element.nukid_contrato),
     })
-    )
+    );
   }
 
   setCatEmpresas(data: any[]) {
@@ -793,7 +785,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.chempresa),
       value: String(element.nukidempresa),
     })
-    )
+    );
   }
 
   setCatCiudades(data: any[]) {
@@ -802,7 +794,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.ciudad),
       value: String(element.idCiudad),
     })
-    )
+    );
   }
 
   setCatNivelEstudios(data: any[]) {
@@ -810,7 +802,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.descripcion),
       value: String(element.id),
     })
-    )
+    );
   }
 
   setCatFormasPago(data: any[]) {
@@ -818,7 +810,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.descripcion),
       value: String(element.id),
     })
-    )
+    );
   }
 
   setCatJornadas(data: any[]) {
@@ -826,7 +818,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.descripcion),
       value: String(element.id),
     })
-    )
+    );
   }
 
   setCatDepartamentos(data: any[]) {
@@ -834,7 +826,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.descripcion),
       value: String(element.id),
     })
-    )
+    );
   }
 
   setCatClasificacion(data: any[]) {
@@ -842,7 +834,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.descripcion),
       value: String(element.id),
     })
-    )
+    );
   }
 
   setCatUnidadNegocio(data: any[]) {
@@ -850,7 +842,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.descripcion),
       value: String(element.id),
     })
-    )
+    );
   }
 
   setCatTurno(data: any[]) {
@@ -858,11 +850,10 @@ export class EmpleadosRegistroComponent implements OnInit {
       name: String(element.descripcion),
       value: String(element.id),
     })
-    )
+    );
   }
 
   buscarCiudades(event: any) {
-
     this.sharedService.cambiarEstado(true)
 
     this.empleadosServ.getCatCiudades(event.value)
@@ -872,7 +863,7 @@ export class EmpleadosRegistroComponent implements OnInit {
           this.setCatCiudades(data)
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-      })
+      });
   }
 
   setearSalarios({ value }: any) {
@@ -882,7 +873,7 @@ export class EmpleadosRegistroComponent implements OnInit {
       const sueldoReal = ((puesto.nusalario_min + puesto.nusalario_max) / 2).toString()
       this.form.patchValue({
         salario: sueldoReal
-      })
+      });
     }
   }
 
@@ -891,9 +882,6 @@ export class EmpleadosRegistroComponent implements OnInit {
     const diferencia = differenceInCalendarYears(ahora, new Date(event))
     this.form.patchValue({
       antiguedad: diferencia
-    })
+    });
   }
-
-
-
 }
