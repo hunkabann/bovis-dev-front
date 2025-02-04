@@ -384,6 +384,9 @@ export class EmpleadosRegistroComponent implements OnInit {
 
     this.sharedService.cambiarEstado(true)
 
+    let texto = !this.esActualizacion ? 'Guardando' : 'Actualizando';
+    Promise.resolve().then(() => this.messageService.add({ severity: 'info', summary: texto + ' registro', detail: 'Espere un momento...' }))
+
     const body = {
       ...this.form.value,
       fecha_ingreso: format(new Date(this.form.value.fecha_ingreso || null), 'Y/MM/dd'),
@@ -460,7 +463,6 @@ export class EmpleadosRegistroComponent implements OnInit {
                 },
                 error: (err) => {
                   if (err.error.text.includes('Se creó nuevo registro con id:')) {
-
                     const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo
                     // cambiamos el valor del primer elemento en fakeCopyDynos
                     fakeCopyDynos[0] = localStorage.getItem('userMail')
@@ -500,14 +502,8 @@ export class EmpleadosRegistroComponent implements OnInit {
                     console.log("Diferente error: " + err.error.text)
                   }
                 }
-              })
-
-            //
-
+              });
           } else {
-
-
-
             let bodyCostoEmpleadoactualiza = {
               idCostoEmpleado: null,
               numEmpleadoRrHh: this.form.value.num_empleado_rr_hh,
@@ -534,7 +530,6 @@ export class EmpleadosRegistroComponent implements OnInit {
                         next: (data) => {
                           this.form.reset()
                           // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
-
                           const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
                           // cambiamos el valor del primer elemento en fakeCopyDynos
                           fakeCopyDynos[0] = localStorage.getItem('userMail')
@@ -569,9 +564,7 @@ export class EmpleadosRegistroComponent implements OnInit {
                         },
                         error: (err) => {
                           if (err.error.text.includes('Actualización del registro de costos:')) {
-
                             // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
-
                             const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo
                             // cambiamos el valor del primer elemento en fakeCopyDynos
                             fakeCopyDynos[0] = localStorage.getItem('userMail')
@@ -618,11 +611,7 @@ export class EmpleadosRegistroComponent implements OnInit {
                 error: (err) => {
                   this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
                 }
-              })
-
-
-
-            //
+              });
           }
 
 
