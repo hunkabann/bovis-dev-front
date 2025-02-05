@@ -159,19 +159,11 @@ export class IngresosComponent implements OnInit {
           this.totaless = data.totales;
 
           data.totales.forEach(total => {
-            console.log('total.reembolsable: ' + total.reembolsable);
-            console.log('total.mes: ' + total.mes);
-            console.log('total.anio: ' + total.anio);
-            console.log('total.totalPorcentaje: ' + total.totalPorcentaje);
-
+            // console.log('total.reembolsable: ' + total.reembolsable);
+            // console.log('total.mes: ' + total.mes);
+            // console.log('total.anio: ' + total.anio);
+            // console.log('total.totalPorcentaje: ' + total.totalPorcentaje);
             this.SumaIngresos += +total.totalPorcentaje;
-
-            /**  this.fechasIngreso(totalIndex).push(this.fb.group({
-              reembolsable:  [total.reembolsable],
-              mes:     [total.mes],
-              anio:    [total.anio],
-              totalPorcentaje:    [total.totalPorcentaje]
-            }))*/
           });
 
           this.proyectoFechaInicio = new Date(data.fechaIni);
@@ -179,40 +171,37 @@ export class IngresosComponent implements OnInit {
           this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin);
 
           data.secciones.forEach((seccion, seccionIndex) => {
+            // Agregar la sección
             this.secciones.push(this.fb.group({
               idSeccion: [seccion.idSeccion],
               codigo: [seccion.codigo],
               seccion: [seccion.seccion],
-              rubros: this.fb.array([])
+              rubros: this.fb.array([]),
             }));
 
-            // Se itera en los rubros
-            seccion.rubros.forEach((rubro, rubroIndex) => {
-              // Agregamos los rubros por seccion
+            const rubrosUnicos = [];
+            // Filtramos los rubros y aseguramos que no se repitan
+            seccion.rubros.forEach((rubro) => {
+              // Comprobamos si el rubro ya ha sido agregado
+              if (!rubrosUnicos.some(existingRubro => existingRubro.codigo === rubro.idRubro)) {
+                rubrosUnicos.push(rubro);
+              }
+            });
+
+            // Agregar los rubros únicos a la sección
+            rubrosUnicos.forEach((rubro, rubroIndex) => {
               this.rubros(seccionIndex).push(this.fb.group({
                 ...rubro,
-                fechas: this.fb.array([])
+                fechas: this.fb.array([]),
               }));
 
-              // // Agreamos las fechas por rubro
-              // rubro.fechas.forEach(fecha => {
-              //   this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-              //     id: fecha.id,
-              //     mes: fecha.mes,
-              //     anio: fecha.anio,
-              //     porcentaje: fecha.porcentaje
-              //   }));
-              // });
-
-              // Agreamos las fechas por rubro
+              // Agregar las fechas correspondientes al rubro
               this.mesesProyecto.forEach(mes => {
                 const mesRegistro = rubro.fechas.find(r =>
                   r.mes === mes.mes && r.anio === mes.anio
                 );
 
                 if (mesRegistro) {
-                  // console.log(mesRegistro, this.mesesProyecto, mes);
-                  // console.log('Agregando registro:', mesRegistro, 'con porcentaje:', mesRegistro.porcentaje);
                   this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
                     id: mesRegistro.id,
                     rubroReembolsable: rubro.reembolsable,
@@ -220,9 +209,7 @@ export class IngresosComponent implements OnInit {
                     anio: mesRegistro.anio,
                     porcentaje: mesRegistro.porcentaje,
                   }));
-                }
-                else {
-                  // console.log('Agregando registro:', mes, 'con porcentaje:', 0);
+                } else {
                   this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
                     id: 0,
                     rubroReembolsable: rubro.reembolsable,
@@ -232,63 +219,152 @@ export class IngresosComponent implements OnInit {
                   }));
                 }
               });
-
-            });
-
-            // Se itera en los NO rubros
-            seccion.rubros.forEach((norubro, norubroIndex) => {
-              // Agregamos los rubros por seccion
-              this.rubros(seccionIndex).push(this.fb.group({
-                ...norubro,
-                fechas: this.fb.array([])
-              }));
-
-              // // Agreamos las fechas por rubro
-              // norubro.fechas.forEach(fecha => {
-              //   this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
-              //     id: fecha.id,
-              //     mes: fecha.mes,
-              //     anio: fecha.anio,
-              //     porcentaje: fecha.porcentaje
-              //   }));
-              // });
-
-              // Agreamos las fechas por rubro
-              this.mesesProyecto.forEach(mes => {
-                const mesRegistro = norubro.fechas.find(r =>
-                  r.mes === mes.mes && r.anio === mes.anio
-                );
-
-                if (mesRegistro) {
-                  // console.log(mesRegistro, this.mesesProyecto, mes);
-                  // console.log('Agregando registro:', mesRegistro, 'con porcentaje:', mesRegistro.porcentaje);
-                  this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
-                    id: mesRegistro.id,
-                    rubroReembolsable: norubro.reembolsable,
-                    mes: mesRegistro.mes,
-                    anio: mesRegistro.anio,
-                    porcentaje: mesRegistro.porcentaje,
-                  }));
-                }
-                else {
-                  // console.log('Agregando registro:', mes, 'con porcentaje:', 0);
-                  this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
-                    id: 0,
-                    rubroReembolsable: norubro.reembolsable,
-                    mes: mes.mes,
-                    anio: mes.anio,
-                    porcentaje: 0,
-                  }));
-                }
-              });
-
-
             });
           });
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       });
   }
+
+
+  // async cargarInformacion(numProyecto: number) {
+  //   this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'ingreso')
+  //     .pipe(finalize(() => this.cargando = false))
+  //     .subscribe({
+  //       next: async ({ data }) => {
+  //         this.totaless = data.totales;
+
+  //         data.totales.forEach(total => {
+  //           console.log('total.reembolsable: ' + total.reembolsable);
+  //           console.log('total.mes: ' + total.mes);
+  //           console.log('total.anio: ' + total.anio);
+  //           console.log('total.totalPorcentaje: ' + total.totalPorcentaje);
+
+  //           this.SumaIngresos += +total.totalPorcentaje;
+
+  //           /**  this.fechasIngreso(totalIndex).push(this.fb.group({
+  //             reembolsable:  [total.reembolsable],
+  //             mes:     [total.mes],
+  //             anio:    [total.anio],
+  //             totalPorcentaje:    [total.totalPorcentaje]
+  //           }))*/
+  //         });
+
+  //         this.proyectoFechaInicio = new Date(data.fechaIni);
+  //         this.proyectoFechaFin = new Date(data.fechaFin);
+  //         this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin);
+
+  //         data.secciones.forEach((seccion, seccionIndex) => {
+  //           this.secciones.push(this.fb.group({
+  //             idSeccion: [seccion.idSeccion],
+  //             codigo: [seccion.codigo],
+  //             seccion: [seccion.seccion],
+  //             rubros: this.fb.array([])
+  //           }));
+
+  //           // Se itera en los rubros
+  //           seccion.rubros.forEach((rubro, rubroIndex) => {
+  //             // Agregamos los rubros por seccion
+  //             this.rubros(seccionIndex).push(this.fb.group({
+  //               ...rubro,
+  //               fechas: this.fb.array([])
+  //             }));
+
+  //             // // Agreamos las fechas por rubro
+  //             // rubro.fechas.forEach(fecha => {
+  //             //   this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+  //             //     id: fecha.id,
+  //             //     mes: fecha.mes,
+  //             //     anio: fecha.anio,
+  //             //     porcentaje: fecha.porcentaje
+  //             //   }));
+  //             // });
+
+  //             // Agreamos las fechas por rubro
+  //             this.mesesProyecto.forEach(mes => {
+  //               const mesRegistro = rubro.fechas.find(r =>
+  //                 r.mes === mes.mes && r.anio === mes.anio
+  //               );
+
+  //               if (mesRegistro) {
+  //                 // console.log(mesRegistro, this.mesesProyecto, mes);
+  //                 // console.log('Agregando registro:', mesRegistro, 'con porcentaje:', mesRegistro.porcentaje);
+  //                 this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+  //                   id: mesRegistro.id,
+  //                   rubroReembolsable: rubro.reembolsable,
+  //                   mes: mesRegistro.mes,
+  //                   anio: mesRegistro.anio,
+  //                   porcentaje: mesRegistro.porcentaje,
+  //                 }));
+  //               }
+  //               else {
+  //                 // console.log('Agregando registro:', mes, 'con porcentaje:', 0);
+  //                 this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+  //                   id: 0,
+  //                   rubroReembolsable: rubro.reembolsable,
+  //                   mes: mes.mes,
+  //                   anio: mes.anio,
+  //                   porcentaje: 0,
+  //                 }));
+  //               }
+  //             });
+
+  //           });
+
+  //           // Se itera en los NO rubros
+  //           seccion.rubros.forEach((norubro, norubroIndex) => {
+  //             // Agregamos los rubros por seccion
+  //             this.rubros(seccionIndex).push(this.fb.group({
+  //               ...norubro,
+  //               fechas: this.fb.array([])
+  //             }));
+
+  //             // // Agreamos las fechas por rubro
+  //             // norubro.fechas.forEach(fecha => {
+  //             //   this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
+  //             //     id: fecha.id,
+  //             //     mes: fecha.mes,
+  //             //     anio: fecha.anio,
+  //             //     porcentaje: fecha.porcentaje
+  //             //   }));
+  //             // });
+
+  //             // Agreamos las fechas por rubro
+  //             this.mesesProyecto.forEach(mes => {
+  //               const mesRegistro = norubro.fechas.find(r =>
+  //                 r.mes === mes.mes && r.anio === mes.anio
+  //               );
+
+  //               if (mesRegistro) {
+  //                 // console.log(mesRegistro, this.mesesProyecto, mes);
+  //                 // console.log('Agregando registro:', mesRegistro, 'con porcentaje:', mesRegistro.porcentaje);
+  //                 this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
+  //                   id: mesRegistro.id,
+  //                   rubroReembolsable: norubro.reembolsable,
+  //                   mes: mesRegistro.mes,
+  //                   anio: mesRegistro.anio,
+  //                   porcentaje: mesRegistro.porcentaje,
+  //                 }));
+  //               }
+  //               else {
+  //                 // console.log('Agregando registro:', mes, 'con porcentaje:', 0);
+  //                 this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
+  //                   id: 0,
+  //                   rubroReembolsable: norubro.reembolsable,
+  //                   mes: mes.mes,
+  //                   anio: mes.anio,
+  //                   porcentaje: 0,
+  //                 }));
+  //               }
+  //             });
+
+
+  //           });
+  //         });
+  //       },
+  //       error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+  //     });
+  // }
 
 
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
