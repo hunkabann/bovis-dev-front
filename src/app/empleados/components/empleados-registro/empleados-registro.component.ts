@@ -385,7 +385,7 @@ export class EmpleadosRegistroComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
 
     let texto = !this.esActualizacion ? 'Guardando' : 'Actualizando';
-    Promise.resolve().then(() => this.messageService.add({ key: 'save_message', severity: 'info', summary: texto + ' registro', detail: 'Espere un momento...', sticky: true }));
+    Promise.resolve().then(() => this.messageService.add({ severity: 'info', summary: texto + ' registro', detail: 'Espere un momento...', sticky: true }));
 
     const body = {
       ...this.form.value,
@@ -463,11 +463,12 @@ export class EmpleadosRegistroComponent implements OnInit {
                       .subscribe();
 
                     //termina envio de correo de nuevo empleado
-                    this.messageService.clear('save_message');
+                    this.messageService.clear();
                     Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }));
                     console.error("Errores = " + err.error.text);
                   } else {
                     //this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message })
+                    this.messageService.clear();
                     this.messageService.add({ severity: 'error', summary: "guardarCostoEmpleadoActualiza()  registro components", detail: err.error })
                     console.error("Diferente error: " + err.error.text);
                   }
@@ -547,10 +548,11 @@ export class EmpleadosRegistroComponent implements OnInit {
                               .subscribe();
 
                             //termina envio de correo actualiza
-                            this.messageService.clear('save_message');
+                            this.messageService.clear();
                             Promise.resolve().then(() => this.messageService.add({ severity: 'success', summary: 'Registro guardado', detail: 'El registro ha sido guardado.' }));
                             console.error("Errores = " + err.error.text);
                           } else {
+                            this.messageService.clear();
                             this.messageService.add({ severity: 'error Actualiza', summary: TITLES.error, detail: err.error.message });
                             console.error("Diferente error: " + err.error.text);
                           }
@@ -561,6 +563,7 @@ export class EmpleadosRegistroComponent implements OnInit {
                   }
                 },
                 error: (err) => {
+                  this.messageService.clear();
                   this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
                 }
               });
@@ -568,6 +571,7 @@ export class EmpleadosRegistroComponent implements OnInit {
         },
         error: (err) => {
           console.error(" err.error --------->>>>>>> " + err.error);
+          this.messageService.clear();
           this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
           this.EmpleadoTieneerror = true;
         }
