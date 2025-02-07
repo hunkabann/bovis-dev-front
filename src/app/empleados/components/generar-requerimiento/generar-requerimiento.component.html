@@ -115,7 +115,8 @@
             </div>
             <div class="col-6">
                 <label for="idProyecto">Proyecto:</label>
-                <p-dropdown id="idProyecto" [options]="proyectos" (onChange)="setearSalarios($event)" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idProyecto')}"
+                <!--p-dropdown id="idProyecto" [options]="proyectos" (onChange)="setearSalarios($event)" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idProyecto')}"-->
+                <p-dropdown id="idProyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idProyecto')}"
                     formControlName="idProyecto" optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
                 <div *ngIf="esInvalido('idProyecto')">
                     <small class="error-msg">
@@ -138,7 +139,8 @@
             </div>
             <div class="col-6">
                 <label for="idTipoContrato">Tipo de contratación:</label>
-                <p-dropdown id="idTipoContrato" [options]="tiposContratacion" (onChange)="setearSalarios($event)" placeholder="Seleccionar un tipo" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idTipoContrato')}"
+                <!--p-dropdown id="idTipoContrato" [options]="tiposContratacion" (onChange)="setearSalarios($event)" placeholder="Seleccionar un tipo" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idTipoContrato')}" -->
+                <p-dropdown id="idTipoContrato" [options]="tiposContratacion" placeholder="Seleccionar un tipo" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('idTipoContrato')}"
                     formControlName="idTipoContrato" optionValue="code" [filter]="true" filterBy="name"></p-dropdown>
                 <div *ngIf="esInvalido('idTipoContrato')">
                     <small class="error-msg">

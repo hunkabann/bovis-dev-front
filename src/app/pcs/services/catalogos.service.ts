@@ -67,8 +67,14 @@ export class CatalogosService {
   }
 
   getPersonalCLAVE() {
-    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
+   //return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Requerimiento/DirectoresEjecutivos`)
   }
+
+  getPersonalResponsable() {
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
+    // return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Requerimiento/DirectoresEjecutivos`)
+   }
 
   
 }
