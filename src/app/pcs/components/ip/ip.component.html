@@ -41,12 +41,12 @@
 
                         <div class="row">
                             <div class="col-4">
-                                <label>Empresa:</label>
+                                <label>Empresa: <span class="required"></span></label>
                                 <p-dropdown [options]="empresas" placeholder="Seleccionar una empresa" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" formControlName="id_empresa" [filter]="true" filterBy="name"></p-dropdown>
                             </div>
                             <!-- <div class="col-4"></div> -->
                             <div class="col-8">
-                                <label for="email">Nombre del Cliente:</label>
+                                <label for="email">Nombre del Cliente: <span class="required"></span></label>
                                 <div class="flex-auto">
                                     <p-multiSelect [options]="catClientes" defaultLabel="Seleccionar al menos un cliente" optionLabel="name" display="chip" scrollHeight="250px" [style]="{ width: '100%' }" [ngClass]="{'ng-invalid ng-dirty': esInvalido('ids_clientes')}" formControlName="ids_clientes"
                                         optionValue="value" appendTo="body"></p-multiSelect>
@@ -133,15 +133,18 @@
                         <div class="row">
                             <div class="col-4">
                                 <label for="email">Responsable de proyecto para Preconstrucción:</label>
-                                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_preconstruccion" optionValue="value"></p-dropdown>
+                                <!--p-dropdown optionLabel="name" [options]="catEmpleadosResponsables" defaultLabel="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_preconstruccion" optionValue="value"  appendTo="body"></p-dropdown-->
+                                <p-dropdown [options]="catEmpleadosResponsables" placeholder="Seleccionar una opción" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" formControlName="id_responsable_preconstruccion" [filter]="true" filterBy="name" placeholder="Seleccionar una opción" ></p-dropdown> 
                             </div>
                             <div class="col-4">
                                 <label for="email">Responsable de proyecto para Construcción:</label>
-                                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_construccion" optionValue="value"></p-dropdown>
+                                <!--p-dropdown optionLabel="name" [options]="catEmpleadosResponsables" defaultLabel="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_construccion" optionValue="value"></p-dropdown-->
+                                <p-dropdown [options]="catEmpleadosResponsables" placeholder="Seleccionar una opción" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" formControlName="id_responsable_construccion" [filter]="true" filterBy="name" placeholder="Seleccionar una opción" ></p-dropdown> 
                             </div>
                             <div class="col-4">
                                 <label for="email">Responsable de proyecto para EHS:</label>
-                                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_ehs" optionValue="value"></p-dropdown>
+                                <!--p-dropdown optionLabel="name" [options]="catEmpleadosResponsables" defaultLabel="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_ehs" optionValue="value"></p-dropdown-->
+                                <p-dropdown [options]="catEmpleadosResponsables" placeholder="Seleccionar una opción" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" formControlName="id_responsable_ehs" [filter]="true" filterBy="name" placeholder="Seleccionar una opción" ></p-dropdown> 
                             </div>
                         </div>
 
@@ -150,7 +153,8 @@
                         <div class="row">
                             <div class="col-4">
                                 <label for="email">Responsable de proyecto para Supervision campo:</label>
-                                <p-dropdown optionLabel="name" [options]="catEmpleados" placeholder="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_supervisor" optionValue="value"></p-dropdown>
+                                <!--p-dropdown optionLabel="name" [options]="catEmpleadosResponsables" defaultLabel="Seleccionar una opción" [showClear]="true" [style]="{ width: '100%' }" [disabled]="isConsulta" [filter]="true" filterBy="name" formControlName="id_responsable_supervisor" optionValue="value"></p-dropdown-->
+                                <p-dropdown [options]="catEmpleadosResponsables" placeholder="Seleccionar una opción" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" formControlName="id_responsable_supervisor" [filter]="true" filterBy="name" placeholder="Seleccionar una opción" ></p-dropdown> 
                             </div>
                             <div class="col-4">
 

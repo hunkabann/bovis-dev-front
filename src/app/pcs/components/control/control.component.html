@@ -8,10 +8,7 @@
 
 <ng-template #principal>
     <div class="content" style="margin: 2%">
-        <p-accordion 
-            [multiple]="true" 
-            (onOpen)="cargarInformacionSeccion($event)"
-        >
+        <p-accordion [multiple]="true" (onOpen)="cargarInformacionSeccion($event)">
             <p-accordionTab *ngFor="let seccion of seccionesOpciones; let i = index">
                 <ng-template pTemplate="header">
                     <div class="d-flex justify-content-between align-items-center w-100">
@@ -26,16 +23,16 @@
                         <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
                     </div>
                     <ng-template #contenido>
-                        <app-tabla-datos 
-                            [data]="seccionesData[i]"
-                            *ngIf="!seccionesData[i]?.hasChildren; else contenidoSubsecciones"
-                        ></app-tabla-datos>
+                        <app-tabla-datos [data]="seccionesData[i]"
+                            *ngIf="!seccionesData[i]?.hasChildren; else contenidoSubsecciones"></app-tabla-datos>
                         <ng-template #contenidoSubsecciones>
                             <app-subsecciones-accordion [data]="seccionesData[i]"></app-subsecciones-accordion>
                         </ng-template>
                     </ng-template>
                 </ng-template>
             </p-accordionTab>
-        </p-accordion>        
+        </p-accordion>
     </div>
 </ng-template>
+
+

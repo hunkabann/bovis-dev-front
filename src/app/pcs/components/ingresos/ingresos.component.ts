@@ -46,7 +46,6 @@ export class IngresosComponent implements OnInit {
 
   totalRecords: number = 0;
 
-
   IDEmpresa: number;
   IDCliente: number;
 
@@ -58,9 +57,7 @@ export class IngresosComponent implements OnInit {
 
   SumaIngresos = 0;
 
-
   constructor() { }
-
   form = this.fb.group({
     numProyecto: [0, Validators.required],
     secciones: this.fb.array([]),
@@ -89,73 +86,69 @@ export class IngresosComponent implements OnInit {
 
 
   ngOnInit(): void {
-
-    this.pcsService.cambiarEstadoBotonNuevo(false)
+    this.pcsService.cambiarEstadoBotonNuevo(false);
 
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
-
         if (!params.proyecto) {
-
-          console.log("params.proyecto:" + params.proyecto)
+          console.log("params.proyecto:" + params.proyecto);
         } else {
-          this.idproyecto = params.proyecto
-          console.log("else params.proyecto:" + params.proyecto)
+          this.idproyecto = params.proyecto;
+          console.log("else params.proyecto:" + params.proyecto);
         }
-      })
+      });
 
     if (this.idproyecto) {
-      console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto)
-
-      this.cargando = true
-      this.cargarInformacion(this.idproyecto)
+      console.log("Gastos.components Entro al this.idproyecto " + this.idproyecto);
+      this.cargando = true;
+      this.cargarInformacion(this.idproyecto);
       /**for(let i = 0; i < 3; i++) {
-
         console.log("valor de i -------------- " + i)
-
         if(i > 1){
           this.isrembolsable  = true
           this.rembolsable = "REMBOLSABLE"
-         }else{
+        }else{
           this.isrembolsable  = false
           this.rembolsable = "NO REMBOLSABLE"
-         }
+        }
 
-         console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
-
-
+        console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
         i++
         }*/
     } else {
       this.pcsService.obtenerIdProyecto()
         .subscribe(numProyecto => {
-          this.proyectoSeleccionado = true
+          this.proyectoSeleccionado = true;
           if (numProyecto) {
             // this.sharedService.cambiarEstado(true)
-            this.cargando = true
-            this.cargarInformacion(numProyecto)
+            this.cargando = true;
+            this.cargarInformacion(numProyecto);
             /**for(let i = 0; i < 3; i++) {
-
               console.log("valor de i -------------- " + i)
+                if(i > 1){
+                  this.isrembolsable  = true
+                  this.rembolsable = "REMBOLSABLE"
+                }else{
+                  this.isrembolsable  = false
+                  this.rembolsable = "NO REMBOLSABLE"
+                }
 
-              if(i > 1){
-                this.isrembolsable  = true
-                this.rembolsable = "REMBOLSABLE"
-               }else{
-                this.isrembolsable  = false
-                this.rembolsable = "NO REMBOLSABLE"
-               }
-
-               console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
-              i++
-              }*/
+                console.log("this.isrembolsable -------------- " + this.isrembolsable +"this.isrembolsable -------------- " + this.rembolsable)
+                i++
+                }*/
           } else {
             console.log('No hay proyecto');
           }
-        })
+        });
     }
+  }
 
+  filterReembolsables(rubros: any[]): any[] {
+    return rubros.filter(rubro => rubro.value.reembolsable === true);
+  }
 
+  filterNoReembolsables(rubros: any[]): any[] {
+    return rubros.filter(rubro => rubro.value.reembolsable === false || rubro.value.reembolsable === null);
   }
 
   async cargarInformacion(numProyecto: number) {
@@ -163,105 +156,218 @@ export class IngresosComponent implements OnInit {
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
         next: async ({ data }) => {
-          this.totaless = data.totales
+          this.totaless = data.totales;
 
           data.totales.forEach(total => {
-            console.log('total.reembolsable: ' + total.reembolsable)
-            console.log('total.mes: ' + total.mes)
-            console.log('total.anio: ' + total.anio)
-            console.log('total.totalPorcentaje: ' + total.totalPorcentaje)
+            // console.log('total.reembolsable: ' + total.reembolsable);
+            // console.log('total.mes: ' + total.mes);
+            // console.log('total.anio: ' + total.anio);
+            // console.log('total.totalPorcentaje: ' + total.totalPorcentaje);
+            this.SumaIngresos += +total.totalPorcentaje;
+          });
 
-            this.SumaIngresos += +total.totalPorcentaje
-
-
-            /**  this.fechasIngreso(totalIndex).push(this.fb.group({
-              reembolsable:  [total.reembolsable],
-              mes:     [total.mes],
-              anio:    [total.anio],
-              totalPorcentaje:    [total.totalPorcentaje]
-            }))*/
-
-          })
-
-          this.proyectoFechaInicio = new Date(data.fechaIni)
-          this.proyectoFechaFin = new Date(data.fechaFin)
-          this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin)
+          this.proyectoFechaInicio = new Date(data.fechaIni);
+          this.proyectoFechaFin = new Date(data.fechaFin);
+          this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin);
 
           data.secciones.forEach((seccion, seccionIndex) => {
-
+            // Agregar la sección
             this.secciones.push(this.fb.group({
               idSeccion: [seccion.idSeccion],
               codigo: [seccion.codigo],
               seccion: [seccion.seccion],
-              rubros: this.fb.array([])
-            }))
+              rubros: this.fb.array([]),
+            }));
 
-            seccion.rubros.forEach((rubro, rubroIndex) => {
+            const rubrosUnicos = [];
+            // Filtramos los rubros y aseguramos que no se repitan
+            seccion.rubros.forEach((rubro) => {
+              // Comprobamos si el rubro ya ha sido agregado
+              if (!rubrosUnicos.some(existingRubro => existingRubro.codigo === rubro.idRubro)) {
+                rubrosUnicos.push(rubro);
+              }
+            });
 
-              // Agregamos los rubros por seccion
+            // Agregar los rubros únicos a la sección
+            rubrosUnicos.forEach((rubro, rubroIndex) => {
               this.rubros(seccionIndex).push(this.fb.group({
                 ...rubro,
-                fechas: this.fb.array([])
-              }))
+                fechas: this.fb.array([]),
+              }));
 
-              // Agreamos las fechas por rubro
-              rubro.fechas.forEach(fecha => {
+              // Agregar las fechas correspondientes al rubro
+              this.mesesProyecto.forEach(mes => {
+                const mesRegistro = rubro.fechas.find(r =>
+                  r.mes === mes.mes && r.anio === mes.anio
+                );
 
-                this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                  id: fecha.id,
-                  mes: fecha.mes,
-                  anio: fecha.anio,
-                  porcentaje: fecha.porcentaje
-                }))
-              })
-            })
-
-            seccion.rubros.forEach((norubro, norubroIndex) => {
-
-              // Agregamos los rubros por seccion
-              this.rubros(seccionIndex).push(this.fb.group({
-                ...norubro,
-                fechas: this.fb.array([])
-              }))
-
-              // Agreamos las fechas por rubro
-              norubro.fechas.forEach(fecha => {
-
-                this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
-                  id: fecha.id,
-                  mes: fecha.mes,
-                  anio: fecha.anio,
-                  porcentaje: fecha.porcentaje
-                }))
-              })
-
-            })
-
-          })
-
-
-
-
-
-
-
-
-        }
-
-
-        ,
+                if (mesRegistro) {
+                  this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+                    id: mesRegistro.id,
+                    rubroReembolsable: rubro.reembolsable,
+                    mes: mesRegistro.mes,
+                    anio: mesRegistro.anio,
+                    porcentaje: mesRegistro.porcentaje,
+                  }));
+                } else {
+                  this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+                    id: 0,
+                    rubroReembolsable: rubro.reembolsable,
+                    mes: mes.mes,
+                    anio: mes.anio,
+                    porcentaje: 0,
+                  }));
+                }
+              });
+            });
+          });
+        },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-      })
-
-
-
-
-
+      });
   }
 
 
-  modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
+  // async cargarInformacion(numProyecto: number) {
+  //   this.pcsService.obtenerGastosIngresosSecciones(numProyecto, 'ingreso')
+  //     .pipe(finalize(() => this.cargando = false))
+  //     .subscribe({
+  //       next: async ({ data }) => {
+  //         this.totaless = data.totales;
 
+  //         data.totales.forEach(total => {
+  //           console.log('total.reembolsable: ' + total.reembolsable);
+  //           console.log('total.mes: ' + total.mes);
+  //           console.log('total.anio: ' + total.anio);
+  //           console.log('total.totalPorcentaje: ' + total.totalPorcentaje);
+
+  //           this.SumaIngresos += +total.totalPorcentaje;
+
+  //           /**  this.fechasIngreso(totalIndex).push(this.fb.group({
+  //             reembolsable:  [total.reembolsable],
+  //             mes:     [total.mes],
+  //             anio:    [total.anio],
+  //             totalPorcentaje:    [total.totalPorcentaje]
+  //           }))*/
+  //         });
+
+  //         this.proyectoFechaInicio = new Date(data.fechaIni);
+  //         this.proyectoFechaFin = new Date(data.fechaFin);
+  //         this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin);
+
+  //         data.secciones.forEach((seccion, seccionIndex) => {
+  //           this.secciones.push(this.fb.group({
+  //             idSeccion: [seccion.idSeccion],
+  //             codigo: [seccion.codigo],
+  //             seccion: [seccion.seccion],
+  //             rubros: this.fb.array([])
+  //           }));
+
+  //           // Se itera en los rubros
+  //           seccion.rubros.forEach((rubro, rubroIndex) => {
+  //             // Agregamos los rubros por seccion
+  //             this.rubros(seccionIndex).push(this.fb.group({
+  //               ...rubro,
+  //               fechas: this.fb.array([])
+  //             }));
+
+  //             // // Agreamos las fechas por rubro
+  //             // rubro.fechas.forEach(fecha => {
+  //             //   this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+  //             //     id: fecha.id,
+  //             //     mes: fecha.mes,
+  //             //     anio: fecha.anio,
+  //             //     porcentaje: fecha.porcentaje
+  //             //   }));
+  //             // });
+
+  //             // Agreamos las fechas por rubro
+  //             this.mesesProyecto.forEach(mes => {
+  //               const mesRegistro = rubro.fechas.find(r =>
+  //                 r.mes === mes.mes && r.anio === mes.anio
+  //               );
+
+  //               if (mesRegistro) {
+  //                 // console.log(mesRegistro, this.mesesProyecto, mes);
+  //                 // console.log('Agregando registro:', mesRegistro, 'con porcentaje:', mesRegistro.porcentaje);
+  //                 this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+  //                   id: mesRegistro.id,
+  //                   rubroReembolsable: rubro.reembolsable,
+  //                   mes: mesRegistro.mes,
+  //                   anio: mesRegistro.anio,
+  //                   porcentaje: mesRegistro.porcentaje,
+  //                 }));
+  //               }
+  //               else {
+  //                 // console.log('Agregando registro:', mes, 'con porcentaje:', 0);
+  //                 this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
+  //                   id: 0,
+  //                   rubroReembolsable: rubro.reembolsable,
+  //                   mes: mes.mes,
+  //                   anio: mes.anio,
+  //                   porcentaje: 0,
+  //                 }));
+  //               }
+  //             });
+
+  //           });
+
+  //           // Se itera en los NO rubros
+  //           seccion.rubros.forEach((norubro, norubroIndex) => {
+  //             // Agregamos los rubros por seccion
+  //             this.rubros(seccionIndex).push(this.fb.group({
+  //               ...norubro,
+  //               fechas: this.fb.array([])
+  //             }));
+
+  //             // // Agreamos las fechas por rubro
+  //             // norubro.fechas.forEach(fecha => {
+  //             //   this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
+  //             //     id: fecha.id,
+  //             //     mes: fecha.mes,
+  //             //     anio: fecha.anio,
+  //             //     porcentaje: fecha.porcentaje
+  //             //   }));
+  //             // });
+
+  //             // Agreamos las fechas por rubro
+  //             this.mesesProyecto.forEach(mes => {
+  //               const mesRegistro = norubro.fechas.find(r =>
+  //                 r.mes === mes.mes && r.anio === mes.anio
+  //               );
+
+  //               if (mesRegistro) {
+  //                 // console.log(mesRegistro, this.mesesProyecto, mes);
+  //                 // console.log('Agregando registro:', mesRegistro, 'con porcentaje:', mesRegistro.porcentaje);
+  //                 this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
+  //                   id: mesRegistro.id,
+  //                   rubroReembolsable: norubro.reembolsable,
+  //                   mes: mesRegistro.mes,
+  //                   anio: mesRegistro.anio,
+  //                   porcentaje: mesRegistro.porcentaje,
+  //                 }));
+  //               }
+  //               else {
+  //                 // console.log('Agregando registro:', mes, 'con porcentaje:', 0);
+  //                 this.fechas(seccionIndex, norubroIndex).push(this.fb.group({
+  //                   id: 0,
+  //                   rubroReembolsable: norubro.reembolsable,
+  //                   mes: mes.mes,
+  //                   anio: mes.anio,
+  //                   porcentaje: 0,
+  //                 }));
+  //               }
+  //             });
+
+
+  //           });
+  //         });
+  //       },
+  //       error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+  //     });
+  // }
+
+
+  modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number) {
     this.dialogService.open(ModificarRubroComponent, {
       header: rubro.rubro,
       width: '50%',
@@ -273,7 +379,6 @@ export class IngresosComponent implements OnInit {
       }
     })
       .onClose.subscribe((result) => {
-
         if (result && result.rubro) {
 
           const rubroRespuesta = result.rubro as Rubro
@@ -283,9 +388,9 @@ export class IngresosComponent implements OnInit {
             cantidad: rubroRespuesta.cantidad,
             reembolsable: rubroRespuesta.reembolsable,
             aplicaTodosMeses: rubroRespuesta.aplicaTodosMeses
-          })
+          });
 
-          this.fechas(seccionIndex, rubroIndex).clear()
+          this.fechas(seccionIndex, rubroIndex).clear();
 
           rubroRespuesta.fechas.forEach(fechaRegistro => {
             this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
@@ -293,17 +398,14 @@ export class IngresosComponent implements OnInit {
               mes: fechaRegistro.mes,
               anio: fechaRegistro.anio,
               porcentaje: fechaRegistro.porcentaje
-            }))
-          })
+            }));
+          });
         }
-      })
+      });
   }
 
   /**getFiltrosVaues() {
     let objBusqueda: Busqueda = new Busqueda();
-
-
-
     console.log('factura this.idproyecto   ----- '+ this.idproyecto)
     //objBusqueda.idProyecto = this.idproyecto;
     objBusqueda.idProyecto = 229;
@@ -320,8 +422,6 @@ export class IngresosComponent implements OnInit {
     //     objBusqueda.idCliente = this.IDCliente;
     //     break;
     // }
-
-
     return objBusqueda;
   }*/
 

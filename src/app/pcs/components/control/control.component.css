@@ -1,0 +1,39 @@
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #545e64;
+    font-size: 13.5px;
+}
+
+.custom-table th {
+    background-color: #9eaab7;
+    color: white;
+    padding: 16px;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.custom-table td {
+    padding: 16px;
+    text-align: left;
+}
+
+.table-cell {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.link-cell {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.link-cell:hover {
+    color: #0255af;
+    text-decoration: none;
+}
+
+.overflow-x {
+    overflow-x: auto;
+}

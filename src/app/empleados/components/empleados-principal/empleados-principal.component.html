@@ -6,19 +6,19 @@
     <h1>Empleados</h1>
 
     <p-toolbar styleClass="p-1 mb-2 d-flex justify-content-end gap-2">
-        <button type="submit" class="btn btn-primary" routerLink="/empleados/registro-empleado"><i class="fas fa-plus"></i> Nuevo empleado</button>
+        <button type="submit" class="btn btn-primary" routerLink="/empleados/registro-empleado"><i
+                class="fas fa-plus"></i> Nuevo empleado</button>
     </p-toolbar>
-    <div class="table-container" >
 
-        
-
+    <div class="table-container">
         <div class="row" style="margin-left: 5px;">
-           
             <div class="col-3">
-                <label for="concepto">Proyecto:</label>
+                <label for="proyecto">Proyecto:</label>
                 <div class="">
                     <!--p-dropdown #listaProyecto [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="tablaPrincipal.filter(listaProyecto.value, 'chproyecto_principal', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"-->
-                    <p-dropdown #dropDownProyecto (onChange)="onChangeCombo($event, 1)" [options]="proyectos" placeholder="Seleccionar un proyecto"  [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
+                    <p-dropdown #dropDownProyecto id="proyecto" (onChange)="onChangeCombo($event, 1)"
+                        [options]="proyectos" placeholder="Seleccionar un proyecto" [showClear]="true" [filter]="true"
+                        filterBy="label" optionLabel="label" appendTo="body">
                         <!--ng-template let-option pTemplate="item">
                             <p-tag [value]="option.value" severity="success"></p-tag>
                         </ng-template-->
@@ -26,73 +26,81 @@
                 </div>
             </div>
             <div class="col-3">
-                <label for="descripcion">Empresa:</label>
+                <label for="empresa">Empresa:</label>
                 <div class="">
                     <!--p-dropdown #listaEmpresa [options]="empresas" placeholder="Seleccionar una empresa" (onChange)="tablaPrincipal.filter(listaEmpresa.value, 'chempresa', 'equals')" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"-->
-                    <p-dropdown #dropDownEmpresa (onChange)="onChangeCombo($event, 2)" [options]="empresas" placeholder="Seleccionar una empresa" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
-                    <!--ng-template let-option pTemplate="item">
+                    <p-dropdown #dropDownEmpresa id="empresa" (onChange)="onChangeCombo($event, 2)" [options]="empresas"
+                        placeholder="Seleccionar una empresa" [showClear]="true" [filter]="true" filterBy="label"
+                        optionLabel="label" appendTo="body">
+                        <!--ng-template let-option pTemplate="item">
                         <p-tag [value]="option.value" severity="success"></p-tag>
                     </ng-template-->
-                </p-dropdown>
+                    </p-dropdown>
                 </div>
             </div>
-                <div class="col-2">
-                    <label for="puesto">Puesto:</label>
-                    <div class="">
-                        <!--p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'chpuesto', 'equals')" placeholder="Seleccionar un Puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"-->
-                            <p-dropdown #dropDownPuesto (onChange)="onChangeCombo($event, 3)" [options]="puestos"  placeholder="Seleccionar un Puesto" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
-                            
-                            <!--ng-template let-option pTemplate="item">
+            <div class="col-3">
+                <label for="puesto">Puesto:</label>
+                <div class="">
+                    <!--p-dropdown #lista [options]="puestos" (onChange)="tablaPrincipal.filter(lista.value, 'chpuesto', 'equals')" placeholder="Seleccionar un Puesto" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"-->
+                    <p-dropdown #dropDownPuesto id="puesto" (onChange)="onChangeCombo($event, 3)" [options]="puestos"
+                        placeholder="Seleccionar un Puesto" [showClear]="true" [filter]="true" filterBy="label"
+                        optionLabel="label" appendTo="body">
+                        <!--ng-template let-option pTemplate="item">
                                 <p-tag [value]="option.value" severity="success"></p-tag>
                             </ng-template-->
-                        </p-dropdown>
-                    </div>                
+                    </p-dropdown>
                 </div>
-
-                <div class="col-2">
-                    <label for="id_unidad_negocio">Unidad de negocio:</label>
-                    <div class="">
-                      <!--p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="tablaPrincipal.filter(listaUnidad.value, 'chunidad_negocio', 'equals')"  [showClear]="true" [filter]="true" filterBy="value" appendTo="body"></p-dropdown--> 
-                      <p-dropdown #dropDownUnidadNegocio (onChange)="onChangeCombo($event, 4)" [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad"   [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body"></p-dropdown> 
-                    </div>         
-                           
+            </div>
+            <div class="col-3">
+                <label for="unidad_negocio">Unidad de negocio:</label>
+                <div class="">
+                    <!--p-dropdown #listaUnidad  [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" (onChange)="tablaPrincipal.filter(listaUnidad.value, 'chunidad_negocio', 'equals')"  [showClear]="true" [filter]="true" filterBy="value" appendTo="body"></p-dropdown-->
+                    <p-dropdown #dropDownUnidadNegocio id="unidad_negocio" (onChange)="onChangeCombo($event, 4)"
+                        [options]="catUnidadNegocio" placeholder="Seleccionar una Unidad" [showClear]="true"
+                        [filter]="true" filterBy="label" optionLabel="label" appendTo="body"></p-dropdown>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-1">
-                    <label for="activo">Estado:</label>
-                    <div class="">
-                        <!--p-dropdown #listaEstados [options]="estados" (onChange)="tablaPrincipal.filter(listaEstados.value, 'boactivo', 'equals')" placeholder="Estatus" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"-->
-                        <p-dropdown #dropDownEstado (onChange)="onChangeCombo($event, 5)" [options]="estados"  placeholder="Estatus" [showClear]="true" [filter]="true" filterBy="label"  optionLabel="label" appendTo="body">
-                            <!--ng-template let-option pTemplate="item">
-                                <p-tag [value]="option.label" severity="success"></p-tag>
-                            </ng-template-->
-                        </p-dropdown>
-                    </div>                
+        <div class="row mx-0" style="margin-left: 5px;">
+            <div class="col-3">
+                <label for="estatus">Estatus:</label>
+                <div class="w-100" style="width: 100% !important;">
+                    <!--p-dropdown #listaEstados [options]="estados" (onChange)="tablaPrincipal.filter(listaEstados.value, 'boactivo', 'equals')" placeholder="Estatus" [showClear]="true" [filter]="true" filterBy="value" appendTo="body"-->
+                    <p-dropdown #dropDownEstado id="estatus" (onChange)="onChangeCombo($event, 5)" [options]="estados"
+                        placeholder="Seleccionar un estatus" [showClear]="true" [filter]="true" filterBy="label"
+                        optionLabel="label" appendTo="body"></p-dropdown>
                 </div>
-
-
-            
+            </div>
         </div>
 
         <div class="row">
             <div class="col-12 d-flex justify-content-center align-items-center gap-2">
-                <button type="button" class="btn btn-dark" (click)="clearFiltros()"><i class="fas fa-eraser"></i> Limpiar filtros</button>
-                <button type="button" class="btn btn-primary" (click)="busqueda()"><i class="fas fa-save"></i> Buscar</button>
+                <button type="button" class="btn btn-dark" (click)="clearFiltros()"><i class="fas fa-eraser"></i>
+                    Limpiar filtros</button>
+                <button type="button" class="btn btn-primary" (click)="busqueda()"><i class="fas fa-save"></i>
+                    Buscar</button>
             </div>
         </div>
-        
+
         <!--p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" *ngIf="{{totalRecords}} > 0"-->
-        <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
-            <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+        <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none">
+            <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success"
+                (click)="exportJsonToExcel()"></p-button>
         </p-toolbar>
 
-        <p-table #tablaPrincipal class="tabla-filtro" [value]="empleados" [paginator]="true" paginatorPosition="both" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]"
-            [rows]="10" [globalFilterFields]="['nunum_empleado_rr_hh', 'nombre_persona', 'chpuesto', 'boactivo','chempresa']" styleClass="p-datatable-striped">
+        <p-table #tablaPrincipal class="tabla-filtro" [value]="empleados" [paginator]="true" paginatorPosition="both"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[10, 25, 50]" [rows]="10"
+            [globalFilterFields]="['nunum_empleado_rr_hh', 'nombre_persona', 'chpuesto', 'boactivo','chempresa']"
+            styleClass="p-datatable-striped">
             <ng-template pTemplate="caption">
                 <div class="flex">
                     <span class="p-input-icon-left ml-auto">
                         <i class="pi pi-search"></i>
-                        <input pInputText #buscador type="text" (input)="tablaPrincipal.filterGlobal(buscador.value, 'contains')" placeholder="Buscar..." />
+                        <input pInputText #buscador type="text"
+                            (input)="tablaPrincipal.filterGlobal(buscador.value, 'contains')" placeholder="Buscar..." />
                     </span>
                 </div>
             </ng-template>
@@ -241,9 +249,10 @@
             <ng-template pTemplate="body" let-empleado>
                 <tr>
                     <td>
-                        <a class="text-success font-bold" [routerLink]="['/empleados/edicion-empleado', empleado.nunum_empleado_rr_hh]">
-              {{ empleado.nunum_empleado_rr_hh }}
-            </a>
+                        <a class="text-success font-bold"
+                            [routerLink]="['/empleados/edicion-empleado', empleado.nunum_empleado_rr_hh]">
+                            {{ empleado.nunum_empleado_rr_hh }}
+                        </a>
                     </td>
                     <td>{{ empleado.nombre_persona }}</td>
                     <td>{{ empleado.chtipo_emplado }}</td>
@@ -288,13 +297,21 @@
             {{ empleado.boactivo ? 'Activo' : 'Inactivo' }}
           </td> -->
                     <td class="text-center">
-                        <p-inputSwitch [ngModel]="empleado.boactivo" (click)="toggleActivo(empleado.nunum_empleado_rr_hh, empleado.boactivo)" [readonly]="true"></p-inputSwitch>
+                        <p-inputSwitch [ngModel]="empleado.boactivo"
+                            (click)="toggleActivo(empleado.nunum_empleado_rr_hh, empleado.boactivo,empleado.nombre_persona)"
+                            [readonly]="true"></p-inputSwitch>
                     </td>
                     <td>
                         <div class="d-flex gap-2">
-                            <button title="Modificar empleado" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info p-mr-2" [routerLink]="['/empleados/edicion-empleado', empleado.nunum_empleado_rr_hh]"></button>
-                            <button title="Contratos del empleado" pButton pRipple icon="pi pi-file" class="p-button-rounded p-button-success p-mr-2" [routerLink]="['/empleados/contratos', empleado.nunum_empleado_rr_hh]"></button>
-                            <button title="Proyectos del empleado" pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success p-mr-2" (click)="mostrarProyectos(empleado.nunum_empleado_rr_hh)"></button>
+                            <button title="Modificar empleado" pButton pRipple icon="pi pi-pencil"
+                                class="p-button-rounded p-button-info p-mr-2"
+                                [routerLink]="['/empleados/edicion-empleado', empleado.nunum_empleado_rr_hh]"></button>
+                            <button title="Contratos del empleado" pButton pRipple icon="pi pi-file"
+                                class="p-button-rounded p-button-success p-mr-2"
+                                [routerLink]="['/empleados/contratos', empleado.nunum_empleado_rr_hh]"></button>
+                            <button title="Proyectos del empleado" pButton pRipple icon="pi pi-eye"
+                                class="p-button-rounded p-button-success p-mr-2"
+                                (click)="mostrarProyectos(empleado.nunum_empleado_rr_hh)"></button>
                         </div>
                     </td>
                 </tr>

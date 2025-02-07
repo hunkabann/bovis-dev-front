@@ -67,6 +67,7 @@ export class IpComponent implements OnInit {
   catClientes: ICatalogoCombos[] = [];
   catEstatusProyecto: ICatalogoCombos[] = [];
   catEmpleados: Opcion[] = []
+  catEmpleadosResponsables: Opcion[] = []
 
   listCatSectores: Array<ICatalogo> = [];
   listCatPaises: Array<ICatalogo> = [];
@@ -507,6 +508,7 @@ export class IpComponent implements OnInit {
     this.getClientes();
     this.getEstatusProyecto();
     this.getEmpleados();
+    this.getEmpleadosResponsable();
     this.getEmpleadosExcel();
     this.getCatEmpresas();
     this.gettUnidadNegocio();
@@ -623,6 +625,16 @@ export class IpComponent implements OnInit {
       this.catEmpleados = directoresR.data.map(catEmpleados => ({ name: catEmpleados.nombre_persona, code: catEmpleados.nunum_empleado_rr_hh.toString() }))
 
 
+    });  
+
+  }
+
+  getEmpleadosResponsable() {
+    //this.catServ.getDirectores().subscribe((directoresR) => {
+    this.catServ.getPersonalResponsable().subscribe((directoresR) => {
+      this.catEmpleadosResponsables = directoresR.data.map(catEmpleadosResponsables => ({ name: catEmpleadosResponsables.nombre_persona, code: catEmpleadosResponsables.nunum_empleado_rr_hh.toString() }))
+
+
     });
 
   }
@@ -638,9 +650,15 @@ export class IpComponent implements OnInit {
 
     this.sharedService.cambiarEstado(true)
 
+    //console.log('fecha inicio ---->>> ' + this.form.value.fecha_inicio)
+    //console.log('fecha fin ---->>> ' + this.form.value.fecha_fin)
+
+    //console.log('format(new Date(this.form.value.fecha_inicio),  ---->>> ' + format(new Date(this.form.value.fecha_inicio), 'Y-MM-dd'))
+    //console.log('format(new Date(this.form.value.fecha_fin), ' + format(new Date(this.form.value.fecha_fin), 'yyyy-MM-dd'))
+
     this.form.patchValue({
       fecha_inicio: this.form.value.fecha_inicio ? format(new Date(this.form.value.fecha_inicio), 'Y-MM-dd') as any : null,
-      fecha_fin: this.form.value.fecha_fin ? format(new Date(this.form.value.fecha_fin), 'Y-MM-dd') as any : null
+      fecha_fin: this.form.value.fecha_fin ? format(new Date(this.form.value.fecha_fin), 'yyyy-MM-dd') as any : null
     })
 
     this.pcsService.guardar(this.catalogosService.esEdicion, this.form.value)

@@ -1,7 +1,7 @@
 
 import * as base64js from 'base64-js'
 import { addMonths, differenceInCalendarMonths, format } from 'date-fns';
-import { es, id } from 'date-fns/locale';
+import { es } from 'date-fns/locale';
 import { SeccionData, SeccionFormateada, SeccionSubseccion } from 'src/app/pcs/models/pcs.model';
 import { Mes } from 'src/models/general.model';
 
@@ -108,7 +108,7 @@ export const formatCurrency = (valor: number) => {
 /**
  * Función para dar formato a las tablas de PCS Control
  */
-export const formatearInformacionControl = (data: SeccionData | SeccionSubseccion, idProyecto: number): SeccionFormateada | null => {
+export const formatearInformacionControl = (data: SeccionData | SeccionSubseccion): SeccionFormateada | null => {
 
   // Paso 1: Unir y ordenar los meses y años de ambos arreglos
   const fechasCombinadas = [...data.previsto.fechas, ...data.real.fechas]
@@ -131,31 +131,17 @@ export const formatearInformacionControl = (data: SeccionData | SeccionSubseccio
 
   const valoresPrevisto = fechasCombinadas.map(f => {
     const entry = data.previsto.fechas.find(e => e.mes === f.mes && e.anio === f.anio);
-    const valor = entry ? entry.porcentaje : 0;
-    const clasificacionPY = entry ? entry.clasificacionPY : '';
-    const url = `/#/cie/resultado-busqueda?month=${f.mes}&year=${f.anio}&projectnum=${idProyecto}&clasificacionPY=${clasificacionPY}`;
-    return { valor, url };
+    return entry ? entry.porcentaje : 0;
   });
 
-  registros.push([
-    { valor: 'Previsto'}, 
-    { valor: data.previsto.subTotal || 0 }, 
-    ...valoresPrevisto
-  ]);
+  registros.push(['Previsto', data.previsto.subTotal || 0, ...valoresPrevisto]);
 
   const valoresReal = fechasCombinadas.map(f => {
     const entry = data.real.fechas.find(e => e.mes === f.mes && e.anio === f.anio);
-    const valor = entry ? entry.porcentaje : 0;
-    const clasificacionPY = entry ? entry.clasificacionPY : '';
-    const url = `/#/cie/resultado-busqueda?month=${f.mes}&year=${f.anio}&projectnum=${idProyecto}&clasificacionPY=${clasificacionPY}`;
-    return { valor, url };
+    return entry ? entry.porcentaje : 0;
   });
 
-  registros.push([
-    { valor: 'REAL' },
-    { valor: data.real.subTotal || 0 }, 
-    ...valoresReal
-  ]);
+  registros.push(['REAL', data.real.subTotal || 0, ...valoresReal]);
 
   return {
     hasChildren: data?.hasChildren || false,

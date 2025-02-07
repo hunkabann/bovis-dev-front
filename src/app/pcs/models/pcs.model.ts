@@ -295,9 +295,10 @@ export interface SeccionRegistro {
 }
 
 export interface SeccionFecha {
-    mes:        number;
-    anio:       number;
-    porcentaje: number;
+    mes:                number;
+    anio:               number;
+    porcentaje:         number;
+    clasificacionPY:    string;
 }
 
 export interface SeccionFormateada {

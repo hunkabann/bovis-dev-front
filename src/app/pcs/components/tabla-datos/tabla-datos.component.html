@@ -11,12 +11,22 @@
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-registro>
+            <ng-template pTemplate="body" let-registro let-rowIndex="rowIndex">
                 <tr>
-                    <td *ngFor="let valor of registro">
-                        <p *ngIf="valor == 'Previsto' || valor == 'REAL'; else valorMoneda">{{ valor }}</p>
-                        <ng-template #valorMoneda>
-                            <p>{{ valor | currency }}</p>
+                    <td *ngFor="let dato of registro">
+                        <span *ngIf="dato.url && rowIndex; else textoPlano">
+                            <a [href]="dato.url" target="_blank">
+                                <p *ngIf="dato.valor == 'Previsto' || dato.valor == 'REAL'; else valorMoneda">{{ dato.valor }}</p>
+                                <ng-template #valorMoneda>
+                                    <p>{{ dato.valor | currency }}</p>
+                                </ng-template>
+                            </a>
+                        </span>
+                        <ng-template #textoPlano>
+                            <p *ngIf="dato.valor == 'Previsto' || dato.valor == 'REAL'; else valorMoneda">{{ dato.valor }}</p>
+                            <ng-template #valorMoneda>
+                                <p>{{ dato.valor | currency }}</p>
+                            </ng-template>
                         </ng-template>
                     </td>
                 </tr>

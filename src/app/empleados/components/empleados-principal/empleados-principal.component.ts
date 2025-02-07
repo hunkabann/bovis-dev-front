@@ -157,18 +157,18 @@ export class EmpleadosPrincipalComponent implements OnInit {
     });
   }
   
-  toggleActivo(id: number, activo: boolean) {
+  toggleActivo(id: number, activo: boolean, empleado: string ) {
     //aqui se manda correo de la matriz 3
     console.log(activo)
     const index = this.empleados.findIndex(({nunum_empleado_rr_hh}) => nunum_empleado_rr_hh === id)
     if(index >= 0) {
       
-      if(!activo){
+      if(activo){
         // ENVIO DE CORREO CUANDO ES inactivo el empleado
                         
                         const fakeCopyDynos = emailsDatosEmpleados.emailInactivoEmpleado.emailsTo
                                 // cambiamos el valor del primer elemento en fakeCopyDynos
-                                fakeCopyDynos[0] = localStorage.getItem('userMail')
+                                fakeCopyDynos[0] = 'dl-bovis-gestion-bajas@bovis.mx'
                                 
                                 // mostramos el valor de fakeCopyDynos y vemos que tiene el cambio
                                 //console.log(fakeCopyDynos) 
@@ -176,14 +176,17 @@ export class EmpleadosPrincipalComponent implements OnInit {
                                 // pero si miramos también el contenido de dynos...
                                 //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
                         
-                                fakeCopyDynos.push('dl-bovis-gestion-bajas@bovis.mx')
+                                //fakeCopyDynos.push('dl-bovis-gestion-bajas@bovis.mx')
                                 //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+                                //fakeCopyDynos.push('arturo_tapia@hunkabann.com.mx')
                         
-                                //console.log(fakeCopyDynos) 
+                                //console.log(fakeCopyDynos + '  ----------   ' + empleado) 
                       
                                 const emailNuevoRequerimiento = {
                                   ...emailsDatosEmpleados.emailInactivoEmpleado,
-                                  body: emailsDatosEmpleados.emailInactivoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                                 // body: emailsDatosEmpleados.emailInactivoEmpleado.body.replace('nombre_usuario', localStorage.getItem('userName') || ''),
+                                 body: emailsDatosEmpleados.emailInactivoEmpleado.body.replace('nombre_usuario', empleado || ''),
+                                 
                                   emailsTo: fakeCopyDynos
                                 }
                                 // console.log(emailNuevoRequerimiento);
@@ -198,16 +201,16 @@ export class EmpleadosPrincipalComponent implements OnInit {
                       //
       }
 
-      this.sharedService.cambiarEstado(true)
-      this.empleadosServ.toggleEstado(!activo, id, false)
-        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-        .subscribe({
-          next: (data) => {
-            this.empleados.at(index).boactivo = !activo
-            this.messageService.add({ severity: 'success', summary: 'Registro actualizado', detail: `El registro ha sido ${activo ? 'deshabilitado' : 'habilitado'}.` })
-          },
-          error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
-        })
+        this.sharedService.cambiarEstado(true)
+        this.empleadosServ.toggleEstado(!activo, id, false)
+          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+          .subscribe({
+            next: (data) => {
+              this.empleados.at(index).boactivo = !activo
+              this.messageService.add({ severity: 'success', summary: 'Registro actualizado', detail: `El registro ha sido ${activo ? 'deshabilitado' : 'habilitado'}.` })
+            },
+            error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+          })
     }
   }
 
