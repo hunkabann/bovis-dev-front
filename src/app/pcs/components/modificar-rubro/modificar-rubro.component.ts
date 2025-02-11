@@ -129,6 +129,8 @@ export class ModificarRubroComponent implements OnInit {
   guardar() {
     this.sharedService.cambiarEstado(true)
 
+    console.log('valor que se actualizara ------>>>>' + console.log(Object.values(this.form.value)))
+
     this.pcsService.actualizarRubro(this.form.value)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
@@ -187,7 +189,8 @@ export class ModificarRubroComponent implements OnInit {
 
       this.form.patchValue({
         
-        aplicaTodosMeses: false
+        aplicaTodosMeses: false,
+        cantidad: '0'
       })
     }else{
       this.stilovisible = 'visible'
