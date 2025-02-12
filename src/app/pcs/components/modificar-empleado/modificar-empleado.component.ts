@@ -71,7 +71,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     FEE: [0],
     fechas: this.fb.array([]),
     puesto: [null],
-    reembolsable: [false]
+    reembolsable: [false],
+    PrecioVenta: [0]
   })
 
   constructor() { }
@@ -83,6 +84,8 @@ export class ModificarEmpleadoComponent implements OnInit {
   async ngOnInit(): Promise<void> {
 
     this.form.controls['FEE'].disable();
+
+    this.form.controls['PrecioVenta'].disable();
 
     const data = this.config.data as EtapaEmpleado
     if (data) {
@@ -335,6 +338,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
               this.form.patchValue({
                 FEE: this.formateaValor(0.0),
+                PrecioVenta: this.formateaValor(0.0)
 
               })
 
@@ -342,6 +346,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
               this.form.patchValue({
                 FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
 
               })
 

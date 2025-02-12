@@ -57,11 +57,44 @@
         </div>
 
         <div class="col-12">
+            
             <div class="row">
                 
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="ModificaSueldo">Modificar sueldo:</label>
+                        <label></label>
+                        <div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="PrecioVenta">Costo por empleado: </label>
+                        <p-inputNumber 
+                            formControlName="PrecioVenta"
+                            class="full-width" 
+                            mode="decimal"
+                            [minFractionDigits]="2"
+                            [maxFractionDigits]="5"
+                        ></p-inputNumber>
+                        <div *ngIf="esInvalido('PrecioVenta')">
+                          <small
+                            class="error-msg"
+                          >
+                            {{ obtenerMensajeError('PrecioVenta') }}
+                          </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="ModificaSueldo">Precio de venta:</label>
                         <div>
                             <p-inputSwitch 
                                 formControlName="ModificaSueldo"
@@ -108,37 +141,44 @@
                     </div>
                     </div>
                 
-                <div class="col-6" *ngIf="form.value.aplicaTodosMeses">
+                    <div class="col-6" *ngIf="form.value.aplicaTodosMeses">
+                        <div class="form-group">
+                            <label for="cantidad">% Participación: <span class="required"></span></label>
+                            <p-inputNumber 
+                                formControlName="cantidad"
+                                class="full-width" 
+                                (onBlur)="cambiarValores()"
+                                [min]="0" 
+                                [max]="100"
+                            ></p-inputNumber>
+                            <div *ngIf="esInvalido('cantidad')">
+                            <small
+                                class="error-msg"
+                            >
+                                {{ obtenerMensajeError('cantidad') }}
+                            </small>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div class="row">
+                
+                <div class="col-6">
                     <div class="form-group">
-                        <label for="cantidad">% Participación: <span class="required"></span></label>
-                        <p-inputNumber 
-                            formControlName="cantidad"
-                            class="full-width" 
-                            (onBlur)="cambiarValores()"
-                            [min]="0" 
-                            [max]="100"
-                        ></p-inputNumber>
-                        <div *ngIf="esInvalido('cantidad')">
-                          <small
-                            class="error-msg"
-                          >
-                            {{ obtenerMensajeError('cantidad') }}
-                          </small>
+                        <label for="reembolsable">Reembolsable:</label>
+                        <div>
+                            <p-inputSwitch 
+                                formControlName="reembolsable"
+                            ></p-inputSwitch>
                         </div>
                     </div>
                 </div>
+                
+                    
             </div>
 
-            <div class="col-4">
-                <div class="form-group">
-                    <label for="reembolsable">Reembolsable:</label>
-                    <div>
-                        <p-inputSwitch 
-                            formControlName="reembolsable"
-                        ></p-inputSwitch>
-                    </div>
-                </div>
-              </div>
+           
         </div>
         
         <ng-container formArrayName="fechas">
