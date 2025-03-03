@@ -129,6 +129,7 @@ export class RequerimientosComponent implements OnInit {
   asignarPersona() {
     this.router.navigate(['/empleados/registro-empleado'], {queryParams: {id_persona: this.form.value.persona, id_requerimiento: this.requerimientoActual}})
     
+    /** 
     const fakeCopyDynos = emailsAsignarRequerimientos.emailNuevoRequerimiento.emailsTo
           // cambiamos el valor del primer elemento en fakeCopyDynos
           fakeCopyDynos[0] = localStorage.getItem('userMail')
@@ -139,8 +140,8 @@ export class RequerimientosComponent implements OnInit {
           // pero si miramos también el contenido de dynos...
           //console.log(emailsDatos.emailNuevoRequerimiento.emailsTo) 
   
-          fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
-          //fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
+          //fakeCopyDynos.push('dl-bovis-gestion-requerimiento@bovis.mx')
+          fakeCopyDynos.push('jmmorales@hunkabann.com.mx')
   
           //console.log(fakeCopyDynos) 
 
@@ -154,9 +155,9 @@ export class RequerimientosComponent implements OnInit {
             .pipe(finalize(() => {
               this.form.reset()
               this.sharedService.cambiarEstado(false)
-              this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
+             // this.router.navigate(['/empleados/requerimientos'], {queryParams: {success: true}})
             }))
-            .subscribe()
+            .subscribe() */
 
   }
 
