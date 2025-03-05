@@ -142,7 +142,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
           this.form.patchValue({
             FEE: this.formateaValor(data.FEE),
-
+           // PrecioVenta: this.formateaValor(data.FEE),
           })
 
         } else {
@@ -165,14 +165,14 @@ export class ModificarEmpleadoComponent implements OnInit {
 
                     this.form.patchValue({
                       FEE: this.formateaValor(0.0),
-
+                      PrecioVenta: this.formateaValor(0.0),
                     })
 
                   } else {
 
                     this.form.patchValue({
                       FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
-
+                      PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                     })
 
                   }
@@ -182,6 +182,40 @@ export class ModificarEmpleadoComponent implements OnInit {
             })
 
         }
+
+        this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
+            .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+            .subscribe({
+              next: ({ data, message }) => {
+
+                const [costoR] = data
+                console.log('message ' + message)
+                console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
+                console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+
+                if (message != null) {
+
+                  this.mensajito = message;
+
+                  if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
+
+                    this.form.patchValue({
+                     // FEE: this.formateaValor(0.0),
+                      PrecioVenta: this.formateaValor(0.0),
+                    })
+
+                  } else {
+
+                    this.form.patchValue({
+                     // FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                      PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                    })
+
+                  }
+                }
+              },
+              error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+            })
       }
 
       const fechaInicio = new Date(data.etapa.fechaIni)
