@@ -113,7 +113,7 @@
                     <hr>
                     <label><strong>Días Registrados: {{ts.proyectosDiasJoin + ts.otrosDiasJoin | number: '1.2-2'}} - Total Dias: {{ts.dias_trabajo| number: '1.2-2'}}</strong></label>
                     <br>
-                    <label><strong>Dedicación Registrado: {{ts.proyectosJoin + ts.otrosJoin}}% - Total Dedicación: 100%</strong></label>
+                    <label><strong>Dedicación Registrado: {{ts.proyectosJoin + ts.otrosJoin}}% - Total Dedicación: {{(ts.proyectosDiasJoin + ts.otrosDiasJoin)/ts.dias_trabajo * 100| number: '1.2-2'}}%</strong></label>
 
                 </td>
                 <td>
