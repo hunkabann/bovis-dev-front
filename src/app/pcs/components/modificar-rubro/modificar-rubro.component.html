@@ -25,6 +25,7 @@
         optionValue="name"
         class="full-width" 
         [(ngModel)]="selectedUnidad"
+        (onChange)="SeleccionaUnidad($event.value);"
         ></p-dropdown>
         <div *ngIf="esInvalido('unidad')">
           <small
@@ -35,8 +36,9 @@
         </div>
       </div>
 
-      <div class="col-4">
-        <label for="cantidad">Cantidad: <span class="required"></span></label>
+      <div class="col-4" style="text-decoration: none; visibility: {{stilovisible}};">
+        <!--label for="cantidad" >Cantidad: <span class="required"></span></label-->
+        <label for="cantidad" >Cantidad: </label>
         <p-inputNumber 
             formControlName="cantidad"
             class="full-width" 
@@ -62,7 +64,7 @@
         </div>
       </div-->
       
-      <div class="col-4">
+      <div class="col-4" style="text-decoration: none; visibility: {{stilovisible}};">
         <div class="form-group">
             <label for="aplicaTodosMeses">Aplica a todos los meses:</label>
             <div>

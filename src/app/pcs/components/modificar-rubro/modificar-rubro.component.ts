@@ -37,12 +37,14 @@ export class ModificarRubroComponent implements OnInit {
 
   mes_ini: number
   ano_ini: number
+   stilovisible: string = ''
 
   form = this.fb.group({
     idRubro: [null],
     idSeccion: [null],
     unidad: ['', Validators.required],
-    cantidad: ['', Validators.required],
+    cantidad: [''],
+    //cantidad: ['', Validators.required],
     reembolsable: [false],
     aplicaTodosMeses: [false],
     fechas: this.fb.array([]),
@@ -57,7 +59,7 @@ export class ModificarRubroComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.unidades = [
-      { name: '%' },
+      //{ name: '%' },
       { name: 'mes' },
       { name: 'pp' },
       { name: 'otro' }
@@ -127,6 +129,8 @@ export class ModificarRubroComponent implements OnInit {
   guardar() {
     this.sharedService.cambiarEstado(true)
 
+    console.log('valor que se actualizara ------>>>>' + console.log(Object.values(this.form.value)))
+
     this.pcsService.actualizarRubro(this.form.value)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
@@ -173,6 +177,33 @@ export class ModificarRubroComponent implements OnInit {
 
   closeDialog() {
     this.ref.close(null)
+  }
+
+
+  SeleccionaUnidad(event: any) {
+
+    console.log('event ' + event)
+
+    if(event === 'otro'){      
+        this.stilovisible = 'hidden'         
+
+      this.form.patchValue({
+        
+        aplicaTodosMeses: false,
+        cantidad: '0'
+      })
+    }else{
+      this.stilovisible = 'visible'
+      this.form.patchValue({
+        
+        aplicaTodosMeses: true
+      })
+
+    }
+
+    
+
+
   }
 
 }
