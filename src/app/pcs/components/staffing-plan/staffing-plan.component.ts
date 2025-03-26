@@ -16,6 +16,7 @@ import { ModificarEmpleadoComponent } from '../modificar-empleado/modificar-empl
 import { Mes } from 'src/models/general.model';
 import { obtenerMeses } from 'src/helpers/helpers';
 import { CatalogosService } from '../../services/catalogos.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 // interface Etapa {
 //   id:         number,
@@ -57,7 +58,7 @@ export class StaffingPlanComponent implements OnInit {
   idproyecto: number;
 
 
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   form = this.fb.group({
     numProyecto: [0, Validators.required],
@@ -129,6 +130,15 @@ export class StaffingPlanComponent implements OnInit {
           }
         })
     }
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+       
+        itemlabel : 'Staffing Plan'
+      },
+      queryParamsHandling: 'merge'
+    })
 
 
   }

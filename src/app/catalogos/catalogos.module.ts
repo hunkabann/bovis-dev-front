@@ -38,6 +38,8 @@ import { CatalogosGeneralesComponent } from './components/catalogos-generales/ca
 import { RegistroComponent } from './components/clientes/registro/registro.component';
 import { PrincipalComponent } from './components/clientes/principal/principal.component';
 import { PuestoRegistroComponent } from './components/puesto/registro/puesto-registro.component';
+import { timesheetusuariosRegistroComponent } from './components/timesheetusuarios/registro/timesheetusuarios-registro.component';
+import { timesheetusuariosPrincipalComponent } from './components/timesheetusuarios/principal/timesheetusuarios-principal.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import { PuestoRegistroComponent } from './components/puesto/registro/puesto-reg
     RegistroComponent,
     PrincipalComponent,
     PuestoPrincipalComponent,
-    PuestoRegistroComponent
+    PuestoRegistroComponent,
+    timesheetusuariosRegistroComponent,
+    timesheetusuariosPrincipalComponent
   ],
   imports: [
     CommonModule,

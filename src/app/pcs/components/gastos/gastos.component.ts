@@ -13,6 +13,7 @@ import { Rubro, EtapasPorProyectoData, SumaFecha } from '../../models/pcs.model'
 import { CatalogosService } from '../../services/catalogos.service';
 import { CostosService } from 'src/app/costos/services/costos.service';
 import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -58,7 +59,7 @@ export class GastosComponent implements OnInit {
   //sumaTotales:        SumaFecha[] = []
   //private spinner: NgxSpinnerService
 
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   form = this.fb.group({
     numProyecto: [0, Validators.required],
@@ -113,6 +114,15 @@ export class GastosComponent implements OnInit {
           }
         });
     }
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+       
+        itemlabel : 'Gastos'
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 
 
