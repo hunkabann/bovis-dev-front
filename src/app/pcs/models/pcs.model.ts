@@ -41,6 +41,7 @@ export interface Fecha {
     mes:        number;
     anio:       number;
     porcentaje: number;
+    disabled?:  boolean;
     mesTranscurrido: number;
 }
 

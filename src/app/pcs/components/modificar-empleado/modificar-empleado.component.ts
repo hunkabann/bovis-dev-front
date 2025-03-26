@@ -5,7 +5,7 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { PcsService } from '../../services/pcs.service';
 import { FormArray, FormBuilder } from '@angular/forms';
 import { Empleado, Etapa, Fecha, puesto } from '../../models/pcs.model';
-import { addMonths, differenceInCalendarMonths, differenceInMonths, format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
 import { finalize } from 'rxjs';
@@ -222,14 +222,21 @@ export class ModificarEmpleadoComponent implements OnInit {
       const fechaFin = new Date(data.etapa.fechaFin)
 
       let meses = await obtenerMeses(fechaInicio, fechaFin);
+      const diaActual = format(new Date(), 'dd', { locale: es });
 
       meses.forEach(mesRegistro => {
-
+        let registroDeshabilitado = false;
+        if(mesRegistro.mes && mesRegistro.anio) {
+          const fechaRegistro = `${diaActual}/${mesRegistro.mes}/${mesRegistro.anio}`;
+          let fechaRegistroFormateada = parse(fechaRegistro, 'dd/MM/yyyy', new Date());
+          registroDeshabilitado = fechaRegistroFormateada.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
+        }
         this.fechas.push(this.fb.group({
           mes: [mesRegistro.mes],
           anio: [mesRegistro.anio],
           desc: [mesRegistro.desc],
-          porcentaje: [this.empleado ? this.obtenerPorcentaje(data.empleado.fechas, mesRegistro) : 0]
+          porcentaje: [this.empleado ? this.obtenerPorcentaje(data.empleado.fechas, mesRegistro) : 0],
+          disabled: [registroDeshabilitado]
         }))
       })
     }
@@ -325,9 +332,11 @@ export class ModificarEmpleadoComponent implements OnInit {
 
   cambiarValores() {
     this.fechas.controls.forEach((fecha, index) => {
-      this.fechas.at(index).patchValue({
-        porcentaje: this.form.value.aplicaTodosMeses ? this.form.value.cantidad : 0
-      })
+      if(!fecha.value.disabled) {
+        this.fechas.at(index).patchValue({
+          porcentaje: this.form.value.aplicaTodosMeses ? this.form.value.cantidad : 0
+        })
+      }
     })
   }
 
