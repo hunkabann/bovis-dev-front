@@ -440,6 +440,15 @@ export class IpComponent implements OnInit {
 
       })
     });
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+       
+        itemlabel : 'IP'
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 
   getConfigCalendar() {
@@ -680,7 +689,8 @@ export class IpComponent implements OnInit {
               queryParams: {
                 proyecto: this.form.value.num_proyecto,
                 esEdicion: 1,
-                nuevo: false
+                nuevo: false,
+                itemlabel : 'IP'
               },
               queryParamsHandling: 'merge'
             })

@@ -147,6 +147,13 @@ export class CatalogosComponent implements OnInit {
       nombre: 'Días Timesheet',
       nameService: 'DiasTimesheet'
     }
+    ,
+    {
+      catalogo: 'cat_TimeSheetUsuarios',
+      id: null,
+      nombre: 'Timesheet Usuarios',
+      nameService: 'CatTimeSheetUsuario'
+    }
 
 
   ];
