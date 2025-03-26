@@ -11,6 +11,7 @@ import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { Rubro, GastosIngresosTotales } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -57,7 +58,7 @@ export class IngresosComponent implements OnInit {
 
   SumaIngresos = 0;
 
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
   form = this.fb.group({
     numProyecto: [0, Validators.required],
     secciones: this.fb.array([]),
@@ -141,6 +142,15 @@ export class IngresosComponent implements OnInit {
           }
         });
     }
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+       
+        itemlabel : 'Ingresos'
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 
   filterReembolsables(rubros: any[]): any[] {
