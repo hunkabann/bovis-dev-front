@@ -29,8 +29,7 @@ export class PcsComponent implements OnInit {
     { label: 'Staffing Plan', routerLink: 'staffing-plan' },
     { label: 'Gastos', routerLink: 'gastos' },
     { label: 'Ingresos', routerLink: 'ingresos' },
-    { label: 'Control', routerLink: 'control' },
-    { label: 'PPA-KPI', routerLink: 'ppa-kpi' }
+    { label: 'Control', routerLink: 'control' }
   ]
 
   activeItem: MenuItem;
