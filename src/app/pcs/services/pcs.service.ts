@@ -83,7 +83,7 @@ export class PcsService {
   }
 
   obtenerGastosIngresosSecciones(numProyecto: number, tipo: string = 'gasto') {
-    return this.http.get<GastosIngresosSeccionesResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/${numProyecto}/${tipo}`)
+    return this.http.get<GastosIngresosSeccionesResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/secciones/${numProyecto}/${tipo}`)
   }
 
   obtenerInformacionSeccion(numProyecto: number, seccion: string) {
