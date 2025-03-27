@@ -308,3 +308,25 @@ export interface SeccionFormateada {
     encabezados:    string[]; 
     registros:      string[]
 }
+
+export interface GastosIngresosSeccionesResponseNuevo {
+    data:          GastosIngresosSecciones[];
+    success:       boolean;
+    message:       null;
+    transactionId: null;
+}
+
+export interface GastosIngresosInformacionResponse {
+    data:          GastosIngresosInformacionResponseData;
+    success:       boolean;
+    message:       null;
+    transactionId: null;
+}
+
+export interface GastosIngresosInformacionResponseData {
+    numProyecto: number;
+    fechaIni:    Date;
+    fechaFin:    Date;
+    secciones:   GastosIngresosSecciones[];
+    totales:     null;
+}

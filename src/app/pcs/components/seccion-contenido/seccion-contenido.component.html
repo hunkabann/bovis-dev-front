@@ -1,0 +1,20 @@
+<p-accordion [multiple]="true">
+    <p-accordionTab *ngFor="let rubro of data.rubros; let i = index">
+        <ng-template pTemplate="header">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="title">
+                    <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                    <span class="vertical-align-middle">{{ rubro.rubro }} <strong>({{ rubro.reembolsable ? 'Reembolsable' : 'No Reembolsable'}})</strong></span>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <!-- <div *ngIf="!seccionesCargado[i]; else contenido" class="text-center">
+                <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+            </div>
+            <ng-template #contenido>
+                <app-seccion-contenido [data]="seccionesData[i]"></app-seccion-contenido>
+            </ng-template> -->
+        </ng-template>
+    </p-accordionTab>
+</p-accordion>

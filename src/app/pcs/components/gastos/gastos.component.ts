@@ -6,17 +6,13 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { obtenerMeses } from 'src/helpers/helpers';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
-import { TITLES } from 'src/utils/constants';
+import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro, EtapasPorProyectoData, SumaFecha } from '../../models/pcs.model';
+import { Rubro, EtapasPorProyectoData, SumaFecha, GastosIngresosSecciones } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 import { CostosService } from 'src/app/costos/services/costos.service';
-import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
-
-
 
 @Component({
   selector: 'app-gastos',
@@ -55,9 +51,8 @@ export class GastosComponent implements OnInit {
   mensajito: string;
 
   cantidadMesesTranscurridos: number;
-
-  //sumaTotales:        SumaFecha[] = []
-  //private spinner: NgxSpinnerService
+  seccionesCargado: boolean[] = [];
+  seccionesData: any[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -169,16 +164,13 @@ export class GastosComponent implements OnInit {
     this.mesesProyecto = null;
     this.secciones.clear();
 
-    this.pcsService.obtenerGastosIngresosSecciones(numProyecto)
+    this.pcsService.obtenerGastosIngresosSeccionesNuevo(numProyecto)
       .pipe(finalize(() => this.cargando = false))
       .subscribe({
         next: async ({ data }) => {
-          this.proyectoFechaInicio = new Date(data.fechaIni);
-          this.proyectoFechaFin = new Date(data.fechaFin);
-
           this.mesesProyecto = await obtenerMeses(this.proyectoFechaInicio, this.proyectoFechaFin);
 
-          await Promise.all(data.secciones.map(async (seccion, seccionIndex) => {
+          await Promise.all(data.map(async (seccion, seccionIndex) => {
             this.secciones.push(this.fb.group({
               idSeccion: [seccion.idSeccion],
               codigo: [seccion.codigo],
@@ -186,62 +178,6 @@ export class GastosComponent implements OnInit {
               rubros: this.fb.array([]),
               sumaFechas: this.fb.array([])
             }));
-
-            seccion.rubros.forEach((rubro, rubroIndex) => {
-
-              // Agregamos los rubros por seccion
-              this.rubros(seccionIndex).push(this.fb.group({
-                ...rubro,
-                fechas: this.fb.array([])
-              }));
-
-              if (seccion.seccion.includes('COSTOS DIRECTOS DE SALARIOS')) {
-                this.costoMensualEmpleado = 0;
-
-                // Agreamos las fechas por rubro
-                rubro.fechas.forEach(fecha => {
-                  if (rubro.costoMensual != null) {
-                    this.costoMensualEmpleado = rubro.costoMensual;
-                  }
-
-                  this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                    id: fecha.id,
-                    mes: fecha.mes,
-                    anio: fecha.anio,
-                    porcentaje: this.formateaValor((fecha.porcentaje * this.costoMensualEmpleado) / 100)
-                  }));
-                });
-              } else {
-
-                // Agreamos las fechas por rubro
-                this.mesesProyecto.forEach(mes => {
-                  const mesRegistro = rubro.fechas.find(r =>
-                    r.mes === mes.mes && r.anio === mes.anio
-                  );
-
-                  if (mesRegistro) {
-                    this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                      id: mesRegistro.id,
-                      rubroReembolsable: rubro.reembolsable,
-                      mes: mesRegistro.mes,
-                      anio: mesRegistro.anio,
-                      porcentaje: mesRegistro.porcentaje,
-                    }));
-                  }
-                  else {
-                    // console.log('Agregando registro:', mes, 'con porcentaje:', 0);
-                    this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                      id: 0,
-                      rubroReembolsable: rubro.reembolsable,
-                      mes: mes.mes,
-                      anio: mes.anio,
-                      porcentaje: 0,
-                    }));
-                  }
-                });
-
-              }
-            });
           }))
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -256,7 +192,21 @@ export class GastosComponent implements OnInit {
       });
   }
 
-
+  async cargarInformacionSeccion(event: any) {
+    const { index } = event;
+    this.pcsService.obtenerInformacionGastosIngresos(this.idproyecto, 'gasto', this.secciones.value.at(index).seccion)
+          .pipe(finalize(() => this.seccionesCargado[index] = true))
+          .subscribe({
+            next: async (result) => {
+              const { data } = result;
+              const seccion = data?.secciones[0] || null;
+              if(seccion) {
+                this.seccionesData[index] = seccion;
+              }
+            },
+            error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+          });
+  }
 
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {
     rubro.reembolsable = reembolsable;
