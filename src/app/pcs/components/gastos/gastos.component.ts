@@ -209,21 +209,9 @@ export class GastosComponent implements OnInit {
                     mes: fecha.mes,
                     anio: fecha.anio,
                     porcentaje: this.formateaValor((fecha.porcentaje * this.costoMensualEmpleado) / 100)
-                    //porcentaje: fecha.porcentaje
                   }));
                 });
               } else {
-                // seccion.sumaFechas.forEach((sumaFecha) => {
-                //   this.sumafechas(seccionIndex).push(this.fb.group({
-                //     mes: sumaFecha.mes,
-                //     anio: sumaFecha.anio,
-                //     sumaFecha: sumaFecha.sumaPorcentaje
-                //   }));
-                // });
-
-                // rubro.fechas.forEach(fecha => {
-                //   this.sumacolumna += +fecha.porcentaje
-                // });
 
                 // Agreamos las fechas por rubro
                 this.mesesProyecto.forEach(mes => {
@@ -232,8 +220,6 @@ export class GastosComponent implements OnInit {
                   );
 
                   if (mesRegistro) {
-                    // console.log(mesRegistro, this.mesesProyecto, mes);
-                    // console.log('Agregando registro:', mesRegistro, 'con porcentaje:', mesRegistro.porcentaje);
                     this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
                       id: mesRegistro.id,
                       rubroReembolsable: rubro.reembolsable,
@@ -254,23 +240,6 @@ export class GastosComponent implements OnInit {
                   }
                 });
 
-                // rubro.fechas.forEach(fecha => {
-                //   const mesRegistro = this.mesesProyecto.find(m =>
-                //     m.mes === fecha.mes && m.anio === fecha.anio
-                //   );
-
-                //   const porcentaje = mesRegistro ? fecha.porcentaje : 0;
-
-                //   console.log(mesRegistro, this.mesesProyecto, fecha);
-
-                //   this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-                //     id: fecha.id,
-                //     mes: mesRegistro.mes,
-                //     anio: mesRegistro.anio,
-                //     porcentaje: porcentaje,
-                //   }));
-                // });
-
               }
             });
           }))
@@ -281,11 +250,8 @@ export class GastosComponent implements OnInit {
 
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
-        if (!params.proyecto) {
-          //console.log("params.proyecto:" + params.proyecto)
-        } else {
+        if (params.proyecto) {
           this.idproyecto = params.proyecto
-          // console.log("else params.proyecto:" + params.proyecto)
         }
       });
   }
