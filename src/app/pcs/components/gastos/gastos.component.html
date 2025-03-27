@@ -23,7 +23,11 @@
                         <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
                     </div>
                     <ng-template #contenido>
-                        <app-seccion-contenido [data]="seccionesData[i]"></app-seccion-contenido>
+                        <app-seccion-contenido 
+                            [seccion]="seccionesData[i]" 
+                            [indexSeccion]="i"
+                            [secciones]="secciones.value"
+                        ></app-seccion-contenido>
                     </ng-template>
                 </ng-template>
             </p-accordionTab>

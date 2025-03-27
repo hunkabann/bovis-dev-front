@@ -120,37 +120,6 @@ export class GastosComponent implements OnInit {
     })
   }
 
-
-  calcularTotalPorcentajePorMes(seccionNombre: string, mes: Mes, isReembolsable: Boolean): number {
-    const seccion = this.secciones.controls.find(ctrl => ctrl.value.seccion === seccionNombre);
-
-    let totalPorcentaje = 0.0;
-    const rubros = seccion.get('rubros') as FormArray;
-
-    rubros.controls.forEach((rubro, i) => {
-      // console.log(rubro.get('reembolsable').value);
-      const fechas = rubro.get('fechas') as FormArray;
-
-      fechas.controls.forEach((fechaControl, j) => {
-        const month = fechaControl.value;
-
-        if (mes.mes === month.mes &&
-          mes.anio === month.anio &&
-          (isReembolsable === (rubro.get('reembolsable').value != null ? rubro.get('reembolsable').value : false))
-        ) {
-          const porcentaje = parseFloat(fechaControl.value.porcentaje);
-          // console.log('Porcentaje encontrado para', rubro.get('rubro').value, 'del', mes.desc, ':', porcentaje);
-          if (!isNaN(porcentaje)) {
-            totalPorcentaje += porcentaje;
-          }
-        }
-      });
-    });
-
-    // console.log('Total porcentaje de', seccionNombre, 'del', mes.desc, ':', totalPorcentaje);
-    return totalPorcentaje;
-  }
-
   filterReembolsables(rubros: any[]): any[] {
     return rubros.filter(rubro => rubro.value.reembolsable === true);
   }
@@ -195,17 +164,21 @@ export class GastosComponent implements OnInit {
   async cargarInformacionSeccion(event: any) {
     const { index } = event;
     this.pcsService.obtenerInformacionGastosIngresos(this.idproyecto, 'gasto', this.secciones.value.at(index).seccion)
-          .pipe(finalize(() => this.seccionesCargado[index] = true))
-          .subscribe({
-            next: async (result) => {
-              const { data } = result;
-              const seccion = data?.secciones[0] || null;
-              if(seccion) {
-                this.seccionesData[index] = seccion;
-              }
-            },
-            error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
-          });
+      .pipe(finalize(() => this.seccionesCargado[index] = true))
+      .subscribe({
+        next: async (result) => {
+          const { data } = result;
+          const seccion = data?.secciones[0] || null;
+          if(seccion) {
+            const mesesProyecto = obtenerMeses(new Date(data.fechaIni), new Date(data.fechaFin));
+            this.seccionesData[index] = {
+              ...seccion,
+              mesesProyecto
+            };
+          }
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+      });
   }
 
   modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {
