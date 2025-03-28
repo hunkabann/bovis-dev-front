@@ -1,8 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { GastosIngresosSecciones, Rubro } from '../../models/pcs.model';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
+import { GastosIngresosSecciones, ModificarRubroEmitterProps, Rubro } from '../../models/pcs.model';
 import { Mes } from 'src/models/general.model';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
 
 interface Props extends GastosIngresosSecciones {
+  fechaIni: Date,
+  fechaFin: Date,
+  numProyecto: number,
   mesesProyecto: {
     mes: number,
     anio: number,
@@ -13,13 +18,17 @@ interface Props extends GastosIngresosSecciones {
 @Component({
   selector: 'app-seccion-contenido',
   templateUrl: './seccion-contenido.component.html',
-  styleUrls: ['./seccion-contenido.component.css']
+  styleUrls: ['./seccion-contenido.component.css'],
+  providers: [DialogService]
 })
 export class SeccionContenidoComponent implements OnInit {
+
+  dialogService = inject(DialogService);
 
   @Input() seccion: Props;
   @Input() indexSeccion: number;
   @Input() secciones: GastosIngresosSecciones[];
+  @Output() modificarRubroEvent = new EventEmitter<ModificarRubroEmitterProps>();
   
   seccionesFormateadas: {
     titulo: string,
@@ -43,7 +52,7 @@ export class SeccionContenidoComponent implements OnInit {
   ngOnInit(): void {
     this.seccionesFormateadas[0].rubros = [];
     this.seccionesFormateadas[1].rubros = [];
-    this.seccion.rubros.forEach(rubro => {
+    this.seccion.rubros.forEach((rubro) => {
       if(rubro.reembolsable) {
         this.seccionesFormateadas[0].rubros.push(rubro);
       } else {
@@ -52,8 +61,30 @@ export class SeccionContenidoComponent implements OnInit {
     });
   }
   
-  modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {
-    console.log('Hey there!')
+  // modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {
+  modificarRubro(rubro: Rubro, rubroIndex: number) {
+    // this.modificarRubroEvent.emit({rubro, idSeccion, fechaIni: this.seccion.fechaIni, fechaFin: this.seccion.fechaFin});
+    this.dialogService.open(ModificarRubroComponent, {
+      header: rubro.rubro,
+      width: '50%',
+      contentStyle: { overflow: 'auto' },
+      data: {
+        rubro,
+        idSeccion: this.seccion.idSeccion,
+        fechaInicio: this.seccion.fechaIni,
+        fechaFin: this.seccion.fechaFin,
+        numProyecto: this.seccion.numProyecto,
+      }
+    }).onClose.subscribe((result) => {
+      if (result && result.rubro) {
+        console.log(result.rubro)
+        const rubroRespuesta = result.rubro as Rubro;
+        this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
+          ...rubro,
+          ...rubroRespuesta,
+        };
+      }
+    });
   }
   
   calcularTotalPorcentajePorMes(seccionNombre: string, mes: Mes, isReembolsable: Boolean): number {

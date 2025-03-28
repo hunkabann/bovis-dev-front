@@ -330,3 +330,10 @@ export interface GastosIngresosInformacionResponseData {
     secciones:   GastosIngresosSecciones[];
     totales:     null;
 }
+
+export interface ModificarRubroEmitterProps {
+    rubro: Rubro,
+    idSeccion: number,
+    fechaIni: Date,
+    fechaFin: Date
+}

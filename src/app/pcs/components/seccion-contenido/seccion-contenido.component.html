@@ -30,7 +30,7 @@
                                 <button 
                                     title="Modificar rubro" type="button"
                                     class="btn btn-primary"
-                                    (click)="modificarRubro(rubro, indexSeccion, iRubro, seccion.idSeccion, true)"
+                                    (click)="modificarRubro(rubro, iRubro)"
                                     [disabled]="!rubro.idRubro || seccion.idSeccion == 2 "
                                 >
                                     <i class="pi pi-pencil vertical-align-middle"></i>
@@ -75,17 +75,4 @@
             </p-table>
         </ng-template>
     </p-accordionTab>
-    <!-- <p-accordionTab *ngFor="let rubro of data.rubros; let i = index">
-        <ng-template pTemplate="header">
-            <div class="d-flex justify-content-between align-items-center w-100">
-                <div class="title">
-                    <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
-                    <span class="vertical-align-middle">{{ rubro.rubro }} <strong>({{ rubro.reembolsable ? 'Reembolsable' : 'No Reembolsable'}})</strong></span>
-                </div>
-            </div>
-        </ng-template>
-        <ng-template pTemplate="content">
-            <app-rubro-contenido [data]="rubro" [seccion]="data" [secciones]="secciones" [mesesProyecto]="data.mesesProyecto"></app-rubro-contenido>
-        </ng-template>
-    </p-accordionTab> -->
 </p-accordion>

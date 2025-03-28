@@ -9,7 +9,7 @@ import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.comp
 import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
-import { Rubro, EtapasPorProyectoData, SumaFecha, GastosIngresosSecciones } from '../../models/pcs.model';
+import { Rubro, EtapasPorProyectoData, SumaFecha, GastosIngresosSecciones, ModificarRubroEmitterProps } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
 import { CostosService } from 'src/app/costos/services/costos.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -173,57 +173,15 @@ export class GastosComponent implements OnInit {
             const mesesProyecto = obtenerMeses(new Date(data.fechaIni), new Date(data.fechaFin));
             this.seccionesData[index] = {
               ...seccion,
-              mesesProyecto
+              mesesProyecto,
+              fechaIni: data.fechaIni,
+              fechaFin: data.fechaFin,
+              numProyecto: data.numProyecto
             };
           }
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
       });
-  }
-
-  modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {
-    rubro.reembolsable = reembolsable;
-
-    this.dialogService.open(ModificarRubroComponent, {
-      header: rubro.rubro,
-      width: '50%',
-      contentStyle: { overflow: 'auto' },
-      data: {
-        rubro,
-        idSeccion: idSeccion,
-        fechaInicio: this.proyectoFechaInicio,
-        fechaFin: this.proyectoFechaFin,
-        numProyecto: this.numProyectorubro,
-      }
-    }).onClose.subscribe((result) => {
-      if (result && result.rubro) {
-        const rubroRespuesta = result.rubro as Rubro;
-
-        this.rubros(seccionIndex).at(rubroIndex).patchValue({
-          unidad: rubroRespuesta.unidad,
-          cantidad: rubroRespuesta.cantidad,
-          reembolsable: rubroRespuesta.reembolsable,
-          aplicaTodosMeses: rubroRespuesta.aplicaTodosMeses,
-        });
-
-        this.fechas(seccionIndex, rubroIndex).clear();
-
-        const fechasFiltradas = rubroRespuesta.fechas.filter(fechaRegistro => {
-          return reembolsable ? rubro.reembolsable : !rubro.reembolsable;
-        });
-
-        fechasFiltradas.forEach(fechaRegistro => {
-          this.fechas(seccionIndex, rubroIndex).push(this.fb.group({
-            id: fechaRegistro.id,
-            mes: fechaRegistro.mes,
-            anio: fechaRegistro.anio,
-            porcentaje: fechaRegistro.porcentaje,
-          }));
-        });
-
-        this.cargarInformacion(this.numProyectorubro); 
-      }
-    });
   }
 
   formateaValor(valor) {
