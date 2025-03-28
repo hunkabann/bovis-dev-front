@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 import { environment } from 'src/environments/environment';
-import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse,GastosIngresosControlResponse, SeccionRespuesta } from '../models/pcs.model';
+import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse,GastosIngresosControlResponse, SeccionRespuesta, GastosIngresosSeccionesResponseNuevo, GastosIngresosInformacionResponse } from '../models/pcs.model';
 
 interface NuevoProyecto {
   id:     number,
@@ -83,7 +83,15 @@ export class PcsService {
   }
 
   obtenerGastosIngresosSecciones(numProyecto: number, tipo: string = 'gasto') {
-    return this.http.get<GastosIngresosSeccionesResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/${numProyecto}/${tipo}`)
+    return this.http.get<GastosIngresosSeccionesResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/secciones/${numProyecto}/${tipo}`)
+  }
+
+  obtenerGastosIngresosSeccionesNuevo(numProyecto: number, tipo: string = 'gasto') {
+    return this.http.get<GastosIngresosSeccionesResponseNuevo>(`${this.baseUrl}api/Pcs/GastosIngresos/secciones/${numProyecto}/${tipo}`)
+  }
+
+  obtenerInformacionGastosIngresos(numProyecto: number, tipo: 'gasto' | 'ingreso', seccion: string) {
+    return this.http.get<GastosIngresosInformacionResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/${numProyecto}/${tipo}/${seccion}`)
   }
 
   obtenerInformacionSeccion(numProyecto: number, seccion: string) {

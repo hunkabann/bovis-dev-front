@@ -1,0 +1,78 @@
+<p-accordion [multiple]="true" >
+    <p-accordionTab *ngFor="let seccionRegistro of seccionesFormateadas; let i = index">
+        <ng-template pTemplate="header">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="title">
+                    <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                    <span class="vertical-align-middle">{{ seccionRegistro.titulo }}</span>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <p-table [value]="seccionRegistro.rubros" [scrollable]="true" scrollHeight="400px">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th width="100px">Opciones</th>
+                        <th>Nombre</th>
+                        <th>Unidad</th>
+                        <th>Cantidad</th>
+                        <th>Reembolsable</th>
+                        <th>Subtotal</th>
+                        <th *ngFor="let mesRegistro of seccion.mesesProyecto">
+                            {{mesRegistro.desc | uppercase}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rubro let-iRubro="rowIndex">
+                    <tr>
+                        <td>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <button 
+                                    title="Modificar rubro" type="button"
+                                    class="btn btn-primary"
+                                    (click)="modificarRubro(rubro, iRubro)"
+                                    [disabled]="!rubro.idRubro || seccion.idSeccion == 2 "
+                                >
+                                    <i class="pi pi-pencil vertical-align-middle"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td>{{rubro.rubro}}</td>
+                        <td class="text-center">{{rubro.unidad}}</td>
+                        <td class="text-center">{{rubro.cantidad}}</td>
+                        <td class="text-center">Sí</td>
+                        <td
+                            *ngIf="!!rubro.reembolsable ; then thenrembolsableSi else thenrembolsableNo">
+                        </td>
+                        <ng-template #thenrembolsableSi>
+                            <td class="text-end">
+                                {{rubro.fechas | calcularSubtotal}}
+                            </td>
+                            <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
+                                {{ (rubro.fechas | porcentajeMes:mesRegistro) }}
+                            </td>
+                        </ng-template>
+                        <ng-template #thenrembolsableNo>
+                            <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
+                                {{0.0 | currency}}
+                            </td>
+                            <td class="text-end">
+                                {{0.0 | currency}}
+                            </td>
+                        </ng-template>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <tr>
+                        <td colspan="6" class="text-end">Totales</td>
+                        <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
+                            {{ calcularTotalPorcentajePorMes(seccion.seccion, mesRegistro, seccionRegistro.reembolsable) | currency }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-template>
+    </p-accordionTab>
+</p-accordion>
