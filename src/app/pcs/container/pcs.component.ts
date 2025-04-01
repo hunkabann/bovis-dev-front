@@ -24,7 +24,7 @@ export class PcsComponent implements OnInit {
   catalogosService = inject(CatalogosService)
   pcsService = inject(PcsService)
 
-  stilovisible: string = ''
+  stilovisible: boolean = true
 
   items: MenuItem[] = [
     { label: 'IP', routerLink: 'ip' },
@@ -86,9 +86,9 @@ export class PcsComponent implements OnInit {
    // console.log('VALOR DEL ITEM ----------------->>>>> ' + event)
 
     if(event === 'IP'){      
-      this.stilovisible = 'hidden'         
+      this.stilovisible = true         
   }else{
-    this.stilovisible = 'visible'
+    this.stilovisible = false
   }
 
     this.proyectoId = null;
@@ -123,9 +123,9 @@ export class PcsComponent implements OnInit {
 
 
     if( itemlabel == 'IP' || itemlabel == 'undefined' || itemlabel == '' || itemlabel == null){
-       this.stilovisible = 'visible'
+       this.stilovisible = false
     }else{
-      this.stilovisible = 'hidden'    
+      this.stilovisible = true 
     }
 
 
