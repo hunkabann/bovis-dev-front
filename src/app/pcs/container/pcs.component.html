@@ -8,9 +8,9 @@
             <button type="button" class="btn btn-info ml-5" (click)="cargarProyecto()">Nuevo proyecto</button>
         </p-toolbar>
 
-        <div class="col-12" style="text-decoration: none; visibility: {{stilovisible}};">
+        <div class="col-12" >
             <label for="id_proyecto">Proyecto:</label>
-            <p-dropdown id="id_proyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="cargarProyecto(true)" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [(ngModel)]="proyectoId"></p-dropdown>
+            <p-dropdown [disabled]="stilovisible" id="id_proyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="cargarProyecto(true)" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [(ngModel)]="proyectoId"></p-dropdown>
         </div>
         <!--<div class="col-12">
             <button type="button" class="btn btn-info" (click)="cargarProyecto(true)" [disabled]="!proyectoId">Editar</button>
