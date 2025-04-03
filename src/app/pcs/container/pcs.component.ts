@@ -24,7 +24,7 @@ export class PcsComponent implements OnInit {
   catalogosService = inject(CatalogosService)
   pcsService = inject(PcsService)
 
-  stilovisible: boolean = true
+  stilovisible: boolean = false
 
   items: MenuItem[] = [
     { label: 'IP', routerLink: 'ip' },
