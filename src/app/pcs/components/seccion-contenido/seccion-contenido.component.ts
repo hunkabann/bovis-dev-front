@@ -77,7 +77,6 @@ export class SeccionContenidoComponent implements OnInit {
       }
     }).onClose.subscribe((result) => {
       if (result && result.rubro) {
-        console.log(result.rubro)
         const rubroRespuesta = result.rubro as Rubro;
         this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
           ...rubro,
