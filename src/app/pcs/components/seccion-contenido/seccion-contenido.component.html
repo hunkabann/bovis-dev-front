@@ -16,7 +16,6 @@
                         <th>Nombre</th>
                         <th>Unidad</th>
                         <th>Cantidad</th>
-                        <th>Reembolsable</th>
                         <th>Subtotal</th>
                         <th *ngFor="let mesRegistro of seccion.mesesProyecto">
                             {{mesRegistro.desc | uppercase}}
@@ -40,7 +39,6 @@
                         <td>{{rubro.rubro}}</td>
                         <td class="text-center">{{rubro.unidad}}</td>
                         <td class="text-center">{{rubro.cantidad}}</td>
-                        <td class="text-center">Sí</td>
                         <td
                             *ngIf="!!rubro.reembolsable ; then thenrembolsableSi else thenrembolsableNo">
                         </td>
