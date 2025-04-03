@@ -34,6 +34,8 @@ export class ModificarRubroComponent implements OnInit {
   selectedUnidades: Unid | undefined;
 
   selectedUnidad: any;
+  
+  fechaActual = new Date();
 
   mes_ini: number
   ano_ini: number
@@ -111,12 +113,14 @@ export class ModificarRubroComponent implements OnInit {
       let OPERACION = MES + ANIO
       // console.log("GRAN TOTAL : " + OPERACION)
 
+      const fechaRegistro = new Date(mesRegistro.anio, mesRegistro.mes - 1);
       this.fechas.push(this.fb.group({
         mes: [mesRegistro.mes],
         anio: [mesRegistro.anio],
         desc: [mesRegistro.desc],
         porcentaje: [this.form.value.idRubro ? this.obtenerPorcentaje(rubro.fechas, mesRegistro) : 0],
-        mesTranscurrido: OPERACION
+        mesTranscurrido: OPERACION,
+        disabled: fechaRegistro < this.fechaActual
       }))
     })
 
@@ -141,9 +145,13 @@ export class ModificarRubroComponent implements OnInit {
 
   cambiarValoresFechas() {
     this.fechas.controls.forEach((fecha, index) => {
-      this.fechas.at(index).patchValue({
-        porcentaje: this.form.value.aplicaTodosMeses ? this.form.value.cantidad : 0
-      })
+      const fechaRegistro = new Date(fecha.value.anio, fecha.value.mes - 1);
+
+      if (!(fechaRegistro < this.fechaActual)) {
+        this.fechas.at(index).patchValue({
+          porcentaje: this.form.value.aplicaTodosMeses ? this.form.value.cantidad : 0
+        })
+      }
     })
   }
 
