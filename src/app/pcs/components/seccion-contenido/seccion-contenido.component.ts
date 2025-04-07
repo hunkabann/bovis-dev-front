@@ -28,6 +28,7 @@ export class SeccionContenidoComponent implements OnInit {
   @Input() seccion: Props;
   @Input() indexSeccion: number;
   @Input() secciones: GastosIngresosSecciones[];
+  @Input() esEditable: boolean = false;
   @Output() modificarRubroEvent = new EventEmitter<ModificarRubroEmitterProps>();
   
   seccionesFormateadas: {
