@@ -64,7 +64,7 @@
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <tr>
-                        <td colspan="6" class="text-end">Totales</td>
+                        <td colspan="5" class="text-end">Totales</td>
                         <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
                             {{ calcularTotalPorcentajePorMes(seccion.seccion, mesRegistro, seccionRegistro.reembolsable) | currency }}
                         </td>
