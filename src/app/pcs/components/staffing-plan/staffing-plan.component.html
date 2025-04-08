@@ -31,11 +31,11 @@
                         </div>
                         <div class="options d-flex gap-2">
                             <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null)">
-                  <i class="pi pi-user-plus vertical-align-middle"></i>
-                </button>
+                                <i class="pi pi-user-plus vertical-align-middle"></i>
+                            </button>
                             <button title="Eliminar etapa" type="button" class="btn btn-danger" (click)="eliminarEtapa($event, etapa.value, i)">
-                  <i class="pi pi-trash vertical-align-middle"></i>
-                </button>
+                                <i class="pi pi-trash vertical-align-middle"></i>
+                            </button>
                         </div>
                     </div>
                 </ng-template>
@@ -57,11 +57,11 @@
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
                                         <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado,empleado.value.FEE)">
-                          <i class="pi pi-calendar vertical-align-middle"></i>
-                        </button>
+                                            <i class="pi pi-calendar vertical-align-middle"></i>
+                                        </button>
                                         <button title="Eliminar empleado" type="button" class="btn btn-danger" (click)="eliminarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)">
-                          <i class="pi pi-trash vertical-align-middle"></i>
-                        </button>
+                                            <i class="pi pi-trash vertical-align-middle"></i>
+                                        </button>
                                     </div>
                                 </td>
                                 <td>{{empleado.value.numempleadoRrHh}}</td>
@@ -70,6 +70,12 @@
                                 <td *ngFor="let mesRegistro of etapa.value.meses">
                                     {{empleado.value.fechas | porcentajeMesStaffing:mesRegistro}}
                                 </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="footer">
+                            <tr>
+                                <td colspan="4" class="text-end">Totales</td>
+                                <td *ngFor="let key of etapaTotales[etapa.value.idFase] | keyvalue: originalOrder">{{key.value}} %</td>
                             </tr>
                         </ng-template>
                     </p-table>

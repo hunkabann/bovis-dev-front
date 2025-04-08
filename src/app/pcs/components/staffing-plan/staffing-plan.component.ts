@@ -17,6 +17,7 @@ import { Mes } from 'src/models/general.model';
 import { obtenerMeses } from 'src/helpers/helpers';
 import { CatalogosService } from '../../services/catalogos.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { KeyValue } from '@angular/common';
 
 // interface Etapa {
 //   id:         number,
@@ -56,7 +57,7 @@ export class StaffingPlanComponent implements OnInit {
   proyectoSeleccionado: boolean = false
 
   idproyecto: number;
-
+  etapaTotales: any[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -181,7 +182,9 @@ export class StaffingPlanComponent implements OnInit {
 
         // Agreamos las fechas por empleado
         empleado.fechas.forEach(fecha => {
-
+          this.etapaTotales[etapa.idFase] = this.etapaTotales[etapa.idFase] || {};
+          this.etapaTotales[etapa.idFase][`${fecha.mes}_${fecha.anio}`] = 
+            (this.etapaTotales[etapa.idFase][`${fecha.mes}_${fecha.anio}`] || 0) + fecha.porcentaje;
           this.fechas(etapaIndex, empleadoIndex).push(this.fb.group({
             id: fecha.id,
             mes: fecha.mes,
@@ -322,4 +325,7 @@ export class StaffingPlanComponent implements OnInit {
     return [format(new Date(etapa.fechaIni), 'Y-m-d'), format(new Date(etapa.fechaFin), 'Y-m-d')]
   }
 
+  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    return 0;
+  }
 }
