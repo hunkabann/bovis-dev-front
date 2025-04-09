@@ -30,6 +30,9 @@
                             <span class="vertical-align-middle">{{obtenerNombreFase(etapa.value)}}</span>
                         </div>
                         <div class="options d-flex gap-2">
+                            <button title="Agregar empleado" type="button" class="btn btn-primary" (click)="modificarEtapa($event, etapa.value, i)">
+                                <i class="pi pi-pencil vertical-align-middle"></i>
+                            </button>
                             <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null)">
                                 <i class="pi pi-user-plus vertical-align-middle"></i>
                             </button>

@@ -60,6 +60,10 @@ export class PcsService {
     return this.http.get<EtapasPorProyectoResponse>(`${this.baseUrl}api/Pcs/Etapas/${idProyecto}`)
   }
 
+  modificarEtapa(body: any) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/Etapas`, body)
+  }
+
   agregarEtapa(body: any) {
     return this.http.post<GenericResponse>(`${this.baseUrl}api/Pcs/Etapas`, body)
   }
