@@ -165,3 +165,11 @@ export const formatearInformacionControl = (data: SeccionData | SeccionSubseccio
   };
 
 }
+
+export const formatearFechaEncabezado = (mes: number, anio: number): string => {
+  let fecha = '-';
+  if(mes && anio) {
+    fecha = format(new Date(`${mes}-01-${anio}`), 'LLL/Y', { locale: es });
+  }
+  return fecha;
+}

@@ -46,6 +46,7 @@ import { SubseccionesAccordionComponent } from './components/subsecciones-accord
 import { porcentajeMesStaffingPipe } from './pipes/porcentaje-mes-staffing.pipe';
 import { SeccionContenidoComponent } from './components/seccion-contenido/seccion-contenido.component';
 import { ModificarEtapaComponent } from './components/modificar-etapa/modificar-etapa.component';
+import { TotalesIngresosComponent } from './components/totales-ingresos/totales-ingresos.component';
 
 
 @NgModule({
@@ -76,7 +77,8 @@ import { ModificarEtapaComponent } from './components/modificar-etapa/modificar-
     SubseccionesAccordionComponent,
     porcentajeMesStaffingPipe,
     SeccionContenidoComponent,
-    ModificarEtapaComponent
+    ModificarEtapaComponent,
+    TotalesIngresosComponent
   ],
   imports: [
     CommonModule,

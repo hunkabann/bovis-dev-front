@@ -11,6 +11,7 @@ import { finalize } from 'rxjs';
 import { CatalogosService } from '../../services/catalogos.service';
 import { CostosService } from 'src/app/costos/services/costos.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TotalesIngresosResponseData } from '../../models/pcs.model';
 
 @Component({
   selector: 'app-ingresos',
@@ -30,8 +31,10 @@ export class IngresosComponent implements OnInit {
   costosService = inject(CostosService);
 
   cargando: boolean = true;
+  cargandoTotales: boolean = true;
   proyectoSeleccionado: boolean = false;
   mesesProyecto: Mes[] = [];
+  totalesData: TotalesIngresosResponseData | null;
 
   proyectoFechaInicio: Date;
   proyectoFechaFin: Date;
@@ -156,6 +159,15 @@ export class IngresosComponent implements OnInit {
         if (params.proyecto) {
           this.idproyecto = params.proyecto
         }
+      });
+
+    this.pcsService.obtenerTotalesIngresos(numProyecto)
+      .pipe(finalize(() => this.cargandoTotales = false))
+      .subscribe({
+        next: ({data}) => {
+          this.totalesData = data;
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       });
   }
 

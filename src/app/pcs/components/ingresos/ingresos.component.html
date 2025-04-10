@@ -32,5 +32,15 @@
                 </ng-template>
             </p-accordionTab>
         </p-accordion>
+        <div class="mt-5">
+            <div class="text-center" *ngIf="cargandoTotales; else totales">
+                <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
+                <p>Cargando totales...</p>
+                <p><strong>Un momento.</strong></p>
+            </div>
+            <ng-template #totales>
+                <app-totales-ingresos [totalesData]="totalesData"></app-totales-ingresos>
+            </ng-template>
+        </div>
     </div>
 </ng-template>
