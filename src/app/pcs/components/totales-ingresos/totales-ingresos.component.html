@@ -9,38 +9,24 @@
             </div>
         </ng-template>
         <ng-template pTemplate="content">
-            <p-accordion [multiple]="true">
-                <p-accordionTab *ngFor="let tipo of registro.value.tipos | keyvalue">
-                    <ng-template pTemplate="header">
-                        <div class="d-flex justify-content-between align-items-center w-100">
-                            <div class="title">
-                                <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
-                                <span class="vertical-align-middle">{{tipo.value.titulo}}</span>
-                            </div>
-                        </div>
-                    </ng-template>
-                    <ng-template pTemplate="content">
-                        <p-table [value]="[1]" [scrollable]="true" scrollHeight="400px">
-                            <ng-template pTemplate="header">
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Subtotal</th>
-                                    <th *ngFor="let mesRegistro of tipo.value.meses">
-                                        {{mesRegistro.desc | uppercase}}
-                                    </th>
-                                </tr>
-                            </ng-template>
-                            <ng-template pTemplate="body">
-                                <tr>
-                                    <td>Tarifa Reembolsable</td>
-                                    <td>0</td>
-                                    <td *ngFor="let valor of tipo.value.registros">{{valor?.totalPorcentaje || '0'}}</td>
-                                </tr>
-                            </ng-template>
-                        </p-table>
-                    </ng-template>
-                </p-accordionTab>
-            </p-accordion>
+            <p-table [value]="[1]" [scrollable]="true" scrollHeight="400px">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Subtotal</th>
+                        <th *ngFor="let mesRegistro of registro.value.meses">
+                            {{mesRegistro.desc | uppercase}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body">
+                    <tr>
+                        <td>Tarifa Reembolsable</td>
+                        <td>{{registro.value.subtotal}}</td>
+                        <td *ngFor="let valor of registro.value.registros">{{valor?.totalPorcentaje || '0'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </ng-template>
     </p-accordionTab>
 </p-accordion>

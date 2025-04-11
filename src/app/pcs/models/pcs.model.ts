@@ -360,16 +360,7 @@ export interface TotalesIngresosResponseData {
 
 export interface TotalesIngresosFormateado  {
     titulo: string,
-    tipos: {
-        reembolsables: {
-            titulo: string,
-            meses?: Mes[],
-            registros?: GastosIngresosTotales[]
-        },
-        noreembolsables: {
-            titulo: string,
-            meses?: Mes[],
-            registros?: GastosIngresosTotales[]
-        }
-    }
+    subtotal: number,
+    meses?: Mes[],
+    registros?: GastosIngresosTotales[]
 }
