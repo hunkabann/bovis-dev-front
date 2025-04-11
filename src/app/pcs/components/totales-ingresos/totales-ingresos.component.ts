@@ -89,7 +89,7 @@ export class TotalesIngresosComponent implements OnInit {
     }
   }
 
-  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+  originalOrder = (a: KeyValue<string, TotalesIngresosFormateado>, b: KeyValue<string, TotalesIngresosFormateado>): number => {
     return 0;
   }
 }

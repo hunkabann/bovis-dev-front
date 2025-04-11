@@ -1,5 +1,5 @@
 <p-accordion [multiple]="true">
-    <p-accordionTab *ngFor="let registro of registros | keyvalue">
+    <p-accordionTab *ngFor="let registro of registros | keyvalue: originalOrder">
         <ng-template pTemplate="header">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <div class="title">
