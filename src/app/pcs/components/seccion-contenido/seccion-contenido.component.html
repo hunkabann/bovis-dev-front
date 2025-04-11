@@ -12,12 +12,12 @@
             <p-table [value]="seccionRegistro.rubros" [scrollable]="true" scrollHeight="400px">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th width="100px">Opciones</th>
-                        <th>Nombre</th>
-                        <th>Unidad</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                        <th *ngFor="let mesRegistro of seccion.mesesProyecto">
+                        <th width="100px" class="text-center">Opciones</th>
+                        <th class="text-left">Nombre</th>
+                        <th class="text-right">Unidad</th>
+                        <th class="text-right">Cantidad</th>
+                        <th class="text-right">Subtotal</th>
+                        <th *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-right">
                             {{mesRegistro.desc | uppercase}}
                         </th>
                     </tr>
@@ -39,9 +39,9 @@
                                 <span></span>
                             </ng-template>
                         </td>
-                        <td>{{rubro.rubro}}</td>
-                        <td class="text-center">{{rubro.unidad}}</td>
-                        <td class="text-center">{{rubro.cantidad}}</td>
+                        <td class="text-left">{{rubro.rubro}}</td>
+                        <td class="text-right">{{rubro.unidad}}</td>
+                        <td class="text-right">{{rubro.cantidad}}</td>
                         <td
                             *ngIf="!!rubro.reembolsable ; then thenrembolsableSi else thenrembolsableNo">
                         </td>
