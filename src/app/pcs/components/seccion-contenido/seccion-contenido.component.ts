@@ -89,7 +89,10 @@ export class SeccionContenidoComponent implements OnInit {
   
   calcularTotalPorcentajePorMes(seccionNombre: string, mes: Mes, isReembolsable: Boolean): number {
         // const seccion = this.secciones.find(ctrl => ctrl.seccion === seccionNombre);
-    
+        if(!isReembolsable) {
+          return 0;
+        }
+
         let totalPorcentaje = 0.0;
   
         const rubros = this.seccion.rubros;
