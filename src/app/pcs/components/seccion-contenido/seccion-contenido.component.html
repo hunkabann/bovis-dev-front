@@ -47,10 +47,10 @@
                         </td>
                         <ng-template #thenrembolsableSi>
                             <td class="text-end">
-                                {{rubro.fechas | calcularSubtotal}}
+                                {{rubro.fechas | calcularSubtotal:seccion.codigo:rubro.costoMensual}}
                             </td>
                             <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
-                                {{ (rubro.fechas | porcentajeMes:mesRegistro) }}
+                                {{ (rubro.fechas | porcentajeMes:mesRegistro:seccion.codigo:rubro.costoMensual) }}
                             </td>
                         </ng-template>
                         <ng-template #thenrembolsableNo>

@@ -8,11 +8,18 @@ import { formatCurrency, getCurrencySymbol } from '@angular/common';
 export class CalcularSubtotalPipe implements PipeTransform {
 
   transform(value: Fecha[], ...args: unknown[]): unknown {
-    // console.log(Object.values(value));
+    const [codigo, costoMensual] = args as [string, number?];
 
     let subtotal = 0
 
     value.forEach(fecha => {
+      if(codigo == '02.0000' && costoMensual) {  
+        if(costoMensual) {
+          subtotal += (costoMensual * fecha.porcentaje) / 100;
+        } else {
+          subtotal += 0;
+        }   
+      }
       subtotal += +fecha.porcentaje
     })
 
