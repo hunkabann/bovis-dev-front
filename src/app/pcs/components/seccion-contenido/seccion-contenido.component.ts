@@ -87,7 +87,7 @@ export class SeccionContenidoComponent implements OnInit {
     });
   }
   
-  calcularTotalPorcentajePorMes(seccionNombre: string, mes: Mes, isReembolsable: Boolean): number {
+  calcularTotalPorcentajePorMes(codigo: string, mes: Mes, isReembolsable: Boolean): number {
         // const seccion = this.secciones.find(ctrl => ctrl.seccion === seccionNombre);
         if(!isReembolsable) {
           return 0;
@@ -109,7 +109,15 @@ export class SeccionContenidoComponent implements OnInit {
             ) {
               const porcentaje = parseFloat((fecha.porcentaje || 0).toString());
               if (!isNaN(porcentaje)) {
-                totalPorcentaje += porcentaje;
+                if(codigo == '02.0000' && rubro.costoMensual) {  
+                  if(rubro.costoMensual) {
+                    totalPorcentaje += (rubro.costoMensual * porcentaje) / 100;
+                  } else {
+                    totalPorcentaje += 0;
+                  }   
+                } else {
+                  totalPorcentaje += porcentaje
+                }
               }
             }
           });

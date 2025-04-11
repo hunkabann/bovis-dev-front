@@ -19,8 +19,9 @@ export class CalcularSubtotalPipe implements PipeTransform {
         } else {
           subtotal += 0;
         }   
+      } else {
+        subtotal += +fecha.porcentaje
       }
-      subtotal += +fecha.porcentaje
     })
 
     return this.formateaValor(formatCurrency(subtotal, 'en-US', getCurrencySymbol('USD', 'wide')))
