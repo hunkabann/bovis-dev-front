@@ -34,6 +34,9 @@ export interface Empleado {
     cantidad:           number;
     Puesto:             string;
     reembolsable:       boolean;
+    nucosto_ini:        number;
+    chalias:            string;
+    PrecioVenta:        number;
 }
 
 export interface Fecha {

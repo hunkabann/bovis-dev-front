@@ -72,7 +72,9 @@ export class ModificarEmpleadoComponent implements OnInit {
     fechas: this.fb.array([]),
     puesto: [null],
     reembolsable: [false],
-    PrecioVenta: [0]
+    PrecioVenta: [0],
+    nucosto_ini: [null],
+    chalias: [null]
   })
 
   constructor() { }
@@ -123,7 +125,9 @@ export class ModificarEmpleadoComponent implements OnInit {
         aplicaTodosMeses: data.empleado?.aplicaTodosMeses,
         cantidad: data.empleado?.cantidad,
         puesto: data.empleado?.Puesto,
-        reembolsable: data.empleado?.aplicaTodosMeses
+        reembolsable: data.empleado?.reembolsable,
+        nucosto_ini: data.empleado?.PrecioVenta,
+        chalias: data.empleado?.chalias
       })
 
       if (!data.empleado) {
@@ -267,6 +271,9 @@ export class ModificarEmpleadoComponent implements OnInit {
               fee: null,
               Puesto: null,
               reembolsable: this.form.value.reembolsable,
+              nucosto_ini: this.form.value.PrecioVenta,
+              chalias: this.form.value.chalias,
+              PrecioVenta: this.form.value.PrecioVenta,
             }
           }
           const empleadoRespuesta: Empleado = {
