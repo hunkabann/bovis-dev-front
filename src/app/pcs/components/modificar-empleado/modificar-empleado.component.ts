@@ -22,7 +22,9 @@ interface EtapaEmpleado {
   aplicaTodosMeses: boolean,
   cantidad: number,
   FEE: number,
-  reembolsable: boolean
+  reembolsable: boolean,
+  //PrecioVenta: number,
+  //nucosto_ini: number,
 }
 
 interface ICatalogo {
@@ -56,6 +58,7 @@ export class ModificarEmpleadoComponent implements OnInit {
   FEEStaaafing: number
   catPuesto: Opcion[] = []
   Puesto: puesto[] = []
+  PreciodeVenta: number
 
   //TipoEmpleado:  EmpleadoTS[] = []
 
@@ -73,7 +76,7 @@ export class ModificarEmpleadoComponent implements OnInit {
     puesto: [null],
     reembolsable: [false],
     PrecioVenta: [0],
-    nucosto_ini: [null],
+    nucosto_ini: [0],
     chalias: [null]
   })
 
@@ -117,6 +120,8 @@ export class ModificarEmpleadoComponent implements OnInit {
           } 
     */
 
+          //console.log('PrecioVenta ------- ' +  data.empleado.PrecioVenta )
+         // console.log('PrecioVenta ------- ' +  data.empleado.nucosto_ini )
 
       this.form.patchValue({
         id_fase: data.etapa.idFase,
@@ -126,8 +131,10 @@ export class ModificarEmpleadoComponent implements OnInit {
         cantidad: data.empleado?.cantidad,
         puesto: data.empleado?.Puesto,
         reembolsable: data.empleado?.reembolsable,
-        nucosto_ini: data.empleado?.PrecioVenta,
-        chalias: data.empleado?.chalias
+        //nucosto_ini: data.empleado?.nucosto_ini,
+        chalias: data.empleado?.chalias,
+        //PrecioVenta: data.empleado?.PrecioVenta
+        
       })
 
       if (!data.empleado) {
@@ -146,7 +153,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
           this.form.patchValue({
             FEE: this.formateaValor(data.FEE),
-           // PrecioVenta: this.formateaValor(data.FEE),
+            PrecioVenta: this.formateaValor(data.FEE),
           })
 
         } else {
@@ -161,12 +168,15 @@ export class ModificarEmpleadoComponent implements OnInit {
                 console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
                 console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
 
+                
+
                 if (message != null) {
 
                   this.mensajito = message;
 
                   if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
-
+                    
+                    this.PreciodeVenta = 0
                     this.form.patchValue({
                       FEE: this.formateaValor(0.0),
                       PrecioVenta: this.formateaValor(0.0),
@@ -174,9 +184,12 @@ export class ModificarEmpleadoComponent implements OnInit {
 
                   } else {
 
+                    this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
                     this.form.patchValue({
                       FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                       PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                      
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                     })
 
                   }
@@ -196,23 +209,27 @@ export class ModificarEmpleadoComponent implements OnInit {
                 console.log('message ' + message)
                 console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
                 console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+                
 
                 if (message != null) {
 
                   this.mensajito = message;
 
                   if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
-
+                    this.PreciodeVenta = 0
                     this.form.patchValue({
                      // FEE: this.formateaValor(0.0),
                       PrecioVenta: this.formateaValor(0.0),
                     })
 
                   } else {
+                    this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
 
                     this.form.patchValue({
                      // FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                       PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                      
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                     })
 
                   }
@@ -254,6 +271,11 @@ export class ModificarEmpleadoComponent implements OnInit {
 
     this.sharedService.cambiarEstado(true)
 
+
+    console.log('valor de precio de venta3: '+ this.PreciodeVenta)
+
+    
+
     this.pcsService.modificarEmpleado(this.form.value, !!this.empleado)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
@@ -269,17 +291,20 @@ export class ModificarEmpleadoComponent implements OnInit {
               aplicaTodosMeses: this.form.value.aplicaTodosMeses,
               cantidad: this.form.value.cantidad,
               fee: null,
+              PrecioVenta: this.PreciodeVenta,
               Puesto: null,
               reembolsable: this.form.value.reembolsable,
-              nucosto_ini: this.form.value.PrecioVenta,
+              nucosto_ini: this.PreciodeVenta,
               chalias: this.form.value.chalias,
-              PrecioVenta: this.form.value.PrecioVenta,
+              
             }
           }
           const empleadoRespuesta: Empleado = {
             ...this.empleado,
             aplicaTodosMeses: this.form.value.aplicaTodosMeses,
             cantidad: this.form.value.cantidad,
+            nucosto_ini: this.PreciodeVenta,
+            PrecioVenta: this.PreciodeVenta,
             fechas: this.form.value.fechas as Fecha[]
           }
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'La etapa ha sido agregada.' })
@@ -379,6 +404,7 @@ export class ModificarEmpleadoComponent implements OnInit {
           console.log('message ' + message)
           console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
           console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+          
 
           if (message != null) {
 
@@ -386,6 +412,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
             if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
 
+              this.PreciodeVenta = 0
               this.form.patchValue({
                 FEE: this.formateaValor(0.0),
                 PrecioVenta: this.formateaValor(0.0)
@@ -394,9 +421,12 @@ export class ModificarEmpleadoComponent implements OnInit {
 
             } else {
 
+
+              this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
               this.form.patchValue({
                 FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
-                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
+                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
 
               })
 
