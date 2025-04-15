@@ -176,6 +176,7 @@ export class StaffingPlanComponent implements OnInit {
           aplicaTodosMeses: empleado.aplicaTodosMeses,
           cantidad: empleado.cantidad,
           FEE: empleado.fee,
+          //se agrega precio de venta y puesto
           Puesto: empleado.Puesto,
           PrecioVenta: empleado.nucosto_ini
         }))

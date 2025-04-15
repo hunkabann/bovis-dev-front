@@ -30,6 +30,7 @@
                             <span class="vertical-align-middle">{{obtenerNombreFase(etapa.value)}}</span>
                         </div>
                         <div class="options d-flex gap-2">
+                            <!--se agrega null para precio de venta-->
                             <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null,null)">
                   <i class="pi pi-user-plus vertical-align-middle"></i>
                 </button>
@@ -56,6 +57,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
+                                        <!--se agrega precio de venta-->
                                         <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado,empleado.value.FEE, empleado.value.PrecioVenta)">
                           <i class="pi pi-calendar vertical-align-middle"></i>
                         </button>
