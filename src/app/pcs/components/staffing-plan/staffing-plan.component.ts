@@ -176,7 +176,8 @@ export class StaffingPlanComponent implements OnInit {
           aplicaTodosMeses: empleado.aplicaTodosMeses,
           cantidad: empleado.cantidad,
           FEE: empleado.fee,
-          Puesto: empleado.Puesto
+          Puesto: empleado.Puesto,
+          PrecioVenta: empleado.nucosto_ini
         }))
 
         // Agreamos las fechas por empleado
@@ -237,7 +238,7 @@ export class StaffingPlanComponent implements OnInit {
       })
   }
 
-  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null) {
+  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, PrecioVenta: number | null) {
     event.stopPropagation()
 
     this.dialogService.open(ModificarEmpleadoComponent, {
@@ -248,7 +249,9 @@ export class StaffingPlanComponent implements OnInit {
         FEE,
         etapa,
         empleado,
+        PrecioVenta,
         num_proyecto: this.form.value.numProyecto
+        
 
       }
     })
@@ -286,7 +289,12 @@ export class StaffingPlanComponent implements OnInit {
               empleado: empleadoRespuesta.empleado,
               fechas: this.fb.array(fechasRespuesta),
               aplicaTodosMeses: empleadoRespuesta.aplicaTodosMeses,
-              cantidad: empleadoRespuesta.cantidad
+              cantidad: empleadoRespuesta.cantidad,
+              reembolsable: empleadoRespuesta.reembolsable,
+              chalias: empleadoRespuesta.chalias,
+              nucosto_ini: empleadoRespuesta.nucosto_ini
+              
+              
             }))
           }
         }
