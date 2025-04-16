@@ -175,6 +175,7 @@ export class StaffingPlanComponent implements OnInit {
 
       // Agregamos los empleados por cada etapa
       etapa.empleados.forEach((empleado, empleadoIndex) => {
+        console.log('empleado.chAlias ' + empleado.chAlias)
 
         this.empleados(etapaIndex).push(this.fb.group({
           id: empleado.id,
@@ -186,6 +187,7 @@ export class StaffingPlanComponent implements OnInit {
           cantidad: empleado.cantidad,
           FEE: empleado.fee,
           Puesto: empleado.Puesto,
+          chalias: empleado.chAlias,
           //PrecioVenta: empleado.PrecioVenta,
          // nucosto_ini: empleado.nucosto_ini
         }))
@@ -299,7 +301,7 @@ export class StaffingPlanComponent implements OnInit {
               cantidad: empleado.cantidad,
               FEE: empleado.fee,
               Puesto: empleado.Puesto,
-              chalias: empleado.chalias,
+              chalias: empleado.chAlias,
               //PrecioVenta: empleado.PrecioVenta,
              // nucosto_ini: empleado.nucosto_ini
             }))
@@ -321,7 +323,7 @@ export class StaffingPlanComponent implements OnInit {
       })
   }
 
-  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, PrecioVenta: number | null) {
+  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, chalias: string | null) {
     event.stopPropagation();
 
     this.dialogService.open(ModificarEmpleadoComponent, {
@@ -332,7 +334,7 @@ export class StaffingPlanComponent implements OnInit {
         FEE,
         etapa,
         empleado,
-        //PrecioVenta,
+        chalias,
         num_proyecto: this.form.value.numProyecto
 
       }
@@ -373,7 +375,7 @@ export class StaffingPlanComponent implements OnInit {
               aplicaTodosMeses: empleadoRespuesta.aplicaTodosMeses,
               cantidad: empleadoRespuesta.cantidad,
               reembolsable: empleadoRespuesta.reembolsable,
-              chalias: empleadoRespuesta.chalias,
+              chalias: empleadoRespuesta.chAlias,
               //nucosto_ini: empleadoRespuesta.nucosto_ini,
              // PrecioVenta: empleadoRespuesta.PrecioVenta
             }))
