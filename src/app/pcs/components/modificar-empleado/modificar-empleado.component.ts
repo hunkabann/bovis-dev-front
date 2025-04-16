@@ -23,6 +23,7 @@ interface EtapaEmpleado {
   cantidad: number,
   FEE: number,
   reembolsable: boolean,
+  chalias: string
   //PrecioVenta: number,
   //nucosto_ini: number,
 }
@@ -121,7 +122,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     */
 
           //console.log('PrecioVenta ------- ' +  data.empleado.PrecioVenta )
-         // console.log('PrecioVenta ------- ' +  data.empleado.nucosto_ini )
+          console.log('valor de alias ------- ' +  data.chalias )
+          console.log('valor de alias ------- ' +  data.empleado?.chAlias )
 
       this.form.patchValue({
         id_fase: data.etapa.idFase,
@@ -132,7 +134,7 @@ export class ModificarEmpleadoComponent implements OnInit {
         puesto: data.empleado?.Puesto,
         reembolsable: data.empleado?.reembolsable,
         //nucosto_ini: data.empleado?.nucosto_ini,
-        chalias: data.empleado?.chalias,
+        chalias: data.chalias,
         //PrecioVenta: data.empleado?.PrecioVenta
         
       })
@@ -294,8 +296,8 @@ export class ModificarEmpleadoComponent implements OnInit {
               PrecioVenta: this.PreciodeVenta,
               Puesto: null,
               reembolsable: this.form.value.reembolsable,
-              nucosto_ini: this.PreciodeVenta,
-              chalias: this.form.value.chalias,
+              nuCostoIni: this.PreciodeVenta,
+              chAlias: this.form.value.chalias,
               
             }
           }
@@ -303,8 +305,8 @@ export class ModificarEmpleadoComponent implements OnInit {
             ...this.empleado,
             aplicaTodosMeses: this.form.value.aplicaTodosMeses,
             cantidad: this.form.value.cantidad,
-            nucosto_ini: this.PreciodeVenta,
-            PrecioVenta: this.PreciodeVenta,
+           // nucosto_ini: this.PreciodeVenta,
+            //PrecioVenta: this.PreciodeVenta,
             fechas: this.form.value.fechas as Fecha[]
           }
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'La etapa ha sido agregada.' })
