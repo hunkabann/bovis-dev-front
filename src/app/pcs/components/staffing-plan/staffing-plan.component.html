@@ -49,6 +49,7 @@
                                 <th width="100px">Opciones</th>
                                 <th width="100px">No. Empleado</th>
                                 <th>Nombre</th>
+                                <th>Reembolsable</th>
                                 <th>Meses</th>
                                 <th *ngFor="let mesRegistro of etapa.value.meses">
                                     {{mesRegistro.desc | uppercase}}
@@ -69,6 +70,7 @@
                                 </td>
                                 <td>{{empleado.value.numempleadoRrHh}}</td>
                                 <td>{{empleado.value.empleado}}</td>
+                                <td>{{empleado.value.reembolsable ? 'Sí' : 'No'}}</td>
                                 <td>{{empleado.value.fechas | calcularSubtotalStaffing}}</td>
                                 <td *ngFor="let mesRegistro of etapa.value.meses">
                                     {{empleado.value.fechas | porcentajeMesStaffing:mesRegistro}}
