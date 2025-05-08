@@ -89,7 +89,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
 
-    this.form.controls['FEE'].disable();
+    // this.form.controls['FEE'].disable();
 
     this.form.controls['PrecioVenta'].disable();
 
@@ -375,14 +375,13 @@ export class ModificarEmpleadoComponent implements OnInit {
   }
 
   cambiarValoresSueldos() {
-    if (this.form.value.ModificaSueldo) {
-      this.form.controls['FEE'].enable()
-    } else {
-      this.form.controls['FEE'].reset()
-      this.form.controls['FEE'].disable()
+    // if (this.form.value.ModificaSueldo) {
+    //   this.form.controls['FEE'].enable()
+    // } else {
+    //   this.form.controls['FEE'].reset()
+    //   this.form.controls['FEE'].disable()
 
-    }
-
+    // }
 
     /*this.fechas.controls.forEach((fecha, index) => {
       this.fechas.at(index).patchValue({
