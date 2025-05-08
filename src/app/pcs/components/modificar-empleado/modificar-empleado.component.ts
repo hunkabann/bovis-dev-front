@@ -59,7 +59,9 @@ export class ModificarEmpleadoComponent implements OnInit {
   FEEStaaafing: number
   catPuesto: Opcion[] = []
   Puesto: puesto[] = []
-  PreciodeVenta: number
+  PreciodeVenta: number;
+
+  cargandoCosto: boolean = false;
 
   //TipoEmpleado:  EmpleadoTS[] = []
 
@@ -159,9 +161,12 @@ export class ModificarEmpleadoComponent implements OnInit {
           })
 
         } else {
-
+          this.cargandoCosto = true;
           this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
-            .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+            .pipe(finalize(() => {
+              this.sharedService.cambiarEstado(false);
+              this.cargandoCosto = false;
+            }))
             .subscribe({
               next: ({ data, message }) => {
 
@@ -202,8 +207,12 @@ export class ModificarEmpleadoComponent implements OnInit {
 
         }
 
+        this.cargandoCosto = true;
         this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
-            .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+            .pipe(finalize(() => {
+              this.sharedService.cambiarEstado(false);
+              this.cargandoCosto = false;
+            }))
             .subscribe({
               next: ({ data, message }) => {
 
@@ -396,8 +405,12 @@ export class ModificarEmpleadoComponent implements OnInit {
     console.log('event ' + event)
     console.log('+event. ' + +event)
 
+    this.cargandoCosto = true;
     this.costosService.getCostoID(event)
-      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .pipe(finalize(() => {
+        this.sharedService.cambiarEstado(false);
+        this.cargandoCosto = false;
+      }))
       .subscribe({
         next: ({ data, message }) => {
 
