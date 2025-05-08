@@ -29,6 +29,7 @@ export class SeccionContenidoComponent implements OnInit {
   @Input() indexSeccion: number;
   @Input() secciones: GastosIngresosSecciones[];
   @Input() esEditable: boolean = false;
+  @Input() mostrarNoReembolsables: boolean = true;
   @Output() modificarRubroEvent = new EventEmitter<ModificarRubroEmitterProps>();
   
   seccionesFormateadas: {
@@ -40,11 +41,6 @@ export class SeccionContenidoComponent implements OnInit {
       titulo: 'Reembolsables',
       reembolsable: true,
       rubros: []
-    },
-    {
-      titulo: 'No Reembolsables',
-      reembolsable: false,
-      rubros: []
     }
   ];
 
@@ -52,11 +48,18 @@ export class SeccionContenidoComponent implements OnInit {
 
   ngOnInit(): void {
     this.seccionesFormateadas[0].rubros = [];
-    this.seccionesFormateadas[1].rubros = [];
+    if (this.mostrarNoReembolsables) {
+      this.seccionesFormateadas[1] = {
+        titulo: 'No Reembolsables',
+        reembolsable: false,
+        rubros: []
+      };
+      this.seccionesFormateadas[1].rubros = [];
+    }
     this.seccion.rubros.forEach((rubro) => {
-      if(rubro.reembolsable) {
+      if (rubro.reembolsable) {
         this.seccionesFormateadas[0].rubros.push(rubro);
-      } else {
+      } else if (this.mostrarNoReembolsables) {
         this.seccionesFormateadas[1].rubros.push(rubro);
       }
     });
