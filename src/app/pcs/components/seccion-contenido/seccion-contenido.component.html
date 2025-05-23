@@ -64,7 +64,13 @@
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <tr>
-                        <td colspan="5" class="text-end">Totales</td>
+                        <td colspan="4" class="text-end" *ngIf="esEditable; else totalesNoEditable">Totales</td>
+                        <ng-template #totalesNoEditable>
+                            <td colspan="3" class="text-end">Totales</td>
+                        </ng-template>
+                        <td class="text-end">
+                            {{ calcularSubTotal(seccionRegistro.rubros) | currency }}
+                        </td>
                         <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
                             {{ calcularTotalPorcentajePorMes(seccion.codigo, mesRegistro, seccionRegistro.reembolsable) | currency }}
                         </td>

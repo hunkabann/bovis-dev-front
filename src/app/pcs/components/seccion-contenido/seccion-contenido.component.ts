@@ -128,5 +128,23 @@ export class SeccionContenidoComponent implements OnInit {
     
         return totalPorcentaje;
       }
+  
+  calcularSubTotal(rubros: Rubro[]): number {
+    let subtotal = 0
+    rubros.forEach(rubro => {
+      rubro.fechas.forEach(fecha => {
+        if(this.seccion.codigo == '02.0000' && rubro.costoMensual) {  
+          if(rubro.costoMensual) {
+            subtotal += (rubro.costoMensual * fecha.porcentaje) / 100;
+          } else {
+            subtotal += 0;
+          }   
+        } else {
+          subtotal += +fecha.porcentaje
+        }
+      })
+    });
+    return subtotal;
+  }
 
 }
