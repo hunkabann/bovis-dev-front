@@ -180,6 +180,7 @@ export class StaffingPlanComponent implements OnInit {
         this.empleados(etapaIndex).push(this.fb.group({
           id: empleado.id,
           idFase: empleado.idFase,
+          reembolsable: empleado.reembolsable,
           numempleadoRrHh: empleado.numempleadoRrHh,
           empleado: empleado.empleado,
           fechas: this.fb.array([]),
