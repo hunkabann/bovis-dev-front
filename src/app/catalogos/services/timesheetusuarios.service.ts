@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 import { environment } from 'src/environments/environment';
-import { ObtenerClientesResponse } from '../Models/clientes';
+import { ObtenerUsuarioTimesheetResponse } from '../Models/timesheetusuarios';
+import { TsProyectosResponse } from 'src/app/timesheet/models/timesheet.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClientesService {
+export class TimeSheetUsuarioService {
 
   http = inject(HttpClient)
   
@@ -15,17 +16,25 @@ export class ClientesService {
 
   constructor() { }
 
-  obtenerClientes() {
-    return this.http.get<ObtenerClientesResponse>(`${this.baseUrl}api/Catalogo/Cliente/true`)
-  }
-
-  guardarCliente(body: any, esActualizacion = false) {
-    return esActualizacion 
-    ? this.http.put<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Actualizar`, body)
-    : this.http.post<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Agregar`, body)
-  }
-
   eliminarCliente(id: number) {
     return this.http.delete<GenericResponse>(`${this.baseUrl}api/Catalogo/Cliente/Borrar/${id}`)
+  }
+
+getCatProyectos(ordenAlfabetico: boolean = true) {
+    return this.http.get<TsProyectosResponse>(`${this.baseUrl}api/pcs/proyectos/${ordenAlfabetico}`)
+  }
+
+  obtenerUsuarioTimesheet() {
+    return this.http.get<ObtenerUsuarioTimesheetResponse>(`${this.baseUrl}api/Timesheet/Usuarios`)
+  }
+
+  guardarUsuarioTimesheet(body: any, esActualizacion = false) {
+    return esActualizacion 
+    ? this.http.put<GenericResponse>(`${this.baseUrl}api/Timesheet/Usuarios`, body)
+    : this.http.post<GenericResponse>(`${this.baseUrl}api/Timesheet/Usuarios`, body)
+  }
+
+  eliminarUsuarioTimesheet(id: string) {
+    return this.http.delete<GenericResponse>(`${this.baseUrl}api/Timesheet/Usuarios/${id}`)
   }
 }
