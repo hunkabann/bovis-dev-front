@@ -2,8 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { finalize } from 'rxjs';
-import { Cliente } from 'src/app/catalogos/Models/clientes';
-import { ClientesService } from 'src/app/catalogos/services/clientes.service';
+import { UsuarioTimesheet } from 'src/app/catalogos/Models/timesheetusuarios';
+//import { ClientesService } from 'src/app/catalogos/services/clientes.service';
+import { TimeSheetUsuarioService } from 'src/app/catalogos/services/timesheetusuarios.service';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { TITLES } from 'src/utils/constants';
 import { timesheetusuariosRegistroComponent } from '../registro/timesheetusuarios-registro.component';
@@ -16,12 +17,14 @@ import { timesheetusuariosRegistroComponent } from '../registro/timesheetusuario
 })
 export class timesheetusuariosPrincipalComponent implements OnInit {
 
-  clientesService   = inject(ClientesService)
+  clientesService   = inject(TimeSheetUsuarioService)
   dialogService     = inject(DialogService)
   messageService    = inject(MessageService)
   sharedService     = inject(SharedService)
 
-  clientes: Cliente[] = []
+  //clientes: UsuarioTimesheet[] = []
+
+  usuariotimesheet: UsuarioTimesheet[] = []
 
   constructor() { }
 
@@ -33,36 +36,36 @@ export class timesheetusuariosPrincipalComponent implements OnInit {
     
     this.sharedService.cambiarEstado(true)
   
-    this.clientesService.obtenerClientes()
+    this.clientesService.obtenerUsuarioTimesheet()
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
-          this.clientes = data
+          this.usuariotimesheet = data
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
   }
 
-  guardarCliente(cliente: Cliente, index: number) {
+  guardarUsuarioTimesheet(usuariotimesheet: UsuarioTimesheet, index: number) {
     
     this.dialogService.open(timesheetusuariosRegistroComponent, {
-      header: `${cliente ? 'Actualizar' : 'Agregar'} timesheet usuario`,
+      header: `${usuariotimesheet ? 'Actualizar' : 'Agregar'} timesheet usuario`,
       width: '50%',
       contentStyle: {overflow: 'auto'},
       data: {
-        cliente
+        usuariotimesheet
       }
     })
     .onClose.subscribe((result) => {
       
       if(result && result.exito) {
         
-        this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El cliente ha sido guardado.'})
+        this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El Usuario Timesheet ha sido guardado.'})
 
-        if(cliente) {
-          this.clientes[index] = {
+        if(usuariotimesheet) {
+          this.usuariotimesheet[index] = {
             ...result.clienteActualizado,
-            idCliente: result.clienteActualizado.id_cliente
+            numEmpleadoRrHh: result.clienteActualizado.numEmpleadoRrHh
           }
         } else {
           this.cargarClientes()
@@ -71,16 +74,16 @@ export class timesheetusuariosPrincipalComponent implements OnInit {
     })
   }
 
-  eliminarCliente(cliente: Cliente, index: number) {
+  eliminarUsuarioTimesheet(usuariotimesheet: UsuarioTimesheet, index: number) {
     
     this.sharedService.cambiarEstado(true)
 
-    this.clientesService.eliminarCliente(cliente.idCliente)
+    this.clientesService.eliminarUsuarioTimesheet(usuariotimesheet.numEmpleadoRrHh)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
-          this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El cliente ha sido eliminado.'})
-          this.clientes.splice(index, 1)
+          this.messageService.add({severity: 'success', summary: TITLES.success, detail: 'El Usuario ha sido eliminado.'})
+          this.usuariotimesheet.splice(index, 1)
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
