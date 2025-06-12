@@ -22,8 +22,8 @@
                 <ng-template pTemplate="body">
                     <tr>
                         <td>Tarifa Reembolsable</td>
-                        <td class="text-right">{{registro.value.subtotal}}</td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0'}}</td>
+                        <td class="text-right">{{registro.value.subtotal ?? '0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0' | currency}}</td>
                     </tr>
                 </ng-template>
             </p-table>
