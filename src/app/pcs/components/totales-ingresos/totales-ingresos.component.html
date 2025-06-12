@@ -25,6 +25,26 @@
                         <td class="text-right">{{registro.value.subtotal ?? '0' | currency}}</td>
                         <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0' | currency}}</td>
                     </tr>
+                    <tr>
+                        <td>Gastos No Reembolsables</td>
+                        <td class="text-right"></td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td>Fee - Porcentaje de OH sobre el total no reembolsable</td>
+                        <td class="text-right"></td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td>Fee - Porcentaje de Utilidad sobre el total no reembolsable</td>
+                        <td class="text-right"></td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right"></td>
+                    </tr>
+                    <tr>
+                        <td>Contingencia - % sobre Costos No Reembolsables</td>
+                        <td class="text-right"></td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right"></td>
+                    </tr>
                 </ng-template>
             </p-table>
         </ng-template>
