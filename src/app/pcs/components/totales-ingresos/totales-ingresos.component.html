@@ -27,23 +27,23 @@
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Gastos No Reembolsables</td>
-                        <td class="text-right"></td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right"></td>
+                        <td class="text-right">{{'0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Fee - Porcentaje de OH sobre el total no reembolsable</td>
-                        <td class="text-right"></td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right"></td>
+                        <td class="text-right">{{'0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Fee - Porcentaje de Utilidad sobre el total no reembolsable</td>
-                        <td class="text-right"></td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right"></td>
+                        <td class="text-right">{{'0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Contingencia - % sobre Costos No Reembolsables</td>
-                        <td class="text-right"></td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right"></td>
+                        <td class="text-right">{{'0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
                     </tr>
                 </ng-template>
             </p-table>
