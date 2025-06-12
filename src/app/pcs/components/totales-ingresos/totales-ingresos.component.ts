@@ -49,7 +49,7 @@ export class TotalesIngresosComponent implements OnInit {
           this.registros.ingreso.subtotal += ingreso.totalPorcentaje;
             const existingRegistro = this.registros.ingreso.registros.find(registro => registro.mes === ingreso.mes && registro.anio === ingreso.anio);
             if (existingRegistro) {
-              existingRegistro.totalPorcentaje += ingreso.totalPorcentaje;
+              existingRegistro.totalPorcentaje = ingreso.totalPorcentaje;
             } else {
               this.registros.ingreso.registros.push(ingreso);
             }
@@ -63,7 +63,7 @@ export class TotalesIngresosComponent implements OnInit {
           this.registros.facturacion.subtotal += facturacion.totalPorcentaje;
           const existingRegistro = this.registros.facturacion.registros.find(registro => registro.mes === facturacion.mes && registro.anio === facturacion.anio);
           if (existingRegistro) {
-            existingRegistro.totalPorcentaje += facturacion.totalPorcentaje;
+            existingRegistro.totalPorcentaje = facturacion.totalPorcentaje;
           } else {
             this.registros.facturacion.registros.push(facturacion);
           }
@@ -77,7 +77,7 @@ export class TotalesIngresosComponent implements OnInit {
           this.registros.cobranza.subtotal += cobranza.totalPorcentaje;
           const existingRegistro = this.registros.cobranza.registros.find(registro => registro.mes === cobranza.mes && registro.anio === cobranza.anio);
           if (existingRegistro) {
-            existingRegistro.totalPorcentaje += cobranza.totalPorcentaje;
+            existingRegistro.totalPorcentaje = cobranza.totalPorcentaje;
           } else {
             this.registros.cobranza.registros.push(cobranza);
           }
