@@ -7,7 +7,7 @@
 
     <p-toolbar styleClass="p-1 mb-4 d-flex justify-content-end gap-2 text-right">
         <button type="button" class="btn btn-secondary" routerLink="/catalogos"><i class="fas fa-arrow-left"></i> Regresar</button>
-        <button type="submit" class="btn btn-primary" (click)="guardarUsuarioTimesheet(null, null)"><i class="fas fa-plus"></i> Nuevo timesheet usuario</button>
+        <button type="submit" class="btn btn-primary" (click)="editarUsuarioTimesheet(null, null)"><i class="fas fa-plus"></i> Nuevo timesheet usuario</button>
     </p-toolbar>
 
     <div class="table-container">
@@ -55,7 +55,7 @@
                     </td-->
                     <td>
                         <div class="text-center">
-                            <button title="Modificar Usuatio Timesheet" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info p-mr-2 mr-3" (click)="guardarUsuarioTimesheet(usuariotimesheet, i)"></button>
+                            <button title="Modificar Usuatio Timesheet" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info p-mr-2 mr-3" (click)="editarUsuarioTimesheet(usuariotimesheet, i)"></button>
                             <button title="Eliminar Usuatio Timesheet" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger p-mr-2" (click)="eliminarUsuarioTimesheet(usuariotimesheet, i)"></button>
                         </div>
                     </td>

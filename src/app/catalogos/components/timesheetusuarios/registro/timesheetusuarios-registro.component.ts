@@ -45,41 +45,37 @@ export class timesheetusuariosRegistroComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-
     forkJoin([
-          this.timesheetService.getCatProyectos(),
-          this.usuariosService.obtenerUsuarios()
-        ])
-          .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-          .subscribe({
-            next: (value) => {
-              const [proyectosR,usuariosR] = value
-              this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}` })),
-              this.usuarios = usuariosR.data.map(usuarios => ({ code: usuarios.numEmpleado.toString(), name: `${usuarios.numEmpleado.toString()} - ${usuarios.empleado}` }))
+      this.timesheetService.getCatProyectos(),
+      this.usuariosService.obtenerUsuarios()
+    ])
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: (value) => {
+        const [proyectosR,usuariosR] = value
+        this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}` })),
+        this.usuarios = usuariosR.data.map(usuarios => ({ code: usuarios.numEmpleado.toString(), name: `${usuarios.numEmpleado.toString()} - ${usuarios.empleado}` }))
+        //this.verificarEstado()
+      },
+      error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
+    });
     
-              //this.verificarEstado()
-            },
-            error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
-          })
-    
-        this.pcsService.obtenerNuevoProyecto()
-          .subscribe(proyecto => {
-            this.proyectos.push({ code: proyecto.id.toString(), name: `${proyecto.id.toString()} - ${proyecto.nombre}` })
-            // this.proyectoId = proyecto.id
-          })
+    this.pcsService.obtenerNuevoProyecto()
+      .subscribe(proyecto => {
+        this.proyectos.push({ code: proyecto.id.toString(), name: `${proyecto.id.toString()} - ${proyecto.nombre}` })
+        // this.proyectoId = proyecto.id
+      });
 
     if(this.config.data.usuariotimesheet) {
-      
       this.esActualizacion = true
-
-      
       const usuariotimesheet = this.config.data.usuariotimesheet
       this.form.patchValue({
-        numEmpleadoRrHh: usuariotimesheet.numEmpleadoRrHh,
+        numEmpleadoRrHh: usuariotimesheet.numEmpleadoRrHh?.toString() || '',
         usuario:    usuariotimesheet.usuario,
-        numProyecto:        usuariotimesheet.numProyecto,
+        nombreEmpleado: usuariotimesheet.nombreEmpleado,
+        numProyecto:        usuariotimesheet.numProyecto?.toString() || '',
         nombreProyecto:        usuariotimesheet.nombreProyecto,
-      })
+      });
     }
   }
 

@@ -1,65 +1,19 @@
-<p-toast>
-</p-toast>
+<p-toast></p-toast>
 
 <form [formGroup]="form" (ngSubmit)="guardar()">
-
     <div class="row">
-
-        <div class="col-12" style="text-decoration: none; visibility: hidden;">
+        <div class="col-12">
             <label for="numEmpleadoRrHh">Usuario:</label>
-            <input id="numEmpleadoRrHh" pInputText class="form-control" maxlength="50" formControlName="numEmpleadoRrHh" [ngClass]="{'ng-invalid ng-dirty': esInvalido('numEmpleadoRrHh')}">
-            <div *ngIf="esInvalido('numEmpleadoRrHh')">
-                <small class="error-msg">
-                    {{ obtenerMensajeError('numEmpleadoRrHh') }}
-                </small>
-            </div>
+            <p-dropdown id="numEmpleadoRrHh" [options]="usuarios" formControlName="numEmpleadoRrHh" placeholder="Seleccionar un usuario" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [appendTo]="'body'"></p-dropdown>
         </div>
 
         <div class="col-12">
-            <label for="usuario">Usuario:</label>
-            <p-dropdown id="usuario" [options]="usuarios" formControlName="usuario" placeholder="Seleccionar un usuario" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" ></p-dropdown>
+            <label for="numProyecto">Proyecto {{form.value.numProyecto}}:</label>
+            <p-dropdown id="numProyecto" [options]="proyectos" formControlName="numProyecto" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [appendTo]="'body'"></p-dropdown>
         </div>
-
-        <!--div class="col-12">
-            <label for="rfc">Proyecto:</label>
-            <input id="rfc" pInputText class="form-control" maxlength="50" formControlName="rfc" [ngClass]="{'ng-invalid ng-dirty': esInvalido('rfc')}">
-            <div *ngIf="esInvalido('rfc')">
-                <small class="error-msg">
-                    {{ obtenerMensajeError('rfc') }}
-                </small>
-            </div>
-        </div-->
-
-        <div class="col-12">
-            <label for="nombreProyecto">Proyecto:</label>
-            <p-dropdown id="nombreProyecto" formControlName="nombreProyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" ></p-dropdown>
-        </div>
-
-        <div class="col-12"  style="text-decoration: none; visibility: hidden;">
-            <label for="numEmpleadoRrHh">Proyecto:</label>
-            <input id="numEmpleadoRrHh" pInputText class="form-control" maxlength="50" formControlName="numEmpleadoRrHh" [ngClass]="{'ng-invalid ng-dirty': esInvalido('numEmpleadoRrHh')}">
-            <div *ngIf="esInvalido('numEmpleadoRrHh')">
-                <small class="error-msg">
-                    {{ obtenerMensajeError('numEmpleadoRrHh') }}
-                </small>
-            </div>
-        </div>
-
-        <div class="col-12" style="text-decoration: none; visibility: hidden;">
-            <label for="numEmpleadoRrHh">Proyecto:</label>
-            <input id="numEmpleadoRrHh" pInputText class="form-control" maxlength="50" formControlName="numEmpleadoRrHh" [ngClass]="{'ng-invalid ng-dirty': esInvalido('numEmpleadoRrHh')}">
-            <div *ngIf="esInvalido('numEmpleadoRrHh')">
-                <small class="error-msg">
-                    {{ obtenerMensajeError('numEmpleadoRrHh') }}
-                </small>
-            </div>
-        </div>
-
     </div>
 
     <div class="d-flex justify-content-end mt-2">
-         <!--button type="button" class="btn btn-primary" (click)="guardar()" [disabled]="!form.valid"><i class="fas fa-save"></i> Guardar</button-->
         <button type="button" class="btn btn-primary" (click)="guardar()" ><i class="fas fa-save"></i> Guardar</button>
     </div>
-
 </form>

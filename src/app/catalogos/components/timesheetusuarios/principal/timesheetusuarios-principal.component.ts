@@ -46,7 +46,7 @@ export class timesheetusuariosPrincipalComponent implements OnInit {
       })
   }
 
-  guardarUsuarioTimesheet(usuariotimesheet: UsuarioTimesheet, index: number) {
+  editarUsuarioTimesheet(usuariotimesheet: UsuarioTimesheet, index: number) {
     
     this.dialogService.open(timesheetusuariosRegistroComponent, {
       header: `${usuariotimesheet ? 'Actualizar' : 'Agregar'} timesheet usuario`,
