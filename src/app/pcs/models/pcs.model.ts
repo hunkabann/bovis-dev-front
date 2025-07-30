@@ -366,6 +366,7 @@ export interface TotalesIngresosResponseData {
 export interface TotalesIngresosFormateado  {
     titulo: string,
     subtotal: number,
+    subtotalno: number,
     meses?: Mes[],
     registros?: GastosIngresosTotales[]
 }
