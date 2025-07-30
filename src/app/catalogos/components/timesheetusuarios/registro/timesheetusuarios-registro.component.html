@@ -3,13 +3,13 @@
 <form [formGroup]="form" (ngSubmit)="guardar()">
     <div class="row">
         <div class="col-12">
-            <label for="numEmpleadoRrHh">Usuario:</label>
-            <p-dropdown id="numEmpleadoRrHh" [options]="usuarios" formControlName="numEmpleadoRrHh" placeholder="Seleccionar un usuario" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [appendTo]="'body'"></p-dropdown>
+            <label for="num_empleado">Usuario:</label>
+            <p-dropdown id="num_empleado" [options]="usuarios" formControlName="num_empleado" placeholder="Seleccionar un usuario" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [appendTo]="'body'"></p-dropdown>
         </div>
 
         <div class="col-12">
-            <label for="numProyecto">Proyecto {{form.value.numProyecto}}:</label>
-            <p-dropdown id="numProyecto" [options]="proyectos" formControlName="numProyecto" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [appendTo]="'body'"></p-dropdown>
+            <label for="num_proyecto">Proyecto:</label>
+            <p-dropdown id="num_proyecto" [options]="proyectos" formControlName="num_proyecto" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [appendTo]="'body'"></p-dropdown>
         </div>
     </div>
 

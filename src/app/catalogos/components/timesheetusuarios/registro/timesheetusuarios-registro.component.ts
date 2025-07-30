@@ -33,11 +33,10 @@ export class timesheetusuariosRegistroComponent implements OnInit {
   esActualizacion = false
 
   form = this.fb.group({
-    numEmpleadoRrHh:   ['', Validators.required],
-    usuario:      [null],
-    nombreEmpleado:      [null],
-    numProyecto:      ['', Validators.required],
-    nombreProyecto:       [null],
+    id:             [null],
+    num_empleado:   ['', Validators.required],
+    usuario:        [null],
+    num_proyecto:   ['', Validators.required]
   })
 
   proyectos: Opcion[] = []
@@ -70,11 +69,10 @@ export class timesheetusuariosRegistroComponent implements OnInit {
       this.esActualizacion = true
       const usuariotimesheet = this.config.data.usuariotimesheet
       this.form.patchValue({
-        numEmpleadoRrHh: usuariotimesheet.numEmpleadoRrHh?.toString() || '',
-        usuario:    usuariotimesheet.usuario,
-        nombreEmpleado: usuariotimesheet.nombreEmpleado,
-        numProyecto:        usuariotimesheet.numProyecto?.toString() || '',
-        nombreProyecto:        usuariotimesheet.nombreProyecto,
+        id:           usuariotimesheet.id,
+        num_empleado: usuariotimesheet.numEmpleadoRrHh?.toString() || '',
+        usuario:      usuariotimesheet.usuario,
+        num_proyecto: usuariotimesheet.numProyecto?.toString() || ''
       });
     }
   }
@@ -86,15 +84,11 @@ export class timesheetusuariosRegistroComponent implements OnInit {
     }
 
     // Buscar datos de usuario y proyecto seleccionados y actualizar el formulario
-    const usuarioSeleccionado: any = this.usuarios.find(u => u.code === this.form.value.numEmpleadoRrHh);
-    const proyectoSeleccionado: any = this.proyectos.find(p => p.code === this.form.value.numProyecto);
+    const usuarioSeleccionado: any = this.usuarios.find(u => u.code === this.form.value.num_empleado);
+    // const proyectoSeleccionado: any = this.proyectos.find(p => p.code === this.form.value.num_proyecto);
 
     this.form.patchValue({
-      numEmpleadoRrHh:  usuarioSeleccionado.numEmpleado?.toString() || '',
-      usuario:          usuarioSeleccionado.empleado,
-      nombreEmpleado:   usuarioSeleccionado.empleado,
-      numProyecto:      proyectoSeleccionado.numProyecto?.toString() || '',
-      nombreProyecto:   proyectoSeleccionado.nombre,
+      usuario: usuarioSeleccionado.empleado
     });
 
     this.sharedService.cambiarEstado(true);
