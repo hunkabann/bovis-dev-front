@@ -85,7 +85,7 @@ export class timesheetusuariosRegistroComponent implements OnInit {
 
     // Buscar datos de usuario y proyecto seleccionados y actualizar el formulario
     const usuarioSeleccionado: any = this.usuarios.find(u => u.code === this.form.value.num_empleado);
-    // const proyectoSeleccionado: any = this.proyectos.find(p => p.code === this.form.value.num_proyecto);
+    const proyectoSeleccionado: any = this.proyectos.find(p => p.code === this.form.value.num_proyecto);
 
     this.form.patchValue({
       usuario: usuarioSeleccionado.empleado
@@ -97,7 +97,14 @@ export class timesheetusuariosRegistroComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
-          this.ref.close({exito: true, clienteActualizado: this.form.value})
+          this.ref.close({exito: true, clienteActualizado: {
+            numEmpleadoRrHh: this.form.value.num_empleado,
+            usuario: usuarioSeleccionado.empleado,
+            numProyecto: this.form.value.num_proyecto ? parseInt(this.form.value.num_proyecto, 10) : null,
+            nombreEmpleado: usuarioSeleccionado.empleado,
+            nombreProyecto: proyectoSeleccionado.nombre,
+            ...this.form.value
+          }})
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       });
