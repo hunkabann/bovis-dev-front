@@ -190,7 +190,8 @@ export class ModificarRubroComponent implements OnInit {
   SeleccionaUnidad(event: any) {
 
     if(event === 'otro'){      
-        this.stilovisible = 'hidden'         
+        this.stilovisible = 'hidden'  
+        this.stilovisiblepp = 'visible' 
 
       this.form.patchValue({
         
