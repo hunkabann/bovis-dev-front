@@ -40,6 +40,7 @@ export class ModificarRubroComponent implements OnInit {
   mes_ini: number
   ano_ini: number
    stilovisible: string = ''
+   stilovisiblepp: string = ''
 
   form = this.fb.group({
     idRubro: [null],
@@ -202,6 +203,15 @@ export class ModificarRubroComponent implements OnInit {
         
         aplicaTodosMeses: true
       })
+
+       if(event === 'pp'){      
+            this.stilovisiblepp = 'hidden'         
+    
+          
+          }else{
+            this.stilovisiblepp = 'visible'           
+      
+          }
 
     }
 
