@@ -20,15 +20,15 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body">
-                    <tr>
+                    <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Gastos Reembolsables</td>
                         <td class="text-right">{{registro.value.subtotal ?? '0' | currency}}</td>
                         <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0' | currency}}</td>
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Gastos No Reembolsables</td>
-                        <td class="text-right">{{'0' | currency}}</td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
+                        <td class="text-right">{{registro.value.subtotalno ?? '0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0' | currency}}</td>
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Fee - Porcentaje de OH sobre el total no reembolsable</td>
