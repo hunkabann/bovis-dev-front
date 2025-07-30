@@ -35,6 +35,6 @@ getCatProyectos(ordenAlfabetico: boolean = true) {
   }
 
   eliminarUsuarioTimesheet(id: string) {
-    return this.http.delete<GenericResponse>(`${this.baseUrl}api/Timesheet/Usuarios/${id}`)
+    return this.http.delete<GenericResponse>(`${this.baseUrl}api/Timesheet/Usuarios`, { body: { id } })
   }
 }

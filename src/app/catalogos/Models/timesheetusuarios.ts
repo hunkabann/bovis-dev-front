@@ -8,6 +8,7 @@ export interface ObtenerUsuarioTimesheetResponse {
 }
 
 export interface UsuarioTimesheet {
+    id:              number;
     usuario:         string;
     numEmpleadoRrHh: string;
     nombreEmpleado:  string;

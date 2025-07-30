@@ -78,7 +78,7 @@ export class timesheetusuariosPrincipalComponent implements OnInit {
     
     this.sharedService.cambiarEstado(true)
 
-    this.clientesService.eliminarUsuarioTimesheet(usuariotimesheet.numEmpleadoRrHh)
+    this.clientesService.eliminarUsuarioTimesheet(usuariotimesheet.id.toString())
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
