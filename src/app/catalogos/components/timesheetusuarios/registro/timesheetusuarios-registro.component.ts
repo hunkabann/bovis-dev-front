@@ -53,8 +53,8 @@ export class timesheetusuariosRegistroComponent implements OnInit {
     .subscribe({
       next: (value) => {
         const [proyectosR,usuariosR] = value
-        this.proyectos = proyectosR.data.map(proyecto => ({ code: proyecto.numProyecto.toString(), name: `${proyecto.numProyecto.toString()} - ${proyecto.nombre}` })),
-        this.usuarios = usuariosR.data.map(usuarios => ({ code: usuarios.numEmpleado.toString(), name: `${usuarios.numEmpleado.toString()} - ${usuarios.empleado}` }))
+        this.proyectos = proyectosR.data.map(proyectoRegistro => ({ code: proyectoRegistro.numProyecto.toString(), name: `${proyectoRegistro.numProyecto.toString()} - ${proyectoRegistro.nombre}`, ...proyectoRegistro })),
+        this.usuarios = usuariosR.data.map(usuarioRegistro => ({ code: usuarioRegistro.numEmpleado.toString(), name: `${usuarioRegistro.numEmpleado.toString()} - ${usuarioRegistro.empleado}`, ...usuarioRegistro }))
         //this.verificarEstado()
       },
       error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
@@ -80,25 +80,24 @@ export class timesheetusuariosRegistroComponent implements OnInit {
   }
 
   guardar() {
-    //if(!this.form.valid) {
-    //  this.form.markAllAsTouched()
-    //  return
-    //}
+    if(!this.form.valid) {
+      this.form.markAllAsTouched()
+      return;
+    }
 
-  console.log("valor de usuario = "+ this.form.value.usuario)
-  console.log("valor de Proyecto = "+ this.form.value.nombreProyecto)
+    // Buscar datos de usuario y proyecto seleccionados y actualizar el formulario
+    const usuarioSeleccionado: any = this.usuarios.find(u => u.code === this.form.value.numEmpleadoRrHh);
+    const proyectoSeleccionado: any = this.proyectos.find(p => p.code === this.form.value.numProyecto);
 
-   
+    this.form.patchValue({
+      numEmpleadoRrHh:  usuarioSeleccionado.numEmpleado?.toString() || '',
+      usuario:          usuarioSeleccionado.empleado,
+      nombreEmpleado:   usuarioSeleccionado.empleado,
+      numProyecto:      proyectoSeleccionado.numProyecto?.toString() || '',
+      nombreProyecto:   proyectoSeleccionado.nombre,
+    });
 
-   this.form.patchValue({
-        numEmpleadoRrHh:  this.form.controls['usuario'].value,
-        numProyecto: this.form.controls['nombreProyecto'].value
-        //costo:      this.formateaValor( (valor / (this.form.value.dias - this.sumaOtros)) * 100 ),
-       // diasCalc: valor,
-        //dedicacionCalc: this.formateaValor((valor / this.form.value.dias) * 100) 
-      })
-
-    this.sharedService.cambiarEstado(true)
+    this.sharedService.cambiarEstado(true);
 
     this.timesheetService.guardarUsuarioTimesheet(this.form.value, this.esActualizacion)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -107,7 +106,7 @@ export class timesheetusuariosRegistroComponent implements OnInit {
           this.ref.close({exito: true, clienteActualizado: this.form.value})
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
-      })
+      });
   }
 
   esInvalido(campo: string): boolean {
