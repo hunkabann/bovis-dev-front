@@ -363,6 +363,7 @@ export interface TotalesIngresosResponseData {
     cobranza:    GastosIngresosTotales[];
 }
 
+
 export interface TotalesIngresosFormateado  {
     titulo: string,
     subtotal: number,
