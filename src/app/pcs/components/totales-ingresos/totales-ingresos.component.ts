@@ -23,18 +23,21 @@ export class TotalesIngresosComponent implements OnInit {
     ingreso: {
       titulo: 'Ingreso',
       subtotal: 0,
+      subtotalno: 0,
       meses: [],
       registros: []
     },
     facturacion: {
       titulo: 'Facturación',
       subtotal: 0,
+      subtotalno: 0,
       meses: [],
       registros: []
     },
     cobranza: {
       titulo: 'Cobranza',
       subtotal: 0,
+      subtotalno: 0,
       meses: [],
       registros: []
     }
@@ -46,6 +49,8 @@ export class TotalesIngresosComponent implements OnInit {
     if(this.totalesData) {
       if(this.totalesData.ingreso) {
         this.totalesData.ingreso.forEach((ingreso: GastosIngresosTotales) => {
+          if(ingreso.reembolsable){
+            
           this.registros.ingreso.subtotal += ingreso.totalPorcentaje;
             const existingRegistro = this.registros.ingreso.registros.find(registro => registro.mes === ingreso.mes && registro.anio === ingreso.anio);
             if (existingRegistro) {
@@ -53,9 +58,25 @@ export class TotalesIngresosComponent implements OnInit {
             } else {
               this.registros.ingreso.registros.push(ingreso);
             }
+            //console.log('VALOR de rembolsable ----------------->>>>> ingreso.reembolsable ' + ingreso.reembolsable + '  VALOR de rembolsable ----------------->>>>> ngreso.totalPorcentaje  '+ingreso.totalPorcentaje)
             if (!this.registros.ingreso.meses.some(m => m.mes === ingreso.mes && m.anio === ingreso.anio)) {
               this.registros.ingreso.meses.push({mes: ingreso.mes, anio: ingreso.anio, desc: formatearFechaEncabezado(ingreso.mes, ingreso.anio)});
             }
+          }
+            if(!ingreso.reembolsable){
+                         // console.log('VALOR de rembolsable falso ----------------->>>>> ingreso.reembolsable ' + ingreso.reembolsable + '  VALOR de rembolsable ----------------->>>>> ngreso.totalPorcentaje  '+ingreso.totalPorcentaje)
+            this.registros.ingreso.subtotalno += ingreso.totalPorcentaje;
+            const existingRegistrono = this.registros.ingreso.registros.find(registro => registro.mes === ingreso.mes && registro.anio === ingreso.anio);
+            if (existingRegistrono) {
+              existingRegistrono.totalPorcentaje = ingreso.totalPorcentaje;
+            } else {
+              this.registros.ingreso.registros.push(ingreso);
+            }
+            if (!this.registros.ingreso.meses.some(m => m.mes === ingreso.mes && m.anio === ingreso.anio)) {
+              this.registros.ingreso.meses.push({mes: ingreso.mes, anio: ingreso.anio, desc: formatearFechaEncabezado(ingreso.mes, ingreso.anio)});
+            }
+
+          }
         });
       }
       if(this.totalesData.facturacion) {
