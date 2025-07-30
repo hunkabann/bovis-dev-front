@@ -33,8 +33,8 @@ export class timesheetusuariosRegistroComponent implements OnInit {
   esActualizacion = false
 
   form = this.fb.group({
-    numEmpleadoRrHh:   [null],
-    usuario:      ['', Validators.required],
+    numEmpleadoRrHh:   ['', Validators.required],
+    usuario:      [null],
     nombreEmpleado:      [null],
     numProyecto:      ['', Validators.required],
     nombreProyecto:       [null],
@@ -81,7 +81,7 @@ export class timesheetusuariosRegistroComponent implements OnInit {
 
   guardar() {
     if(!this.form.valid) {
-      this.form.markAllAsTouched()
+      this.form.markAllAsTouched();
       return;
     }
 
