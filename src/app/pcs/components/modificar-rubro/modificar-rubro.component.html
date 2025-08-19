@@ -77,7 +77,7 @@
       </div>
       
     </div>
-    <div class="row">
+    <div class="row" style="text-decoration: none; visibility: {{stilovisiblepp}};">
         <ng-container formArrayName="fechas">
             <div 
                 *ngFor="let fecha of fechas.controls; let i = index" 
@@ -95,6 +95,7 @@
                         mode="decimal" 
                         [min]="0" 
                         [readonly]="form.value.aplicaTodosMeses"
+                        [disabled]="fecha.value.disabled"
                     ></p-inputNumber>
                 </div>
             </div>

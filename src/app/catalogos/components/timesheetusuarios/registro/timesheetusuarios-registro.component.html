@@ -1,0 +1,19 @@
+<p-toast></p-toast>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="row">
+        <div class="col-12">
+            <label for="num_empleado">Usuario:</label>
+            <p-dropdown id="num_empleado" [options]="usuarios" formControlName="num_empleado" placeholder="Seleccionar un usuario" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [appendTo]="'body'"></p-dropdown>
+        </div>
+
+        <div class="col-12">
+            <label for="num_proyecto">Proyecto:</label>
+            <p-dropdown id="num_proyecto" [options]="proyectos" formControlName="num_proyecto" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [appendTo]="'body'"></p-dropdown>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end mt-2">
+        <button type="button" class="btn btn-primary" (click)="guardar()" ><i class="fas fa-save"></i> Guardar</button>
+    </div>
+</form>

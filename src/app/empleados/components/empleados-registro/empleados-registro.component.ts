@@ -416,7 +416,8 @@ export class EmpleadosRegistroComponent implements OnInit {
               .subscribe({
                 next: (data) => {
                   this.form.reset()
-
+                  
+                  /** 
                   const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo;
                   // cambiamos el valor del primer elemento en fakeCopyDynos
                   fakeCopyDynos[0] = localStorage.getItem('userMail');
@@ -439,9 +440,12 @@ export class EmpleadosRegistroComponent implements OnInit {
 
                   //termina envio de correo de nuevo empleado
                   this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
+                  */
                 },
                 error: (err) => {
                   if (err.error.text.includes('Se creó nuevo registro con id:')) {
+                    
+                    /** 
                     const fakeCopyDynos = emailsDatosEmpleados.emailNuevoEmpleado.emailsTo;
                     // cambiamos el valor del primer elemento en fakeCopyDynos
                     fakeCopyDynos[0] = localStorage.getItem('userMail');
@@ -461,6 +465,8 @@ export class EmpleadosRegistroComponent implements OnInit {
                         this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } })
                       }))
                       .subscribe();
+
+                      */
 
                     //termina envio de correo de nuevo empleado
                     this.messageService.clear();
@@ -499,6 +505,9 @@ export class EmpleadosRegistroComponent implements OnInit {
                       .subscribe({
                         next: (data) => {
                           this.form.reset();
+                          
+                          /** 
+                          
                           // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
                           const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo;
                           // cambiamos el valor del primer elemento en fakeCopyDynos
@@ -520,11 +529,16 @@ export class EmpleadosRegistroComponent implements OnInit {
                             }))
                             .subscribe();
 
+                            */
+
                           //termina envio de correo actualiza
                           this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                         },
                         error: (err) => {
                           if (err.error.text.includes('Actualización del registro de costos:')) {
+
+                            /** 
+
                             // ENVIO DE CORREO CUANDO ACTUALIZA EMPLEADO
                             const fakeCopyDynos = emailsDatosEmpleados.emailActualizaEmpleado.emailsTo;
                             // cambiamos el valor del primer elemento en fakeCopyDynos
@@ -545,6 +559,7 @@ export class EmpleadosRegistroComponent implements OnInit {
                                 this.router.navigate(['/empleados/empleado-pri'], { queryParams: { success: true } });
                               }))
                               .subscribe();
+                              */
 
                             //termina envio de correo actualiza
                             this.messageService.clear();

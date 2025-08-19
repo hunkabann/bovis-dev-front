@@ -62,7 +62,7 @@ export class CatalogosService {
 
 
   getEmpleadosExcel() {
-      return this.http.get<CostosEmpleadoResponse>(`${ this.baseUrl }api/Costo/costos/0`)
+      return this.http.get<CostosEmpleadoResponse>(`${ this.baseUrl }api/Costo/0`)
     
   }
 

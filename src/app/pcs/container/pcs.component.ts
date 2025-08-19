@@ -24,13 +24,14 @@ export class PcsComponent implements OnInit {
   catalogosService = inject(CatalogosService)
   pcsService = inject(PcsService)
 
+  stilovisible: boolean = false
+
   items: MenuItem[] = [
     { label: 'IP', routerLink: 'ip' },
     { label: 'Staffing Plan', routerLink: 'staffing-plan' },
     { label: 'Gastos', routerLink: 'gastos' },
     { label: 'Ingresos', routerLink: 'ingresos' },
-    { label: 'Control', routerLink: 'control' },
-    { label: 'PPA-KPI', routerLink: 'ppa-kpi' }
+    { label: 'Control', routerLink: 'control' }
   ]
 
   activeItem: MenuItem;
@@ -67,18 +68,29 @@ export class PcsComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe(params => {
       const proyecto = params['proyecto']
       const esEdicion = params['esEdicion']
+      const itemlabel = params['itemlabel']
+      
 
       if (proyecto) {
         this.proyectoId = proyecto
         this.pcsService.enviarIdProyecto(this.proyectoId)
 
-        this.cambiarTabs(esEdicion)
+        this.cambiarTabs(esEdicion,itemlabel)
       }
     });
   }
 
   onActiveItemChange(event: any) {
     this.activeItem = event
+
+   // console.log('VALOR DEL ITEM ----------------->>>>> ' + event)
+
+    if(event === 'IP'){      
+      this.stilovisible = true         
+  }else{
+    this.stilovisible = false
+  }
+
     this.proyectoId = null;
   }
 
@@ -86,6 +98,7 @@ export class PcsComponent implements OnInit {
     if (!esEdicion) {
       this.proyectoId = null
     }
+
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: {
@@ -95,17 +108,34 @@ export class PcsComponent implements OnInit {
       }
     })
 
-    this.cambiarTabs()
+    this.cambiarTabs(false,'')
   }
 
-  cambiarTabs(esEdicion: boolean = false) {
+  cambiarTabs(esEdicion: boolean = false,itemlabel : string ) {
     this.items = this.items.map(item => ({
       ...item,
       queryParams: {
         proyecto: this.proyectoId,
         esEdicion: esEdicion ? 1 : null
-      }
+      },
+      
     }))
+
+
+    if( itemlabel == 'IP' || itemlabel == 'undefined' || itemlabel == '' || itemlabel == null){
+       this.stilovisible = false
+    }else{
+      this.stilovisible = true 
+    }
+
+
+    //const found = this.items.find((element) => element.label );
+
+//console.log(esEdicion);
+    console.log('VALOR DEL ITEM ----------------->>>>> ' + itemlabel )
+
+    
+   
   }
 
 }

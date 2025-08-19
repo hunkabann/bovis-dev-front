@@ -11,6 +11,7 @@ import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { Rubro, GastosIngresosTotales, GastosIngresosControlData, SumaFecha, Previsto, SumaFechas, SeccionOpcion, SeccionRespuesta, SeccionFormateada } from '../../models/pcs.model';
 import { CatalogosService } from '../../services/catalogos.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-control',
@@ -74,7 +75,7 @@ export class ControlComponent implements OnInit {
   seccionesCargado: boolean[] = [];
   seccionesData: any[] = [];
 
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   form = this.fb.group({
     numProyecto: [0, Validators.required],
@@ -167,6 +168,15 @@ export class ControlComponent implements OnInit {
           }
         });
     }
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+       
+        itemlabel : 'Control'
+      },
+      queryParamsHandling: 'merge'
+    })
   }
 
   async cargarInformacionSeccion(event: any) {

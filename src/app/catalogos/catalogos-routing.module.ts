@@ -8,6 +8,8 @@ import { CatalogosGeneralesComponent } from './components/catalogos-generales/ca
 import { DiasTimesheetComponent } from '../timesheet/views/dias-timesheet/dias-timesheet.component';
 import { PrincipalComponent } from './components/clientes/principal/principal.component';
 import { PuestoPrincipalComponent } from './components/puesto/principal/puesto-principal.component';
+import { timesheetusuariosPrincipalComponent } from './components/timesheetusuarios/principal/timesheetusuarios-principal.component';
+
 
 const routes: Routes = [
   { path: '', component: CatalogosComponent },
@@ -32,7 +34,8 @@ const routes: Routes = [
   { path: 'cat_profesion', component: CatalogosGeneralesComponent },
   { path: 'cat_dias', component: DiasTimesheetComponent },
   { path: 'cat_cta_contable', component: CatalogosGeneralesComponent },
-  { path: 'cat_puesto', component: PuestoPrincipalComponent }
+  { path: 'cat_puesto', component: PuestoPrincipalComponent },
+  { path: 'cat_TimeSheetUsuarios', component: timesheetusuariosPrincipalComponent }
 ];
 
 @NgModule({

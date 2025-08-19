@@ -60,39 +60,47 @@
             
             <div class="row">
                 
-                <div class="col-6">
+                <!-- <div class="col-6">
                     <div class="form-group">
                         <label></label>
                         <div>
                             
                         </div>
                     </div>
-                </div>
+                </div> -->
                 
                 <div class="col-6">
                     <div class="form-group">
-                        <label for="PrecioVenta">Costo por empleado: </label>
-                        <p-inputNumber 
-                            formControlName="PrecioVenta"
-                            class="full-width" 
-                            mode="decimal"
-                            [minFractionDigits]="2"
-                            [maxFractionDigits]="5"
-                        ></p-inputNumber>
-                        <div *ngIf="esInvalido('PrecioVenta')">
-                          <small
-                            class="error-msg"
-                          >
-                            {{ obtenerMensajeError('PrecioVenta') }}
-                          </small>
-                        </div>
+                        <ng-container *ngIf="cargandoCosto; else inputCostoEmpleado">
+                            <div class="d-flex align-items-center">
+                                <p-progressSpinner [style]="{width: '20px', height: '20px'}"></p-progressSpinner>
+                                <span class="ml-2">Cargando costo...</span>
+                            </div>
+                        </ng-container>
+                        <ng-template #inputCostoEmpleado>
+                            <label for="PrecioVenta">Costo por empleado: </label>
+                            <p-inputNumber 
+                                formControlName="PrecioVenta"
+                                class="full-width" 
+                                mode="decimal"
+                                [minFractionDigits]="2"
+                                [maxFractionDigits]="5"
+                            ></p-inputNumber>
+                            <div *ngIf="esInvalido('PrecioVenta')">
+                              <small
+                                class="error-msg"
+                              >
+                                {{ obtenerMensajeError('PrecioVenta') }}
+                              </small>
+                            </div>
+                        </ng-template>
                     </div>
                 </div>
             </div>
 
             <div class="row">
                 
-                <div class="col-6">
+                <!-- <div class="col-6">
                     <div class="form-group">
                         <label for="ModificaSueldo">Precio de venta:</label>
                         <div>
@@ -102,7 +110,7 @@
                             ></p-inputSwitch>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 
                 <div class="col-6">
                     <div class="form-group">
@@ -125,6 +133,33 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-12">
+            <div class="row">
+                    
+                <label for="chalias">Alias:</label>
+                <input 
+                id="chalias"
+                pInputText
+                class="form-control" 
+                maxlength="50" 
+                formControlName="chalias"
+                [ngClass]="{'ng-invalid ng-dirty': esInvalido('chalias')}"
+                >
+                <div *ngIf="esInvalido('chalias')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('chaliass') }}
+                </small>
+                </div>
+                
+            </div>      
+        </div>
+
+        
+            
+      
 
         <div class="col-12">
             <div class="row">
@@ -168,9 +203,14 @@
                     <div class="form-group">
                         <label for="reembolsable">Reembolsable:</label>
                         <div>
-                            <p-inputSwitch 
-                                formControlName="reembolsable"
-                            ></p-inputSwitch>
+                            <ng-container *ngIf="empleado; else switchReembolsable">
+                                <p>{{form.value.reembolsable ? 'Sí' : 'No'}}</p>
+                            </ng-container>
+                            <ng-template #switchReembolsable>
+                                <p-inputSwitch 
+                                    formControlName="reembolsable"
+                                ></p-inputSwitch>
+                            </ng-template>
                         </div>
                     </div>
                 </div>
@@ -198,7 +238,7 @@
                         mode="decimal" 
                         [min]="0" 
                         [max]="100"
-                       
+                        [disabled]="fecha.value.disabled"
                     ></p-inputNumber>
                 </div>
             </div>
@@ -231,7 +271,7 @@
     </div>
     
     <div class="d-flex justify-content-end mt-2">
-        <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid || !form.value.num_empleado">Guardar</button>
+        <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid || !form.value.num_empleado || cargandoCosto">Guardar</button>
     </div>
 
 </form>

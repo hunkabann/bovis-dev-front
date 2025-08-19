@@ -5,7 +5,7 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { PcsService } from '../../services/pcs.service';
 import { FormArray, FormBuilder } from '@angular/forms';
 import { Empleado, Etapa, Fecha, puesto } from '../../models/pcs.model';
-import { addMonths, differenceInCalendarMonths, differenceInMonths, format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { TimesheetService } from 'src/app/timesheet/services/timesheet.service';
 import { finalize } from 'rxjs';
@@ -22,7 +22,10 @@ interface EtapaEmpleado {
   aplicaTodosMeses: boolean,
   cantidad: number,
   FEE: number,
-  reembolsable: boolean
+  reembolsable: boolean,
+  chalias: string
+  //PrecioVenta: number,
+  //nucosto_ini: number,
 }
 
 interface ICatalogo {
@@ -56,6 +59,9 @@ export class ModificarEmpleadoComponent implements OnInit {
   FEEStaaafing: number
   catPuesto: Opcion[] = []
   Puesto: puesto[] = []
+  PreciodeVenta: number;
+
+  cargandoCosto: boolean = false;
 
   //TipoEmpleado:  EmpleadoTS[] = []
 
@@ -72,7 +78,9 @@ export class ModificarEmpleadoComponent implements OnInit {
     fechas: this.fb.array([]),
     puesto: [null],
     reembolsable: [false],
-    PrecioVenta: [0]
+    PrecioVenta: [0],
+    nucosto_ini: [0],
+    chalias: [null]
   })
 
   constructor() { }
@@ -83,7 +91,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
 
-    this.form.controls['FEE'].disable();
+    // this.form.controls['FEE'].disable();
 
     this.form.controls['PrecioVenta'].disable();
 
@@ -115,6 +123,9 @@ export class ModificarEmpleadoComponent implements OnInit {
           } 
     */
 
+          //console.log('PrecioVenta ------- ' +  data.empleado.PrecioVenta )
+          console.log('valor de alias ------- ' +  data.chalias )
+          console.log('valor de alias ------- ' +  data.empleado?.chAlias )
 
       this.form.patchValue({
         id_fase: data.etapa.idFase,
@@ -123,7 +134,11 @@ export class ModificarEmpleadoComponent implements OnInit {
         aplicaTodosMeses: data.empleado?.aplicaTodosMeses,
         cantidad: data.empleado?.cantidad,
         puesto: data.empleado?.Puesto,
-        reembolsable: data.empleado?.aplicaTodosMeses
+        reembolsable: data.empleado?.reembolsable,
+        //nucosto_ini: data.empleado?.nucosto_ini,
+        chalias: data.chalias,
+        //PrecioVenta: data.empleado?.PrecioVenta
+        
       })
 
       if (!data.empleado) {
@@ -142,13 +157,16 @@ export class ModificarEmpleadoComponent implements OnInit {
 
           this.form.patchValue({
             FEE: this.formateaValor(data.FEE),
-           // PrecioVenta: this.formateaValor(data.FEE),
+            PrecioVenta: this.formateaValor(data.FEE),
           })
 
         } else {
-
+          this.cargandoCosto = true;
           this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
-            .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+            .pipe(finalize(() => {
+              this.sharedService.cambiarEstado(false);
+              this.cargandoCosto = false;
+            }))
             .subscribe({
               next: ({ data, message }) => {
 
@@ -157,12 +175,15 @@ export class ModificarEmpleadoComponent implements OnInit {
                 console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
                 console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
 
+                
+
                 if (message != null) {
 
                   this.mensajito = message;
 
                   if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
-
+                    
+                    this.PreciodeVenta = 0
                     this.form.patchValue({
                       FEE: this.formateaValor(0.0),
                       PrecioVenta: this.formateaValor(0.0),
@@ -170,9 +191,12 @@ export class ModificarEmpleadoComponent implements OnInit {
 
                   } else {
 
+                    this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
                     this.form.patchValue({
                       FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                       PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                      
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                     })
 
                   }
@@ -183,8 +207,12 @@ export class ModificarEmpleadoComponent implements OnInit {
 
         }
 
+        this.cargandoCosto = true;
         this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
-            .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+            .pipe(finalize(() => {
+              this.sharedService.cambiarEstado(false);
+              this.cargandoCosto = false;
+            }))
             .subscribe({
               next: ({ data, message }) => {
 
@@ -192,23 +220,27 @@ export class ModificarEmpleadoComponent implements OnInit {
                 console.log('message ' + message)
                 console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
                 console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+                
 
                 if (message != null) {
 
                   this.mensajito = message;
 
                   if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
-
+                    this.PreciodeVenta = 0
                     this.form.patchValue({
                      // FEE: this.formateaValor(0.0),
                       PrecioVenta: this.formateaValor(0.0),
                     })
 
                   } else {
+                    this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
 
                     this.form.patchValue({
                      // FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                       PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                      
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                     })
 
                   }
@@ -222,14 +254,21 @@ export class ModificarEmpleadoComponent implements OnInit {
       const fechaFin = new Date(data.etapa.fechaFin)
 
       let meses = await obtenerMeses(fechaInicio, fechaFin);
+      const diaActual = format(new Date(), 'dd', { locale: es });
 
       meses.forEach(mesRegistro => {
-
+        let registroDeshabilitado = false;
+        if(mesRegistro.mes && mesRegistro.anio) {
+          const fechaRegistro = `${diaActual}/${mesRegistro.mes}/${mesRegistro.anio}`;
+          let fechaRegistroFormateada = parse(fechaRegistro, 'dd/MM/yyyy', new Date());
+          registroDeshabilitado = fechaRegistroFormateada.setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0);
+        }
         this.fechas.push(this.fb.group({
           mes: [mesRegistro.mes],
           anio: [mesRegistro.anio],
           desc: [mesRegistro.desc],
-          porcentaje: [this.empleado ? this.obtenerPorcentaje(data.empleado.fechas, mesRegistro) : 0]
+          porcentaje: [this.empleado ? this.obtenerPorcentaje(data.empleado.fechas, mesRegistro) : 0],
+          disabled: [registroDeshabilitado]
         }))
       })
     }
@@ -242,6 +281,11 @@ export class ModificarEmpleadoComponent implements OnInit {
     }
 
     this.sharedService.cambiarEstado(true)
+
+
+    console.log('valor de precio de venta3: '+ this.PreciodeVenta)
+
+    
 
     this.pcsService.modificarEmpleado(this.form.value, !!this.empleado)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
@@ -258,14 +302,20 @@ export class ModificarEmpleadoComponent implements OnInit {
               aplicaTodosMeses: this.form.value.aplicaTodosMeses,
               cantidad: this.form.value.cantidad,
               fee: null,
+              PrecioVenta: this.PreciodeVenta,
               Puesto: null,
               reembolsable: this.form.value.reembolsable,
+              nuCostoIni: this.PreciodeVenta,
+              chAlias: this.form.value.chalias,
+              
             }
           }
           const empleadoRespuesta: Empleado = {
             ...this.empleado,
             aplicaTodosMeses: this.form.value.aplicaTodosMeses,
             cantidad: this.form.value.cantidad,
+           // nucosto_ini: this.PreciodeVenta,
+            //PrecioVenta: this.PreciodeVenta,
             fechas: this.form.value.fechas as Fecha[]
           }
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'La etapa ha sido agregada.' })
@@ -325,21 +375,22 @@ export class ModificarEmpleadoComponent implements OnInit {
 
   cambiarValores() {
     this.fechas.controls.forEach((fecha, index) => {
-      this.fechas.at(index).patchValue({
-        porcentaje: this.form.value.aplicaTodosMeses ? this.form.value.cantidad : 0
-      })
+      if(!fecha.value.disabled) {
+        this.fechas.at(index).patchValue({
+          porcentaje: this.form.value.aplicaTodosMeses ? this.form.value.cantidad : 0
+        })
+      }
     })
   }
 
   cambiarValoresSueldos() {
-    if (this.form.value.ModificaSueldo) {
-      this.form.controls['FEE'].enable()
-    } else {
-      this.form.controls['FEE'].reset()
-      this.form.controls['FEE'].disable()
+    // if (this.form.value.ModificaSueldo) {
+    //   this.form.controls['FEE'].enable()
+    // } else {
+    //   this.form.controls['FEE'].reset()
+    //   this.form.controls['FEE'].disable()
 
-    }
-
+    // }
 
     /*this.fechas.controls.forEach((fecha, index) => {
       this.fechas.at(index).patchValue({
@@ -354,8 +405,12 @@ export class ModificarEmpleadoComponent implements OnInit {
     console.log('event ' + event)
     console.log('+event. ' + +event)
 
+    this.cargandoCosto = true;
     this.costosService.getCostoID(event)
-      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .pipe(finalize(() => {
+        this.sharedService.cambiarEstado(false);
+        this.cargandoCosto = false;
+      }))
       .subscribe({
         next: ({ data, message }) => {
 
@@ -363,6 +418,7 @@ export class ModificarEmpleadoComponent implements OnInit {
           console.log('message ' + message)
           console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
           console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+          
 
           if (message != null) {
 
@@ -370,6 +426,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
             if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
 
+              this.PreciodeVenta = 0
               this.form.patchValue({
                 FEE: this.formateaValor(0.0),
                 PrecioVenta: this.formateaValor(0.0)
@@ -378,9 +435,12 @@ export class ModificarEmpleadoComponent implements OnInit {
 
             } else {
 
+
+              this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
               this.form.patchValue({
                 FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
-                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
+                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
 
               })
 

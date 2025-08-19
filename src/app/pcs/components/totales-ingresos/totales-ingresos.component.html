@@ -1,0 +1,52 @@
+<p-accordion [multiple]="true">
+    <p-accordionTab *ngFor="let registro of registros | keyvalue: originalOrder">
+        <ng-template pTemplate="header">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="title">
+                    <i class="pi pi-calendar mr-2 vertical-align-middle"></i>
+                    <span class="vertical-align-middle">{{registro.value.titulo}}</span>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <p-table [value]="[1]" [scrollable]="true" scrollHeight="400px">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nombre</th>
+                        <th class="text-right">Subtotal</th>
+                        <th *ngFor="let mesRegistro of registro.value.meses" class="text-right">
+                            {{mesRegistro.desc | uppercase}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body">
+                    <tr *ngIf="registro.value.titulo == 'Ingreso'">
+                        <td>Gastos Reembolsables</td>
+                        <td class="text-right">{{registro.value.subtotal ?? '0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0' | currency}}</td>
+                    </tr>
+                    <tr *ngIf="registro.value.titulo == 'Ingreso'">
+                        <td>Gastos No Reembolsables</td>
+                        <td class="text-right">{{registro.value.subtotalno ?? '0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0' | currency}}</td>
+                    </tr>
+                    <tr *ngIf="registro.value.titulo == 'Ingreso'">
+                        <td>Fee - Porcentaje de OH sobre el total no reembolsable</td>
+                        <td class="text-right">{{'0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
+                    </tr>
+                    <tr *ngIf="registro.value.titulo == 'Ingreso'">
+                        <td>Fee - Porcentaje de Utilidad sobre el total no reembolsable</td>
+                        <td class="text-right">{{'0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
+                    </tr>
+                    <tr *ngIf="registro.value.titulo == 'Ingreso'">
+                        <td>Contingencia - % sobre Costos No Reembolsables</td>
+                        <td class="text-right">{{'0' | currency}}</td>
+                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </ng-template>
+    </p-accordionTab>
+</p-accordion>

@@ -16,6 +16,9 @@ import { ModificarEmpleadoComponent } from '../modificar-empleado/modificar-empl
 import { Mes } from 'src/models/general.model';
 import { obtenerMeses } from 'src/helpers/helpers';
 import { CatalogosService } from '../../services/catalogos.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { KeyValue } from '@angular/common';
+import { ModificarEtapaComponent } from '../modificar-etapa/modificar-etapa.component';
 
 // interface Etapa {
 //   id:         number,
@@ -55,9 +58,9 @@ export class StaffingPlanComponent implements OnInit {
   proyectoSeleccionado: boolean = false
 
   idproyecto: number;
+  etapaTotales: any[] = [];
 
-
-  constructor() { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   form = this.fb.group({
     numProyecto: [0, Validators.required],
@@ -66,6 +69,10 @@ export class StaffingPlanComponent implements OnInit {
 
   get etapas() {
     return this.form.get('etapas') as FormArray
+  }
+
+  meses(etapaIndex: number) {
+    return (this.etapas.at(etapaIndex).get('meses') as FormArray)
   }
 
   empleados(etapaIndex: number) {
@@ -130,6 +137,15 @@ export class StaffingPlanComponent implements OnInit {
         })
     }
 
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+       
+        itemlabel : 'Staffing Plan'
+      },
+      queryParamsHandling: 'merge'
+    })
+
 
   }
 
@@ -141,7 +157,7 @@ export class StaffingPlanComponent implements OnInit {
 
     // Agregamos las etapas del proyecto
     data.etapas.map(async (etapa, etapaIndex) => {
-
+      const meses: Mes[] = obtenerMeses(new Date(etapa.fechaIni), new Date(etapa.fechaFin));
       this.etapas.push(this.fb.group({
         idFase: etapa.idFase,
         orden: etapa.orden,
@@ -149,29 +165,39 @@ export class StaffingPlanComponent implements OnInit {
         fechaIni: etapa.fechaIni,
         fechaFin: etapa.fechaFin,
         empleados: this.fb.array([]),
-        meses: this.fb.array(await obtenerMeses(new Date(etapa.fechaIni), new Date(etapa.fechaFin)))
-      }))
+        meses: this.fb.array(meses)
+      }));
+
+      meses.forEach(mes => {
+        this.etapaTotales[etapa.idFase] = this.etapaTotales[etapa.idFase] || {};
+        this.etapaTotales[etapa.idFase][`${mes.mes}_${mes.anio}`] = 0;
+      });
 
       // Agregamos los empleados por cada etapa
       etapa.empleados.forEach((empleado, empleadoIndex) => {
-
-        //console.log('fee de empleados ----- ' +  empleado.fee)
+        console.log('empleado.chAlias ' + empleado.chAlias)
 
         this.empleados(etapaIndex).push(this.fb.group({
           id: empleado.id,
           idFase: empleado.idFase,
+          reembolsable: empleado.reembolsable,
           numempleadoRrHh: empleado.numempleadoRrHh,
           empleado: empleado.empleado,
           fechas: this.fb.array([]),
           aplicaTodosMeses: empleado.aplicaTodosMeses,
           cantidad: empleado.cantidad,
           FEE: empleado.fee,
-          Puesto: empleado.Puesto
+          Puesto: empleado.Puesto,
+          chalias: empleado.chAlias,
+          //PrecioVenta: empleado.PrecioVenta,
+         // nucosto_ini: empleado.nucosto_ini
         }))
 
         // Agreamos las fechas por empleado
         empleado.fechas.forEach(fecha => {
-
+          if(this.etapaTotales[etapa.idFase][`${fecha.mes}_${fecha.anio}`] !== undefined) {
+            this.etapaTotales[etapa.idFase][`${fecha.mes}_${fecha.anio}`] = (this.etapaTotales[etapa.idFase][`${fecha.mes}_${fecha.anio}`] || 0) + fecha.porcentaje;
+          }
           this.fechas(etapaIndex, empleadoIndex).push(this.fb.group({
             id: fecha.id,
             mes: fecha.mes,
@@ -212,7 +238,7 @@ export class StaffingPlanComponent implements OnInit {
 
   eliminarEtapa(event: Event, etapa: Etapa, index: number) {
 
-    event.stopPropagation()
+    event.stopPropagation();
 
     this.sharedService.cambiarEstado(true)
 
@@ -227,8 +253,79 @@ export class StaffingPlanComponent implements OnInit {
       })
   }
 
-  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null) {
-    event.stopPropagation()
+  modificarEtapa(event: Event, etapa: Etapa, etapaIndex: number) {
+    event.stopPropagation();
+
+    this.dialogService.open(ModificarEtapaComponent, {
+      header: 'Modificar etapa',
+      width: '50%',
+      contentStyle: { overflow: 'auto' },
+      data: {
+        numProyecto: this.form.value.numProyecto,
+        fechaInicio: this.proyectoFechaInicio,
+        fechaFin: this.proyectoFechaFin,
+        etapa: etapa
+      }
+    })
+      .onClose.subscribe(async (result) => {
+        if (result && result.etapa) {
+          const etapaRes = result.etapa
+          const meses: Mes[] = obtenerMeses(new Date(etapaRes.fechaIni), new Date(etapaRes.fechaFin));
+          this.etapas.at(etapaIndex).patchValue({
+            idFase: etapaRes.idFase,
+            orden: etapaRes.orden,
+            fase: etapaRes.fase,
+            fechaIni: etapaRes.fechaIni,
+            fechaFin: etapaRes.fechaFin
+          });
+
+          this.meses(etapaIndex).clear();
+
+          this.etapaTotales[etapa.idFase] = [];
+          meses.forEach(mes => {
+            this.etapaTotales[etapaRes.idFase] = this.etapaTotales[etapaRes.idFase] || {};
+            this.etapaTotales[etapaRes.idFase][`${mes.mes}_${mes.anio}`] = 0;
+            this.meses(etapaIndex).push(this.fb.group(mes))
+          });
+
+          // Agreamos las fechas por empleado
+          this.empleados(etapaIndex).clear();
+          // Agregamos los empleados por cada etapa
+          etapa.empleados.forEach((empleado, empleadoIndex) => {
+            this.empleados(etapaIndex).push(this.fb.group({
+              id: empleado.id,
+              idFase: empleado.idFase,
+              numempleadoRrHh: empleado.numempleadoRrHh,
+              empleado: empleado.empleado,
+              fechas: this.fb.array([]),
+              aplicaTodosMeses: empleado.aplicaTodosMeses,
+              cantidad: empleado.cantidad,
+              FEE: empleado.fee,
+              Puesto: empleado.Puesto,
+              chalias: empleado.chAlias,
+              //PrecioVenta: empleado.PrecioVenta,
+             // nucosto_ini: empleado.nucosto_ini
+            }))
+
+            // Agreamos las fechas por empleado
+            empleado.fechas.forEach(fecha => {
+              if(this.etapaTotales[etapa.idFase][`${fecha.mes}_${fecha.anio}`] !== undefined) {
+                this.etapaTotales[etapa.idFase][`${fecha.mes}_${fecha.anio}`] = (this.etapaTotales[etapa.idFase][`${fecha.mes}_${fecha.anio}`] || 0) + fecha.porcentaje;
+                this.fechas(etapaIndex, empleadoIndex).push(this.fb.group({
+                  id: fecha.id,
+                  mes: fecha.mes,
+                  anio: fecha.anio,
+                  porcentaje: fecha.porcentaje
+                }))
+              }
+            })
+          })
+        }
+      })
+  }
+
+  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, chalias: string | null) {
+    event.stopPropagation();
 
     this.dialogService.open(ModificarEmpleadoComponent, {
       header: 'Empleado (Porcentajes)',
@@ -238,6 +335,7 @@ export class StaffingPlanComponent implements OnInit {
         FEE,
         etapa,
         empleado,
+        chalias,
         num_proyecto: this.form.value.numProyecto
 
       }
@@ -276,7 +374,11 @@ export class StaffingPlanComponent implements OnInit {
               empleado: empleadoRespuesta.empleado,
               fechas: this.fb.array(fechasRespuesta),
               aplicaTodosMeses: empleadoRespuesta.aplicaTodosMeses,
-              cantidad: empleadoRespuesta.cantidad
+              cantidad: empleadoRespuesta.cantidad,
+              reembolsable: empleadoRespuesta.reembolsable,
+              chalias: empleadoRespuesta.chAlias,
+              //nucosto_ini: empleadoRespuesta.nucosto_ini,
+             // PrecioVenta: empleadoRespuesta.PrecioVenta
             }))
           }
         }
@@ -312,4 +414,7 @@ export class StaffingPlanComponent implements OnInit {
     return [format(new Date(etapa.fechaIni), 'Y-m-d'), format(new Date(etapa.fechaFin), 'Y-m-d')]
   }
 
+  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    return 0;
+  }
 }

@@ -44,6 +44,9 @@ import { porcentajeMesControlPipe } from './pipes/porcentaje-mes-control.pipe';
 import { TablaDatosComponent } from './components/tabla-datos/tabla-datos.component';
 import { SubseccionesAccordionComponent } from './components/subsecciones-accordion/subsecciones-accordion.component';
 import { porcentajeMesStaffingPipe } from './pipes/porcentaje-mes-staffing.pipe';
+import { SeccionContenidoComponent } from './components/seccion-contenido/seccion-contenido.component';
+import { ModificarEtapaComponent } from './components/modificar-etapa/modificar-etapa.component';
+import { TotalesIngresosComponent } from './components/totales-ingresos/totales-ingresos.component';
 
 
 @NgModule({
@@ -72,7 +75,10 @@ import { porcentajeMesStaffingPipe } from './pipes/porcentaje-mes-staffing.pipe'
     porcentajeMesControlPipe,
     TablaDatosComponent,
     SubseccionesAccordionComponent,
-    porcentajeMesStaffingPipe
+    porcentajeMesStaffingPipe,
+    SeccionContenidoComponent,
+    ModificarEtapaComponent,
+    TotalesIngresosComponent
   ],
   imports: [
     CommonModule,
