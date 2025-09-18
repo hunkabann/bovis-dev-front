@@ -14,6 +14,7 @@ import { Empleado as EmpleadoTS } from 'src/app/timesheet/models/timesheet.model
 import { TITLES, errorsArray } from 'src/utils/constants';
 import { obtenerMeses } from 'src/helpers/helpers';
 import { CostosService } from 'src/app/costos/services/costos.service';
+import { Console } from 'console';
 
 interface EtapaEmpleado {
   etapa: Etapa,
@@ -62,10 +63,11 @@ export class ModificarEmpleadoComponent implements OnInit {
   PreciodeVenta: number;
 
   cargandoCosto: boolean = false;
-
+ 
   //TipoEmpleado:  EmpleadoTS[] = []
 
   mensajito: string;
+  etiqueta: string; //LEO TBD
 
   form = this.fb.group({
     id_fase: [null],
@@ -81,6 +83,7 @@ export class ModificarEmpleadoComponent implements OnInit {
     PrecioVenta: [0],
     nucosto_ini: [0],
     chalias: [null]
+    ,etiqueta: [null] //LEO TBD
   })
 
   constructor() { }
@@ -93,7 +96,8 @@ export class ModificarEmpleadoComponent implements OnInit {
 
     // this.form.controls['FEE'].disable();
 
-    this.form.controls['PrecioVenta'].disable();
+    this.form.get('PrecioVenta')?.disable();
+    this.form.get('etiqueta')?.disable(); //LEO TBD
 
     const data = this.config.data as EtapaEmpleado
     if (data) {
@@ -146,8 +150,9 @@ export class ModificarEmpleadoComponent implements OnInit {
           this.cargarTipoEmpleados()
       } else {
 
-        this.form.controls['puesto'].disable();
-
+        //this.form.controls['puesto'].disable();
+        this.form.get('puesto')?.disable();
+        
         this.empleado = data.empleado
 
 
@@ -293,6 +298,7 @@ export class ModificarEmpleadoComponent implements OnInit {
         next: ({ data }) => {
           if (!this.empleado) {
             const empleadoEncontrado = this.empleadosOriginal.find(empleadoRegistro => empleadoRegistro.nunum_empleado_rr_hh == this.form.value.num_empleado)
+            if(empleadoEncontrado != undefined && empleadoEncontrado != null){
             this.empleado = {
               id: null,
               empleado: empleadoEncontrado.nombre_persona,
@@ -307,9 +313,11 @@ export class ModificarEmpleadoComponent implements OnInit {
               reembolsable: this.form.value.reembolsable,
               nuCostoIni: this.PreciodeVenta,
               chAlias: this.form.value.chalias,
-              
+              etiqueta: this.form.value.etiqueta, //LEO TBD
             }
+          }//LEO TBD
           }
+
           const empleadoRespuesta: Empleado = {
             ...this.empleado,
             aplicaTodosMeses: this.form.value.aplicaTodosMeses,
@@ -318,6 +326,7 @@ export class ModificarEmpleadoComponent implements OnInit {
             //PrecioVenta: this.PreciodeVenta,
             fechas: this.form.value.fechas as Fecha[]
           }
+
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'La etapa ha sido agregada.' })
           this.ref.close({ empleado: empleadoRespuesta })
         },
@@ -335,6 +344,7 @@ export class ModificarEmpleadoComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({ data }) => {
+          console.log('Antes de setCatEmpleados valor: ' + event)
           this.setCatEmpleados(data)
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -401,9 +411,10 @@ export class ModificarEmpleadoComponent implements OnInit {
 
   CargaSueldoCostos(event: any) {
 
-    console.log('event.value ' + event.value)
-    console.log('event ' + event)
-    console.log('+event. ' + +event)
+    console.log('CargaSueldoCostos event.value:' + event.value)
+    console.log('event:' + event)
+    console.log('+event:' + +event)
+    //console.log('PuestoSel. ' + idPuesto)
 
     this.cargandoCosto = true;
     this.costosService.getCostoID(event)
@@ -516,4 +527,80 @@ export class ModificarEmpleadoComponent implements OnInit {
     )
   }
 
+
+  //LEO TBD
+  CargaSueldoCostosPuesto(event: any, idPuesto: any) {
+
+    console.log('event.value ' + event.value)
+    console.log('event ' + event)
+    console.log('+event. ' + +event)
+
+    if(event == '000'){
+      this.form.get('etiqueta')?.enable();
+    }
+    else{
+      this.etiqueta = '';
+      this.form.get('etiqueta')?.disable();
+      this.form.get('etiqueta')?.setValue('');
+    }
+    
+
+    this.cargandoCosto = true;
+    this.costosService.getCostoIDPorPuesto(event, idPuesto)
+      .pipe(finalize(() => {
+        this.sharedService.cambiarEstado(false);
+        this.cargandoCosto = false;
+      }))
+      .subscribe({
+        next: ({ data, message }) => {
+
+          const [costoR] = data
+          console.log('message ' + message)
+          console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
+          console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+          
+
+          if (message != null) {
+
+            this.mensajito = message;
+
+            if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
+
+              this.PreciodeVenta = 0
+              this.form.patchValue({
+                FEE: this.formateaValor(0.0),
+                PrecioVenta: this.formateaValor(0.0)
+
+              })
+
+            } else {
+
+
+              this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
+              this.form.patchValue({
+                FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+
+              })
+
+            }
+          }
+
+
+
+
+
+        },
+        error: (err) => {
+          console.log("error cuando no Existe registro de costos --------------> " + err.error.text);
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+
+        }
+      })
+
+
+
+  }
 }

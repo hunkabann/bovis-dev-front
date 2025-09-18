@@ -41,6 +41,7 @@ export interface Empleado {
     PrecioVenta:        number;
     //nucosto_ini:        number;
     //chalias:            string;
+    etiqueta:            string; //LEO TBD
 }
 
 export interface Fecha {

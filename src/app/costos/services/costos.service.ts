@@ -46,4 +46,9 @@ export class CostosService {
   getEmpresas() {
     return this.http.get<any>(`${this.baseUrl}api/pcs/empresas`);
   }
+
+  //LEO TBD
+  getCostoIDPorPuesto(id: string, idPuesto: string) {
+    return this.http.get<CostosEmpleadoResponse>(`${this.baseUrl}api/Costo/Empleado/${id}/${idPuesto}`)
+  }
 }

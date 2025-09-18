@@ -44,7 +44,7 @@
                     [filter]="true" 
                     filterBy="name"
                     appendTo="body"
-                    (onChange)="CargaSueldoCostos($event.value);"
+                    (onChange)="CargaSueldoCostosPuesto($event.value, form.get('puesto')?.value)"
                 ></p-dropdown>
                 <div *ngIf="esInvalido('num_empleado')">
                     <small
@@ -55,6 +55,33 @@
                 </div>
             </ng-template>
         </div>
+
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="etiqueta">Etiqueta:</label>
+                        <input 
+                        id="etiqueta"
+                        pInputText
+                        class="form-control" 
+                        maxlength="50" 
+                        formControlName="etiqueta"
+                        [ngClass]="{'ng-invalid ng-dirty': esInvalido('etiqueta')}"
+                        >
+                        <div *ngIf="esInvalido('etiqueta')">
+                        <small
+                            class="error-msg"
+                        >
+                            {{ obtenerMensajeError('etiqueta') }}
+                        </small>
+                        </div>
+                    </div>
+                </div>
+            </div>      
+        </div>
+
+
 
         <div class="col-12">
             
