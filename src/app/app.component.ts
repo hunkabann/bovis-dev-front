@@ -121,7 +121,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     })
     
-    this.router.events
+    /*this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         const urlActual = event.url.split('/')[1];
@@ -134,7 +134,27 @@ export class AppComponent implements OnInit, OnDestroy {
         }
 
         this.tituloPaginaLocal = tituloPagina
-      });
+      });*/
+
+     
+
+      this.router.events
+        .pipe(
+          filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+        )
+        .subscribe((event) => {
+          const urlActual = event.url.split('/')[1]; // event ahora es NavigationEnd
+          let tituloPagina = '';
+
+          if (urlActual) {
+            const opcion = menuOpciones.find(opcion => opcion.url === urlActual);
+            if (opcion) {
+              tituloPagina = opcion.titulo;
+            }
+          }
+
+          this.tituloPaginaLocal = tituloPagina;
+        });
   }
 
   setLoginDisplay() {

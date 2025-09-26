@@ -5,7 +5,8 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
-    "strict": false,
+    "skipLibCheck": true,
+    "strict": true,
     "noImplicitOverride": true,
 	  "noImplicitAny": false,
     "strictPropertyInitialization": false,
@@ -28,7 +29,8 @@
     "paths": {
       "@angular/*": ["./node_modules/@angular/*"],
       "rxjs": ["./node_modules/rxjs"]
-    }
+    },
+    "types": ["node"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

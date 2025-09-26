@@ -162,7 +162,7 @@ export class CargaSaeComponent implements OnInit {
                   }
               } catch(e) {
                 console.log("Error al leer el Excel"+ e.toString()); 
-                this.messageService.add({severity: 'error', summary: 'El archivo Excel tiene problema en el formato', detail: e})
+                this.messageService.add({severity: 'error', summary: 'El archivo Excel tiene problema en el formato', detail: e.toString()})
                 return;
               }
           }

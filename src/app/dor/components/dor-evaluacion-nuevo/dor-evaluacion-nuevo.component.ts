@@ -110,7 +110,20 @@ export class DorEvaluacionNuevoComponent implements OnInit {
     }
     catch (ex) {
       this.sharedService.cambiarEstado(false)
-      this.messageService.add({ severity: 'error', summary: TITLES.error, detail: ex.error.message })
+      //this.messageService.add({ severity: 'error', summary: TITLES.error, detail: ex.error.message })
+      if (ex && typeof ex === 'object' && 'error' in ex) {
+        this.messageService.add({
+          severity: 'error',
+          summary: TITLES.error,
+          detail: (ex as any).error.message // o castear correctamente si sabes el tipo
+        });
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: TITLES.error,
+          detail: 'Ha ocurrido un error inesperado'
+        });
+      }
     }
   }
 

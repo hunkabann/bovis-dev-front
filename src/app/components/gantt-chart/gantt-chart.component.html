@@ -1,0 +1,22 @@
+
+<!-- <div class="gantt-container">
+  <canvas baseChart
+          [data]="chartData"
+          [type]="chartType"
+          [options]="chartOptions"
+          [plugins]="[]">
+  </canvas>
+</div> -->
+<div *ngIf="chartData.datasets.length > 0; else loading" class="chart-wrapper">
+  <canvas baseChart
+          [data]="chartData"
+          [type]="chartType"
+          [options]="chartOptions"
+          [plugins]="[]"
+          style="height: 200px width: 100%;">
+  </canvas>
+</div>
+
+<ng-template #loading>
+  <p>Cargando gráfico...</p>
+</ng-template>

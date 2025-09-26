@@ -47,6 +47,9 @@ import { porcentajeMesStaffingPipe } from './pipes/porcentaje-mes-staffing.pipe'
 import { SeccionContenidoComponent } from './components/seccion-contenido/seccion-contenido.component';
 import { ModificarEtapaComponent } from './components/modificar-etapa/modificar-etapa.component';
 import { TotalesIngresosComponent } from './components/totales-ingresos/totales-ingresos.component';
+import { SharedChartsModule } from '../shared/shared-charts.module';
+//import { SharedChartsModule } from 'src/app/shared/shared-charts.module';
+
 
 
 @NgModule({
@@ -78,7 +81,7 @@ import { TotalesIngresosComponent } from './components/totales-ingresos/totales-
     porcentajeMesStaffingPipe,
     SeccionContenidoComponent,
     ModificarEtapaComponent,
-    TotalesIngresosComponent
+    TotalesIngresosComponent,
   ],
   imports: [
     CommonModule,
@@ -97,7 +100,8 @@ import { TotalesIngresosComponent } from './components/totales-ingresos/totales-
     ButtonModule,
     ProgressSpinnerModule,
     InputSwitchModule,
-    MultiSelectModule
+    MultiSelectModule,
+    SharedChartsModule // Aquí va
   ],
   providers: [ConfirmationService, MessageService]
 })
