@@ -150,7 +150,7 @@ export class StaffingPlanComponent implements OnInit {
   }
 
   async cargarInformacion(data: EtapasPorProyectoData) {
-
+    console.log('cargarInformacion Inicio') //LEO TBD
     this.form.patchValue({ numProyecto: data.numProyecto })
     this.proyectoFechaInicio = new Date(data.fechaIni)
     this.proyectoFechaFin = new Date(data.fechaFin)
@@ -175,7 +175,7 @@ export class StaffingPlanComponent implements OnInit {
 
       // Agregamos los empleados por cada etapa
       etapa.empleados.forEach((empleado, empleadoIndex) => {
-        console.log('empleado.chAlias ' + empleado.chAlias)
+        console.log('cargarInformacion empleado.numempleadoRrHh:' + empleado.numempleadoRrHh + ', empleado.etiqueta:' + empleado.etiquetaTBD + ', empleado.IdPuesto:' + empleado.idPuesto + "."); //LEO TBD
 
         this.empleados(etapaIndex).push(this.fb.group({
           id: empleado.id,
@@ -191,6 +191,8 @@ export class StaffingPlanComponent implements OnInit {
           chalias: empleado.chAlias,
           //PrecioVenta: empleado.PrecioVenta,
          // nucosto_ini: empleado.nucosto_ini
+          etiqueta: empleado.etiquetaTBD, //LEO TBD
+          IdPuesto: empleado.idPuesto, //LEO TBD
         }))
 
         // Agreamos las fechas por empleado
@@ -305,6 +307,8 @@ export class StaffingPlanComponent implements OnInit {
               chalias: empleado.chAlias,
               //PrecioVenta: empleado.PrecioVenta,
              // nucosto_ini: empleado.nucosto_ini
+             etiquetaTBD: empleado.etiquetaTBD, //LEO TBD
+             IdPuesto: empleado.idPuesto, //LEO TBD
             }))
 
             // Agreamos las fechas por empleado
@@ -324,9 +328,20 @@ export class StaffingPlanComponent implements OnInit {
       })
   }
 
-  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, chalias: string | null) {
+  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, chalias: string | null, etiquetaTBD: string | null, IdPuesto: string | null) {
     event.stopPropagation();
-
+    console.log('Staffing Plan modificarEmpleado'); //LEO TBD
+    if(empleado == null)
+    {
+      console.log('Staffing Plan modificarEmpleado empleado es null')
+    }
+    else
+    {
+      console.log('Staffing Plan modificarEmpleado empleado.numempleadoRrHh:'+empleado.numempleadoRrHh
+            +' EtapaIndex:'+etapaIndex + ' EmpleadoIndex:'+empleadoIndex 
+            +' EtiquetaTBD:'+etiquetaTBD + ' IdPuesto:'+IdPuesto); //LEO TBD
+    }
+    
     this.dialogService.open(ModificarEmpleadoComponent, {
       header: 'Empleado (Porcentajes)',
       width: '50%',
@@ -336,8 +351,9 @@ export class StaffingPlanComponent implements OnInit {
         etapa,
         empleado,
         chalias,
-        num_proyecto: this.form.value.numProyecto
-
+        num_proyecto: this.form.value.numProyecto,
+        etiquetaTBD, //LEO TBD
+        IdPuesto //LEO TBD
       }
     })
       .onClose.subscribe((result) => {
@@ -350,7 +366,7 @@ export class StaffingPlanComponent implements OnInit {
             porcentaje: fechaRegistro.porcentaje
           }))
           if (empleado) {
-
+            console.log('Entro if(empleado)'); //LEO TBD
             this.empleados(etapaIndex).at(empleadoIndex).patchValue({
               aplicaTodosMeses: empleadoRespuesta.aplicaTodosMeses,
               cantidad: empleadoRespuesta.cantidad
@@ -367,6 +383,7 @@ export class StaffingPlanComponent implements OnInit {
               }))
             })
           } else {
+            console.log('Entro else if(empleado)'); //LEO TBD
             this.empleados(etapaIndex).push(this.fb.group({
               id: empleadoRespuesta.id,
               idFase: empleadoRespuesta.idFase,
@@ -379,6 +396,8 @@ export class StaffingPlanComponent implements OnInit {
               chalias: empleadoRespuesta.chAlias,
               //nucosto_ini: empleadoRespuesta.nucosto_ini,
              // PrecioVenta: empleadoRespuesta.PrecioVenta
+             etiquetaTBD: empleado.etiquetaTBD, //LEO TBD
+             IdPuesto: empleado.idPuesto, //LEO TBD
             }))
           }
         }

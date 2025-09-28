@@ -27,6 +27,8 @@ interface EtapaEmpleado {
   chalias: string
   //PrecioVenta: number,
   //nucosto_ini: number,
+  etiquetaTBD: string, //LEO TBD
+  IdPuesto: string //LEO TBD
 }
 
 interface ICatalogo {
@@ -100,8 +102,9 @@ export class ModificarEmpleadoComponent implements OnInit {
     this.form.get('etiqueta')?.disable(); //LEO TBD
 
     const data = this.config.data as EtapaEmpleado
+    console.log('modificarEmpleadoComponent entro'); //LEO TBD
     if (data) {
-
+      console.log('modificarEmpleadoComponent entro if(data)'); //LEO TBD
           /**console.log('valor Fee ------- ' + data.empleado.fee + '------ fase empleados Fee ------- ' + data.etapa.empleados[0].fee )
           console.log('valor Fee2 ------- ' +  data.empleado.fee+' valor directo de Fee2 ------- ' + data.FEE )
           console.log(Object.values(data.etapa.empleados));
@@ -128,8 +131,10 @@ export class ModificarEmpleadoComponent implements OnInit {
     */
 
           //console.log('PrecioVenta ------- ' +  data.empleado.PrecioVenta )
-          console.log('valor de alias ------- ' +  data.chalias )
-          console.log('valor de alias ------- ' +  data.empleado?.chAlias )
+          console.log('valor de data.chalias:' +  data.chalias )
+          console.log('valor de data.empleado?.chAlias:' +  data.empleado?.chAlias )
+          console.log('valor de data.etiquetaTBD:' +  data.etiquetaTBD ) //LEO TBD
+          console.log('valor de data.IdPuesto:' +  data.IdPuesto ) //LEO TBD
 
       this.form.patchValue({
         id_fase: data.etapa.idFase,
@@ -142,30 +147,61 @@ export class ModificarEmpleadoComponent implements OnInit {
         //nucosto_ini: data.empleado?.nucosto_ini,
         chalias: data.chalias,
         //PrecioVenta: data.empleado?.PrecioVenta
-        
+        etiqueta: data.etiquetaTBD, //LEO TBD
       })
 
       if (!data.empleado) {
+        console.log('modificarEmpleadoComponent entro if(!data.empleado)  linea 154'); //LEO TBD
+        console.log('modificarEmpleadoComponent es decir es Agregar'); //LEO TBD
         this.cargarEmpleados(),
           this.cargarTipoEmpleados()
       } else {
-
+        console.log('modificarEmpleadoComponent entro else del if(!data.empleado linea 158)'); //LEO TBD
         //this.form.controls['puesto'].disable();
-        this.form.get('puesto')?.disable();
+        //se llena el combo de empleados para que seleccione alguno diferente del TBD
+        //this.cargarEmpleados(); //LEO TBD
+        //se llena el combo de puesto y se selecciona el puesto del empleado sea TBD o no
+        this.cargarTipoEmpleados(); //LEO TBD
+        this.form.get('puesto')?.setValue(data.IdPuesto); //LEO TBD
+        console.log('modificarEmpleadoComponent despues de cargar combos linea 162'); //LEO TBD
         
+        this.form.get('puesto')?.disable();  //LEO TBD
+
+
+
         this.empleado = data.empleado
 
+        //LEO TBD I
+        //para cargar los empleados del puesto seleccionado
+        this.buscarEmpleadosPorIdPuesto(data.IdPuesto);
+
+        //para saber si es un empleado TBD o no.
+        //en caso de ser TBD que inhabilite el combo de EMpleado y seleccione el empleado seleccionado en staffing plan
+        let iIndiceTBD = data.empleado.numempleadoRrHh.indexOf('|TBD',0);
+        console.log('modificarEmpleadoComponent indiceTBD:'+iIndiceTBD); //LEO TBD
+        if( iIndiceTBD < 0)
+        {
+          console.log('modificarEmpleadoComponent entro al if( iIndiceTBD < 0)'); //LEO TBD
+          //indica que es un empleado que no es TBD entoncesl inhabilita el combo
+          this.form.get('num_empleado')?.disable(); 
+        }
+        else
+        {
+          this.form.get('num_empleado')?.enable(); 
+        }
+        //LEO TBD F
 
         // console.log('data.empleado.fee ------- ' + data.empleado.fee + ' ------------ data.empleado.fee ------- ' + data.empleado?.fee )
 
         if (data.FEE != null) {
-
+          console.log('modificarEmpleadoComponent entro if(data.FEE != null) linea 168'); //LEO TBD
           this.form.patchValue({
             FEE: this.formateaValor(data.FEE),
             PrecioVenta: this.formateaValor(data.FEE),
           })
 
         } else {
+          console.log('modificarEmpleadoComponent entro else de if(data.FEE != null) linea 175'); //LEO TBD
           this.cargandoCosto = true;
           this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
             .pipe(finalize(() => {
@@ -213,6 +249,7 @@ export class ModificarEmpleadoComponent implements OnInit {
         }
 
         this.cargandoCosto = true;
+        console.log('modificarEmpleadoComponent ejecutara .getCostoId linea 253'); //LEO TBD
         this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
             .pipe(finalize(() => {
               this.sharedService.cambiarEstado(false);
@@ -298,6 +335,7 @@ export class ModificarEmpleadoComponent implements OnInit {
         next: ({ data }) => {
           if (!this.empleado) {
             const empleadoEncontrado = this.empleadosOriginal.find(empleadoRegistro => empleadoRegistro.nunum_empleado_rr_hh == this.form.value.num_empleado)
+            console.log('modificaEmpleado empleadoEncontrado.nombre_persona:'+empleadoEncontrado.nombre_persona);//LEO TBD
             if(empleadoEncontrado != undefined && empleadoEncontrado != null){
             this.empleado = {
               id: null,
@@ -313,7 +351,8 @@ export class ModificarEmpleadoComponent implements OnInit {
               reembolsable: this.form.value.reembolsable,
               nuCostoIni: this.PreciodeVenta,
               chAlias: this.form.value.chalias,
-              etiqueta: this.form.value.etiqueta, //LEO TBD
+              etiquetaTBD: this.form.value.etiqueta, //LEO TBD
+              idPuesto: this.form.value.puesto, //LEO TBD
             }
           }//LEO TBD
           }
@@ -352,16 +391,19 @@ export class ModificarEmpleadoComponent implements OnInit {
   }
 
   cargarEmpleados() {
-
+    console.log('modificarEmpleadoComponent cargaEmpleado entro'); //LEO TBD
     this.sharedService.cambiarEstado(true)
-
+    console.log('modificarEmpleadoComponent cargaEmpleado ejecutara getEmpleados linea 371'); //LEO TBD
     this.timesheetService.getEmpleados()
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({ data }) => {
+          console.log('modificarEmpleadoComponent cargaEmpleado data.length:' + data.length); //LEO TBD
           this.empleadosOriginal = data
           //this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
+          console.log('modificarEmpleadoComponent cargaEmpleado data.length:' + data.length); //LEO TBD
           this.empleados = this.empleadosOriginal.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+          console.log('modificarEmpleadoComponent cargaEmpleado this.empleados.length:' + this.empleados.length); //LEO TBD
         },
         error: (err) => this.closeDialog()
       })
@@ -603,4 +645,23 @@ export class ModificarEmpleadoComponent implements OnInit {
 
 
   }
+
+  buscarEmpleadosPorIdPuesto(idPuesto: string) {
+    console.log('buscarEmpleadosPorIdPuesto entro con idPuesto:'+ idPuesto);
+    this.sharedService.cambiarEstado(true)
+
+    console.log('buscarEmpleadosPorIdPuesto idPuesto:' + idPuesto)
+    let iPuestoNumero = parseInt(idPuesto, 10); ;
+    this.timesheetService.getEmpleadosTIPO(iPuestoNumero)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({ data }) => {
+          console.log('buscarEmpeladosPorIDPuesto Antes de setCatEmpleados valor: ' + iPuestoNumero + ' numRegistros:' + data.length)
+          this.setCatEmpleados(data)
+          console.log('buscarEmpeladosPorIDPuesto DEspues de setCatEmpleados')
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })
+  }
+
 }

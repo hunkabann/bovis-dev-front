@@ -1,7 +1,7 @@
 <p-toast>
 </p-toast>
 
-<div style="height: 200px width: 100%;">
+<div style="height: 200px; width: 100%;">
     <app-gantt-chart></app-gantt-chart>
 </div>
 
@@ -37,9 +37,14 @@
                             <button title="Agregar empleado" type="button" class="btn btn-primary" (click)="modificarEtapa($event, etapa.value, i)">
                                 <i class="pi pi-pencil vertical-align-middle"></i>
                             </button>
-                            <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null,null)">
+                            <!-- <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null,null)">
+                                <i class="pi pi-user-plus vertical-align-middle"></i>
+                            </button> -->
+                            <!-- LEO TBD I -->
+                            <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null,null,null,null)">
                                 <i class="pi pi-user-plus vertical-align-middle"></i>
                             </button>
+                            <!-- LEO TBD F -->
                             <button title="Eliminar etapa" type="button" class="btn btn-danger" (click)="eliminarEtapa($event, etapa.value, i)">
                                 <i class="pi pi-trash vertical-align-middle"></i>
                             </button>
@@ -64,9 +69,14 @@
                             <tr>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado,empleado.value.FEE, empleado.value.chalias)">
+                                        <!-- <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado,empleado.value.FEE, empleado.value.chalias)">
+                                            <i class="pi pi-calendar vertical-align-middle"></i>
+                                        </button> -->
+                                        <!-- LEO TBD I -->
+                                        <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado,empleado.value.FEE, empleado.value.chalias, empleado.value.etiqueta,empleado.value.IdPuesto)">
                                             <i class="pi pi-calendar vertical-align-middle"></i>
                                         </button>
+                                        <!-- LEO TBD F -->
                                         <button title="Eliminar empleado" type="button" class="btn btn-danger" (click)="eliminarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)">
                                             <i class="pi pi-trash vertical-align-middle"></i>
                                         </button>

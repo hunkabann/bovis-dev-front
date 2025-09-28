@@ -27,10 +27,10 @@
 
         <div class="col-12">
             <label for="num_empleado">Empleado:</label>
-            <ng-container *ngIf="empleado; else dropDown">
+            <!--<ng-container *ngIf="empleado; else dropDown">
                 <p>{{empleado.empleado}}</p>
-            </ng-container>
-            <ng-template #dropDown>
+            </ng-container>  -->  <!-- //LEO TBD -->
+            <!-- <ng-template #dropDown> -->
                 <p-dropdown 
                     id="empleado" 
                     [options]="empleados"
@@ -53,7 +53,7 @@
                         {{ obtenerMensajeError('num_empleado') }}
                     </small>
                 </div>
-            </ng-template>
+            <!-- </ng-template> -->
         </div>
 
         <div class="col-12">

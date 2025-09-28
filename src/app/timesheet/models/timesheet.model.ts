@@ -51,7 +51,8 @@ export interface Empleado {
   nuvalor_descuento:        number;
   nuno_empleado_noi:        number;
   chrol:                    null;
-  etiqueta:                 string; //LEO TBD
+  etiquetaTBD:                 string; //LEO TBD
+  IdPuesto:                 string; //LEO TBD
 }
 
 export interface DiasHabilesResponse {
