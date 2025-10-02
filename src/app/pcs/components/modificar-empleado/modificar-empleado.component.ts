@@ -86,6 +86,7 @@ export class ModificarEmpleadoComponent implements OnInit {
     nucosto_ini: [0],
     chalias: [null]
     ,etiqueta: [null] //LEO TBD
+    ,num_empleadoDesdeElPadre: [null], //LEO TBD
   })
 
   constructor() { }
@@ -148,6 +149,7 @@ export class ModificarEmpleadoComponent implements OnInit {
         chalias: data.chalias,
         //PrecioVenta: data.empleado?.PrecioVenta
         etiqueta: data.etiquetaTBD, //LEO TBD
+        num_empleadoDesdeElPadre: data.empleado?.numempleadoRrHh || null, //LEO TBD
       })
 
       if (!data.empleado) {
