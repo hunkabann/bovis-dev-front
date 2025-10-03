@@ -29,6 +29,7 @@ interface EtapaEmpleado {
   //nucosto_ini: number,
   etiquetaTBD: string, //LEO TBD
   IdPuesto: string //LEO TBD
+  num_empleadoDesdeElPadre: string //LEO TBD
 }
 
 interface ICatalogo {
@@ -134,7 +135,7 @@ export class ModificarEmpleadoComponent implements OnInit {
           //console.log('PrecioVenta ------- ' +  data.empleado.PrecioVenta )
           console.log('valor de data.chalias:' +  data.chalias )
           console.log('valor de data.empleado?.chAlias:' +  data.empleado?.chAlias )
-          console.log('valor de data.etiquetaTBD:' +  data.etiquetaTBD ) //LEO TBD
+          console.log('valor de data.etiquetaTBD:' +  data.etiquetaTBD || 'nulo' ) //LEO TBD
           console.log('valor de data.IdPuesto:' +  data.IdPuesto ) //LEO TBD
 
       this.form.patchValue({
@@ -148,8 +149,8 @@ export class ModificarEmpleadoComponent implements OnInit {
         //nucosto_ini: data.empleado?.nucosto_ini,
         chalias: data.chalias,
         //PrecioVenta: data.empleado?.PrecioVenta
-        etiqueta: data.etiquetaTBD, //LEO TBD
-        num_empleadoDesdeElPadre: data.empleado?.numempleadoRrHh || null, //LEO TBD
+        etiqueta: data.etiquetaTBD || '', //LEO TBD
+        num_empleadoDesdeElPadre: data.empleado?.numempleadoRrHh || '', //LEO TBD
       })
 
       if (!data.empleado) {
@@ -174,6 +175,7 @@ export class ModificarEmpleadoComponent implements OnInit {
         this.empleado = data.empleado
 
         //LEO TBD I
+        this.cargandoCosto = true;//LEO TBD
         //para cargar los empleados del puesto seleccionado
         this.buscarEmpleadosPorIdPuesto(data.IdPuesto);
 
@@ -261,9 +263,9 @@ export class ModificarEmpleadoComponent implements OnInit {
               next: ({ data, message }) => {
 
                 const [costoR] = data
-                console.log('message ' + message)
-                console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
-                console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+                //console.log('message ' + message)
+                //console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
+                //console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
                 
 
                 if (message != null) {
@@ -327,7 +329,7 @@ export class ModificarEmpleadoComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
 
 
-    console.log('valor de precio de venta3: '+ this.PreciodeVenta)
+    //console.log('valor de precio de venta3: '+ this.PreciodeVenta)
 
     
 
@@ -337,7 +339,7 @@ export class ModificarEmpleadoComponent implements OnInit {
         next: ({ data }) => {
           if (!this.empleado) {
             const empleadoEncontrado = this.empleadosOriginal.find(empleadoRegistro => empleadoRegistro.nunum_empleado_rr_hh == this.form.value.num_empleado)
-            console.log('modificaEmpleado empleadoEncontrado.nombre_persona:'+empleadoEncontrado.nombre_persona);//LEO TBD
+            //console.log('modificaEmpleado empleadoEncontrado:'+empleadoEncontrado+', this.form.value.num_empleado:'+this.form.value.num_empleado);//LEO TBD
             if(empleadoEncontrado != undefined && empleadoEncontrado != null){
             this.empleado = {
               id: null,
@@ -366,6 +368,7 @@ export class ModificarEmpleadoComponent implements OnInit {
            // nucosto_ini: this.PreciodeVenta,
             //PrecioVenta: this.PreciodeVenta,
             fechas: this.form.value.fechas as Fecha[]
+            ,etiquetaTBD: this.form.value.etiqueta //LEO
           }
 
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'La etapa ha sido agregada.' })
@@ -379,13 +382,13 @@ export class ModificarEmpleadoComponent implements OnInit {
 
     this.sharedService.cambiarEstado(true)
 
-    console.log('VALOR QUE LLEGA DEL COMBO -------- <<<< ' + event.value)
+    //console.log('VALOR QUE LLEGA DEL COMBO -------- <<<< ' + event.value)
 
     this.timesheetService.getEmpleadosTIPO(event.value)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({ data }) => {
-          console.log('Antes de setCatEmpleados valor: ' + event)
+          //console.log('Antes de setCatEmpleados valor: ' + event)
           this.setCatEmpleados(data)
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -393,9 +396,9 @@ export class ModificarEmpleadoComponent implements OnInit {
   }
 
   cargarEmpleados() {
-    console.log('modificarEmpleadoComponent cargaEmpleado entro'); //LEO TBD
+    //console.log('modificarEmpleadoComponent cargaEmpleado entro'); //LEO TBD
     this.sharedService.cambiarEstado(true)
-    console.log('modificarEmpleadoComponent cargaEmpleado ejecutara getEmpleados linea 371'); //LEO TBD
+    //console.log('modificarEmpleadoComponent cargaEmpleado ejecutara getEmpleados linea 371'); //LEO TBD
     this.timesheetService.getEmpleados()
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
@@ -575,9 +578,9 @@ export class ModificarEmpleadoComponent implements OnInit {
   //LEO TBD
   CargaSueldoCostosPuesto(event: any, idPuesto: any) {
 
-    console.log('event.value ' + event.value)
-    console.log('event ' + event)
-    console.log('+event. ' + +event)
+    //console.log('event.value ' + event.value)
+    //console.log('event ' + event)
+    //console.log('+event. ' + +event)
 
     if(event == '000'){
       this.form.get('etiqueta')?.enable();
@@ -599,9 +602,9 @@ export class ModificarEmpleadoComponent implements OnInit {
         next: ({ data, message }) => {
 
           const [costoR] = data
-          console.log('message ' + message)
-          console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
-          console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+          //console.log('message ' + message)
+          //console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
+          //console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
           
 
           if (message != null) {
@@ -658,9 +661,9 @@ export class ModificarEmpleadoComponent implements OnInit {
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({ data }) => {
-          console.log('buscarEmpeladosPorIDPuesto Antes de setCatEmpleados valor: ' + iPuestoNumero + ' numRegistros:' + data.length)
+          //console.log('buscarEmpeladosPorIDPuesto Antes de setCatEmpleados valor: ' + iPuestoNumero + ' numRegistros:' + data.length)
           this.setCatEmpleados(data)
-          console.log('buscarEmpeladosPorIDPuesto DEspues de setCatEmpleados')
+          //console.log('buscarEmpeladosPorIDPuesto DEspues de setCatEmpleados')
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })

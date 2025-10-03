@@ -254,14 +254,19 @@
                 class="col-6"
                 [formGroupName]="i"
             >
+            <!-- LEO TBD Para el campo-fecha+i se quito el campo [id] y se dejo solamente inputId
+                Esto se hizo para el error que marcaba el navegador: 
+                Multiple form field elements in the same form have the same id attribute value. This might prevent the browser from correctly autofilling the form.
+                To fix this issue, use unique id attribute values for each form field. 
+                El id repetido era id="minmax"-->
                 <div class="d-grid">
                     <label [for]="'campo-fecha-'+i">
                         <strong> {{'% '+fecha.value.desc | uppercase}}:</strong>
                     </label>
                     <p-inputNumber 
                         formControlName="porcentaje" 
-                        inputId="minmax" 
-                        [id]="'campo-fecha-'+i"
+                        [inputId]="'campo-fecha-' + i"
+                        
                         mode="decimal" 
                         [min]="0" 
                         [max]="100"
