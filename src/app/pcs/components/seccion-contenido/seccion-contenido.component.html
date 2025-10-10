@@ -14,7 +14,7 @@
                     <tr>
                         <th width="100px" class="text-center" *ngIf="esEditable">Opciones</th>
                         <th class="text-left">Nombre</th>
-                        <th class="text-right">Unidad</th>
+                        <th class="text-right" *ngIf="!seccion.codigo.includes('02.0000')">Unidad</th> <!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
                         <th class="text-right">Cantidad</th>
                         <th class="text-right">Subtotal</th>
                         <th *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-right">
@@ -37,7 +37,7 @@
                             </div>
                         </td>
                         <td class="text-left">{{rubro.rubro}}</td>
-                        <td class="text-right">{{rubro.unidad}}</td>
+                        <td class="text-right" *ngIf="!seccion.codigo.includes('02.0000')">{{rubro.unidad}}</td><!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
                         <td class="text-right">{{rubro.cantidad}}</td>
                         <td
                             *ngIf="!!rubro.reembolsable ; then thenrembolsableSi else thenrembolsableNo">

@@ -2,6 +2,9 @@
 <p-toast></p-toast>
 
 <form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="d-flex justify-content-end mt-2">
+        <button type="button" id="btnGuardar2" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid || !form.value.num_empleado || cargandoCosto">Guardar</button>
+    </div>
 
     <div class="row">
 
@@ -16,6 +19,9 @@
                         formControlName="puesto" 
                         [ngClass]="{'ng-invalid ng-dirty':      esInvalido('puesto')}"
                         optionValue="code"
+                        [filter]="true" 
+                        filterBy="name"
+                        appendTo="body"
                         (onChange)="buscarEmpleados($event)"
                 ></p-dropdown>
             <div *ngIf="esInvalido('puesto')">
