@@ -241,7 +241,7 @@ export class ModificarEmpleadoComponent implements OnInit {
                       FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                       PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                       
-                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                      nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                     })
 
                   }
@@ -591,6 +591,20 @@ export class ModificarEmpleadoComponent implements OnInit {
       this.form.get('etiqueta')?.setValue('');
     }
     
+    //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+    //    Para reemplazar al TBD. 
+    //    La bande bMantener es quien controla:
+    //    True: debe mantener el "PRecio de Venta" que es el campo FEE, debe habilitar "Costo por Empleado"
+    //          que es el campo "PrecioVenta"
+    //    False: debe reemplazar el "PRecio de VEnta" y deshabilitar el "Costo por Empleado"
+    let num_empleadoPadre = this.form.get('num_empleadoDesdeElPadre').getRawValue();
+    let bMantener = false;
+    if(num_empleadoPadre != '' &&  event != '000')
+    {
+      bMantener = true;
+    }
+    //console.log('bMAntener:'+bMantener+', num_empleadoPadre:'+num_empleadoPadre+', event:'+event);
+    //LEO TBD F
 
     this.cargandoCosto = true;
     this.costosService.getCostoIDPorPuesto(event, idPuesto)
@@ -612,26 +626,70 @@ export class ModificarEmpleadoComponent implements OnInit {
             this.mensajito = message;
 
             if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
-
-              this.PreciodeVenta = 0
-              this.form.patchValue({
+               
+              //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+              if(!bMantener)
+              {
+                //console.log('bMAntener:No encontró registros y colocará cero');
+                //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+                this.PreciodeVenta = 0
+                this.form.patchValue({
                 FEE: this.formateaValor(0.0),
-                PrecioVenta: this.formateaValor(0.0)
-
-              })
+                PrecioVenta: this.formateaValor(0.0),
+                
+                })
+                //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+              }
+              else
+              {
+                //console.log('bMAntener:No encontró registros y no colocará cero en Precio venta');
+                this.form.patchValue({
+                FEE: this.formateaValor(0.0),
+                nucosto_ini: this.formateaValor(0.0),
+                })
+              }
+              //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
 
             } else {
 
-
-              this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
-              this.form.patchValue({
+              //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+              if(!bMantener)
+              {
+                //console.log('bMAntener:Lo encontró registros y colocará el valor');
+                this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
+                this.form.patchValue({
                 FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                 PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                 nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
 
-              })
+                })
+              }
+              else
+              {
+                //console.log('bMAntener:Lo encontró registros y no colocará el valor');
+                this.form.patchValue({
+                //FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+
+                })
+              }
+              //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
 
             }
+
+            //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+            if(bMantener)
+            {
+              //console.log('Mantener costo ini enable');
+              this.form.get('PrecioVenta')?.enable();
+            }
+            else
+            {
+              //console.log('Mantener costo ini disable');
+              this.form.get('PrecioVenta')?.disable();
+            }
+            //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
           }
 
 
@@ -670,3 +728,5 @@ export class ModificarEmpleadoComponent implements OnInit {
   }
 
 }
+
+
