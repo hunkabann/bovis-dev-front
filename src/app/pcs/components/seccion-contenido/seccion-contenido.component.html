@@ -64,10 +64,22 @@
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <tr>
-                        <td colspan="4" class="text-end" *ngIf="esEditable; else totalesNoEditable">Totales</td>
+                        <!--LEO 2025-10-09 Puntos Bugs y Mejoras, se comenta td y ng-template-->
+                        <!-- <td colspan="4" class="text-end" *ngIf="esEditable; else totalesNoEditable">Totales</td>
                         <ng-template #totalesNoEditable>
                             <td colspan="3" class="text-end">Totales</td>
-                        </ng-template>
+                        </ng-template> -->
+                        <!--LEO 2025-10-09 I Puntos Bugs y Mejoras-->
+                        <td 
+                        class="text-end"
+                        [attr.colspan]="
+                            esEditable 
+                            ? (seccion.codigo.includes('02.0000') ? 3 : 4) 
+                            : (seccion.codigo.includes('02.0000') ? 2 : 3)"
+                        >
+                        Totales
+                        </td>
+                        <!--LEO 2025-10-09 F Puntos Bugs y Mejoras-->
                         <td class="text-end">
                             {{ calcularSubTotal(seccionRegistro.rubros) | currency }}
                         </td>
