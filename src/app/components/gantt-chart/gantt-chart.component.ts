@@ -130,9 +130,14 @@ export class GanttChartComponent implements OnInit {
             y: p.y
           })),
           //backgroundColor: '#4ea7a7ff',
-          backgroundColor: this.transformedProjects.map((_, i) =>
-            i === 0 ? '#000000b4' : '#4ea7a7ff' // rojo para la primera barra, el resto azul
-          ),
+          //backgroundColor: this.transformedProjects.map((_, i) =>
+          //  i === 0 ? '#000000b4' : '#4ea7a7ff' 
+          //),
+          backgroundColor: this.transformedProjects.map((_, i) => {
+            if (i === 0) return '#000000b4'; // primera barra negra
+            // alterna entre dos colores a partir de la segunda
+            return i % 2 === 0 ? '#4ea7a7ff' : '#82ceceff';
+          }),          
           borderRadius: 4,
           stack: 'stack1',
           barThickness: 20,
