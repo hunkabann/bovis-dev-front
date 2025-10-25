@@ -15,7 +15,7 @@
                         <th width="100px" class="text-center" *ngIf="esEditable">Opciones</th>
                         <th class="text-left">Nombre</th>
                         <th class="text-right" *ngIf="!seccion.codigo.includes('02.0000')">Unidad</th> <!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
-                        <th class="text-right">Cantidad</th>
+                        <th class="text-right">{{ seccion.codigo.includes('02.0000') ? 'Mes' : 'Cantidad' }}</th> <!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
                         <th class="text-right">Subtotal</th>
                         <th *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-right">
                             {{mesRegistro.desc | uppercase}}
@@ -38,7 +38,16 @@
                         </td>
                         <td class="text-left">{{rubro.rubro}}</td>
                         <td class="text-right" *ngIf="!seccion.codigo.includes('02.0000')">{{rubro.unidad}}</td><!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
-                        <td class="text-right">{{rubro.cantidad}}</td>
+                        <td class="text-right">
+                            <!--LEO 2025-10-09 I Puntos Bugs y Mejoras-->
+                            <ng-container *ngIf="seccion.codigo.includes('02.0000'); else mostrarCantidad">
+                                {{ rubro.fechas | calcularSubtotalStaffing }}
+                            </ng-container>
+                            <ng-template #mostrarCantidad>
+                                {{ rubro.cantidad }}
+                            </ng-template>
+                            <!--LEO 2025-10-09 F Puntos Bugs y Mejoras-->
+                        </td>
                         <td
                             *ngIf="!!rubro.reembolsable ; then thenrembolsableSi else thenrembolsableNo">
                         </td>

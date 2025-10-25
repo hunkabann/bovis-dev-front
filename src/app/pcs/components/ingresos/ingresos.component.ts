@@ -55,6 +55,8 @@ export class IngresosComponent implements OnInit {
   seccionesCargado: boolean[] = [];
   seccionesData: any[] = [];
 
+  nombrePagina: string; //LEO 2025-10-09 Puntos Bugs y Mejoras
+  
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   form = this.fb.group({
@@ -119,6 +121,7 @@ export class IngresosComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     })
+    this.nombrePagina = 'ingresosPagina';//LEO 2025-10-09 Puntos Bugs y Mejoras
   }
 
   filterReembolsables(rubros: any[]): any[] {
