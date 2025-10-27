@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit,ViewChild, inject } from '@angular/core'; //LEO Linea Base
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { finalize, forkJoin } from 'rxjs';
@@ -8,6 +8,7 @@ import { Opcion } from 'src/models/general.model';
 import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { CatalogosService } from '../services/catalogos.service';
 import { PcsService } from '../services/pcs.service';
+import { Calendar } from 'primeng/calendar'; //LEO Linea Base
 
 @Component({
   selector: 'app-pcs',
@@ -37,11 +38,21 @@ export class PcsComponent implements OnInit {
   activeItem: MenuItem;
   proyectos: Opcion[] = []
   proyectoId: number = null;
+  fecha_base: Date = null;//LEO Linea Base
+  fechaSeleccionadaPorUsuario = false; // Para saber si el usuario cambió la fecha //LEO Linea Base
+  @ViewChild('fechaBaseRef') fechaBaseRef!: Calendar;//LEO Linea Base
 
   constructor() { }
 
   ngOnInit(): void {
     this.sharedService.cambiarEstado(true)
+
+    //LEO I Linea Base
+    if(this.fecha_base == null)
+    {
+      this.fecha_base = new Date();
+    }
+    //LEO F Linea Base
 
     forkJoin([
       this.timesheetService.getCatProyectos()
@@ -69,7 +80,7 @@ export class PcsComponent implements OnInit {
       const proyecto = params['proyecto']
       const esEdicion = params['esEdicion']
       const itemlabel = params['itemlabel']
-      
+      const fechaParam = params['fecha_base']; // leer la fecha //LEO Linea Base
 
       if (proyecto) {
         this.proyectoId = proyecto
@@ -77,6 +88,18 @@ export class PcsComponent implements OnInit {
 
         this.cambiarTabs(esEdicion,itemlabel)
       }
+
+      //LEO I Linea Base
+      // asignar fecha desde los params si existe
+      if (fechaParam) {
+        const partes = fechaParam.split(/[\/\-]/); // acepta 2025/10/26 o 2025-10-26
+        const year = parseInt(partes[0], 10);
+        const month = parseInt(partes[1], 10) - 1;
+        const day = parseInt(partes[2], 10);
+        this.fecha_base = new Date(year, month, day); // crea fecha local, sin UTC
+        this.fechaSeleccionadaPorUsuario = true;
+      }
+      //LEO F Linea Base
     });
   }
 
@@ -86,9 +109,11 @@ export class PcsComponent implements OnInit {
    // console.log('VALOR DEL ITEM ----------------->>>>> ' + event)
 
     if(event === 'IP'){      
-      this.stilovisible = true         
+      this.stilovisible = true   
+      this.deshabilitaCalendario(false); // Habilita el calendario //LEO Linea Base
   }else{
     this.stilovisible = false
+    this.deshabilitaCalendario(true);// Deshabilita el calendario //LEO Linea Base
   }
 
     this.proyectoId = null;
@@ -99,12 +124,21 @@ export class PcsComponent implements OnInit {
       this.proyectoId = null
     }
 
+    //LEO I Linea Base
+    // Solo poner la fecha actual si el usuario no la ha cambiado antes
+    if (!this.fechaSeleccionadaPorUsuario) {
+      this.fecha_base = new Date();
+    }
+    //LEO F Linea Base
+
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: {
         proyecto: esEdicion ? this.proyectoId : null,
         esEdicion: esEdicion ? 1 : null,
-        nuevo: !esEdicion
+        nuevo: !esEdicion,
+        fecha_base: this.fecha_base ? this.formatFechaQuery(this.fecha_base) : null //LEO Linea Base
+        //fechaBase: this.fecha_base //LEO Linea Base
       }
     })
 
@@ -116,7 +150,8 @@ export class PcsComponent implements OnInit {
       ...item,
       queryParams: {
         proyecto: this.proyectoId,
-        esEdicion: esEdicion ? 1 : null
+        esEdicion: esEdicion ? 1 : null,
+        fecha_base: this.fecha_base ? this.formatFechaQuery(this.fecha_base) : null //LEO Linea Base
       },
       
     }))
@@ -138,4 +173,35 @@ export class PcsComponent implements OnInit {
    
   }
 
+  //LEO I Linea Base
+  onFechaSeleccionada(event: Date) {
+    this.fechaSeleccionadaPorUsuario = true;
+    this.fecha_base = event;
+
+    // Actualiza el queryParam "fecha_base" en la URL sin recargar la página
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParamsHandling: 'merge', // mantiene los demás params (proyecto, esEdicion, etc.)
+      queryParams: {
+        fecha_base: this.formatFechaQuery(this.fecha_base)
+      }
+    });
+  }
+
+  deshabilitaCalendario(bHabilita: boolean)
+  {
+    if (this.fechaBaseRef) {
+      this.fechaBaseRef.disabled = bHabilita;
+    }
+  }
+
+  private formatFechaQuery(fecha: Date): string {
+    const year = fecha.getFullYear();
+    const month = String(fecha.getMonth() + 1).padStart(2, '0');
+    const day = String(fecha.getDate()).padStart(2, '0');
+    //return `${year}-${month}-${day}`; // formato ISO corto //asi resta 1 día a la fecha
+    return `${year}/${month}/${day}`; // usa / para evitar que JS lo interprete como UTC
+  }
+
+  //LEO F Linea Base
 }
