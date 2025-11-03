@@ -158,9 +158,9 @@ export class IpComponent implements OnInit {
     correo_contacto: [null],
     impuesto_nomina: [0, [Validators.required]],
     id_unidad_negocio: ['', [Validators.required]],
-    overhead: [null], //LEO inputs para FEEs I
-    utilidad: [null], //LEO inputs para FEEs I
-    contingencia: [null] //LEO inputs para FEEs I
+    overheadPorcentaje: [null], //LEO inputs para FEEs I
+    utilidadPorcentaje: [null], //LEO inputs para FEEs I
+    contingenciaPorcentaje: [null] //LEO inputs para FEEs I
   })
 
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
@@ -230,9 +230,9 @@ export class IpComponent implements OnInit {
                     correo_contacto: proyectoData.chcontacto_correo,
                     impuesto_nomina: proyectoData.impuesto_nomina,
                     id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString(),
-                    overhead:0, //LEO inputs para FEEs
-                    utilidad:0, //LEO inputs para FEEs
-                    contingencia:0 //LEO inputs para FEEs
+                    overheadPorcentaje:0, //LEO inputs para FEEs
+                    utilidadPorcentaje:0, //LEO inputs para FEEs
+                    contingenciaPorcentaje:0 //LEO inputs para FEEs
                   })
                   this.actualizarTotalMeses()
                 }
@@ -291,9 +291,9 @@ export class IpComponent implements OnInit {
                 impuesto_nomina: proyectoData.impuesto_nomina,
                 //id_unidad_negocio: proyectoData.nukidunidadnegocio.toString()
                 id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString(),
-                overhead:0, //LEO inputs para FEEs
-                utilidad:0, //LEO inputs para FEEs
-                contingencia:0 //LEO inputs para FEEs
+                overheadPorcentaje:0, //LEO inputs para FEEs
+                utilidadPorcentaje:0, //LEO inputs para FEEs
+                contingenciaPorcentaje:0 //LEO inputs para FEEs
               })
               this.actualizarTotalMeses()
             }
