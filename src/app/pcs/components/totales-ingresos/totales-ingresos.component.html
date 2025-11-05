@@ -57,26 +57,30 @@
                         <div class="col-2">
 
                         </div>                        
-                        <div class="col-3">
-
-                        </div>
                         <div class="col-2">
                             <label for="porcOverhead">Overhead: </label>
-                            <input type="number" id="typeNumber" class="form-control" id="porcOverhead" />
-                        </div>
-                        <div class="col-2">
-                            <label for="porcUtilidad">Utilidad:</label>
-                            <input type="number" id="typeNumber" class="form-control" id="porcUtilidad" />
-                        </div>
-                        <div class="col-2">
-                            <label for="porcContingencia">Contingencia:</label>
-                            <input type="number" id="typeNumber" class="form-control" id="porcContingencia" />
-                        </div>
-                        <div class="col-1">
-                            <label for="btnGuardar2"></label>
-                            <button type="button" id="btnGuardar2" class="btn btn-info" (click)="guardar()">Guardar</button>
+                            <input type="number" class="form-control" id="porcOverhead"
+                                    [(ngModel)]="overheadPorcentaje" name="porcOverhead" />
                         </div>
 
+                        <div class="col-2">
+                            <label for="porcUtilidad">Utilidad:</label>
+                            <input type="number" class="form-control" id="porcUtilidad"
+                                    [(ngModel)]="utilidadPorcentaje" name="porcUtilidad" />
+                        </div>
+
+                        <div class="col-2">
+                            <label for="porcContingencia">Contingencia:</label>
+                            <input type="number" class="form-control" id="porcContingencia"
+                                    [(ngModel)]="contingenciaPorcentaje" name="porcContingencia" />
+                        </div>
+                        <div class="col-2">
+                            <label for="btnGuardar2"></label>
+                            <button type="button" id="btnGuardar2" class="btn btn-info" (click)="guardarFee()">Guardar</button>
+                        </div>
+                        <div class="col-2">
+
+                        </div>
                     </div>
                 </div>
             </ng-container>

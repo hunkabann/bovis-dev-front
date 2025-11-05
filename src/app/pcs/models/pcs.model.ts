@@ -105,6 +105,9 @@ export interface Proyecto {
     impuesto_nomina:                  number;
     nukidunidadnegocio:               string;
     chunidadnegocio:                  string;
+    overheadPorcentaje:               number; //LEO inputs para FEEs
+    utilidadPorcentaje:               number; //LEO inputs para FEEs
+    contingenciaPorcentaje:           number;//LEO inputs para FEEs
 }
 
 export interface ClientePcs {

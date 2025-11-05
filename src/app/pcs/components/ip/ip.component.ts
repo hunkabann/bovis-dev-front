@@ -230,9 +230,9 @@ export class IpComponent implements OnInit {
                     correo_contacto: proyectoData.chcontacto_correo,
                     impuesto_nomina: proyectoData.impuesto_nomina,
                     id_unidad_negocio: proyectoData.nukidunidadnegocio === '' || proyectoData.nukidunidadnegocio === null ? '' : proyectoData.nukidunidadnegocio.toString(),
-                    overheadPorcentaje:0, //LEO inputs para FEEs
-                    utilidadPorcentaje:0, //LEO inputs para FEEs
-                    contingenciaPorcentaje:0 //LEO inputs para FEEs
+                    overheadPorcentaje: proyectoData.overheadPorcentaje, //LEO inputs para FEEs
+                    utilidadPorcentaje: proyectoData.utilidadPorcentaje, //LEO inputs para FEEs
+                    contingenciaPorcentaje: proyectoData.contingenciaPorcentaje //LEO inputs para FEEs
                   })
                   this.actualizarTotalMeses()
                 }

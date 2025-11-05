@@ -5,6 +5,9 @@ import { KeyValue } from '@angular/common';
 import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { formatearFechaEncabezado } from 'src/helpers/helpers';
+import { PcsService } from '../../services/pcs.service'; //LEO inputs para FEEs
+import { MessageService } from 'primeng/api';//LEO inputs para FEEs
+import { TITLES, errorsArray, EXCEL_EXTENSION } from 'src/utils/constants';
 
 @Component({
   selector: 'app-totales-ingresos',
@@ -14,6 +17,7 @@ import { formatearFechaEncabezado } from 'src/helpers/helpers';
 export class TotalesIngresosComponent implements OnInit {
 
   @Input() totalesData: TotalesIngresosResponseData;
+  @Input() nunum_proyecto: number; //LEO inputs para FEEs 
 
   registros: {
     ingreso: TotalesIngresosFormateado,
@@ -43,9 +47,19 @@ export class TotalesIngresosComponent implements OnInit {
     }
   };
 
-  constructor() { }
+  //LEO inputs para FEEs I
+  // propiedades globales para los inputs
+  overheadPorcentaje: number = 0;
+  utilidadPorcentaje: number = 0;
+  contingenciaPorcentaje: number = 0;
+  //LEO inputs para FEEs F
+
+  constructor(private pcsService: PcsService, private messageService: MessageService) { }//LEO inputs para FEEs
 
   ngOnInit(): void {
+
+    //nunum_proyecto: 0; //LEO inputs para FEEs
+
     if(this.totalesData) {
       if(this.totalesData.ingreso) {
         this.totalesData.ingreso.forEach((ingreso: GastosIngresosTotales) => {
@@ -118,7 +132,28 @@ export class TotalesIngresosComponent implements OnInit {
     return ingresos?.filter(i => i.reembolsable === false) || [];
   }
 
-  guardar()
-  {}
+  guardarFee()
+  {
+    // validar opcionalmente
+    if (this.overheadPorcentaje == null && this.utilidadPorcentaje == null && this.contingenciaPorcentaje == null) {
+      this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Completa al menos 1 porcentaje' });
+      return;
+    }
+
+    this.pcsService.guardarFeePorcentaje(true, {
+      nunum_proyecto: this.nunum_proyecto,
+      overheadPorcentaje: this.overheadPorcentaje,
+      utilidadPorcentaje: this.utilidadPorcentaje,
+      contingenciaPorcentaje: this.contingenciaPorcentaje
+    }).subscribe({
+      next: (data) => {
+        this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
+      }
+    });
+
+  }
   //LEO inputs para FEEs F
 }
