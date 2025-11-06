@@ -61,6 +61,10 @@ export class TotalesIngresosComponent implements OnInit {
     //nunum_proyecto: 0; //LEO inputs para FEEs
 
     if(this.totalesData) {
+      this.overheadPorcentaje = this.totalesData.overheadPorcentaje;
+      this.utilidadPorcentaje = this.totalesData.utilidadPorcentaje;
+      this.contingenciaPorcentaje = this.totalesData.contingenciaPorcentaje;
+
       if(this.totalesData.ingreso) {
         this.totalesData.ingreso.forEach((ingreso: GastosIngresosTotales) => {
         // Asegurar que el mes esté registrado

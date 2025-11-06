@@ -49,7 +49,8 @@ import { ModificarEtapaComponent } from './components/modificar-etapa/modificar-
 import { TotalesIngresosComponent } from './components/totales-ingresos/totales-ingresos.component';
 import { SharedChartsModule } from '../shared/shared-charts.module';
 //import { SharedChartsModule } from 'src/app/shared/shared-charts.module';
-
+import { PorcentajeImportesPipe } from './pipes/porcentaje-importes.pipe'; //LEO inputs para FEEs
+import { PorcentajeImportesSubtotalPipe } from './pipes/porcentaje-importes-subtotal.pipe'; //LEO inputs para FEEs
 
 
 @NgModule({
@@ -82,6 +83,8 @@ import { SharedChartsModule } from '../shared/shared-charts.module';
     SeccionContenidoComponent,
     ModificarEtapaComponent,
     TotalesIngresosComponent,
+    PorcentajeImportesPipe, //LEO inputs para FEEs
+    PorcentajeImportesSubtotalPipe, //LEO inputs para FEEs
   ],
   imports: [
     CommonModule,
