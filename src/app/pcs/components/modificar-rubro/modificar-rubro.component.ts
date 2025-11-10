@@ -51,7 +51,8 @@ export class ModificarRubroComponent implements OnInit {
     reembolsable: [false],
     aplicaTodosMeses: [false],
     fechas: this.fb.array([]),
-    numProyecto: [null]
+    numProyecto: [null],
+    chcomentarios: [''] //LEO Gastos comentarios I
   })
 
   constructor() { }

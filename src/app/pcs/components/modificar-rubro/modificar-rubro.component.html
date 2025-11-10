@@ -102,6 +102,32 @@
         </ng-container>
     </div>
     
+    <!-- LEO Gastos comentarios I -->
+    <div class="col-12">
+            <div class="row">
+                    
+                <label for="chcomentarios">Comentarios:</label>
+                    <textarea
+                      id="chcomentarios"
+                      pInputTextarea
+                      class="form-control no-resize"
+                      rows="3"
+                      maxlength="250"
+                      formControlName="chcomentarios"
+                      [ngClass]="{'ng-invalid ng-dirty': esInvalido('chcomentarios')}"
+                    ></textarea>
+                <div *ngIf="esInvalido('chcomentarios')">
+                <small
+                    class="error-msg"
+                >
+                    {{ obtenerMensajeError('chcomentarios') }}
+                </small>
+                </div>
+                
+            </div>      
+        </div>
+    <!-- LEO Gastos comentarios F -->
+
     <div class="d-flex justify-content-end mt-2">
         <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Guardar</button>
     </div>
