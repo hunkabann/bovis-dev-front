@@ -159,6 +159,7 @@ export interface Rubro {
     numEmpleadoRrHh:    string;
     numProyecto:      number;
     costoMensual:         number;
+    chcomentarios:    string; //LEO Gastos comentarios
 }
 
 export interface SumaFecha {

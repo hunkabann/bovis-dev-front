@@ -132,6 +132,28 @@
                         <td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:contingenciaPorcentaje | currency}}</td><!-- LEO inputs para FEEs -->
                         <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: contingenciaPorcentaje |currency}}</td><!-- LEO inputs para FEEs -->
                     </tr>
+
+                    <!-- FACTURACIÓN -->
+                    <tr *ngIf="registro.value.titulo?.includes('Factura')">
+                    <td>Facturación</td>
+                    <td class="text-right">
+                        {{ registro.value.subtotal | currency }}
+                    </td>
+                    <td *ngFor="let valor of registro.value.registros" class="text-right">
+                        {{ valor.totalPorcentaje | currency }}
+                    </td>
+                    </tr>
+
+                    <!-- COBRANZA -->
+                    <tr *ngIf="registro.value.titulo == 'Cobranza'">
+                    <td>Cobranza</td>
+                    <td class="text-right">
+                        {{ registro.value.subtotal | currency }}
+                    </td>
+                    <td *ngFor="let valor of registro.value.registros" class="text-right">
+                        {{ valor.totalPorcentaje | currency }}
+                    </td>
+                    </tr>
                 </ng-template>
             </p-table>
         </ng-template>

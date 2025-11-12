@@ -90,7 +90,7 @@ export class TotalesIngresosComponent implements OnInit {
 
       if(this.totalesData.facturacion) {
         this.totalesData.facturacion.forEach((facturacion: GastosIngresosTotales) => {
-          if (!facturacion.reembolsable) {
+          //if (!facturacion.reembolsable) {  //LEO Facturación y Corbanza 
           this.registros.facturacion.subtotal += facturacion.totalPorcentaje;
           const existingRegistro = this.registros.facturacion.registros.find(registro => registro.mes === facturacion.mes && registro.anio === facturacion.anio && registro.reembolsable == false);
           if (existingRegistro) {
@@ -98,7 +98,7 @@ export class TotalesIngresosComponent implements OnInit {
           } else {
             this.registros.facturacion.registros.push(facturacion);
           }
-        }
+        //} //LEO Facturación y Corbanza 
 
           if (!this.registros.facturacion.meses.some(m => m.mes === facturacion.mes && m.anio === facturacion.anio)) {
             this.registros.facturacion.meses.push({mes: facturacion.mes, anio: facturacion.anio, desc: formatearFechaEncabezado(facturacion.mes, facturacion.anio)});
