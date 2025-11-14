@@ -160,4 +160,10 @@ export class TotalesIngresosComponent implements OnInit {
 
   }
   //LEO inputs para FEEs F
+
+  modificarRegistro(rubro: any[], idFuente: number) {
+      console.log('Fuente:' + idFuente);
+      console.log('NumElementos:' + rubro.length);
+
+    }
 }

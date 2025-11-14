@@ -88,6 +88,7 @@
             <p-table [value]="[1]" [scrollable]="true" scrollHeight="400px">
                 <ng-template pTemplate="header">
                     <tr>
+                        <th width="100px" class="text-center" *ngIf="registro.value.titulo?.includes('Factura') || registro.value.titulo == 'Cobranza'">Opciones</th>
                         <th>Nombre</th>
                         <th class="text-right">Subtotal</th>
                         <th *ngFor="let mesRegistro of registro.value.meses" class="text-right">
@@ -135,6 +136,17 @@
 
                     <!-- FACTURACIÓN -->
                     <tr *ngIf="registro.value.titulo?.includes('Factura')">
+                    <td>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button 
+                                title="Modificar rubro" type="button"
+                                class="btn btn-primary"
+                                (click)="modificarRegistro(registro.value.registros, 1)"
+                                >
+                                <i class="pi pi-pencil vertical-align-middle"></i>
+                            </button>
+                        </div>
+                    </td>
                     <td>Facturación</td>
                     <td class="text-right">
                         {{ registro.value.subtotal | currency }}
@@ -146,6 +158,17 @@
 
                     <!-- COBRANZA -->
                     <tr *ngIf="registro.value.titulo == 'Cobranza'">
+                    <td>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button 
+                                title="Modificar rubro" type="button"
+                                class="btn btn-primary"
+                                (click)="modificarRegistro(registro.value.registros, 2)"
+                                >
+                                <i class="pi pi-pencil vertical-align-middle"></i>
+                            </button>
+                        </div>
+                    </td>                        
                     <td>Cobranza</td>
                     <td class="text-right">
                         {{ registro.value.subtotal | currency }}
