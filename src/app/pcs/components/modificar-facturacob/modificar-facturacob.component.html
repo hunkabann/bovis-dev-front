@@ -1,0 +1,31 @@
+<p-toast></p-toast>
+<form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="row" style="text-decoration: none;" >
+        <ng-container formArrayName="fechas">
+            <div 
+                *ngFor="let fecha of fechasFA.controls; let i = index" 
+                class="col-6"
+                [formGroupName]="i"
+            >
+                <div class="d-grid">
+                    <label [for]="'campo-fecha-'+i">
+                        <strong>{{fecha.value.desc | uppercase}}:</strong>
+                    </label>
+                    <p-inputNumber 
+                        formControlName="totalPorcentaje" 
+                        inputId="minmax" 
+                        [id]="'campo-fecha-'+i"
+                        mode="currency"
+                        currency="MXN"
+                        locale="es-MX"
+                        [min]="0" 
+                        [disabled]="fecha.value.disabled"
+                    ></p-inputNumber>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="d-flex justify-content-end mt-2">
+        <button type="button" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid">Guardar</button>
+    </div>
+</form>

@@ -51,7 +51,7 @@ import { SharedChartsModule } from '../shared/shared-charts.module';
 //import { SharedChartsModule } from 'src/app/shared/shared-charts.module';
 import { PorcentajeImportesPipe } from './pipes/porcentaje-importes.pipe'; //LEO inputs para FEEs
 import { PorcentajeImportesSubtotalPipe } from './pipes/porcentaje-importes-subtotal.pipe'; //LEO inputs para FEEs
-
+import { ModificarFacturacobComponent } from './components/modificar-facturacob/modificar-facturacob.component'; //LEO Facturación y Cobranza
 
 @NgModule({
   declarations: [
@@ -85,6 +85,7 @@ import { PorcentajeImportesSubtotalPipe } from './pipes/porcentaje-importes-subt
     TotalesIngresosComponent,
     PorcentajeImportesPipe, //LEO inputs para FEEs
     PorcentajeImportesSubtotalPipe, //LEO inputs para FEEs
+    ModificarFacturacobComponent,   //LEO Facturación y Cobranza
   ],
   imports: [
     CommonModule,

@@ -173,3 +173,58 @@ export const formatearFechaEncabezado = (mes: number, anio: number): string => {
   }
   return fecha;
 }
+
+//LEO Facturación y Cobranza I
+export const descripcionMesAnio = (iMes: number, iAnio: number): string => {
+  let descripcion = '';
+
+  switch (iMes) {
+    case 1: descripcion = "Ene"; break;
+    case 2: descripcion = "Feb"; break;
+    case 3: descripcion = "Mar"; break;
+    case 4: descripcion = "Abr"; break;
+    case 5: descripcion = "May"; break;
+    case 6: descripcion = "Jun"; break;
+    case 7: descripcion = "Jul"; break;
+    case 8: descripcion = "Ago"; break;
+    case 9: descripcion = "Sep"; break;
+    case 10: descripcion = "Oct"; break;
+    case 11: descripcion = "Nov"; break;
+    case 12: descripcion = "Dic"; break;
+    default: descripcion = "NA"; break;
+  }
+
+  return `${descripcion}/${iAnio}`;
+}
+
+export const deshabilitaControl = (iMes: number, iAnio: number): boolean => {
+  
+  /*
+  5/2025 actual 8/2025 => deshabilita = true
+  8/2025 actual 8/2025 => deshabilita = false
+  9/2025 actual 8/2025 => deshabilita = false
+  12/2024 actual 8/2025 => deshabilita = true
+  2/2026 actual 8/2025 => deshabilita = false
+  */
+  let deshabilita = false;
+  const fecha = new Date();
+
+  const iMesActual = fecha.getMonth() + 1; // getMonth() devuelve 0-11
+  const iAnioActual = fecha.getFullYear();
+
+  if(iAnio<iAnioActual)
+  {
+    deshabilita = true;
+    return deshabilita;
+  }
+
+  if(iMes<iMesActual)
+  {
+    deshabilita = true;
+    return deshabilita;
+  }
+
+  return deshabilita;
+}
+
+//LEO Facturación y Cobranza F

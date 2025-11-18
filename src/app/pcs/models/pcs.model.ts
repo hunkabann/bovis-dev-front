@@ -380,3 +380,20 @@ export interface TotalesIngresosFormateado  {
     meses?: Mes[],
     registros?: GastosIngresosTotales[]
 }
+
+//LEO Facturación y Cobranza I
+export interface FechaEntradaFacturaCob {
+  mes: number;
+  anio: number;
+  reembolsable: boolean;
+  totalPorcentaje: number;
+}
+
+export interface FechaFormValue {
+  mes: number;
+  anio: number;
+  desc: string;
+  disabled: boolean;
+  totalPorcentaje: number;
+}
+//LEO Facturación y Cobranza F

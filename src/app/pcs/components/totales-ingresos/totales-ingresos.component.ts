@@ -8,6 +8,9 @@ import { formatearFechaEncabezado } from 'src/helpers/helpers';
 import { PcsService } from '../../services/pcs.service'; //LEO inputs para FEEs
 import { MessageService } from 'primeng/api';//LEO inputs para FEEs
 import { TITLES, errorsArray, EXCEL_EXTENSION } from 'src/utils/constants';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'; //LEO Facturación y Cobranza
+import { ModificarFacturacobComponent } from '../modificar-facturacob/modificar-facturacob.component'; //LEO Facuración y Cobranza
+
 
 @Component({
   selector: 'app-totales-ingresos',
@@ -54,7 +57,11 @@ export class TotalesIngresosComponent implements OnInit {
   contingenciaPorcentaje: number = 0;
   //LEO inputs para FEEs F
 
-  constructor(private pcsService: PcsService, private messageService: MessageService) { }//LEO inputs para FEEs
+  ref: DynamicDialogRef; //LEO Facturación y Cobranza
+
+  constructor(
+    private dialogService: DialogService, //LEO Facturación y Cobranza
+    private pcsService: PcsService, private messageService: MessageService) { }//LEO inputs para FEEs
 
   ngOnInit(): void {
 
@@ -160,10 +167,42 @@ export class TotalesIngresosComponent implements OnInit {
 
   }
   //LEO inputs para FEEs F
-
+ 
+  //LEO Facturación y Cobranza I
   modificarRegistro(rubro: any[], idFuente: number) {
-      console.log('Fuente:' + idFuente);
-      console.log('NumElementos:' + rubro.length);
+  
+    this.ref = this.dialogService.open(ModificarFacturacobComponent, {
+      header: idFuente === 1 ? 'Modificar Facturación' : 'Modificar Cobranza',
+      width: '700px',
+      data: {
+        registros: rubro,           // <<--- ARREGLO COMPLETO
+        tipo: idFuente,             // <<--- 1 = factura, 2 = cobranza
+        numProyecto: this.nunum_proyecto
+      }
+    });
 
+    // Recibir resultado
+    let smensaje = '';
+    this.ref.onClose.subscribe((resultado) => {
+    
+    if (!resultado) return;
+
+    // Inserto el arreglo actualizado en el origen
+    if (idFuente === 1) {
+      smensaje = 'Facturación'
+      this.registros.facturacion.registros = resultado.rubroActualizado;
+    } else {
+      smensaje = 'Cobranza'
+      this.registros.cobranza.registros = resultado.rubroActualizado;
     }
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Actualizado',
+      detail: 'El total de ' + smensaje + ' fue modificado correctamente'
+      });
+    });
+  }
+  //LEO Facturación y Cobranza F
+
 }

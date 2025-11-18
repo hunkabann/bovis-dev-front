@@ -131,4 +131,10 @@ export class PcsService {
   }
 
   //LEO inputs para FEEs F
+
+  //LEO Facturación y Cobranza I
+  actualizarFacturacob(body: any) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/FacturacionCobranza`, body)
+  }
+  //LEO Facturación y Cobranza F
 }
