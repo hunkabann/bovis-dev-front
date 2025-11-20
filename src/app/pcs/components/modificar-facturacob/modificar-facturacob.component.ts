@@ -104,7 +104,7 @@ export class ModificarFacturacobComponent implements OnInit {
             cobranza: aSalida,
         };
     }
-    
+    //console.log('payload:'+payload);
     this.pcsService.actualizarFacturacob(payload).subscribe({
 
       next: (resp) => {
