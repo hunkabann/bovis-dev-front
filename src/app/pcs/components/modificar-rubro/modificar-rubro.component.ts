@@ -39,8 +39,8 @@ export class ModificarRubroComponent implements OnInit {
 
   mes_ini: number
   ano_ini: number
-   stilovisible: string = ''
-   stilovisiblepp: string = ''
+   stilovisible: string = 'visible'
+   stilovisiblepp: string = 'visible'
 
   form = this.fb.group({
     idRubro: [null],

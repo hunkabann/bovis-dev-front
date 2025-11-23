@@ -3,6 +3,7 @@ import { GastosIngresosSecciones, ModificarRubroEmitterProps, Rubro } from '../.
 import { Mes } from 'src/models/general.model';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
+import { ModificarRubroInflacionComponent } from '../modificar-rubro-inflacion/modificar-rubro-inflacion.component';
 
 interface Props extends GastosIngresosSecciones {
   fechaIni: Date,
@@ -70,26 +71,19 @@ export class SeccionContenidoComponent implements OnInit {
   // modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {
   modificarRubro(rubro: Rubro, rubroIndex: number) {
     // this.modificarRubroEvent.emit({rubro, idSeccion, fechaIni: this.seccion.fechaIni, fechaFin: this.seccion.fechaFin});
-    this.dialogService.open(ModificarRubroComponent, {
-      header: rubro.rubro,
-      width: '50%',
-      contentStyle: { overflow: 'auto' },
-      data: {
-        rubro,
-        idSeccion: this.seccion.idSeccion,
-        fechaInicio: this.seccion.fechaIni,
-        fechaFin: this.seccion.fechaFin,
-        numProyecto: this.seccion.numProyecto,
-      }
-    }).onClose.subscribe((result) => {
-      if (result && result.rubro) {
-        const rubroRespuesta = result.rubro as Rubro;
-        this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
-          ...rubro,
-          ...rubroRespuesta,
-        };
-      }
-    });
+    console.log('rubro.idRubro:'+ rubro.idRubro)
+    //LEO Fórmula Inlfación I 
+    //se reemplaza el code anterior para colocar una función que haga el mismo llamado y se vea más limpio la decisión
+    // entre que ventana debe abrir
+    if(rubro.idRubro==2) {
+      // abre para datos de Inlfaciión Anual
+      this.abreRubroInflacion(rubro, rubroIndex);
+    }
+    else {
+      //abre para modificar como siempre
+      this.abreRubro(rubro, rubroIndex);
+    }
+    //LEO Fórmula Inlfación F
   }
   
   calcularTotalPorcentajePorMes(codigo: string, mes: Mes, isReembolsable: Boolean): number {
@@ -149,4 +143,54 @@ export class SeccionContenidoComponent implements OnInit {
     return subtotal;
   }
 
+  //LEO Fórmula Inflación I
+  //abreRubro abre la modal que se viene manejando siempre 
+  abreRubro(rubro: Rubro, rubroIndex: number) {
+    // this.modificarRubroEvent.emit({rubro, idSeccion, fechaIni: this.seccion.fechaIni, fechaFin: this.seccion.fechaFin});
+    console.log('Abre Modal Modificar Rubro IdRubro:'+ rubro.idRubro)
+    this.dialogService.open(ModificarRubroComponent, {
+      header: rubro.rubro + 'Leo1',
+      width: '50%',
+      contentStyle: { overflow: 'auto' },
+      data: {
+        rubro,
+        idSeccion: this.seccion.idSeccion,
+        fechaInicio: this.seccion.fechaIni,
+        fechaFin: this.seccion.fechaFin,
+        numProyecto: this.seccion.numProyecto,
+      }
+    }).onClose.subscribe((result) => {
+      if (result && result.rubro) {
+        const rubroRespuesta = result.rubro as Rubro;
+        this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
+          ...rubro,
+          ...rubroRespuesta,
+        };
+      }
+    });
+  }  
+
+  //abreRubroInflacion abre la modal para modificar datos de Inflación Anual
+  abreRubroInflacion(rubro: Rubro, rubroIndex: number) {
+    console.log('Abre Modal Modificar-RubroInflacion IdRubro:'+ rubro.idRubro)
+    this.dialogService.open(ModificarRubroInflacionComponent, {
+      header: rubro.rubro,
+      width: '50%',
+      contentStyle: { overflow: 'auto' },
+      data: {
+        fechaInicio: this.seccion.fechaIni,
+        numProyecto: this.seccion.numProyecto,
+        reembolsable: true,
+      }
+    }).onClose.subscribe((result) => {
+      if (result && result.rubro) {
+        const rubroRespuesta = result.rubro as Rubro;
+        this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
+          ...rubro,
+          ...rubroRespuesta,
+        };
+      }
+    });
+  }    
+  //LEO Fórmula Inflación F
 }
