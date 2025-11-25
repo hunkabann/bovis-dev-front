@@ -5,6 +5,12 @@ import { KeyValue } from '@angular/common';
 import { es } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { formatearFechaEncabezado } from 'src/helpers/helpers';
+import { PcsService } from '../../services/pcs.service'; //LEO inputs para FEEs
+import { MessageService } from 'primeng/api';//LEO inputs para FEEs
+import { TITLES, errorsArray, EXCEL_EXTENSION } from 'src/utils/constants';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'; //LEO Facturación y Cobranza
+import { ModificarFacturacobComponent } from '../modificar-facturacob/modificar-facturacob.component'; //LEO Facuración y Cobranza
+
 
 @Component({
   selector: 'app-totales-ingresos',
@@ -14,6 +20,7 @@ import { formatearFechaEncabezado } from 'src/helpers/helpers';
 export class TotalesIngresosComponent implements OnInit {
 
   @Input() totalesData: TotalesIngresosResponseData;
+  @Input() nunum_proyecto: number; //LEO inputs para FEEs 
 
   registros: {
     ingreso: TotalesIngresosFormateado,
@@ -43,51 +50,63 @@ export class TotalesIngresosComponent implements OnInit {
     }
   };
 
-  constructor() { }
+  //LEO inputs para FEEs I
+  // propiedades globales para los inputs
+  overheadPorcentaje: number = 0;
+  utilidadPorcentaje: number = 0;
+  contingenciaPorcentaje: number = 0;
+  //LEO inputs para FEEs F
+
+  ref: DynamicDialogRef; //LEO Facturación y Cobranza
+
+  constructor(
+    private dialogService: DialogService, //LEO Facturación y Cobranza
+    private pcsService: PcsService, private messageService: MessageService) { }//LEO inputs para FEEs
 
   ngOnInit(): void {
+
+    //nunum_proyecto: 0; //LEO inputs para FEEs
+
     if(this.totalesData) {
+      this.overheadPorcentaje = this.totalesData.overheadPorcentaje;
+      this.utilidadPorcentaje = this.totalesData.utilidadPorcentaje;
+      this.contingenciaPorcentaje = this.totalesData.contingenciaPorcentaje;
+
       if(this.totalesData.ingreso) {
         this.totalesData.ingreso.forEach((ingreso: GastosIngresosTotales) => {
-          if(ingreso.reembolsable){
-            
-          this.registros.ingreso.subtotal += ingreso.totalPorcentaje;
-            const existingRegistro = this.registros.ingreso.registros.find(registro => registro.mes === ingreso.mes && registro.anio === ingreso.anio);
-            if (existingRegistro) {
-              existingRegistro.totalPorcentaje = ingreso.totalPorcentaje;
-            } else {
-              this.registros.ingreso.registros.push(ingreso);
-            }
-            //console.log('VALOR de rembolsable ----------------->>>>> ingreso.reembolsable ' + ingreso.reembolsable + '  VALOR de rembolsable ----------------->>>>> ngreso.totalPorcentaje  '+ingreso.totalPorcentaje)
-            if (!this.registros.ingreso.meses.some(m => m.mes === ingreso.mes && m.anio === ingreso.anio)) {
-              this.registros.ingreso.meses.push({mes: ingreso.mes, anio: ingreso.anio, desc: formatearFechaEncabezado(ingreso.mes, ingreso.anio)});
-            }
-          }
-            if(!ingreso.reembolsable){
-                         // console.log('VALOR de rembolsable falso ----------------->>>>> ingreso.reembolsable ' + ingreso.reembolsable + '  VALOR de rembolsable ----------------->>>>> ngreso.totalPorcentaje  '+ingreso.totalPorcentaje)
-            this.registros.ingreso.subtotalno += ingreso.totalPorcentaje;
-            const existingRegistrono = this.registros.ingreso.registros.find(registro => registro.mes === ingreso.mes && registro.anio === ingreso.anio);
-            if (existingRegistrono) {
-              existingRegistrono.totalPorcentaje = ingreso.totalPorcentaje;
-            } else {
-              this.registros.ingreso.registros.push(ingreso);
-            }
-            if (!this.registros.ingreso.meses.some(m => m.mes === ingreso.mes && m.anio === ingreso.anio)) {
-              this.registros.ingreso.meses.push({mes: ingreso.mes, anio: ingreso.anio, desc: formatearFechaEncabezado(ingreso.mes, ingreso.anio)});
-            }
+        // Asegurar que el mes esté registrado
+        if (!this.registros.ingreso.meses.some(m => m.mes === ingreso.mes && m.anio === ingreso.anio)) {
+          this.registros.ingreso.meses.push({
+            mes: ingreso.mes,
+            anio: ingreso.anio,
+            desc: formatearFechaEncabezado(ingreso.mes, ingreso.anio)
+          });
+        }
 
-          }
+        // Guardar valores reembolsables y no reembolsables por separado
+        if (ingreso.reembolsable) {
+          this.registros.ingreso.subtotal += ingreso.totalPorcentaje;
+        } else {
+          this.registros.ingreso.subtotalno += ingreso.totalPorcentaje;
+        }
+
+        // Almacenamos ambos tipos de registros por separado
+        this.registros.ingreso.registros.push(ingreso);
         });
       }
+
       if(this.totalesData.facturacion) {
         this.totalesData.facturacion.forEach((facturacion: GastosIngresosTotales) => {
+          //if (!facturacion.reembolsable) {  //LEO Facturación y Corbanza 
           this.registros.facturacion.subtotal += facturacion.totalPorcentaje;
-          const existingRegistro = this.registros.facturacion.registros.find(registro => registro.mes === facturacion.mes && registro.anio === facturacion.anio);
+          const existingRegistro = this.registros.facturacion.registros.find(registro => registro.mes === facturacion.mes && registro.anio === facturacion.anio && registro.reembolsable == false);
           if (existingRegistro) {
             existingRegistro.totalPorcentaje = facturacion.totalPorcentaje;
           } else {
             this.registros.facturacion.registros.push(facturacion);
           }
+        //} //LEO Facturación y Corbanza 
+
           if (!this.registros.facturacion.meses.some(m => m.mes === facturacion.mes && m.anio === facturacion.anio)) {
             this.registros.facturacion.meses.push({mes: facturacion.mes, anio: facturacion.anio, desc: formatearFechaEncabezado(facturacion.mes, facturacion.anio)});
           }
@@ -96,7 +115,7 @@ export class TotalesIngresosComponent implements OnInit {
       if(this.totalesData.cobranza) {
         this.totalesData.cobranza.forEach((cobranza: GastosIngresosTotales) => {
           this.registros.cobranza.subtotal += cobranza.totalPorcentaje;
-          const existingRegistro = this.registros.cobranza.registros.find(registro => registro.mes === cobranza.mes && registro.anio === cobranza.anio);
+          const existingRegistro = this.registros.cobranza.registros.find(registro => registro.mes === cobranza.mes && registro.anio === cobranza.anio && registro.reembolsable == false);
           if (existingRegistro) {
             existingRegistro.totalPorcentaje = cobranza.totalPorcentaje;
           } else {
@@ -113,4 +132,77 @@ export class TotalesIngresosComponent implements OnInit {
   originalOrder = (a: KeyValue<string, TotalesIngresosFormateado>, b: KeyValue<string, TotalesIngresosFormateado>): number => {
     return 0;
   }
+
+  //LEO inputs para FEEs I
+  // Añade estos dos métodos utilitarios para usar en el HTML
+  filterReembolsables(ingresos: any[]): any[] {
+    return ingresos?.filter(i => i.reembolsable === true) || [];
+  }
+
+  filterNoReembolsables(ingresos: any[]): any[] {
+    return ingresos?.filter(i => i.reembolsable === false) || [];
+  }
+
+  guardarFee()
+  {
+    // validar opcionalmente
+    if (this.overheadPorcentaje == null && this.utilidadPorcentaje == null && this.contingenciaPorcentaje == null) {
+      this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Completa al menos 1 porcentaje' });
+      return;
+    }
+
+    this.pcsService.guardarFeePorcentaje(true, {
+      nunum_proyecto: this.nunum_proyecto,
+      overheadPorcentaje: this.overheadPorcentaje,
+      utilidadPorcentaje: this.utilidadPorcentaje,
+      contingenciaPorcentaje: this.contingenciaPorcentaje
+    }).subscribe({
+      next: (data) => {
+        this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+      },
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
+      }
+    });
+
+  }
+  //LEO inputs para FEEs F
+ 
+  //LEO Facturación y Cobranza I
+  modificarRegistro(rubro: any[], idFuente: number) {
+  
+    this.ref = this.dialogService.open(ModificarFacturacobComponent, {
+      header: idFuente === 1 ? 'Modificar Facturación' : 'Modificar Cobranza',
+      width: '700px',
+      data: {
+        registros: rubro,           // <<--- ARREGLO COMPLETO
+        tipo: idFuente,             // <<--- 1 = factura, 2 = cobranza
+        numProyecto: this.nunum_proyecto
+      }
+    });
+
+    // Recibir resultado
+    let smensaje = '';
+    this.ref.onClose.subscribe((resultado) => {
+    
+    if (!resultado) return;
+
+    // Inserto el arreglo actualizado en el origen
+    if (idFuente === 1) {
+      smensaje = 'Facturación'
+      this.registros.facturacion.registros = resultado.rubroActualizado;
+    } else {
+      smensaje = 'Cobranza'
+      this.registros.cobranza.registros = resultado.rubroActualizado;
+    }
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Actualizado',
+      detail: 'El total de ' + smensaje + ' fue modificado correctamente'
+      });
+    });
+  }
+  //LEO Facturación y Cobranza F
+
 }

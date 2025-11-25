@@ -51,6 +51,7 @@ export class GastosComponent implements OnInit {
   cantidadMesesTranscurridos: number;
   seccionesCargado: boolean[] = [];
   seccionesData: any[] = [];
+  nombrePagina: string; //LEO 2025-10-09 Puntos Bugs y Mejoras
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -116,6 +117,7 @@ export class GastosComponent implements OnInit {
       },
       queryParamsHandling: 'merge'
     })
+    this.nombrePagina = 'gastosPagina';//LEO 2025-10-09 Puntos Bugs y Mejoras
   }
 
   filterReembolsables(rubros: any[]): any[] {

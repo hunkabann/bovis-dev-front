@@ -92,15 +92,15 @@ export class StaffingPlanComponent implements OnInit {
 
         if (!params.proyecto) {
 
-          console.log("params.proyecto:" + params.proyecto)
+          //console.log("params.proyecto:" + params.proyecto)
         } else {
           this.idproyecto = params.proyecto
-          console.log("else params.proyecto:" + params.proyecto)
+          //console.log("else params.proyecto:" + params.proyecto)
         }
       })
 
     if (this.idproyecto) {
-      console.log("Staffing-plan.components Entro al this.idproyecto " + this.idproyecto)
+      //console.log("Staffing-plan.components Entro al this.idproyecto " + this.idproyecto)
 
       this.cargando = true
       this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
@@ -150,7 +150,7 @@ export class StaffingPlanComponent implements OnInit {
   }
 
   async cargarInformacion(data: EtapasPorProyectoData) {
-
+    //console.log('cargarInformacion Inicio') //LEO TBD
     this.form.patchValue({ numProyecto: data.numProyecto })
     this.proyectoFechaInicio = new Date(data.fechaIni)
     this.proyectoFechaFin = new Date(data.fechaFin)
@@ -175,7 +175,7 @@ export class StaffingPlanComponent implements OnInit {
 
       // Agregamos los empleados por cada etapa
       etapa.empleados.forEach((empleado, empleadoIndex) => {
-        console.log('empleado.chAlias ' + empleado.chAlias)
+        //console.log('cargarInformacion empleado.numempleadoRrHh:' + empleado.numempleadoRrHh + ', empleado.etiqueta:' + empleado.etiquetaTBD + ', empleado.IdPuesto:' + empleado.idPuesto + "."); //LEO TBD
 
         this.empleados(etapaIndex).push(this.fb.group({
           id: empleado.id,
@@ -191,6 +191,8 @@ export class StaffingPlanComponent implements OnInit {
           chalias: empleado.chAlias,
           //PrecioVenta: empleado.PrecioVenta,
          // nucosto_ini: empleado.nucosto_ini
+          etiqueta: empleado.etiquetaTBD, //LEO TBD
+          IdPuesto: empleado.idPuesto, //LEO TBD
         }))
 
         // Agreamos las fechas por empleado
@@ -305,6 +307,8 @@ export class StaffingPlanComponent implements OnInit {
               chalias: empleado.chAlias,
               //PrecioVenta: empleado.PrecioVenta,
              // nucosto_ini: empleado.nucosto_ini
+             etiquetaTBD: empleado.etiquetaTBD, //LEO TBD
+             IdPuesto: empleado.idPuesto, //LEO TBD
             }))
 
             // Agreamos las fechas por empleado
@@ -324,9 +328,21 @@ export class StaffingPlanComponent implements OnInit {
       })
   }
 
-  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, chalias: string | null) {
+  modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, chalias: string | null, etiquetaTBD: string | null, IdPuesto: string | null) {
     event.stopPropagation();
-
+    // console.log('Staffing Plan modificarEmpleado'); //LEO TBD
+    // if(etiquetaTBD==null) { etiquetaTBD= ''} //LEO TBD
+    // if(empleado == null)
+    // {
+    //   console.log('Staffing Plan modificarEmpleado empleado es null')
+    // }
+    // else
+    // {
+    //   console.log('Staffing Plan modificarEmpleado empleado.numempleadoRrHh:'+empleado.numempleadoRrHh
+    //         +' EtapaIndex:'+etapaIndex + ' EmpleadoIndex:'+empleadoIndex 
+    //         +' EtiquetaTBD:'+etiquetaTBD + ' IdPuesto:'+IdPuesto); //LEO TBD
+    // }
+    
     this.dialogService.open(ModificarEmpleadoComponent, {
       header: 'Empleado (Porcentajes)',
       width: '50%',
@@ -336,52 +352,74 @@ export class StaffingPlanComponent implements OnInit {
         etapa,
         empleado,
         chalias,
-        num_proyecto: this.form.value.numProyecto
-
+        num_proyecto: this.form.value.numProyecto,
+        etiquetaTBD, //LEO TBD
+        IdPuesto, //LEO TBD
       }
     })
       .onClose.subscribe((result) => {
-        if (result && result.empleado) {
-          const empleadoRespuesta = result.empleado as Empleado
-          const fechasRespuesta = empleadoRespuesta.fechas.map(fechaRegistro => this.fb.group({
-            id: fechaRegistro.id,
-            mes: fechaRegistro.mes,
-            anio: fechaRegistro.anio,
-            porcentaje: fechaRegistro.porcentaje
+        //LEO TBD I
+        //console.log('modificarEmpleado obtenerEtapasPorProyecto1:'+this.etapas.length) //LEO TBD
+        this.etapas.clear();
+        this.cargando = true
+        //console.log('modificarEmpleado obtenerEtapasPorProyecto2:'+this.etapas.length) //LEO TBD
+        this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+            .pipe(finalize(() => {
+            // this.sharedService.cambiarEstado(false)
+            this.proyectoSeleccionado = true
+            this.cargando = false
           }))
-          if (empleado) {
+          .subscribe({
+            next: ({ data }) => this.cargarInformacion(data),
+            error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+          })
+          //LEO TBD F
 
-            this.empleados(etapaIndex).at(empleadoIndex).patchValue({
-              aplicaTodosMeses: empleadoRespuesta.aplicaTodosMeses,
-              cantidad: empleadoRespuesta.cantidad
-            })
+        //LEO TBD se comenta el código para permitir que vuelva a cargar la página
+        // if (result && result.empleado) {
+        //   const empleadoRespuesta = result.empleado as Empleado
+        //   const fechasRespuesta = empleadoRespuesta.fechas.map(fechaRegistro => this.fb.group({
+        //     id: fechaRegistro.id,
+        //     mes: fechaRegistro.mes,
+        //     anio: fechaRegistro.anio,
+        //     porcentaje: fechaRegistro.porcentaje
+        //   }))
+        //   if (empleado) {
+        //     console.log('Entro if(empleado)'); //LEO TBD
+        //     this.empleados(etapaIndex).at(empleadoIndex).patchValue({
+        //       aplicaTodosMeses: empleadoRespuesta.aplicaTodosMeses,
+        //       cantidad: empleadoRespuesta.cantidad
+        //     })
 
-            this.fechas(etapaIndex, empleadoIndex).clear()
+        //     this.fechas(etapaIndex, empleadoIndex).clear()
 
-            empleadoRespuesta.fechas.forEach(fechaRegistro => {
-              this.fechas(etapaIndex, empleadoIndex).push(this.fb.group({
-                id: fechaRegistro.id,
-                mes: fechaRegistro.mes,
-                anio: fechaRegistro.anio,
-                porcentaje: fechaRegistro.porcentaje
-              }))
-            })
-          } else {
-            this.empleados(etapaIndex).push(this.fb.group({
-              id: empleadoRespuesta.id,
-              idFase: empleadoRespuesta.idFase,
-              numempleadoRrHh: empleadoRespuesta.numempleadoRrHh,
-              empleado: empleadoRespuesta.empleado,
-              fechas: this.fb.array(fechasRespuesta),
-              aplicaTodosMeses: empleadoRespuesta.aplicaTodosMeses,
-              cantidad: empleadoRespuesta.cantidad,
-              reembolsable: empleadoRespuesta.reembolsable,
-              chalias: empleadoRespuesta.chAlias,
-              //nucosto_ini: empleadoRespuesta.nucosto_ini,
-             // PrecioVenta: empleadoRespuesta.PrecioVenta
-            }))
-          }
-        }
+        //     empleadoRespuesta.fechas.forEach(fechaRegistro => {
+        //       this.fechas(etapaIndex, empleadoIndex).push(this.fb.group({
+        //         id: fechaRegistro.id,
+        //         mes: fechaRegistro.mes,
+        //         anio: fechaRegistro.anio,
+        //         porcentaje: fechaRegistro.porcentaje
+        //       }))
+        //     })
+        //   } else {
+        //     console.log('Entro else if(empleado)'); //LEO TBD
+        //     this.empleados(etapaIndex).push(this.fb.group({
+        //       id: empleadoRespuesta.id,
+        //       idFase: empleadoRespuesta.idFase,
+        //       numempleadoRrHh: empleadoRespuesta.numempleadoRrHh,
+        //       empleado: empleadoRespuesta.empleado,
+        //       fechas: this.fb.array(fechasRespuesta),
+        //       aplicaTodosMeses: empleadoRespuesta.aplicaTodosMeses,
+        //       cantidad: empleadoRespuesta.cantidad,
+        //       reembolsable: empleadoRespuesta.reembolsable,
+        //       chalias: empleadoRespuesta.chAlias,
+        //       //nucosto_ini: empleadoRespuesta.nucosto_ini,
+        //      // PrecioVenta: empleadoRespuesta.PrecioVenta
+        //      etiquetaTBD: empleado?.etiquetaTBD || '', //LEO TBD
+        //      IdPuesto: empleado?.idPuesto, //LEO TBD
+        //     }))
+        //   }
+        // }
       })
   }
 

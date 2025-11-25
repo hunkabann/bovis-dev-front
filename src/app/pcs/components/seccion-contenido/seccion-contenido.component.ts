@@ -30,7 +30,9 @@ export class SeccionContenidoComponent implements OnInit {
   @Input() secciones: GastosIngresosSecciones[];
   @Input() esEditable: boolean = false;
   @Input() mostrarNoReembolsables: boolean = true;
+  @Input() nombrePaginaPadre: string; //LEO 2025-10-09 Puntos Bugs y Mejoras
   @Output() modificarRubroEvent = new EventEmitter<ModificarRubroEmitterProps>();
+
   
   seccionesFormateadas: {
     titulo: string,

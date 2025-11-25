@@ -14,6 +14,32 @@ import { environment } from 'src/environments/environment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { NgChartsModule } from 'ng2-charts';
+
+import {
+  Chart,
+  BarController,
+  BarElement,
+  CategoryScale,
+  TimeScale,
+  LinearScale,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import 'chartjs-adapter-date-fns';
+
+
+Chart.register(
+  BarController,
+  BarElement,
+  CategoryScale,
+  TimeScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  ChartDataLabels
+);
 
 const isIE = window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1; // Remove this line to use Angular Universal
 
@@ -85,19 +111,22 @@ export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   declarations: [
     AppComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+
   ],
   imports: [
     BrowserModule,
-    NoopAnimationsModule, // Animations cause delay which interfere with E2E tests
+    NgChartsModule,
+    //NoopAnimationsModule, // Animations cause delay which interfere with E2E tests
     AppRoutingModule,
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     MsalModule,
-    BrowserModule,
+//    BrowserModule,
     BrowserAnimationsModule,
+    
   ],
   exports: [
   ],

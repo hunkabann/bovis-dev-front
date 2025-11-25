@@ -14,6 +14,7 @@ import { Empleado as EmpleadoTS } from 'src/app/timesheet/models/timesheet.model
 import { TITLES, errorsArray } from 'src/utils/constants';
 import { obtenerMeses } from 'src/helpers/helpers';
 import { CostosService } from 'src/app/costos/services/costos.service';
+import { Console } from 'console';
 
 interface EtapaEmpleado {
   etapa: Etapa,
@@ -26,6 +27,9 @@ interface EtapaEmpleado {
   chalias: string
   //PrecioVenta: number,
   //nucosto_ini: number,
+  etiquetaTBD: string, //LEO TBD
+  IdPuesto: string //LEO TBD
+  num_empleadoDesdeElPadre: string //LEO TBD
 }
 
 interface ICatalogo {
@@ -62,10 +66,11 @@ export class ModificarEmpleadoComponent implements OnInit {
   PreciodeVenta: number;
 
   cargandoCosto: boolean = false;
-
+ 
   //TipoEmpleado:  EmpleadoTS[] = []
 
   mensajito: string;
+  etiqueta: string; //LEO TBD
 
   form = this.fb.group({
     id_fase: [null],
@@ -81,6 +86,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     PrecioVenta: [0],
     nucosto_ini: [0],
     chalias: [null]
+    ,etiqueta: [null] //LEO TBD
+    ,num_empleadoDesdeElPadre: [null], //LEO TBD
   })
 
   constructor() { }
@@ -93,11 +100,13 @@ export class ModificarEmpleadoComponent implements OnInit {
 
     // this.form.controls['FEE'].disable();
 
-    this.form.controls['PrecioVenta'].disable();
+    this.form.get('PrecioVenta')?.disable();
+    this.form.get('etiqueta')?.disable(); //LEO TBD
 
     const data = this.config.data as EtapaEmpleado
+    console.log('modificarEmpleadoComponent entro'); //LEO TBD
     if (data) {
-
+      console.log('modificarEmpleadoComponent entro if(data)'); //LEO TBD
           /**console.log('valor Fee ------- ' + data.empleado.fee + '------ fase empleados Fee ------- ' + data.etapa.empleados[0].fee )
           console.log('valor Fee2 ------- ' +  data.empleado.fee+' valor directo de Fee2 ------- ' + data.FEE )
           console.log(Object.values(data.etapa.empleados));
@@ -124,8 +133,10 @@ export class ModificarEmpleadoComponent implements OnInit {
     */
 
           //console.log('PrecioVenta ------- ' +  data.empleado.PrecioVenta )
-          console.log('valor de alias ------- ' +  data.chalias )
-          console.log('valor de alias ------- ' +  data.empleado?.chAlias )
+          console.log('valor de data.chalias:' +  data.chalias )
+          console.log('valor de data.empleado?.chAlias:' +  data.empleado?.chAlias )
+          console.log('valor de data.etiquetaTBD:' +  data.etiquetaTBD || 'nulo' ) //LEO TBD
+          console.log('valor de data.IdPuesto:' +  data.IdPuesto ) //LEO TBD
 
       this.form.patchValue({
         id_fase: data.etapa.idFase,
@@ -138,29 +149,63 @@ export class ModificarEmpleadoComponent implements OnInit {
         //nucosto_ini: data.empleado?.nucosto_ini,
         chalias: data.chalias,
         //PrecioVenta: data.empleado?.PrecioVenta
-        
+        etiqueta: data.etiquetaTBD || '', //LEO TBD
+        num_empleadoDesdeElPadre: data.empleado?.numempleadoRrHh || '', //LEO TBD
       })
 
       if (!data.empleado) {
+        console.log('modificarEmpleadoComponent entro if(!data.empleado)  linea 154'); //LEO TBD
+        console.log('modificarEmpleadoComponent es decir es Agregar'); //LEO TBD
         this.cargarEmpleados(),
           this.cargarTipoEmpleados()
       } else {
+        console.log('modificarEmpleadoComponent entro else del if(!data.empleado linea 158)'); //LEO TBD
+        //this.form.controls['puesto'].disable();
+        //se llena el combo de empleados para que seleccione alguno diferente del TBD
+        //this.cargarEmpleados(); //LEO TBD
+        //se llena el combo de puesto y se selecciona el puesto del empleado sea TBD o no
+        this.cargarTipoEmpleados(); //LEO TBD
+        this.form.get('puesto')?.setValue(data.IdPuesto); //LEO TBD
+        console.log('modificarEmpleadoComponent despues de cargar combos linea 162'); //LEO TBD
+        
+        this.form.get('puesto')?.disable();  //LEO TBD
 
-        this.form.controls['puesto'].disable();
+
 
         this.empleado = data.empleado
 
+        //LEO TBD I
+        this.cargandoCosto = true;//LEO TBD
+        //para cargar los empleados del puesto seleccionado
+        this.buscarEmpleadosPorIdPuesto(data.IdPuesto);
+
+        //para saber si es un empleado TBD o no.
+        //en caso de ser TBD que inhabilite el combo de EMpleado y seleccione el empleado seleccionado en staffing plan
+        let iIndiceTBD = data.empleado.numempleadoRrHh.indexOf('|TBD',0);
+        console.log('modificarEmpleadoComponent indiceTBD:'+iIndiceTBD); //LEO TBD
+        if( iIndiceTBD < 0)
+        {
+          console.log('modificarEmpleadoComponent entro al if( iIndiceTBD < 0)'); //LEO TBD
+          //indica que es un empleado que no es TBD entoncesl inhabilita el combo
+          this.form.get('num_empleado')?.disable(); 
+        }
+        else
+        {
+          this.form.get('num_empleado')?.enable(); 
+        }
+        //LEO TBD F
 
         // console.log('data.empleado.fee ------- ' + data.empleado.fee + ' ------------ data.empleado.fee ------- ' + data.empleado?.fee )
 
         if (data.FEE != null) {
-
+          console.log('modificarEmpleadoComponent entro if(data.FEE != null) linea 168'); //LEO TBD
           this.form.patchValue({
             FEE: this.formateaValor(data.FEE),
             PrecioVenta: this.formateaValor(data.FEE),
           })
 
         } else {
+          console.log('modificarEmpleadoComponent entro else de if(data.FEE != null) linea 175'); //LEO TBD
           this.cargandoCosto = true;
           this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
             .pipe(finalize(() => {
@@ -196,7 +241,7 @@ export class ModificarEmpleadoComponent implements OnInit {
                       FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                       PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                       
-                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                      nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
                     })
 
                   }
@@ -208,6 +253,7 @@ export class ModificarEmpleadoComponent implements OnInit {
         }
 
         this.cargandoCosto = true;
+        console.log('modificarEmpleadoComponent ejecutara .getCostoId linea 253'); //LEO TBD
         this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
             .pipe(finalize(() => {
               this.sharedService.cambiarEstado(false);
@@ -217,9 +263,9 @@ export class ModificarEmpleadoComponent implements OnInit {
               next: ({ data, message }) => {
 
                 const [costoR] = data
-                console.log('message ' + message)
-                console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
-                console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+                //console.log('message ' + message)
+                //console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
+                //console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
                 
 
                 if (message != null) {
@@ -283,7 +329,7 @@ export class ModificarEmpleadoComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
 
 
-    console.log('valor de precio de venta3: '+ this.PreciodeVenta)
+    //console.log('valor de precio de venta3: '+ this.PreciodeVenta)
 
     
 
@@ -293,6 +339,8 @@ export class ModificarEmpleadoComponent implements OnInit {
         next: ({ data }) => {
           if (!this.empleado) {
             const empleadoEncontrado = this.empleadosOriginal.find(empleadoRegistro => empleadoRegistro.nunum_empleado_rr_hh == this.form.value.num_empleado)
+            //console.log('modificaEmpleado empleadoEncontrado:'+empleadoEncontrado+', this.form.value.num_empleado:'+this.form.value.num_empleado);//LEO TBD
+            if(empleadoEncontrado != undefined && empleadoEncontrado != null){
             this.empleado = {
               id: null,
               empleado: empleadoEncontrado.nombre_persona,
@@ -307,9 +355,12 @@ export class ModificarEmpleadoComponent implements OnInit {
               reembolsable: this.form.value.reembolsable,
               nuCostoIni: this.PreciodeVenta,
               chAlias: this.form.value.chalias,
-              
+              etiquetaTBD: this.form.value.etiqueta, //LEO TBD
+              idPuesto: this.form.value.puesto, //LEO TBD
             }
+          }//LEO TBD
           }
+
           const empleadoRespuesta: Empleado = {
             ...this.empleado,
             aplicaTodosMeses: this.form.value.aplicaTodosMeses,
@@ -317,7 +368,9 @@ export class ModificarEmpleadoComponent implements OnInit {
            // nucosto_ini: this.PreciodeVenta,
             //PrecioVenta: this.PreciodeVenta,
             fechas: this.form.value.fechas as Fecha[]
+            ,etiquetaTBD: this.form.value.etiqueta //LEO
           }
+
           this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'La etapa ha sido agregada.' })
           this.ref.close({ empleado: empleadoRespuesta })
         },
@@ -329,12 +382,13 @@ export class ModificarEmpleadoComponent implements OnInit {
 
     this.sharedService.cambiarEstado(true)
 
-    console.log('VALOR QUE LLEGA DEL COMBO -------- <<<< ' + event.value)
+    //console.log('VALOR QUE LLEGA DEL COMBO -------- <<<< ' + event.value)
 
     this.timesheetService.getEmpleadosTIPO(event.value)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({ data }) => {
+          //console.log('Antes de setCatEmpleados valor: ' + event)
           this.setCatEmpleados(data)
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
@@ -342,16 +396,19 @@ export class ModificarEmpleadoComponent implements OnInit {
   }
 
   cargarEmpleados() {
-
+    //console.log('modificarEmpleadoComponent cargaEmpleado entro'); //LEO TBD
     this.sharedService.cambiarEstado(true)
-
+    //console.log('modificarEmpleadoComponent cargaEmpleado ejecutara getEmpleados linea 371'); //LEO TBD
     this.timesheetService.getEmpleados()
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({ data }) => {
+          console.log('modificarEmpleadoComponent cargaEmpleado data.length:' + data.length); //LEO TBD
           this.empleadosOriginal = data
           //this.empleados = this.empleadosOriginal.map(empleado => ({code: empleado.nunum_empleado_rr_hh.toString(), name: empleado.nombre_persona}))
+          console.log('modificarEmpleadoComponent cargaEmpleado data.length:' + data.length); //LEO TBD
           this.empleados = this.empleadosOriginal.map(empleado => ({ code: empleado.nunum_empleado_rr_hh.toString(), name: `${empleado.nunum_empleado_rr_hh.toString()} - ${empleado.nombre_persona}` }))
+          console.log('modificarEmpleadoComponent cargaEmpleado this.empleados.length:' + this.empleados.length); //LEO TBD
         },
         error: (err) => this.closeDialog()
       })
@@ -401,9 +458,10 @@ export class ModificarEmpleadoComponent implements OnInit {
 
   CargaSueldoCostos(event: any) {
 
-    console.log('event.value ' + event.value)
-    console.log('event ' + event)
-    console.log('+event. ' + +event)
+    console.log('CargaSueldoCostos event.value:' + event.value)
+    console.log('event:' + event)
+    console.log('+event:' + +event)
+    //console.log('PuestoSel. ' + idPuesto)
 
     this.cargandoCosto = true;
     this.costosService.getCostoID(event)
@@ -516,4 +574,159 @@ export class ModificarEmpleadoComponent implements OnInit {
     )
   }
 
+
+  //LEO TBD
+  CargaSueldoCostosPuesto(event: any, idPuesto: any) {
+
+    //console.log('event.value ' + event.value)
+    //console.log('event ' + event)
+    //console.log('+event. ' + +event)
+
+    if(event == '000'){
+      this.form.get('etiqueta')?.enable();
+    }
+    else{
+      this.etiqueta = '';
+      this.form.get('etiqueta')?.disable();
+      this.form.get('etiqueta')?.setValue('');
+    }
+    
+    //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+    //    Para reemplazar al TBD. 
+    //    La bande bMantener es quien controla:
+    //    True: debe mantener el "PRecio de Venta" que es el campo FEE, debe habilitar "Costo por Empleado"
+    //          que es el campo "PrecioVenta"
+    //    False: debe reemplazar el "PRecio de VEnta" y deshabilitar el "Costo por Empleado"
+    let num_empleadoPadre = this.form.get('num_empleadoDesdeElPadre').getRawValue();
+    let bMantener = false;
+    if(num_empleadoPadre != '' &&  event != '000')
+    {
+      bMantener = true;
+    }
+    //console.log('bMAntener:'+bMantener+', num_empleadoPadre:'+num_empleadoPadre+', event:'+event);
+    //LEO TBD F
+
+    this.cargandoCosto = true;
+    this.costosService.getCostoIDPorPuesto(event, idPuesto)
+      .pipe(finalize(() => {
+        this.sharedService.cambiarEstado(false);
+        this.cargandoCosto = false;
+      }))
+      .subscribe({
+        next: ({ data, message }) => {
+
+          const [costoR] = data
+          //console.log('message ' + message)
+          //console.log('data.map(empleado => costoR.costoMensualEmpleado ) ' + data.map(empleado => costoR.idCosto))
+          //console.log(' this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado )) ' + this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)))
+          
+
+          if (message != null) {
+
+            this.mensajito = message;
+
+            if (this.mensajito.includes('No se encontraron registros de costos para el empleado:')) {
+               
+              //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+              if(!bMantener)
+              {
+                //console.log('bMAntener:No encontró registros y colocará cero');
+                //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+                this.PreciodeVenta = 0
+                this.form.patchValue({
+                FEE: this.formateaValor(0.0),
+                PrecioVenta: this.formateaValor(0.0),
+                
+                })
+                //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+              }
+              else
+              {
+                //console.log('bMAntener:No encontró registros y no colocará cero en Precio venta');
+                this.form.patchValue({
+                FEE: this.formateaValor(0.0),
+                nucosto_ini: this.formateaValor(0.0),
+                })
+              }
+              //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+
+            } else {
+
+              //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+              if(!bMantener)
+              {
+                //console.log('bMAntener:Lo encontró registros y colocará el valor');
+                this.PreciodeVenta = this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado))
+                this.form.patchValue({
+                FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+
+                })
+              }
+              else
+              {
+                //console.log('bMAntener:Lo encontró registros y no colocará el valor');
+                this.form.patchValue({
+                //FEE: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                PrecioVenta: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+                nucosto_ini: this.formateaValor(data.map(empleado => costoR.costoMensualEmpleado)),
+
+                })
+              }
+              //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+
+            }
+
+            //LEO I Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+            if(bMantener)
+            {
+              //console.log('Mantener costo ini enable');
+              this.form.get('PrecioVenta')?.enable();
+            }
+            else
+            {
+              //console.log('Mantener costo ini disable');
+              this.form.get('PrecioVenta')?.disable();
+            }
+            //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
+          }
+
+
+
+
+
+        },
+        error: (err) => {
+          console.log("error cuando no Existe registro de costos --------------> " + err.error.text);
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+
+
+        }
+      })
+
+
+
+  }
+
+  buscarEmpleadosPorIdPuesto(idPuesto: string) {
+    console.log('buscarEmpleadosPorIdPuesto entro con idPuesto:'+ idPuesto);
+    this.sharedService.cambiarEstado(true)
+
+    console.log('buscarEmpleadosPorIdPuesto idPuesto:' + idPuesto)
+    let iPuestoNumero = parseInt(idPuesto, 10); ;
+    this.timesheetService.getEmpleadosTIPO(iPuestoNumero)
+      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+      .subscribe({
+        next: ({ data }) => {
+          //console.log('buscarEmpeladosPorIDPuesto Antes de setCatEmpleados valor: ' + iPuestoNumero + ' numRegistros:' + data.length)
+          this.setCatEmpleados(data)
+          //console.log('buscarEmpeladosPorIDPuesto DEspues de setCatEmpleados')
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      })
+  }
+
 }
+
+

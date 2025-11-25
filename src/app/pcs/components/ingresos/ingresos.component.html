@@ -22,12 +22,15 @@
                     <div *ngIf="!seccionesCargado[i]; else contenido" class="text-center">
                         <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
                     </div>
+                    <!--LEO 2025-10-09 Puntos Bugs y Mejoras, en el llamado al componente seccion-contenido
+                        se agregó la variable de entrada nombrePaginaPadre-->
                     <ng-template #contenido>
                         <app-seccion-contenido 
                             [seccion]="seccionesData[i]" 
                             [indexSeccion]="i"
                             [secciones]="secciones.value"
                             [mostrarNoReembolsables]="false"
+                            [nombrePaginaPadre]="nombrePagina"
                         ></app-seccion-contenido>
                     </ng-template>
                 </ng-template>
@@ -40,7 +43,7 @@
                 <p><strong>Un momento.</strong></p>
             </div>
             <ng-template #totales>
-                <app-totales-ingresos [totalesData]="totalesData"></app-totales-ingresos>
+                <app-totales-ingresos [totalesData]="totalesData" [nunum_proyecto]="this.numProyectorubro"></app-totales-ingresos>  <!-- LEO inputs para FEEs -->
             </ng-template>
         </div>
     </div>

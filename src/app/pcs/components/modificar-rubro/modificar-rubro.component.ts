@@ -51,8 +51,11 @@ export class ModificarRubroComponent implements OnInit {
     reembolsable: [false],
     aplicaTodosMeses: [false],
     fechas: this.fb.array([]),
-    numProyecto: [null]
+    numProyecto: [null],
+    chcomentarios: [''] //LEO Gastos comentarios 
   })
+
+  SeccionIdValor: number //LEO Gastos comentarios 
 
   constructor() { }
 
@@ -69,11 +72,11 @@ export class ModificarRubroComponent implements OnInit {
     ];
 
     const rubro = this.config.data.rubro as Rubro
-    // console.log(rubro);
+      //console.log(rubro);
 
     const idSeccion = this.config.data.idSeccion;
     const numProyectos = this.config.data.numProyecto;
-
+    this.SeccionIdValor = idSeccion; //LEO Gastos comentarios 
     if (this.config.data) {
       //console.log('valor de unidad ' + rubro.unidad )
       this.form.patchValue({
@@ -83,7 +86,8 @@ export class ModificarRubroComponent implements OnInit {
         cantidad: rubro.cantidad?.toString(),
         reembolsable: rubro.reembolsable || false,
         aplicaTodosMeses: rubro.aplicaTodosMeses || false,
-        numProyecto: numProyectos
+        numProyecto: numProyectos,
+        chcomentarios:rubro.chcomentarios, //LEO Gastos Comentarios
       })
     }
 

@@ -1,4 +1,45 @@
 <p-accordion [multiple]="true">
+    <!-- LEO inputs para FEEs I -->
+    <!-- <p-accordionTab>
+        <ng-template pTemplate="header">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="title">
+                    <i class="pi pi-pencil mr-2 vertical-align-middle"></i>
+                    <span class="vertical-align-middle">Porcentajes FEEs</span>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+            <div class="">
+                <div class="row">
+                    <div class="col-2">
+
+                    </div>
+                    <div class="col-2">
+                        <label for="porcOverhead">Overhead: </label>
+                        <input type="number" id="typeNumber" class="form-control" id="porcOverhead" />
+                    </div>
+                    <div class="col-2">
+                        <label for="porcUtilidad">Utilidad:</label>
+                        <input type="number" id="typeNumber" class="form-control" id="porcUtilidad" />
+                    </div>
+                    <div class="col-2">
+                        <label for="porcContingencia">Contingencia:</label>
+                        <input type="number" id="typeNumber" class="form-control" id="porcContingencia" />
+                    </div>
+                    <div class="col-2">
+                        <label for="btnGuardar2"></label>
+                        <button type="button" id="btnGuardar2" class="btn btn-info" (click)="guardar()">Guardar</button>
+                    </div>
+                    <div class="col-2">
+
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-accordionTab> -->
+    <!-- LEO inputs para FEEs F -->
+
     <p-accordionTab *ngFor="let registro of registros | keyvalue: originalOrder">
         <ng-template pTemplate="header">
             <div class="d-flex justify-content-between align-items-center w-100">
@@ -9,9 +50,45 @@
             </div>
         </ng-template>
         <ng-template pTemplate="content">
+            <!-- LEO inputs para FEEs I -->
+            <ng-container *ngIf="registro.value.titulo=='Ingreso'">
+                <div class="">
+                    <div class="row">
+                        <div class="col-2">
+
+                        </div>                        
+                        <div class="col-2">
+                            <label for="porcOverhead">Overhead: </label>
+                            <input type="number" class="form-control" id="porcOverhead"
+                                    [(ngModel)]="overheadPorcentaje" name="porcOverhead" />
+                        </div>
+
+                        <div class="col-2">
+                            <label for="porcUtilidad">Utilidad:</label>
+                            <input type="number" class="form-control" id="porcUtilidad"
+                                    [(ngModel)]="utilidadPorcentaje" name="porcUtilidad" />
+                        </div>
+
+                        <div class="col-2">
+                            <label for="porcContingencia">Contingencia:</label>
+                            <input type="number" class="form-control" id="porcContingencia"
+                                    [(ngModel)]="contingenciaPorcentaje" name="porcContingencia" />
+                        </div>
+                        <div class="col-2">
+                            <label for="btnGuardar2"></label>
+                            <button type="button" id="btnGuardar2" class="btn btn-info" (click)="guardarFee()">Guardar</button>
+                        </div>
+                        <div class="col-2">
+
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <!-- LEO inputs para FEEs F -->
             <p-table [value]="[1]" [scrollable]="true" scrollHeight="400px">
                 <ng-template pTemplate="header">
                     <tr>
+                        <th width="100px" class="text-center" *ngIf="registro.value.titulo?.includes('Factura') || registro.value.titulo == 'Cobranza'">Opciones</th>
                         <th>Nombre</th>
                         <th class="text-right">Subtotal</th>
                         <th *ngFor="let mesRegistro of registro.value.meses" class="text-right">
@@ -20,30 +97,85 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body">
+                    <!-- GASTOS REEMBOLSABLES -->
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Gastos Reembolsables</td>
-                        <td class="text-right">{{registro.value.subtotal ?? '0' | currency}}</td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0' | currency}}</td>
+                        <td class="text-right">
+                        {{ registro.value.subtotal | currency }}
+                        </td>
+                        <td *ngFor="let valor of filterReembolsables(registro.value.registros)" class="text-right">
+                        {{ valor.totalPorcentaje | currency }}
+                        </td>
                     </tr>
+
+                    <!-- GASTOS NO REEMBOLSABLES -->
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Gastos No Reembolsables</td>
-                        <td class="text-right">{{registro.value.subtotalno ?? '0' | currency}}</td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{valor?.totalPorcentaje || '0' | currency}}</td>
+                        <td class="text-right">
+                        {{ registro.value.subtotalno | currency }}
+                        </td>
+                        <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">
+                        {{ valor.totalPorcentaje | currency }}
+                        </td>
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Fee - Porcentaje de OH sobre el total no reembolsable</td>
-                        <td class="text-right">{{'0' | currency}}</td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
+                        <td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:overheadPorcentaje | currency}}</td><!-- LEO inputs para FEEs -->
+                        <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: overheadPorcentaje |currency}}</td><!-- LEO inputs para FEEs -->
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Fee - Porcentaje de Utilidad sobre el total no reembolsable</td>
-                        <td class="text-right">{{'0' | currency}}</td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
+                        <td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:utilidadPorcentaje | currency}}</td><!-- LEO inputs para FEEs -->
+                        <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: utilidadPorcentaje |currency}}</td><!-- LEO inputs para FEEs -->
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Contingencia - % sobre Costos No Reembolsables</td>
-                        <td class="text-right">{{'0' | currency}}</td>
-                        <td *ngFor="let valor of registro.value.registros" class="text-right">{{'0' | currency}}</td>
+                        <td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:contingenciaPorcentaje | currency}}</td><!-- LEO inputs para FEEs -->
+                        <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: contingenciaPorcentaje |currency}}</td><!-- LEO inputs para FEEs -->
+                    </tr>
+
+                    <!-- FACTURACIÓN -->
+                    <tr *ngIf="registro.value.titulo?.includes('Factura')">
+                    <td>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button 
+                                title="Modificar rubro" type="button"
+                                class="btn btn-primary"
+                                (click)="modificarRegistro(registro.value.registros, 1)"
+                                >
+                                <i class="pi pi-pencil vertical-align-middle"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>Facturación</td>
+                    <td class="text-right">
+                        {{ registro.value.subtotal | currency }}
+                    </td>
+                    <td *ngFor="let valor of registro.value.registros" class="text-right">
+                        {{ valor.totalPorcentaje | currency }}
+                    </td>
+                    </tr>
+
+                    <!-- COBRANZA -->
+                    <tr *ngIf="registro.value.titulo == 'Cobranza'">
+                    <td>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <button 
+                                title="Modificar rubro" type="button"
+                                class="btn btn-primary"
+                                (click)="modificarRegistro(registro.value.registros, 2)"
+                                >
+                                <i class="pi pi-pencil vertical-align-middle"></i>
+                            </button>
+                        </div>
+                    </td>                        
+                    <td>Cobranza</td>
+                    <td class="text-right">
+                        {{ registro.value.subtotal | currency }}
+                    </td>
+                    <td *ngFor="let valor of registro.value.registros" class="text-right">
+                        {{ valor.totalPorcentaje | currency }}
+                    </td>
                     </tr>
                 </ng-template>
             </p-table>

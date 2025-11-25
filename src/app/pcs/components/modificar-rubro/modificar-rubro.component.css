@@ -1,0 +1,4 @@
+.no-resize {
+  resize: none;       /* Evita que el usuario cambie el tamaño */
+  overflow-y: auto;   /* Agrega scroll si el texto excede el espacio */
+}

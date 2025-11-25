@@ -2,6 +2,9 @@
 <p-toast></p-toast>
 
 <form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="d-flex justify-content-end mt-2">
+        <button type="button" id="btnGuardar2" class="btn btn-info" (click)="guardar()" [disabled]="!form.valid || !form.value.num_empleado || cargandoCosto">Guardar</button>
+    </div>
 
     <div class="row">
 
@@ -16,6 +19,9 @@
                         formControlName="puesto" 
                         [ngClass]="{'ng-invalid ng-dirty':      esInvalido('puesto')}"
                         optionValue="code"
+                        [filter]="true" 
+                        filterBy="name"
+                        appendTo="body"
                         (onChange)="buscarEmpleados($event)"
                 ></p-dropdown>
             <div *ngIf="esInvalido('puesto')">
@@ -27,10 +33,10 @@
 
         <div class="col-12">
             <label for="num_empleado">Empleado:</label>
-            <ng-container *ngIf="empleado; else dropDown">
+            <!--<ng-container *ngIf="empleado; else dropDown">
                 <p>{{empleado.empleado}}</p>
-            </ng-container>
-            <ng-template #dropDown>
+            </ng-container>  -->  <!-- //LEO TBD -->
+            <!-- <ng-template #dropDown> -->
                 <p-dropdown 
                     id="empleado" 
                     [options]="empleados"
@@ -44,7 +50,7 @@
                     [filter]="true" 
                     filterBy="name"
                     appendTo="body"
-                    (onChange)="CargaSueldoCostos($event.value);"
+                    (onChange)="CargaSueldoCostosPuesto($event.value, form.get('puesto')?.value)"
                 ></p-dropdown>
                 <div *ngIf="esInvalido('num_empleado')">
                     <small
@@ -53,8 +59,35 @@
                         {{ obtenerMensajeError('num_empleado') }}
                     </small>
                 </div>
-            </ng-template>
+            <!-- </ng-template> -->
         </div>
+
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="etiqueta">Etiqueta TBD:</label>
+                        <input 
+                        id="etiqueta"
+                        pInputText
+                        class="form-control" 
+                        maxlength="50" 
+                        formControlName="etiqueta"
+                        [ngClass]="{'ng-invalid ng-dirty': esInvalido('etiqueta')}"
+                        >
+                        <div *ngIf="esInvalido('etiqueta')">
+                        <small
+                            class="error-msg"
+                        >
+                            {{ obtenerMensajeError('etiqueta') }}
+                        </small>
+                        </div>
+                    </div>
+                </div>
+            </div>      
+        </div>
+
+
 
         <div class="col-12">
             
@@ -227,14 +260,19 @@
                 class="col-6"
                 [formGroupName]="i"
             >
+            <!-- LEO TBD Para el campo-fecha+i se quito el campo [id] y se dejo solamente inputId
+                Esto se hizo para el error que marcaba el navegador: 
+                Multiple form field elements in the same form have the same id attribute value. This might prevent the browser from correctly autofilling the form.
+                To fix this issue, use unique id attribute values for each form field. 
+                El id repetido era id="minmax"-->
                 <div class="d-grid">
                     <label [for]="'campo-fecha-'+i">
                         <strong> {{'% '+fecha.value.desc | uppercase}}:</strong>
                     </label>
                     <p-inputNumber 
                         formControlName="porcentaje" 
-                        inputId="minmax" 
-                        [id]="'campo-fecha-'+i"
+                        [inputId]="'campo-fecha-' + i"
+                        
                         mode="decimal" 
                         [min]="0" 
                         [max]="100"

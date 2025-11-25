@@ -260,7 +260,34 @@
                 </p-accordionTab>
             </p-accordion>
 
+            <!-- LEO inputs para FEEs I -->
+            <br />
+            <p-accordion [activeIndex]="0">
+                <p-accordionTab header="Porcentajes FEE">
 
+                    <div class="">
+
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="overheadPorcentaje">Overhead:</label>
+                                <input type="number" class="form-control" [disabled]="isConsulta" formControlName="overheadPorcentaje" />
+                            </div>
+                            <div class="col-4">
+                                <label for="utilidadPorcentaje">Utilidad:</label>
+                                <input type="number" class="form-control" [disabled]="isConsulta" formControlName="utilidadPorcentaje" />
+                            </div>
+                            <div class="col-4">
+                                <label for="contingenciaPorcentaje">Contingencia:</label>
+                                <input type="number" class="form-control" [disabled]="isConsulta" formControlName="contingenciaPorcentaje" />
+                            </div>
+                        </div>
+
+                        <br />
+                    </div>
+
+                </p-accordionTab>
+            </p-accordion>
+            <!-- LEO inputs para FEEs F -->
             <p-toast></p-toast>
         </form>
 

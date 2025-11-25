@@ -47,7 +47,11 @@ import { porcentajeMesStaffingPipe } from './pipes/porcentaje-mes-staffing.pipe'
 import { SeccionContenidoComponent } from './components/seccion-contenido/seccion-contenido.component';
 import { ModificarEtapaComponent } from './components/modificar-etapa/modificar-etapa.component';
 import { TotalesIngresosComponent } from './components/totales-ingresos/totales-ingresos.component';
-
+import { SharedChartsModule } from '../shared/shared-charts.module';
+//import { SharedChartsModule } from 'src/app/shared/shared-charts.module';
+import { PorcentajeImportesPipe } from './pipes/porcentaje-importes.pipe'; //LEO inputs para FEEs
+import { PorcentajeImportesSubtotalPipe } from './pipes/porcentaje-importes-subtotal.pipe'; //LEO inputs para FEEs
+import { ModificarFacturacobComponent } from './components/modificar-facturacob/modificar-facturacob.component'; //LEO Facturación y Cobranza
 
 @NgModule({
   declarations: [
@@ -78,7 +82,10 @@ import { TotalesIngresosComponent } from './components/totales-ingresos/totales-
     porcentajeMesStaffingPipe,
     SeccionContenidoComponent,
     ModificarEtapaComponent,
-    TotalesIngresosComponent
+    TotalesIngresosComponent,
+    PorcentajeImportesPipe, //LEO inputs para FEEs
+    PorcentajeImportesSubtotalPipe, //LEO inputs para FEEs
+    ModificarFacturacobComponent,   //LEO Facturación y Cobranza
   ],
   imports: [
     CommonModule,
@@ -97,7 +104,8 @@ import { TotalesIngresosComponent } from './components/totales-ingresos/totales-
     ButtonModule,
     ProgressSpinnerModule,
     InputSwitchModule,
-    MultiSelectModule
+    MultiSelectModule,
+    SharedChartsModule // Aquí va
   ],
   providers: [ConfirmationService, MessageService]
 })

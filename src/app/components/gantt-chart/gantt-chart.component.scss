@@ -1,0 +1,25 @@
+.gantt-container {
+  width: 100%;
+  max-width: 100%;     // Asegura que no se pase del ancho padre
+  height: 200px;       // Altura fija
+  overflow: auto;      // Scroll horizontal/vertical si se necesita
+}
+
+// canvas {
+//   min-width: 800px;    // Si la gráfica se pasa, activa scroll horizontal
+//   min-height: 400px;
+// }
+
+.chart-wrapper {
+  max-height: 200px;     // Scroll vertical si hay muchos proyectos
+  max-width: 100%;       // Limita el ancho al contenedor padre
+  overflow-y: auto;      // Scroll vertical
+  overflow-x: auto;      // Scroll horizontal si la fecha se extiende mucho
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+canvas {
+  min-width: 800px;      // Fuerza al menos este ancho, puedes aumentar si necesitas más espacio
+  height: auto !important;
+}

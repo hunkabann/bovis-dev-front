@@ -10,6 +10,15 @@ interface NuevoProyecto {
   nombre: string
 }
 
+//LEO inputs para FEEs I
+interface FeePorcentajes{
+  nunum_proyecto: number,
+  overheadPorcentaje: number,
+  utilidadPorcentaje: number,
+  contingenciaPorcentaje: number
+}
+//LEO inputs para FEEs F
+
 @Injectable({
   providedIn: 'root'
 })
@@ -114,4 +123,18 @@ export class PcsService {
     return this.http.get<TotalesIngresosResponse>(`${this.baseUrl}api/Pcs/TotalesIngresos/${numProyecto}`);
   }
   
+  //LEO inputs para FEEs I
+  guardarFeePorcentaje(esActualizacion: boolean = false, body: FeePorcentajes) {
+    return esActualizacion
+    ? this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/TotalesIngresos/Fee`, body)
+    : this.http.post<GenericResponse>(`${this.baseUrl}api/Pcs/TotalesIngresos/Fee`, body)
+  }
+
+  //LEO inputs para FEEs F
+
+  //LEO Facturación y Cobranza I
+  actualizarFacturacob(body: any) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/FacturacionCobranza`, body)
+  }
+  //LEO Facturación y Cobranza F
 }

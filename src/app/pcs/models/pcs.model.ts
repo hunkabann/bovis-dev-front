@@ -41,6 +41,8 @@ export interface Empleado {
     PrecioVenta:        number;
     //nucosto_ini:        number;
     //chalias:            string;
+    etiquetaTBD:            string; //LEO TBD
+    idPuesto:            string; //LEO TBD
 }
 
 export interface Fecha {
@@ -103,6 +105,9 @@ export interface Proyecto {
     impuesto_nomina:                  number;
     nukidunidadnegocio:               string;
     chunidadnegocio:                  string;
+    overheadPorcentaje:               number; //LEO inputs para FEEs
+    utilidadPorcentaje:               number; //LEO inputs para FEEs
+    contingenciaPorcentaje:           number;//LEO inputs para FEEs
 }
 
 export interface ClientePcs {
@@ -154,6 +159,7 @@ export interface Rubro {
     numEmpleadoRrHh:    string;
     numProyecto:      number;
     costoMensual:         number;
+    chcomentarios:    string; //LEO Gastos comentarios
 }
 
 export interface SumaFecha {
@@ -361,6 +367,9 @@ export interface TotalesIngresosResponseData {
     ingreso:     GastosIngresosTotales[];
     facturacion: GastosIngresosTotales[];
     cobranza:    GastosIngresosTotales[];
+    overheadPorcentaje: number; //LEO inputs para FEEs
+    utilidadPorcentaje: number; //LEO inputs para FEEs
+    contingenciaPorcentaje: number; //LEO inputs para FEEs
 }
 
 
@@ -371,3 +380,20 @@ export interface TotalesIngresosFormateado  {
     meses?: Mes[],
     registros?: GastosIngresosTotales[]
 }
+
+//LEO Facturación y Cobranza I
+export interface FechaEntradaFacturaCob {
+  mes: number;
+  anio: number;
+  reembolsable: boolean;
+  totalPorcentaje: number;
+}
+
+export interface FechaFormValue {
+  mes: number;
+  anio: number;
+  desc: string;
+  disabled: boolean;
+  totalPorcentaje: number;
+}
+//LEO Facturación y Cobranza F
