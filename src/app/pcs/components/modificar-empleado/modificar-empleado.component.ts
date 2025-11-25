@@ -100,7 +100,7 @@ export class ModificarEmpleadoComponent implements OnInit {
 
     // this.form.controls['FEE'].disable();
 
-    this.form.get('PrecioVenta')?.disable();
+    //this.form.get('PrecioVenta')?.disable();//2025-11-24 JM pide invertir la deshabilitación
     this.form.get('etiqueta')?.disable(); //LEO TBD
 
     const data = this.config.data as EtapaEmpleado
@@ -131,7 +131,15 @@ export class ModificarEmpleadoComponent implements OnInit {
             console.log(data.etapa.empleados[i]);
           } 
     */
+      //2025-11-24 JM pide invertir la deshabilitación I
+      if( data.empleado?.numempleadoRrHh != null && data.empleado?.numempleadoRrHh.includes('TBD')) {
+        this.form.get('PrecioVenta')?.enable();
+      }
+      else {
+        this.form.get('PrecioVenta')?.disable();
+      }
 
+      //2025-11-24 JM pide invertir la deshabilitación F
           //console.log('PrecioVenta ------- ' +  data.empleado.PrecioVenta )
           console.log('valor de data.chalias:' +  data.chalias )
           console.log('valor de data.empleado?.chAlias:' +  data.empleado?.chAlias )
@@ -682,12 +690,12 @@ export class ModificarEmpleadoComponent implements OnInit {
             if(bMantener)
             {
               //console.log('Mantener costo ini enable');
-              this.form.get('PrecioVenta')?.enable();
+              this.form.get('PrecioVenta')?.disable();//2025-11-24 JM pide invertir la deshabilitación
             }
             else
             {
               //console.log('Mantener costo ini disable');
-              this.form.get('PrecioVenta')?.disable();
+              this.form.get('PrecioVenta')?.enable();//2025-11-24 JM pide invertir la deshabilitación
             }
             //LEO F Mantener el "Precio de Venta" y habilitar el "Costo" al selecionar un Emplado
           }

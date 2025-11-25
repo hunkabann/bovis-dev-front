@@ -77,7 +77,8 @@ export class SeccionContenidoComponent implements OnInit {
     // entre que ventana debe abrir
     if(rubro.idRubro==2) {
       // abre para datos de Inlfaciión Anual
-      this.abreRubroInflacion(rubro, rubroIndex);
+      //this.abreRubroInflacion(rubro, rubroIndex);
+      this.abreRubro(rubro, rubroIndex); //se coloca para el cambio de Invertir habilitar "CostoEmpleado" en StaffingPlan
     }
     else {
       //abre para modificar como siempre
