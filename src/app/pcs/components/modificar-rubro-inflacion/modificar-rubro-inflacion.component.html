@@ -1,8 +1,29 @@
 <p-toast></p-toast>
 <form [formGroup]="form" (ngSubmit)="guardar()">
     <div class="row">
-      <div class="col-4" style="text-decoration: none; visibility: stilovisible;">
-        <!--label for="cantidad" >Cantidad: <span class="required"></span></label-->
+        <div class="col-4">
+            <label for="numes_ini_calculo">Mes de Inicio:</label>
+            <p-dropdown id="numes_ini_calculo" 
+                        [options]="catMeses"
+                        placeholder="Seleccionar un Mes" 
+                        optionLabel="name" 
+                        optionDisabled="disabled" 
+                        [showClear]="true" 
+                        [style]="{ width: '100%' }" 
+                        formControlName="numes_ini_calculo" 
+                        [ngClass]="{'ng-invalid ng-dirty':      esInvalido('numes_ini_calculo')}"
+                        optionValue="code"
+                        [filter]="true" 
+                        filterBy="name"
+                        appendTo="body"
+                ></p-dropdown>
+            <div *ngIf="esInvalido('numes_ini_calculo')">
+            <small class="error-msg">
+              {{ obtenerMensajeError('puesto') }}
+            </small>
+          </div>  
+        </div>
+      <!-- <div class="col-4" style="text-decoration: none; visibility: stilovisible;">
         <label for="numes_ini_calculo" >Mes de Inicio: </label>
         <p-inputNumber 
             formControlName="numes_ini_calculo"
@@ -15,9 +36,8 @@
             {{ obtenerMensajeError('numes_ini_calculo') }}
           </small>
         </div>
-      </div>
+      </div> -->
       <div class="col-4" style="text-decoration: none; visibility: stilovisible;">
-        <!--label for="cantidad" >Cantidad: <span class="required"></span></label-->
         <label for="porcentaje" >Porcentaje: </label>
         <p-inputNumber 
             formControlName="porcentaje"

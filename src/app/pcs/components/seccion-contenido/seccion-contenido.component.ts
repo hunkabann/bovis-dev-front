@@ -66,6 +66,7 @@ export class SeccionContenidoComponent implements OnInit {
         this.seccionesFormateadas[1].rubros.push(rubro);
       }
     });
+    this.seccion.fechaIni = new Date(this.seccion.fechaIni); //LEO Fórmula Inflación  
   }
   
   // modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {
@@ -77,8 +78,8 @@ export class SeccionContenidoComponent implements OnInit {
     // entre que ventana debe abrir
     if(rubro.idRubro==2) {
       // abre para datos de Inlfaciión Anual
-      //this.abreRubroInflacion(rubro, rubroIndex);
-      this.abreRubro(rubro, rubroIndex); //se coloca para el cambio de Invertir habilitar "CostoEmpleado" en StaffingPlan
+      this.abreRubroInflacion(rubro, rubroIndex);
+      //this.abreRubro(rubro, rubroIndex); //se coloca para el cambio de Invertir habilitar "CostoEmpleado" en StaffingPlan
     }
     else {
       //abre para modificar como siempre
@@ -173,15 +174,18 @@ export class SeccionContenidoComponent implements OnInit {
 
   //abreRubroInflacion abre la modal para modificar datos de Inflación Anual
   abreRubroInflacion(rubro: Rubro, rubroIndex: number) {
-    console.log('Abre Modal Modificar-RubroInflacion IdRubro:'+ rubro.idRubro)
+    console.log('Abre Modal Modificar-RubroInflacion IdRubro:'+ rubro.idRubro + ' idSeccion:'+this.seccion.idSeccion + ' Reembolsable:'+rubro.reembolsable
+      +' SeccionFechaIni:'+this.seccion.fechaIni)
     this.dialogService.open(ModificarRubroInflacionComponent, {
       header: rubro.rubro,
       width: '50%',
       contentStyle: { overflow: 'auto' },
       data: {
+        rubroEnvio: rubro,
         fechaInicio: this.seccion.fechaIni,
+        mesInicio: this.seccion.fechaIni.getMonth()+1,
         numProyecto: this.seccion.numProyecto,
-        reembolsable: true,
+        reembolsable: rubro.reembolsable,
       }
     }).onClose.subscribe((result) => {
       if (result && result.rubro) {

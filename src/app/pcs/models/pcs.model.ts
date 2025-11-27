@@ -397,3 +397,11 @@ export interface FechaFormValue {
   totalPorcentaje: number;
 }
 //LEO Facturación y Cobranza F
+
+//LEO Fórmula Inflación I
+export interface MesesFront{
+    code:number;
+    name: string;
+    disabled: boolean;
+}
+//LEO Fórmula Inflación F
