@@ -405,3 +405,15 @@ export interface MesesFront{
     disabled: boolean;
 }
 //LEO Fórmula Inflación F
+
+//LEO Fórmula Inflación I
+export interface DatosInflacionResponse{
+    data: DatosInflacion
+}
+
+export interface DatosInflacion{
+    numProyecto: number;
+    nuprocentaje: number;
+    numes_ini_calculo: number;
+}
+//LEO Fórmula Inflación F

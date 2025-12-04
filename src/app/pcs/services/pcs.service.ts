@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 import { environment } from 'src/environments/environment';
-import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse,GastosIngresosControlResponse, SeccionRespuesta, GastosIngresosSeccionesResponseNuevo, GastosIngresosInformacionResponse, TotalesIngresosResponse } from '../models/pcs.model';
+import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse,GastosIngresosControlResponse, SeccionRespuesta, GastosIngresosSeccionesResponseNuevo, GastosIngresosInformacionResponse, TotalesIngresosResponse, DatosInflacionResponse } from '../models/pcs.model'; 
 
 interface NuevoProyecto {
   id:     number,
@@ -137,4 +137,15 @@ export class PcsService {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/FacturacionCobranza`, body)
   }
   //LEO Facturación y Cobranza F
+
+
+  //LEO Fórmula Inflación I
+  obtenerDatosInflacion(numProyecto: number, fecha:string) {
+    return this.http.get<DatosInflacionResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/${numProyecto}/ProyectoInFlacion/${fecha}`);
+  }
+
+  actualizarDatosInflacion(body: any) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/ProyectoInFlacion`, body)
+  }
+  //LEO Fórmula Inflación F
 }

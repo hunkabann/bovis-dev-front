@@ -6,7 +6,7 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { PcsService } from '../../services/pcs.service';
 import { TITLES, errorsArray } from 'src/utils/constants';
 import { obtenerMeses, descripcionMesAnio, deshabilitaControl } from 'src/helpers/helpers';
-import { Fecha, Rubro, GastosIngresosTotales, FechaEntradaFacturaCob, FechaFormValue , MesesFront } from '../../models/pcs.model'; //LEO Fórmula Inflación
+import { Fecha, Rubro, GastosIngresosTotales, FechaEntradaFacturaCob, FechaFormValue , MesesFront,DatosInflacion } from '../../models/pcs.model'; //LEO Fórmula Inflación
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { facturaCancelacion } from 'src/app/facturacion/Models/FacturacionModels';
@@ -30,6 +30,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
   stilovisiblepp: string = ''
   catMeses : MesesFront[] = []; //LEO Fórmula Inflación
   mesActual: number = 0;
+  mesguardado: number;
 
   form = this.fb.group({
     numProyecto: [null],
@@ -48,6 +49,8 @@ export class ModificarRubroInflacionComponent implements OnInit {
   
 
   ngOnInit(): void {
+
+    //llenando las variables
     this.mesActual = new Date().getMonth() + 1; // Enero = 1
     // Recibir datos enviados
     //this.registrosEntrada = this.config.data.registros;
@@ -55,8 +58,11 @@ export class ModificarRubroInflacionComponent implements OnInit {
     this.fechaInicio = this.config.data.fechaInicio;
     this.mesInicio = this.config.data.mesInicio;
     this.numProyecto = this.config.data.numProyecto;
-    this.numPorcentaje = 15;
+    //this.numPorcentaje = 15;
     this.reembolsable = this.config.data.reembolsable;
+
+    //obtener los valores guardado en BD
+    this.consultaDatosinflacion();
 
     //Llenado de los meses para el combo 
     this.cargarCatalogoMeses();
@@ -64,7 +70,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
     // Setear valores al form
     this.form.patchValue({
       numProyecto: this.numProyecto,
-      //numes_ini_calculo: this.mesInicio,
+      numes_ini_calculo: this.mesguardado,
       porcentaje: this.numPorcentaje,
     });
 
@@ -88,11 +94,36 @@ export class ModificarRubroInflacionComponent implements OnInit {
   }  
 
   guardar() {
+    console.log('Porcentaje:'+this.form.get('porcentaje').value + ' numes_ini_calculo:' + this.form.get('numes_ini_calculo').value)
+    let payload;
+
+    payload = {
+      nunum_proyecto: this.numProyecto,
+      nuprocentaje: this.form.get('porcentaje').value,
+      numes_ini_calculo: this.form.get('numes_ini_calculo').value
+    };
+    console.log('payload:'+payload);
+    this.pcsService.actualizarDatosInflacion(payload).subscribe({
+
+      next: (resp) => {
+
+        this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+
+        this.ref.close({
+          
+        });
+      },
+
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
+      }
+
+    });
     
   }  
 
   calculaMesInicio(rubro: Rubro){
-    console.log('this.rubroEntrada.fechas:'+this.rubroEntrada.fechas)
+    //console.log('this.rubroEntrada.fechas:'+this.rubroEntrada.fechas)
 
     if(this.rubroEntrada.fechas == null || this.rubroEntrada.fechas.length==0){
       this.mesInicio = -1;
@@ -170,6 +201,22 @@ export class ModificarRubroInflacionComponent implements OnInit {
       // console.log('Catálogo final:', this.catMeses);
       // console.log('Mes seleccionado:', mesParaSeleccionar);
     
+  }
+
+  consultaDatosinflacion() {
+
+    this.pcsService.obtenerDatosInflacion(this.numProyecto, '')
+      .pipe()
+      .subscribe({
+        next: ({data}) => {
+          this.numPorcentaje = data.nuprocentaje;
+          this.mesguardado = data.numes_ini_calculo; 
+          this.form.get('porcentaje')?.setValue(this.numPorcentaje);
+          this.form.get('numes_ini_calculo')?.setValue(this.mesguardado);
+        },
+        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
+      });
+  
   }
 }
 

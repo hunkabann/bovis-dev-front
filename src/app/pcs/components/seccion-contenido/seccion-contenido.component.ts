@@ -151,7 +151,7 @@ export class SeccionContenidoComponent implements OnInit {
     // this.modificarRubroEvent.emit({rubro, idSeccion, fechaIni: this.seccion.fechaIni, fechaFin: this.seccion.fechaFin});
     console.log('Abre Modal Modificar Rubro IdRubro:'+ rubro.idRubro)
     this.dialogService.open(ModificarRubroComponent, {
-      header: rubro.rubro + 'Leo1',
+      header: rubro.rubro ,
       width: '50%',
       contentStyle: { overflow: 'auto' },
       data: {
@@ -188,13 +188,7 @@ export class SeccionContenidoComponent implements OnInit {
         reembolsable: rubro.reembolsable,
       }
     }).onClose.subscribe((result) => {
-      if (result && result.rubro) {
-        const rubroRespuesta = result.rubro as Rubro;
-        this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
-          ...rubro,
-          ...rubroRespuesta,
-        };
-      }
+      
     });
   }    
   //LEO Fórmula Inflación F
