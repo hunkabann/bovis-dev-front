@@ -215,5 +215,23 @@ export class SeccionContenidoComponent implements OnInit {
     }
   }
 
+  esEspecial(codigoSeccion: string){
+    if(codigoSeccion.includes('02.0000') || codigoSeccion.includes('07.0000')) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  esSeccionFee(codigoSeccion: string){
+    if(codigoSeccion.includes('07.0000')) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   //FEE libre F
 }
