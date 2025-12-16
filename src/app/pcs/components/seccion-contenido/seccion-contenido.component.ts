@@ -1,9 +1,11 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { GastosIngresosSecciones, ModificarRubroEmitterProps, Rubro } from '../../models/pcs.model';
+import { GastosIngresosSecciones, ModificarRubroEmitterProps, Rubro, Fecha, GastosIngresosTotales } from '../../models/pcs.model';  //FEE libre
 import { Mes } from 'src/models/general.model';
-import { DialogService } from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api'; // FEE libre
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'; //FEE libre
 import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
 import { ModificarRubroInflacionComponent } from '../modificar-rubro-inflacion/modificar-rubro-inflacion.component';
+import {ModificarFacturacobComponent } from '../modificar-facturacob/modificar-facturacob.component'; //FEE libre
 
 interface Props extends GastosIngresosSecciones {
   fechaIni: Date,
@@ -47,7 +49,9 @@ export class SeccionContenidoComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+   ref: DynamicDialogRef; //FEE libre
+
+  constructor( private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.seccionesFormateadas[0].rubros = [];
@@ -91,6 +95,7 @@ export class SeccionContenidoComponent implements OnInit {
     //FEE libre I
     else if(idSeccionRubro == 17){
       console.log('Es para FEE libre')
+      this.abreRubroFactCob(rubro.fechas, 3, rubroIndex);
     }
     //FEE libre F
     else {
@@ -233,5 +238,54 @@ export class SeccionContenidoComponent implements OnInit {
     }
   }
 
+  abreRubroFactCob(rubro: any[], idFuente: number, rubroIndex: number) {
+    //se mapea la entrada de Fecha a GastosIngresosTotales para que muestre la info la modal
+    let lst = this.mapeaFechasToGastostotales(rubro);
+    console.log('abreRubroFactCob Idseccion:'+this.seccion.idSeccion);
+    this.ref = this.dialogService.open(ModificarFacturacobComponent, {
+      header: 'Modificar ' + rubro[rubroIndex].rubro,
+      width: '700px',
+      data: {
+        registros: lst,           // <<--- ARREGLO COMPLETO
+        tipo: idFuente,             // <<--- 1 = factura, 2 = cobranza, 3 FEE libre
+        numProyecto: this.seccion.numProyecto,
+        idSeccion: this.seccion.idSeccion
+      }
+    });
+
+    // Recibir resultado
+    let smensaje = 'FEE libre';
+    this.ref.onClose.subscribe((resultado) => {
+      console.log('Leo1')
+      if (!resultado) return;
+      console.log('Leo2')
+      if (resultado && resultado.rubro) {
+        console.log('Leo3')
+        const rubroRespuesta = resultado.rubro as Rubro;
+        console.log('Leo4')
+        this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
+          ...rubro,
+          ...rubroRespuesta,
+        };
+        console.log('Leo5')
+      }
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Actualizado',
+      detail: 'El total de ' + smensaje + ' fue modificado correctamente'
+      });
+    });
+  }  
+
+  mapeaFechasToGastostotales(lstEntrada: Fecha[]): GastosIngresosTotales[] {
+    return lstEntrada.map(fecha => ({
+      mes: fecha.mes,
+      anio: fecha.anio,
+      reembolsable: true,
+      totalPorcentaje: fecha.porcentaje
+    }));
+  }
   //FEE libre F
+
 }

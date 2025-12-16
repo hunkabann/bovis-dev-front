@@ -148,4 +148,11 @@ export class PcsService {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/ProyectoInFlacion`, body)
   }
   //LEO Fórmula Inflación F
+
+  //FEE libre I
+  actualizarFee(body: any) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/Fee`, body)
+  }
+  //FEE libre F
+
 }

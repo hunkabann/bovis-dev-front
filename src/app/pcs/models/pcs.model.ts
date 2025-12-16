@@ -145,7 +145,6 @@ export interface GastosIngresosTotales {
     mes:                number;
     anio:               number;
     totalPorcentaje:    number;
-    
 }
 
 export interface Rubro {
@@ -417,3 +416,12 @@ export interface DatosInflacion{
     numes_ini_calculo: number;
 }
 //LEO Fórmula Inflación F
+
+//FEE libre I
+export interface FechaEntradaFEELibre {
+  mes: number;
+  anio: number;
+  reembolsable: boolean;
+  totalPorcentaje: number;
+}
+//FEE libre F
