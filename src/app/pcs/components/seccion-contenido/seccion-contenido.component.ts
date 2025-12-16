@@ -67,10 +67,17 @@ export class SeccionContenidoComponent implements OnInit {
       }
     });
     this.seccion.fechaIni = new Date(this.seccion.fechaIni); //LEO Fórmula Inflación  
+    
+    //FEE libre I
+    if(this.seccion.idSeccion == 17) {
+      //si se trata de "FEE  libre" que muestre el btn
+      this.esEditable = true;
+    }
+    //FEE libre F
   }
   
   // modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {
-  modificarRubro(rubro: Rubro, rubroIndex: number) {
+  modificarRubro(rubro: Rubro, rubroIndex: number, idSeccionRubro: number) {
     // this.modificarRubroEvent.emit({rubro, idSeccion, fechaIni: this.seccion.fechaIni, fechaFin: this.seccion.fechaFin});
     console.log('rubro.idRubro:'+ rubro.idRubro)
     //LEO Fórmula Inlfación I 
@@ -81,6 +88,11 @@ export class SeccionContenidoComponent implements OnInit {
       this.abreRubroInflacion(rubro, rubroIndex);
       //this.abreRubro(rubro, rubroIndex); //se coloca para el cambio de Invertir habilitar "CostoEmpleado" en StaffingPlan
     }
+    //FEE libre I
+    else if(idSeccionRubro == 17){
+      console.log('Es para FEE libre')
+    }
+    //FEE libre F
     else {
       //abre para modificar como siempre
       this.abreRubro(rubro, rubroIndex);
@@ -192,4 +204,16 @@ export class SeccionContenidoComponent implements OnInit {
     });
   }    
   //LEO Fórmula Inflación F
+
+  //FEE libre I
+  muestraUnidad(codigoSeccion: string){
+    if(!codigoSeccion.includes('02.0000') && !codigoSeccion.includes('07.0000')) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  //FEE libre F
 }

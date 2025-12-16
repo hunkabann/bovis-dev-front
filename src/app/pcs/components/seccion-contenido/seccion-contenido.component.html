@@ -14,7 +14,7 @@
                     <tr>
                         <th width="100px" class="text-center" *ngIf="esEditable">Opciones</th>
                         <th class="text-left">Nombre</th>
-                        <th class="text-right" *ngIf="!seccion.codigo.includes('02.0000')">Unidad</th> <!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
+                        <th class="text-right" *ngIf="muestraUnidad(seccion.codigo)">Unidad</th> <!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
                         <th class="text-right">{{ seccion.codigo.includes('02.0000') ? 'Mes' : 'Cantidad' }}</th> <!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
                         <th class="text-right">Subtotal</th>
                         <th *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-right">
@@ -24,20 +24,19 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-rubro let-iRubro="rowIndex">
                     <tr>
-                        <td *ngIf="esEditable">
+                        <td *ngIf="esEditable"> <!--FEE libre, se agrego al btn el seccion.idSeccion a la función modificarRubro -->
                             <div class="d-flex gap-2 justify-content-center">
                                 <button 
                                     title="Modificar rubro" type="button"
                                     class="btn btn-primary"
-                                    (click)="modificarRubro(rubro, iRubro)"
-                                    [disabled]="!rubro.idRubro || seccion.idSeccion == 2 "
-                                >
+                                    (click)="modificarRubro(rubro, iRubro, seccion.idSeccion)" 
+                                    [disabled]="!rubro.idRubro || seccion.idSeccion == 2 ">
                                     <i class="pi pi-pencil vertical-align-middle"></i>
                                 </button>
                             </div>
                         </td>
                         <td class="text-left">{{rubro.rubro}}</td>
-                        <td class="text-right" *ngIf="!seccion.codigo.includes('02.0000')">{{rubro.unidad}}</td><!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
+                        <td class="text-right" *ngIf="muestraUnidad(seccion.codigo)">{{rubro.unidad}}</td><!--LEO 2025-10-09 Puntos Bugs y Mejoras-->
                         <td class="text-right">
                             <!--LEO 2025-10-09 I Puntos Bugs y Mejoras-->
                             <ng-container *ngIf="seccion.codigo.includes('02.0000'); else mostrarCantidad">
@@ -79,12 +78,13 @@
                             <td colspan="3" class="text-end">Totales</td>
                         </ng-template> -->
                         <!--LEO 2025-10-09 I Puntos Bugs y Mejoras-->
+                        <!-- FEE libre, se cambia a que llame a la función muestraUnidad para el attr.colspan -->
                         <td 
                         class="text-end"
                         [attr.colspan]="
                             esEditable 
-                            ? (seccion.codigo.includes('02.0000') ? 3 : 4) 
-                            : (seccion.codigo.includes('02.0000') ? 2 : 3)"
+                            ? (!muestraUnidad(seccion.codigo) ? 3 : 4) 
+                            : (!muestraUnidad(seccion.codigo) ? 2 : 3)"
                         >
                         Totales
                         </td>
