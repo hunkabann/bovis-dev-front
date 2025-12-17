@@ -249,7 +249,8 @@ export class SeccionContenidoComponent implements OnInit {
         registros: lst,           // <<--- ARREGLO COMPLETO
         tipo: idFuente,             // <<--- 1 = factura, 2 = cobranza, 3 FEE libre
         numProyecto: this.seccion.numProyecto,
-        idSeccion: this.seccion.idSeccion
+        idSeccion: this.seccion.idSeccion,
+        idRubro: this.seccion.rubros[rubroIndex].idRubro
       }
     });
 

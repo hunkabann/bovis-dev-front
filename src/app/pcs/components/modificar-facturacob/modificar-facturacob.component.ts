@@ -24,6 +24,7 @@ export class ModificarFacturacobComponent implements OnInit {
   tipo: number = 0;
   numProyecto: number = 0;
   idSeccion: number = 0; //FEE libre
+  idRubro: number = 0; //FEE libre
 
   form = this.fb.group({
     numProyecto: [null],
@@ -52,6 +53,7 @@ export class ModificarFacturacobComponent implements OnInit {
     this.tipo = this.config.data.tipo;
     this.numProyecto = this.config.data.numProyecto;
     this.idSeccion = this.config.data.idSeccion;
+    this.idRubro = this.config.data.idRubro == null ? 0 : this.config.data.idRubro; //FEE libre
 
     // Setear valores al form
     this.form.patchValue({
@@ -126,6 +128,8 @@ export class ModificarFacturacobComponent implements OnInit {
           nunum_proyecto: this.numProyecto,
           tipo: this.tipo,
           idSeccion: this.idSeccion,
+          idRubro: this.idRubro,
+          reembolsable: true,
           fees: aSalidaFee,
       };
     }
@@ -141,11 +145,11 @@ export class ModificarFacturacobComponent implements OnInit {
       next: (resp) => {
 
         // Cerrar y devolver al padre el arreglo ACTUALIZADO
-        const arregloActualizado = (this.form.value.fechas as any[]).map(f => ({
+        const arregloActualizado = (aSalidaFee as any[]).map(f => ({
             reembolsable: false,
             mes: f.mes,
             anio: f.anio,
-            //totalPorcentaje: f.totalPorcentaje
+            totalPorcentaje: f.totalPorcentaje,
             porcentaje: f.totalPorcentaje
         }));
 
