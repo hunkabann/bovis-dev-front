@@ -6,7 +6,7 @@ import { SharedService } from 'src/app/shared/services/shared.service';
 import { PcsService } from '../../services/pcs.service';
 import { TITLES, errorsArray } from 'src/utils/constants';
 import { obtenerMeses, descripcionMesAnio, deshabilitaControl } from 'src/helpers/helpers';
-import { Fecha, Rubro, GastosIngresosTotales, FechaEntradaFacturaCob, FechaFormValue } from '../../models/pcs.model';
+import { Fecha, Rubro, GastosIngresosTotales, FechaEntradaFacturaCob, FechaFormValue, FechaEntradaFEELibre } from '../../models/pcs.model';  //FEE libre
 import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { facturaCancelacion } from 'src/app/facturacion/Models/FacturacionModels';
@@ -23,6 +23,8 @@ export class ModificarFacturacobComponent implements OnInit {
   registrosEntrada: GastosIngresosTotales[] = [];
   tipo: number = 0;
   numProyecto: number = 0;
+  idSeccion: number = 0; //FEE libre
+  idRubro: number = 0; //FEE libre
 
   form = this.fb.group({
     numProyecto: [null],
@@ -50,6 +52,8 @@ export class ModificarFacturacobComponent implements OnInit {
     this.registrosEntrada = this.config.data.registros;
     this.tipo = this.config.data.tipo;
     this.numProyecto = this.config.data.numProyecto;
+    this.idSeccion = this.config.data.idSeccion;
+    this.idRubro = this.config.data.idRubro == null ? 0 : this.config.data.idRubro; //FEE libre
 
     // Setear valores al form
     this.form.patchValue({
@@ -75,6 +79,7 @@ export class ModificarFacturacobComponent implements OnInit {
     let payload;
 
   const aSalida: FechaEntradaFacturaCob[] = [];
+  const aSalidaFee: FechaEntradaFEELibre[] = []; //FEE libre
 
   (this.form.value.fechas as FechaFormValue[]).forEach(fecha => {
 
@@ -96,7 +101,7 @@ export class ModificarFacturacobComponent implements OnInit {
             facturacion: aSalida,
         };
     }
-    else {
+    else if(this.tipo == 2){ //FEE libre
         payload = {
             nunum_proyecto: this.numProyecto,
             tipo: this.tipo,
@@ -104,8 +109,67 @@ export class ModificarFacturacobComponent implements OnInit {
             cobranza: aSalida,
         };
     }
+    //FEE libre I
+    else {
+      //para FEE libre se cambia el listado de fechas
+      (this.form.value.fechas as FechaFormValue[]).forEach(fecha => {
+
+        const nuevo: FechaEntradaFEELibre = {
+            mes: fecha.mes,
+            anio: fecha.anio,
+            reembolsable: true,
+            totalPorcentaje: fecha.totalPorcentaje
+        };
+
+        aSalidaFee.push(nuevo);
+      });
+
+      payload = {
+          nunum_proyecto: this.numProyecto,
+          tipo: this.tipo,
+          idSeccion: this.idSeccion,
+          idRubro: this.idRubro,
+          reembolsable: true,
+          fees: aSalidaFee,
+      };
+    }
+    //FEE libre F
+
     //console.log('payload:'+payload);
-    this.pcsService.actualizarFacturacob(payload).subscribe({
+    //FEE libre I
+    if(this.tipo == 3){
+      //guardar FEE libre
+      console.log('Guardare FEE libre');
+      this.pcsService.actualizarFee(payload).subscribe({
+
+      next: (resp) => {
+
+        // Cerrar y devolver al padre el arreglo ACTUALIZADO
+        const arregloActualizado = (aSalidaFee as any[]).map(f => ({
+            reembolsable: false,
+            mes: f.mes,
+            anio: f.anio,
+            totalPorcentaje: f.totalPorcentaje,
+            porcentaje: f.totalPorcentaje
+        }));
+
+        this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+
+        this.ref.close({
+          rubroActualizado: arregloActualizado
+        });
+      },
+
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
+      }
+
+      });      
+    }
+    else{
+      //guardar Facturacion o Cobranza
+      //FEE libre F
+      this.pcsService.actualizarFacturacob(payload).subscribe({
 
       next: (resp) => {
 
@@ -128,7 +192,8 @@ export class ModificarFacturacobComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
       }
 
-    });
+      });
+    }//FEE libre 
   }
 
 }

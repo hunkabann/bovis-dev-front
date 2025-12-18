@@ -145,7 +145,6 @@ export interface GastosIngresosTotales {
     mes:                number;
     anio:               number;
     totalPorcentaje:    number;
-    
 }
 
 export interface Rubro {
@@ -397,3 +396,32 @@ export interface FechaFormValue {
   totalPorcentaje: number;
 }
 //LEO Facturación y Cobranza F
+
+//LEO Fórmula Inflación I
+export interface MesesFront{
+    code:number;
+    name: string;
+    disabled: boolean;
+}
+//LEO Fórmula Inflación F
+
+//LEO Fórmula Inflación I
+export interface DatosInflacionResponse{
+    data: DatosInflacion
+}
+
+export interface DatosInflacion{
+    numProyecto: number;
+    nuprocentaje: number;
+    numes_ini_calculo: number;
+}
+//LEO Fórmula Inflación F
+
+//FEE libre I
+export interface FechaEntradaFEELibre {
+  mes: number;
+  anio: number;
+  reembolsable: boolean;
+  totalPorcentaje: number;
+}
+//FEE libre F
