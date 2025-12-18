@@ -257,26 +257,35 @@ export class SeccionContenidoComponent implements OnInit {
     // Recibir resultado
     let smensaje = 'FEE libre';
     this.ref.onClose.subscribe((resultado) => {
-      console.log('Leo1')
-      if (!resultado) return;
-      console.log('Leo2')
-      if (resultado && resultado.rubro) {
-        console.log('Leo3')
-        const rubroRespuesta = resultado.rubro as Rubro;
-        console.log('Leo4')
-        this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
-          ...rubro,
-          ...rubroRespuesta,
-        };
-        console.log('Leo5')
-      }
+       if (!resultado?.rubroActualizado) {
+    return;
+  }
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Actualizado',
-      detail: 'El total de ' + smensaje + ' fue modificado correctamente'
-      });
-    });
+  const fechasActualizadas = resultado.rubroActualizado;
+
+  // IMPORTANTE: actualizar el rubro original
+  const rubroOriginal =
+    this.seccionesFormateadas[0].rubros[rubroIndex]; // FEE libre siempre reembolsable
+
+  rubroOriginal.fechas = rubroOriginal.fechas.map(f => {
+    const nueva = fechasActualizadas.find(
+      x => x.mes === f.mes && x.anio === f.anio
+    );
+
+    return nueva
+      ? { ...f, porcentaje: nueva.totalPorcentaje }
+      : f;
+  });
+
+  // Forzar refresco de PrimeNG
+  this.seccionesFormateadas = [...this.seccionesFormateadas];
+
+  this.messageService.add({
+    severity: 'success',
+    summary: 'Actualizado',
+    detail: 'El total de FEE libre fue modificado correctamente'
+  });
+});
   }  
 
   mapeaFechasToGastostotales(lstEntrada: Fecha[]): GastosIngresosTotales[] {
