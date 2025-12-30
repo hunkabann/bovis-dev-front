@@ -9,7 +9,7 @@
             </div>
             <div class="col-sm">
                 <label for="email">Mes:</label>
-                <p-calendar [showIcon]="true" [style]="{width: '100%', display: 'inline-flex', height: '39px'}" view="month" dateFormat="mm/yy" [maxDate]="new Date()" [disabled]="isConsulta"></p-calendar>
+                <p-calendar [(ngModel)]="mes" [showIcon]="true" [style]="{width: '100%', display: 'inline-flex', height: '39px'}" view="month" dateFormat="mm/yy" [minDate]="minDate" [maxDate]="maxDate" [disabled]="isConsulta"></p-calendar>
             </div>
             <div class="col-sm">
                 <label for="email">Responsable:</label>
@@ -116,3 +116,4 @@
     </div>
 
 </div>
+
