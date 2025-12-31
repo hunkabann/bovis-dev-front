@@ -203,6 +203,8 @@ export class SeccionContenidoComponent implements OnInit {
         mesInicio: this.seccion.fechaIni.getMonth()+1,
         numProyecto: this.seccion.numProyecto,
         reembolsable: rubro.reembolsable,
+        idSeccion: this.seccion.idSeccion, //Fórmula Inflación
+        idRubro: rubro.idRubro, //Fórmula Inflación
       }
     }).onClose.subscribe((result) => {
       

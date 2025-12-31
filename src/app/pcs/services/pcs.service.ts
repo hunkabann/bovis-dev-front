@@ -147,6 +147,10 @@ export class PcsService {
   actualizarDatosInflacion(body: any) {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/ProyectoInFlacion`, body)
   }
+
+  actualizarDatosInflacionRubro(body: any) {
+    return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/ProyectoInFlacion/RubroValor`, body)
+  }
   //LEO Fórmula Inflación F
 
   //FEE libre I

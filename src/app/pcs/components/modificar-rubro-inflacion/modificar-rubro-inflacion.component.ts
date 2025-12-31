@@ -31,6 +31,8 @@ export class ModificarRubroInflacionComponent implements OnInit {
   catMeses : MesesFront[] = []; //LEO Fórmula Inflación
   mesActual: number = 0;
   mesguardado: number;
+  nukidSeccion: number; //Fórmula Inflación
+  nukidRubro:number; //Fórmula Inflación
 
   form = this.fb.group({
     numProyecto: [null],
@@ -60,7 +62,11 @@ export class ModificarRubroInflacionComponent implements OnInit {
     this.numProyecto = this.config.data.numProyecto;
     //this.numPorcentaje = 15;
     this.reembolsable = this.config.data.reembolsable;
+    this.nukidSeccion = this.config.data.idSeccion; //Fórmula Inflación
+    this.nukidRubro = this.config.data.idRubro; //Fórmula Inflación
 
+    console.log('this.nukidSeccion:'+this.nukidSeccion)
+    console.log('this.nukidRubro:'+this.nukidRubro)
     //obtener los valores guardado en BD
     this.consultaDatosinflacion();
 
@@ -99,6 +105,8 @@ export class ModificarRubroInflacionComponent implements OnInit {
 
     payload = {
       nunum_proyecto: this.numProyecto,
+      nukid_seccion: this.nukidSeccion, 
+      nukid_rubro: this.nukidRubro, 
       nuprocentaje: this.form.get('porcentaje').value,
       numes_ini_calculo: this.form.get('numes_ini_calculo').value
     };
@@ -107,15 +115,32 @@ export class ModificarRubroInflacionComponent implements OnInit {
 
       next: (resp) => {
 
-        this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+        //después de que guarde los datos e mes inicio y porcentaje ahora calcula con la fórmula
+        //entonces reasigna valores para el request del siguiente servicio
+        payload = {
+          nunum_proyecto: this.numProyecto,
+          nukid_seccion: this.nukidSeccion, 
+          nukid_rubro: this.nukidRubro, 
+          nuprocentaje: this.form.get('porcentaje').value,
+          numes_ini_calculo: this.form.get('numes_ini_calculo').value
+        };  
 
-        this.ref.close({
-          
+        this.pcsService.actualizarDatosInflacionRubro(payload).subscribe({
+          next: (resp) => {
+            this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+            this.ref.close({
+            });
+          },
+
+          error: (err) => {
+            this.messageService.add({ severity: 'error', summary: TITLES.error, detail: 'Guarda Fórmula:' + err.error });
+          }
+
         });
       },
 
       error: (err) => {
-        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
+        this.messageService.add({ severity: 'error', summary: TITLES.error, detail: 'Guarda Datos:' + err.error });
       }
 
     });
