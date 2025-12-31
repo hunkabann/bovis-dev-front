@@ -6,6 +6,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'; //FEE l
 import { ModificarRubroComponent } from '../modificar-rubro/modificar-rubro.component';
 import { ModificarRubroInflacionComponent } from '../modificar-rubro-inflacion/modificar-rubro-inflacion.component';
 import {ModificarFacturacobComponent } from '../modificar-facturacob/modificar-facturacob.component'; //FEE libre
+import { SeccionRefreshService } from 'src/app/shared/services/seccion-refresh.service';// refrescar una sección
 
 interface Props extends GastosIngresosSecciones {
   fechaIni: Date,
@@ -51,7 +52,9 @@ export class SeccionContenidoComponent implements OnInit {
 
    ref: DynamicDialogRef; //FEE libre
 
-  constructor( private messageService: MessageService) { }
+  constructor( private messageService: MessageService,
+    private refreshService: SeccionRefreshService //refrescar una sección
+  ) { }
 
   ngOnInit(): void {
     this.seccionesFormateadas[0].rubros = [];
@@ -207,7 +210,19 @@ export class SeccionContenidoComponent implements OnInit {
         idRubro: rubro.idRubro, //Fórmula Inflación
       }
     }).onClose.subscribe((result) => {
-      
+      // SOLO avisamos que esta sección cambió
+      if (this.nombrePaginaPadre === 'gastosPagina') {
+        this.refreshService.refrescarSeccion(this.indexSeccion);
+      }
+
+      // //forma del sistema
+      // if (result && result.rubro) {
+      //   const rubroRespuesta = result.rubro as Rubro;
+      //   this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
+      //     ...rubro,
+      //     ...rubroRespuesta,
+      //   };
+      // }
     });
   }    
   //LEO Fórmula Inflación F

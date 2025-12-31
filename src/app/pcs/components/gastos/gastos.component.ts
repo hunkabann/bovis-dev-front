@@ -11,6 +11,7 @@ import { finalize } from 'rxjs';
 import { CatalogosService } from '../../services/catalogos.service';
 import { CostosService } from 'src/app/costos/services/costos.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SeccionRefreshService } from 'src/app/shared/services/seccion-refresh.service';//refrescar una sección
 
 @Component({
   selector: 'app-gastos',
@@ -53,7 +54,9 @@ export class GastosComponent implements OnInit {
   seccionesData: any[] = [];
   nombrePagina: string; //LEO 2025-10-09 Puntos Bugs y Mejoras
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private activatedRoute: ActivatedRoute, private router: Router,
+    private refreshService: SeccionRefreshService) //refrescar una sección
+  { }
 
   form = this.fb.group({
     numProyecto: [0, Validators.required],
@@ -118,6 +121,12 @@ export class GastosComponent implements OnInit {
       queryParamsHandling: 'merge'
     })
     this.nombrePagina = 'gastosPagina';//LEO 2025-10-09 Puntos Bugs y Mejoras
+
+    //refrescar una sección
+    // Escuchar refresco SOLO de gastos
+    this.refreshService.refrescarSeccion$.subscribe(index => {
+      this.refrescarSeccion(index);
+    });
   }
 
   filterReembolsables(rubros: any[]): any[] {
@@ -192,4 +201,36 @@ export class GastosComponent implements OnInit {
     return num.toString().padStart(2, "0");
   }
 
+  //refrescar una sección
+    refrescarSeccion(index: number) {
+      console.log('RefrescarSeccion:'+index)
+    this.seccionesCargado[index] = false;
+
+    this.pcsService
+      .obtenerInformacionGastosIngresos(
+        this.idproyecto,
+        'gasto',
+        this.secciones.value.at(index).seccion
+      )
+      .pipe(finalize(() => this.seccionesCargado[index] = true))
+      .subscribe({
+        next: ({ data }) => {
+          const seccion = data?.secciones[0];
+          if (seccion) {
+            const mesesProyecto = obtenerMeses(
+              new Date(data.fechaIni),
+              new Date(data.fechaFin)
+            );
+
+            this.seccionesData[index] = {
+              ...seccion,
+              mesesProyecto,
+              fechaIni: data.fechaIni,
+              fechaFin: data.fechaFin,
+              numProyecto: data.numProyecto
+            };
+          }
+        }
+      });
+  }
 }

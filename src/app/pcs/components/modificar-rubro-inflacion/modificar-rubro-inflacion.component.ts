@@ -11,7 +11,6 @@ import { Mes } from 'src/models/general.model';
 import { finalize } from 'rxjs';
 import { facturaCancelacion } from 'src/app/facturacion/Models/FacturacionModels';
 
-
 @Component({
   selector: 'app-modificar-rubro-inflacion',
   templateUrl: './modificar-rubro-inflacion.component.html',
@@ -46,7 +45,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
     public config: DynamicDialogConfig,
     private pcsService: PcsService,
     private messageService: MessageService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
   ) {}
   
 
