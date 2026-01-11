@@ -121,7 +121,8 @@ export class ModificarRubroInflacionComponent implements OnInit {
           nukid_seccion: this.nukidSeccion, 
           nukid_rubro: this.nukidRubro, 
           nuprocentaje: this.form.get('porcentaje').value,
-          numes_ini_calculo: this.form.get('numes_ini_calculo').value
+          numes_ini_calculo: this.form.get('numes_ini_calculo').value,
+          boreembolsable: this.reembolsable
         };  
 
         this.pcsService.actualizarDatosInflacionRubro(payload).subscribe({
