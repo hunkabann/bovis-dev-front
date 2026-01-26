@@ -350,3 +350,39 @@ export interface Opcion {
   value: string,
   label: string
 }
+
+//Reporte EmpleadosXProyecto I
+// ===============================
+// TimeSheet por Empleado y Proyecto
+// ===============================
+
+export interface TimeSheetEmpProyectoResponse {
+  data:          TimeSheetEmpProyecto;
+  success:       boolean;
+  message:       null;
+  transactionId: null;
+}
+
+
+export interface TimeSheetEmpProyecto {
+  general: TimeSheetEmpProyectoGral;
+  detalle: TimeSheetEmpProyectoDetalle[];
+}
+
+export interface TimeSheetEmpProyectoGral {
+  nunum_proyecto: number;
+  chproyecto:     string;
+  dtfecha_ini:    string;
+  dtfecha_fin:    string;
+  meses:          number;
+}
+
+export interface TimeSheetEmpProyectoDetalle {
+  nukid_empleado: string;
+  nombre:         string;
+  nummes:         number;
+  numanio:        number;
+  nukidProyecto:  number;
+  numcosto:       string;
+}
+//Reporte EmpleadosXProyecto F

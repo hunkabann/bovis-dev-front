@@ -3,7 +3,8 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
-import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, DiasTimesheetResponse, EmpleadoInfoResponse, EmpleadoProyectoResponse, EmpleadoTNoProyectos, SabadosOpciones, TimesheetPorIdResponse, TimesheetsPorEmpleadoResponse, TimesheetsPorFechaResponse, TsProyectosResponse, UnidadesNegocioResponse } from '../models/timesheet.model';
+//Reporte EmpleadosXProyecto en el siguiente import se agregó al final la clase:TimeSheetEmpProyectoResponse
+import { CargarHorasResponse, CatEmpleadoResponse, DiasHabilesResponse, DiasTimesheetResponse, EmpleadoInfoResponse, EmpleadoProyectoResponse, EmpleadoTNoProyectos, SabadosOpciones, TimesheetPorIdResponse, TimesheetsPorEmpleadoResponse, TimesheetsPorFechaResponse, TsProyectosResponse, UnidadesNegocioResponse ,TimeSheetEmpProyectoResponse} from '../models/timesheet.model'; 
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 
 interface Dias {
@@ -131,4 +132,10 @@ export class TimesheetService {
   obtenerDiasTimesheet(mes: number) {
     return this.http.get<DiasTimesheetResponse>(`${this.baseUrl}api/Timesheet/Dias/${mes}`)
   }
+
+  //Reporte EmpleadosXProyecto I
+  getTimeSheetsEmpleadoxProyecto(proyectoId: number = 0) {
+    return this.http.get<TimeSheetEmpProyectoResponse>(`${this.baseUrl}api/Timesheet/TimeSheets/Filtro/${proyectoId}`)
+  }
+  //Reporte EmpleadosXProyecto F
 }
