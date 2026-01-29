@@ -15,6 +15,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { AgregarProyectoComponent } from '../agregar-proyecto/agregar-proyecto.component';
 import { UserService } from '../../../services/user.service';
 import { EmpleadosService } from 'src/app/empleados/services/empleados.service';
+import { DateUtils } from 'src/app/shared/utils/date-utils'; // LineaBase
 
 @Component({
   selector: 'app-cargar-horas',
@@ -95,6 +96,8 @@ export class CargarHorasComponent implements OnInit {
       })
     ])
   })
+
+  fechaLineaBase: string;// LienaBase
 
   constructor() { }
 
@@ -206,7 +209,7 @@ export class CargarHorasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.fechaLineaBase = DateUtils.getToday_ddMMyyyy(); // LineaBase
     this.sharedService.cambiarEstado(true)
 
     if(this.userService.rolesG.length >= 1) {
@@ -223,7 +226,7 @@ export class CargarHorasComponent implements OnInit {
 
     forkJoin(([
       this.timesheetService.getEmpleadoInfo(localStorage.getItem('userMail') || ''),
-      this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? this.empleadosService.getEmpleadosActivos() : this.timesheetService.getEmpleadosByJefeEmail(localStorage.getItem('userMail') || ''),
+      this.userService.verificarRol(MODULOS.TIMESHEET_CARGA_DE_HORAS)?.administrador ? this.empleadosService.getEmpleadosActivos(this.fechaLineaBase) : this.timesheetService.getEmpleadosByJefeEmail(localStorage.getItem('userMail') || ''),
       this.timesheetService.getDiasHabiles(+this.form.value.mes, +this.form.value.anio, this.form.value.sabados as SabadosOpciones)
     ]))
     .pipe(

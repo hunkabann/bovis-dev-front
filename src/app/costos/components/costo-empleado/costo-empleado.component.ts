@@ -16,6 +16,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { Dropdown } from 'primeng/dropdown';
 import {TableModule} from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { DateUtils } from 'src/app/shared/utils/date-utils'; // LineaBase
 
 interface ICatalogo {
   name: string;
@@ -120,13 +121,16 @@ export class CostoEmpleadoComponent implements OnInit {
   IDUnidadNegocio: number = 0;
 
   opcionFiltro: number = 0;
+  fechaLineaBase: string;// LienaBase
+
   constructor() { }
 
   ngOnInit(): void {
     this.sharedService.cambiarEstado(true)
+    this.fechaLineaBase = DateUtils.getToday_ddMMyyyy(); // LineaBase
 
     forkJoin([
-      this.costosService.getEmpleados(),
+      this.costosService.getEmpleados(this.fechaLineaBase), // LineaBase
       this.costosService.getPuestos(),
       this.costosService.getProyectos(),
       this.costosService.getCatUnidadNegocio(),

@@ -252,8 +252,8 @@ export class EmpleadosService {
     return this.http.post<GenericResponse>(`${this.baseUrl}api/Beneficios/0`, body)
   }
 
-  getEmpleadosActivos() {
-    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
+  getEmpleadosActivos(fecha: string) {
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true/${fecha}`);
   }
 
   getEmpleadosAllFiltro(idEstado: number,idPuesto: number,idProyecto: number,idEmpresa: number,IDUnidadNegocio: number) {

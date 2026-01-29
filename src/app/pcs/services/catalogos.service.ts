@@ -71,8 +71,8 @@ export class CatalogosService {
     return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Requerimiento/DirectoresEjecutivos`)
   }
 
-  getPersonalResponsable() {
-    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
+  getPersonalResponsable(fecha: string) {
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true/${fecha}`);
     // return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Requerimiento/DirectoresEjecutivos`)
    }
 

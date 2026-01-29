@@ -20,7 +20,7 @@ import { Empleado, Etapa, EtapasPorProyectoData, GastosIngresosSeccionesData, Su
 import { obtenerMeses, } from 'src/helpers/helpers';
 import { CostosService } from 'src/app/costos/services/costos.service';
 import { CalcularSubtotalPipe } from 'src/app/pcs/pipes/calcular-subtotal.pipe';
-
+import { DateUtils } from 'src/app/shared/utils/date-utils'; // LineaBase
 
 //import { addMonths, differenceInCalendarMonths, format} from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -162,12 +162,14 @@ export class IpComponent implements OnInit {
     utilidadPorcentaje: [null], //LEO inputs para FEEs I
     contingenciaPorcentaje: [null] //LEO inputs para FEEs I
   })
+  fechaLineaBase: string;// LienaBase
 
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   catalogosService = inject(CatalogosService)
 
   ngOnInit(): void {
+    this.fechaLineaBase = DateUtils.getToday_ddMMyyyy(); // LineaBase
     this.poblarCombos();
     this.getConfigCalendar();
     this.pcsService.cambiarEstadoBotonNuevo(true)
@@ -524,7 +526,7 @@ export class IpComponent implements OnInit {
     this.getClientes();
     this.getEstatusProyecto();
     this.getEmpleados();
-    this.getEmpleadosResponsable();
+    this.getEmpleadosResponsable(this.fechaLineaBase); //LineaBase
     this.getEmpleadosExcel();
     this.getCatEmpresas();
     this.gettUnidadNegocio();
@@ -645,9 +647,9 @@ export class IpComponent implements OnInit {
 
   }
 
-  getEmpleadosResponsable() {
+  getEmpleadosResponsable(fecha: string) {
     //this.catServ.getDirectores().subscribe((directoresR) => {
-    this.catServ.getPersonalResponsable().subscribe((directoresR) => {
+    this.catServ.getPersonalResponsable(fecha).subscribe((directoresR) => {
       this.catEmpleadosResponsables = directoresR.data.map(catEmpleadosResponsables => ({ name: catEmpleadosResponsables.nombre_persona, code: catEmpleadosResponsables.nunum_empleado_rr_hh.toString() }))
 
 

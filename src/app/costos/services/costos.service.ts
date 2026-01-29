@@ -26,9 +26,9 @@ export class CostosService {
   getPersonas() {
     return this.http.get<UpPersonasResponse>(`${this.baseUrl}api/Persona/Personas/true`);
   }
-
-  getEmpleados() {
-    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`);
+  // LineaBase, se agrega param
+  getEmpleados(fecha: string) {
+    return this.http.get<UpEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true/${fecha}`);
   }
 
   getPuestos() {
