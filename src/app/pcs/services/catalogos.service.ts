@@ -46,7 +46,8 @@ export class CatalogosService {
       map(data => {
         const params = {
           proyecto:   data['proyecto'] || null,
-          esEdicion:  data['esEdicion'] == 1
+          esEdicion:  data['esEdicion'] == 1,
+          fecha_base: data['fecha_base'] == null ? "" : data['fecha_base'] //LineaBase
         }
 
         this.esEdicion = params.esEdicion

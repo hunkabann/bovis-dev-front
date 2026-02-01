@@ -19,6 +19,7 @@ import { CatalogosService } from '../../services/catalogos.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '@angular/common';
 import { ModificarEtapaComponent } from '../modificar-etapa/modificar-etapa.component';
+//import { DateUtils } from 'src/app/shared/utils/date-utils'; // LineaBase
 
 // interface Etapa {
 //   id:         number,
@@ -60,6 +61,8 @@ export class StaffingPlanComponent implements OnInit {
   idproyecto: number;
   etapaTotales: any[] = [];
 
+  fechaLineaBase: string;// LienaBase  
+
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
   form = this.fb.group({
@@ -84,6 +87,14 @@ export class StaffingPlanComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'StaffingPlan')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('StaffingPlan Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
 
     this.pcsService.cambiarEstadoBotonNuevo(false)
 
@@ -103,7 +114,8 @@ export class StaffingPlanComponent implements OnInit {
       //console.log("Staffing-plan.components Entro al this.idproyecto " + this.idproyecto)
 
       this.cargando = true
-      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+      //LineaBase en this.pcsService.obtenerEtapasPorProyecto
+      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto, this.fechaLineaBase)
         .pipe(finalize(() => {
           // this.sharedService.cambiarEstado(false)
           this.proyectoSeleccionado = true
@@ -122,7 +134,8 @@ export class StaffingPlanComponent implements OnInit {
           if (numProyecto) {
             // this.sharedService.cambiarEstado(true)
             this.cargando = true
-            this.pcsService.obtenerEtapasPorProyecto(numProyecto)
+            //LineaBase en this.pcsService.obtenerEtapasPorProyecto
+            this.pcsService.obtenerEtapasPorProyecto(numProyecto, this.fechaLineaBase)
               .pipe(finalize(() => {
                 // this.sharedService.cambiarEstado(false)
                 this.cargando = false
@@ -363,7 +376,8 @@ export class StaffingPlanComponent implements OnInit {
         this.etapas.clear();
         this.cargando = true
         //console.log('modificarEmpleado obtenerEtapasPorProyecto2:'+this.etapas.length) //LEO TBD
-        this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+        //LineaBase en this.pcsService.obtenerEtapasPorProyecto
+        this.pcsService.obtenerEtapasPorProyecto(this.idproyecto, this.fechaLineaBase)
             .pipe(finalize(() => {
             // this.sharedService.cambiarEstado(false)
             this.proyectoSeleccionado = true
@@ -455,4 +469,5 @@ export class StaffingPlanComponent implements OnInit {
   originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
     return 0;
   }
+
 }

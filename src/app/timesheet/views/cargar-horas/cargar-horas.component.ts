@@ -209,7 +209,7 @@ export class CargarHorasComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fechaLineaBase = DateUtils.getToday_ddMMyyyy(); // LineaBase
+    this.fechaLineaBase = DateUtils.getToday_yyyyMMdd('yyyy/MM/dd','-'); // LineaBase
     this.sharedService.cambiarEstado(true)
 
     if(this.userService.rolesG.length >= 1) {

@@ -65,8 +65,8 @@ export class PcsService {
     : this.http.post<GenericResponse>(`${this.baseUrl}api/Pcs/Proyectos`, body)
   }
 
-  obtenerEtapasPorProyecto(idProyecto: number) {
-    return this.http.get<EtapasPorProyectoResponse>(`${this.baseUrl}api/Pcs/Etapas/${idProyecto}`)
+  obtenerEtapasPorProyecto(idProyecto: number, fecha:string) {
+    return this.http.get<EtapasPorProyectoResponse>(`${this.baseUrl}api/Pcs/Etapas/${idProyecto}/${fecha}`)
   }
 
   modificarEtapa(body: any) {
@@ -91,8 +91,8 @@ export class PcsService {
     return this.http.delete<GenericResponse>(`${this.baseUrl}api/Pcs/Empleados/${numEmpleado}/Fase/${idEtapa}`)
   }
 
-  obtenerProyectoPorId(id: number) {
-    return this.http.get<ProyectoPorIDResponse>(`${this.baseUrl}api/Pcs/Proyectos/Info/${id}`)
+  obtenerProyectoPorId(id: number, fecha: string) { 
+    return this.http.get<ProyectoPorIDResponse>(`${this.baseUrl}api/Pcs/Proyectos/Info/${id}/${fecha}`) //LineaBase
   }
 
   obtenerGastosIngresosSecciones(numProyecto: number, tipo: string = 'gasto') {

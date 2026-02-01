@@ -9,6 +9,7 @@ import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { CatalogosService } from '../services/catalogos.service';
 import { PcsService } from '../services/pcs.service';
 import { Calendar } from 'primeng/calendar'; //LEO Linea Base
+import { DateUtils } from 'src/app/shared/utils/date-utils'; // LineaBase
 
 @Component({
   selector: 'app-pcs',
@@ -26,6 +27,7 @@ export class PcsComponent implements OnInit {
   pcsService = inject(PcsService)
 
   stilovisible: boolean = false
+  stilovisibleCal: boolean = false
 
   items: MenuItem[] = [
     { label: 'IP', routerLink: 'ip' },
@@ -108,12 +110,12 @@ export class PcsComponent implements OnInit {
 
    // console.log('VALOR DEL ITEM ----------------->>>>> ' + event)
 
-    if(event === 'IP'){      
-      this.stilovisible = true   
+  if(event === 'IP'){      
+      this.stilovisibleCal = true   
       this.deshabilitaCalendario(false); // Habilita el calendario //LEO Linea Base
   }else{
-    this.stilovisible = false
-    this.deshabilitaCalendario(true);// Deshabilita el calendario //LEO Linea Base
+    this.stilovisibleCal = true
+    this.deshabilitaCalendario(false);// Deshabilita el calendario //LEO Linea Base
   }
 
     this.proyectoId = null;
@@ -137,7 +139,7 @@ export class PcsComponent implements OnInit {
         proyecto: esEdicion ? this.proyectoId : null,
         esEdicion: esEdicion ? 1 : null,
         nuevo: !esEdicion,
-        fecha_base: this.fecha_base ? this.formatFechaQuery(this.fecha_base) : null //LEO Linea Base
+        fecha_base: this.fecha_base ? DateUtils.formatDate_yyyyMMdd(this.fecha_base,"-") : DateUtils.getToday_yyyyMMdd("yyyy/MM/dd","-") //LEO Linea Base
         //fechaBase: this.fecha_base //LEO Linea Base
       }
     })
@@ -151,7 +153,7 @@ export class PcsComponent implements OnInit {
       queryParams: {
         proyecto: this.proyectoId,
         esEdicion: esEdicion ? 1 : null,
-        fecha_base: this.fecha_base ? this.formatFechaQuery(this.fecha_base) : null //LEO Linea Base
+        fecha_base: this.fecha_base ? DateUtils.formatDate_yyyyMMdd(this.fecha_base,"-") : DateUtils.getToday_yyyyMMdd("yyyy/MM/dd","-") //LEO Linea Base
       },
       
     }))
@@ -183,7 +185,7 @@ export class PcsComponent implements OnInit {
       relativeTo: this.activatedRoute,
       queryParamsHandling: 'merge', // mantiene los demás params (proyecto, esEdicion, etc.)
       queryParams: {
-        fecha_base: this.formatFechaQuery(this.fecha_base)
+        fecha_base: DateUtils.formatDate_yyyyMMdd(this.fecha_base,"-"),
       }
     });
   }

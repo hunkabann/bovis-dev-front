@@ -127,7 +127,7 @@ export class CostoEmpleadoComponent implements OnInit {
 
   ngOnInit(): void {
     this.sharedService.cambiarEstado(true)
-    this.fechaLineaBase = DateUtils.getToday_ddMMyyyy(); // LineaBase
+    this.fechaLineaBase = DateUtils.getToday_yyyyMMdd('yyyy/MM/dd','-'); // LineaBase
 
     forkJoin([
       this.costosService.getEmpleados(this.fechaLineaBase), // LineaBase

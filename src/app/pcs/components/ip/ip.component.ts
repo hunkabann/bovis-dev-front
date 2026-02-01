@@ -169,7 +169,16 @@ export class IpComponent implements OnInit {
   catalogosService = inject(CatalogosService)
 
   ngOnInit(): void {
-    this.fechaLineaBase = DateUtils.getToday_ddMMyyyy(); // LineaBase
+    //this.obtieneLineaBase();//LineaBase 
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'IP')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('IP Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
+
     this.poblarCombos();
     this.getConfigCalendar();
     this.pcsService.cambiarEstadoBotonNuevo(true)
@@ -189,7 +198,8 @@ export class IpComponent implements OnInit {
           this.mostrarFormulario = true
           // this.sharedService.cambiarEstado(true)
           // this.cargando = true
-          this.pcsService.obtenerProyectoPorId(this.idproyecto)
+          //LineaBase en this.pcsService.obtenerProyectoPorId
+          this.pcsService.obtenerProyectoPorId(this.idproyecto, this.fechaLineaBase)
             .pipe(finalize(() => {
               // this.sharedService.cambiarEstado(false)
               this.cargando = false
@@ -249,7 +259,8 @@ export class IpComponent implements OnInit {
       this.mostrarFormulario = true
       // this.sharedService.cambiarEstado(true)
       // this.cargando = true
-      this.pcsService.obtenerProyectoPorId(this.idproyecto)
+      //LineaBase en this.pcsService.obtenerProyectoPorId
+      this.pcsService.obtenerProyectoPorId(this.idproyecto, this.fechaLineaBase)
         .pipe(finalize(() => {
           // this.sharedService.cambiarEstado(false)
           this.cargando = false
@@ -304,7 +315,8 @@ export class IpComponent implements OnInit {
         })
 
       // INICIA LLAMADO A STAFFING
-      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+      //LineaBase en this.pcsService.obtenerEtapasPorProyecto
+      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto, this.fechaLineaBase)
         .pipe(finalize(() => {
           // this.sharedService.cambiarEstado(false)
           //this.proyectoSeleccionado = true
@@ -345,7 +357,8 @@ export class IpComponent implements OnInit {
             this.mostrarFormulario = true
             // this.sharedService.cambiarEstado(true)
             // this.cargando = true
-            this.pcsService.obtenerProyectoPorId(numProyecto)
+            //LineaBase en this.pcsService.obtenerProyectoPorId
+            this.pcsService.obtenerProyectoPorId(numProyecto, this.fechaLineaBase)
               .pipe(finalize(() => {
                 // this.sharedService.cambiarEstado(false)
                 this.cargando = false
@@ -399,7 +412,8 @@ export class IpComponent implements OnInit {
 
 
             //INICIA LLAMADO A STAFFING
-            this.pcsService.obtenerEtapasPorProyecto(numProyecto)
+            //LineaBase en this.pcsService.obtenerEtapasPorProyecto
+            this.pcsService.obtenerEtapasPorProyecto(numProyecto, this.fechaLineaBase)
               .pipe(finalize(() => {
                 // this.sharedService.cambiarEstado(false)
                 //this.proyectoSeleccionado = true
@@ -1413,5 +1427,33 @@ export class IpComponent implements OnInit {
     await new Promise(resolve => setTimeout(() => resolve, ms)).then(() => console.log("fired"));
   }
 
+  //LineaBase I
+  obtieneLineaBase(){
+      var caso = "";
+    this.catalogosService.obtenerParametros()
+      .subscribe(params => {
+        if(params.fecha_base == "" || params.fecha_base == "undefined"){
+          //si la fecha es vacío entonces coloca la fecha de hoy para los servicios que se corren 
+          //antes de mostrar el calendario
+          this.fechaLineaBase = DateUtils.getToday_yyyyMMdd("yyyy/MM/dd","-");  
+          caso = "casoNoExiste";
+        }
+        else{
+          if(this.fechaLineaBase != params.fecha_base){
+            console.log('Fecha_base_Anterior:{'+this.fechaLineaBase+"} Fecha_base_Nueva:{"+params.fecha_base+"}");
+          }
 
+          //si es diferente de vacío entonces es que se tiene cargado el calendario
+          this.fechaLineaBase = params.fecha_base;
+          caso = "casoExiste";
+        }
+        console.log('Fecha_base:{'+this.fechaLineaBase+"} caso:{"+caso+"}");
+    });
+  }
+
+  //para línea base se tiene que agrupar todo lo que hace desde el inicio
+  //para que cuando cambien la fecha se actualice toda la información
+  //hasta el momento no es necesario ya que al cambiar la fecha del calendario
+  //entra el OnInit en automático
+  //LineaBase F
 }
