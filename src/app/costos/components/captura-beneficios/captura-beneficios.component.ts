@@ -80,6 +80,7 @@ export class CapturaBeneficiosComponent implements OnInit {
 
   cargando:             boolean = false
 
+  fechaLineaBase: string;// LineaBase
 
   constructor( private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -179,6 +180,14 @@ export class CapturaBeneficiosComponent implements OnInit {
   NumEmpleado = null
 
   ngOnInit(): void {
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'IP')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('IP Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
 
     //Inicializa valiables beneficios en false
 
@@ -311,7 +320,8 @@ export class CapturaBeneficiosComponent implements OnInit {
       if(id) {
         this.idEmpleado = id
         this.esActualizacion = true
-        this.costosService.getCostoID(id)
+        //LineaBase en this.costosService.getCostoID
+        this.costosService.getCostoID(id, this.fechaLineaBase)
           .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
           .subscribe({
             next: ({data}) => {
@@ -2935,7 +2945,8 @@ if(this.isProy_FacturacionBpm){
       if(id) {
         this.idEmpleado = id
         this.esActualizacion = true
-        this.costosService.getCostoID(id)
+        //LineaBase en this.costosService.getCostoID
+        this.costosService.getCostoID(id, this.fechaLineaBase)
           .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
           .subscribe({
             next: ({data}) => {
@@ -3086,8 +3097,8 @@ console.log('Goodbye!');
        //fecha_ultimo_reingreso: this.form.value.fecha_ultimo_reingreso ? format(new Date(this.form.value.fecha_ultimo_reingreso), 'Y/MM/dd') : null
  
      }
- 
-     this.empleadosServ.getCostoID(this.idEmpleado)
+     //LineaBase en this.empleadosServ.getCostoID
+     this.empleadosServ.getCostoID(this.idEmpleado, this.fechaLineaBase)
                .subscribe({
                  next: (data) => {
                    if (data.data.length > 0) {
@@ -3113,8 +3124,8 @@ console.log('Goodbye!');
                      },
                     );
                     }*/
- 
-                     this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
+                    //LineaBase en this.empleadosServ.guardarCostoEmpleadoActualiza
+                     this.empleadosServ.guardarCostoEmpleadoActualiza(body, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado+'/'+this.fechaLineaBase)
                        .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
                        .subscribe({
                          next: (datad) => {

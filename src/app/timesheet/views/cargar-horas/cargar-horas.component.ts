@@ -97,7 +97,7 @@ export class CargarHorasComponent implements OnInit {
     ])
   })
 
-  fechaLineaBase: string;// LienaBase
+  fechaLineaBase: string;// LineaBase
 
   constructor() { }
 

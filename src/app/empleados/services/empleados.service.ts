@@ -191,8 +191,8 @@ export class EmpleadosService {
     return this.http.get<ContratosResponse>(`${this.baseUrl}api/Contrato/ContratosEmpleado/${id}`)
   }
 
-  getCostoID(id: string) {
-    return this.http.get<CostoEmpleadoResponse>(`${this.baseUrl}api/Costo/Empleado/${id}`)
+  getCostoID(id: string, fecha:string) {
+    return this.http.get<CostoEmpleadoResponse>(`${this.baseUrl}api/Costo/Empleado/${id}/${fecha}`)
   }
 
   guardarBeneficioCosto(body: any) {

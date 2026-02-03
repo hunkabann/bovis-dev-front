@@ -138,6 +138,8 @@ export class EmpleadosRegistroComponent implements OnInit {
     num_proyecto_principal: ['', Validators.required]
   })
 
+  fechaLineaBase: string;// LineaBase
+
   constructor(
     private config: PrimeNGConfig,
     private empleadosServ: EmpleadosService,
@@ -151,6 +153,15 @@ export class EmpleadosRegistroComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'IP')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('IP Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
+
     this.getConfigCalendar();
     this.sharedService.cambiarEstado(true)
 
@@ -491,7 +502,8 @@ export class EmpleadosRegistroComponent implements OnInit {
               cotizacion: this.form.value.cotizacion
             }
 
-            this.empleadosServ.getCostoID(this.form.value.num_empleado_rr_hh)
+            //LineaBase en this.empleadosServ.getCostoID
+            this.empleadosServ.getCostoID(this.form.value.num_empleado_rr_hh, this.fechaLineaBase)
               .subscribe({
                 next: (data) => {
                   if (data.data.length > 0) {
@@ -499,8 +511,8 @@ export class EmpleadosRegistroComponent implements OnInit {
                       ...bodyCostoEmpleadoactualiza,
                       idCostoEmpleado: data.data[0].idCostoEmpleado
                     }
-
-                    this.empleadosServ.guardarCostoEmpleadoActualiza(bodyCostoEmpleadoactualiza, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado)
+                    //LineaBase en this.empleadosServ.guardarCostoEmpleadoActualiza  
+                    this.empleadosServ.guardarCostoEmpleadoActualiza(bodyCostoEmpleadoactualiza, this.esActualizacion, "api/Costo/" + data.data[0].idCostoEmpleado+"/"+this.fechaLineaBase)
                       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
                       .subscribe({
                         next: (data) => {

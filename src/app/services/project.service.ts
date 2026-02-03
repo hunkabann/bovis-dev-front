@@ -32,9 +32,9 @@ export class ProjectService {
   }
     */
 
-  getProjects(id: number): Observable<GanttItem[]> {
+  getProjects(id: number, fecha: string): Observable<GanttItem[]> {
     //return this.http.get<GanttItem[]>(`${this.baseUrl}api/Pcs/EtapasP/${id}`);
-    return this.http.get<any>(`${this.baseUrl}api/Pcs/EtapasP/${id}`).pipe(
+    return this.http.get<any>(`${this.baseUrl}api/Pcs/EtapasP/${id}/${fecha}`).pipe(
       map(response => {
         // Aseguramos que data.data exista y sea un array
         const rawData = response?.data?.data || [];

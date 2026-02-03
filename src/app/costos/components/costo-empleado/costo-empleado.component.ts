@@ -121,7 +121,7 @@ export class CostoEmpleadoComponent implements OnInit {
   IDUnidadNegocio: number = 0;
 
   opcionFiltro: number = 0;
-  fechaLineaBase: string;// LienaBase
+  fechaLineaBase: string;// LineaBase
 
   constructor() { }
 

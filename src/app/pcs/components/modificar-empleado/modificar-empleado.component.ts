@@ -90,6 +90,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     ,num_empleadoDesdeElPadre: [null], //LEO TBD
   })
 
+  fechaLineaBase: string;// LineaBase
+
   constructor() { }
 
   get fechas() {
@@ -97,7 +99,14 @@ export class ModificarEmpleadoComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'ModifEmpleado')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('ModifEmpleado Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
     // this.form.controls['FEE'].disable();
 
     //this.form.get('PrecioVenta')?.disable();//2025-11-24 JM pide invertir la deshabilitación
@@ -215,7 +224,8 @@ export class ModificarEmpleadoComponent implements OnInit {
         } else {
           console.log('modificarEmpleadoComponent entro else de if(data.FEE != null) linea 175'); //LEO TBD
           this.cargandoCosto = true;
-          this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
+          //LineaBase en this.costosService.getCostoID
+          this.costosService.getCostoID(data.empleado?.numempleadoRrHh, this.fechaLineaBase)
             .pipe(finalize(() => {
               this.sharedService.cambiarEstado(false);
               this.cargandoCosto = false;
@@ -261,8 +271,10 @@ export class ModificarEmpleadoComponent implements OnInit {
         }
 
         this.cargandoCosto = true;
-        console.log('modificarEmpleadoComponent ejecutara .getCostoId linea 253'); //LEO TBD
-        this.costosService.getCostoID(data.empleado?.numempleadoRrHh)
+        console.log('modificarEmpleadoComponent ejecutara .getCostoId linea 253 NumEmp:' + data.empleado?.numempleadoRrHh); //LEO TBD
+        console.log('modificarEmpleadoComponent ejecutara .getCostoId linea 253 FechaBAse:' + this.fechaLineaBase); //LEO TBD
+        //LineaBase en this.costosService.getCostoID
+        this.costosService.getCostoID(data.empleado?.numempleadoRrHh, this.fechaLineaBase)
             .pipe(finalize(() => {
               this.sharedService.cambiarEstado(false);
               this.cargandoCosto = false;
@@ -302,6 +314,7 @@ export class ModificarEmpleadoComponent implements OnInit {
               },
               error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
             })
+            console.log('modificarEmpleadoComponent termino .getCostoId linea 253 FechaBAse:' + this.fechaLineaBase);
       }
 
       const fechaInicio = new Date(data.etapa.fechaIni)
@@ -407,7 +420,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     //console.log('modificarEmpleadoComponent cargaEmpleado entro'); //LEO TBD
     this.sharedService.cambiarEstado(true)
     //console.log('modificarEmpleadoComponent cargaEmpleado ejecutara getEmpleados linea 371'); //LEO TBD
-    this.timesheetService.getEmpleados()
+    //LineaBase en this.timesheetService.getEmpleados
+    this.timesheetService.getEmpleados(this.fechaLineaBase)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({ data }) => {
@@ -472,7 +486,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     //console.log('PuestoSel. ' + idPuesto)
 
     this.cargandoCosto = true;
-    this.costosService.getCostoID(event)
+    //LineaBase en this.costosService.getCostoID
+    this.costosService.getCostoID(event, this.fechaLineaBase)
       .pipe(finalize(() => {
         this.sharedService.cambiarEstado(false);
         this.cargandoCosto = false;
@@ -615,7 +630,8 @@ export class ModificarEmpleadoComponent implements OnInit {
     //LEO TBD F
 
     this.cargandoCosto = true;
-    this.costosService.getCostoIDPorPuesto(event, idPuesto)
+    //LineaBase en this.costosService.getCostoIDPorPuesto
+    this.costosService.getCostoIDPorPuesto(event, idPuesto, this.fechaLineaBase)
       .pipe(finalize(() => {
         this.sharedService.cambiarEstado(false);
         this.cargandoCosto = false;

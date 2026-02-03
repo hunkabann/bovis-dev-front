@@ -61,7 +61,7 @@ export class StaffingPlanComponent implements OnInit {
   idproyecto: number;
   etapaTotales: any[] = [];
 
-  fechaLineaBase: string;// LienaBase  
+  fechaLineaBase: string;// LineaBase  
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -448,7 +448,7 @@ export class StaffingPlanComponent implements OnInit {
       .subscribe({
         next: (data) => {
           this.empleados(etapaIndex).removeAt(empleadoIndex)
-          this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'El empleado ha sido eliminada.' })
+          this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'El empleado ha sido eliminado.' })
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       })

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject} from '@angular/core'; //LineaBase
 import { ActivatedRoute } from '@angular/router'; // importar ActivatedRoute
 import { ChartData, ChartOptions, ChartDataset } from 'chart.js';
 import { GanttItem, ProjectService } from '../../services/project.service';
 import type { TimeScaleOptions } from 'chart.js';
+import { SharedService } from 'src/app/shared/services/shared.service'; //LineaBase
 
 @Component({
   selector: 'app-gantt-chart',
@@ -10,6 +11,7 @@ import type { TimeScaleOptions } from 'chart.js';
   styleUrls: ['./gantt-chart.component.scss']
 })
 export class GanttChartComponent implements OnInit {
+  sharedService = inject(SharedService) //LineaBase
   public chartType: 'bar' = 'bar';
 
   // Declaramos chartData con el tipo correcto para objetos {x, y}
@@ -68,12 +70,23 @@ export class GanttChartComponent implements OnInit {
   max = new Date();
   transformedProjects: { y: string; start: Date; duration: number }[] = [];
 
+  fechaLineaBase: string;// LineaBase
+
   constructor(
     private projectService: ProjectService,
     private activatedRoute: ActivatedRoute // inyectar ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'StaffingPlanGantt')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('StaffingPlanGantt Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
+
     this.activatedRoute.queryParams.subscribe(params => {
       const idProyecto = +params['proyecto']; // 👈 leer parámetro de URL
 
@@ -82,7 +95,8 @@ export class GanttChartComponent implements OnInit {
         return;
       }
 
-      this.projectService.getProjects(idProyecto).subscribe((data: GanttItem[]) => {
+      //LineaBase en this.projectService.getProjects
+      this.projectService.getProjects(idProyecto, this.fechaLineaBase).subscribe((data: GanttItem[]) => {
         this.transformedProjects = data.map(item => {
           const start = new Date(item.x[0]);
           const end = new Date(item.x[1]);

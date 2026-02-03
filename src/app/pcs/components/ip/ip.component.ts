@@ -162,7 +162,7 @@ export class IpComponent implements OnInit {
     utilidadPorcentaje: [null], //LEO inputs para FEEs I
     contingenciaPorcentaje: [null] //LEO inputs para FEEs I
   })
-  fechaLineaBase: string;// LienaBase
+  fechaLineaBase: string;// LineaBase
 
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -645,7 +645,8 @@ export class IpComponent implements OnInit {
 
   getEmpleadosExcel() {
     this.listEmpleados = [];
-    this.catServ.getEmpleadosExcel().subscribe((data) => {
+    //LineaBase this.catServ.getEmpleadosExcel
+    this.catServ.getEmpleadosExcel(this.fechaLineaBase).subscribe((data) => {
       this.empleado = data.data
       console.log('array data costo por empleado ------ ' + data.data)
     });

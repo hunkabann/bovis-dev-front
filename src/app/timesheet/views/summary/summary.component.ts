@@ -54,10 +54,20 @@ export class SummaryComponent implements OnInit {
 
   menosde100: number = 0
 
+  fechaLineaBase: string;// LineaBase
 
   constructor() { }
 
   ngOnInit(): void {
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'Summary')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('Summary Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
+
     this.sharedService.cambiarEstado(true)
     this.timeSheetService.getCatProyectos(false)
       .subscribe(({data}) => {
@@ -67,7 +77,7 @@ export class SummaryComponent implements OnInit {
       })
 
       forkJoin([
-        this.timeSheetService.getEmpleados()
+        this.timeSheetService.getEmpleados(this.fechaLineaBase)
       ])
         .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
         .subscribe({

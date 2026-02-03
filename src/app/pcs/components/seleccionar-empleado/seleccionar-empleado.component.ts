@@ -19,15 +19,25 @@ export class SeleccionarEmpleadoComponent implements OnInit {
   empleadosOriginal: Empleado[] = []
   empleados: Opcion[] = []
 
+  fechaLineaBase: string;// LineaBase
+
   constructor(
     public ref: DynamicDialogRef
   ) { }
 
   ngOnInit(): void {
-    
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'SelecEmpleado')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('SelecEmpleado Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
+
     this.sharedService.cambiarEstado(true)
 
-    this.timesheetService.getEmpleados()
+    this.timesheetService.getEmpleados(this.fechaLineaBase)
     .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
     .subscribe({
       next: ({data}) => {

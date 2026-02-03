@@ -19,8 +19,8 @@ export class CostosService {
     return this.http.get<CostosEmpleadoResponse>(`${ this.baseUrl }api/Costo/costos/${esreghistorico}/${idEmpleado}/${idPuesto}/${idProyecto}/${idEmpresa}/${IDUnidadNegocio}/${DtFechaIni}/${DtFechaFin}`)
   }
 
-  getCostoID(id: string) {
-    return this.http.get<CostosEmpleadoResponse>(`${this.baseUrl}api/Costo/Empleado/${id}`)
+  getCostoID(id: string, fecha: string) {
+    return this.http.get<CostosEmpleadoResponse>(`${this.baseUrl}api/Costo/Empleado/${id}/${fecha}`)
   }
 
   getPersonas() {
@@ -48,7 +48,7 @@ export class CostosService {
   }
 
   //LEO TBD
-  getCostoIDPorPuesto(id: string, idPuesto: string) {
-    return this.http.get<CostosEmpleadoResponse>(`${this.baseUrl}api/Costo/Empleado/${id}/${idPuesto}`)
+  getCostoIDPorPuesto(id: string, idPuesto: string, fecha: string) {
+    return this.http.get<CostosEmpleadoResponse>(`${this.baseUrl}api/Costo/Empleado/${id}/${idPuesto}/${fecha}`)
   }
 }

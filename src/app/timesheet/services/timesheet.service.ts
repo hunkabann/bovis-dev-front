@@ -22,8 +22,8 @@ export class TimesheetService {
 
   constructor() { }
 
-  getEmpleados() {
-    return this.http.get<CatEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true`)
+  getEmpleados(fecha: string) {
+    return this.http.get<CatEmpleadoResponse>(`${this.baseUrl}api/Empleado/Empleados/true/${fecha}`)
   }
 
   getEmpleadosTIPO(idPuesto: number = 0) {
