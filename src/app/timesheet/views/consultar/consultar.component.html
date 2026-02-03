@@ -7,7 +7,8 @@
     <div class="row">
         <div class="col-4">
             <label for="proyecto">Proyecto:</label>
-            <p-dropdown id="proyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'proyecto')" [(ngModel)]="idProyecto" optionValue="code" [filter]="true"
+            <!-- Reporte EmpleadosXProyecto se agrega al dropdown la función de mostrar btn -->
+            <p-dropdown id="proyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" (onChange)="buscarRegistros($event, 'proyecto'); mostrarBoton(true);" [(ngModel)]="idProyecto" optionValue="code" [filter]="true" 
                 filterBy="name"></p-dropdown>
         </div>
         <div class="col-4">
@@ -40,6 +41,7 @@
 
     <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
         <p-button icon="pi pi-file-excel" label="Exportar Excel" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+        <p-button *ngIf="verBotonExportar" icon="pi pi-file-excel" label="Exportar Emp. x Proyecto" styleClass="p-button-success" (click)="buscarReporteEmp_x_Proy()" visible="false"></p-button>
     </p-toolbar>
 
     <p-table [value]="timesheets" [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros" [rowsPerPageOptions]="[10, 25, 50]" [rows]="10"

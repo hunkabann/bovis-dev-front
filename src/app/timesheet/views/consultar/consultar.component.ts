@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SharedService } from 'src/app/shared/services/shared.service';
 import { Opcion } from 'src/models/general.model';
 import { TimesheetService } from '../../services/timesheet.service';
-import { Proyecto, Timesheet } from '../../models/timesheet.model';
+import { Proyecto, Timesheet,TimeSheetEmpProyecto,TimeSheetEmpProyectoGral, TimeSheetEmpProyectoDetalle } from '../../models/timesheet.model';
 import { finalize, forkJoin } from 'rxjs';
 import { MODULOS, SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
 import { format } from 'date-fns';
@@ -75,6 +75,13 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
   })
 
   readonly = null;
+//Reporte EmpleadosXProyecto I
+  verBotonExportar: boolean = false; 
+
+
+
+
+//Reporte EmpleadosXProyecto F
 
   constructor() { }
 
@@ -115,6 +122,8 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
             error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
           })
       })
+
+      this.verBotonExportar = false; // Reporte EmpleadosXProyecto
   }
 
   verificarEstado() {
@@ -717,4 +726,135 @@ export class ConsultarComponent implements OnInit { //AfterViewInit {
     ];
   }
 
+  //Reporte EmpleadosXProyecto I
+  mostrarBoton(esVisible: boolean ) {
+    this.verBotonExportar = esVisible;
+  }
+
+buscarReporteEmp_x_Proy() {
+
+console.log('IdProy:'+this.idProyecto)
+  this.timesheetService.getTimeSheetsEmpleadoxProyecto(this.idProyecto)
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe(resp => {
+
+      if (!resp?.data?.detalle?.length) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Sin datos',
+          detail: 'No hay información para exportar'
+        });
+        return;
+      }
+
+      const pivot = this._pivotEmpProyecto(resp.data);
+      this._exportEmpProyectoExcelJS(pivot, resp.data.general);
+    });
+}
+
+private _pivotEmpProyecto(data: TimeSheetEmpProyecto) {
+
+  const meses = [...new Set(
+    data.detalle.map(d => `${this._mesTexto(d.nummes)} ${d.numanio}`)
+  )];
+
+  const map = new Map<string, any>();
+
+  data.detalle.forEach(d => {
+
+    if (!map.has(d.nukid_empleado)) {
+      const row: any = {EMPLEADO: d.nombre, NUMERO: d.nukid_empleado };
+      meses.forEach(m => row[m] = '');
+      map.set(d.nukid_empleado, row);
+    }
+
+    const key = `${this._mesTexto(d.nummes)} ${d.numanio}`;
+    map.get(d.nukid_empleado)[key] = Number(d.numcosto);
+  });
+
+  return {
+    headers: ['EMPLEADO','NUMERO', ...meses],
+    rows: Array.from(map.values())
+  };
+}
+
+private _mesTexto(m: number) {
+  return [
+    '', 'Enero','Febrero','Marzo','Abril','Mayo','Junio',
+    'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'
+  ][m];
+}
+
+private async _exportEmpProyectoExcelJS(pivot: any, general: TimeSheetEmpProyectoGral) {
+
+  const wb = new ExcelJS.Workbook();
+  const ws = wb.addWorksheet('Emp x Proyecto');
+
+  // ===== Encabezado superior (general)
+  //ws.mergeCells('A1', 'D1'); //combina las celdas 
+  ws.getCell('A1').value = `Proyecto: ${general.chproyecto}`;
+  ws.getCell('A1').font = { bold: true, size: 14 };
+  //colorear de gris, de momento lo comento
+  // ws.getCell('A1').fill = {
+  //   type: 'pattern',
+  //   pattern: 'solid',
+  //   fgColor: { argb: 'FFF2F2F2' }
+  // };
+
+  ws.getCell('A2').value = `Inicio: ${general.dtfecha_ini}`;
+  ws.getCell('B2').value = `Fin: ${general.dtfecha_fin}`;
+  ws.getCell('C2').value = `Meses: ${general.meses}`;
+
+  ws.addRow([]);
+
+  // ===== Headers (fila 4)
+  const headerRow = ws.addRow(pivot.headers);
+
+  headerRow.eachCell(cell => {
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    cell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FF4F81BD' }
+    };
+    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    cell.border = {
+      top: {style:'thin'}, left:{style:'thin'},
+      bottom:{style:'thin'}, right:{style:'thin'}
+    };
+  });
+
+  // ===== Freeze encabezados (fila 4)
+  ws.views = [{ state: 'frozen', ySplit: 4 }];
+
+  // ===== Contenido
+  pivot.rows.forEach(r => {
+    const row = ws.addRow(pivot.headers.map(h => r[h]));
+    row.eachCell(cell => {
+      cell.border = {
+        top:{style:'thin'}, left:{style:'thin'},
+        bottom:{style:'thin'}, right:{style:'thin'}
+      };
+    });
+  });
+
+  
+  ws.columns.forEach(col => {
+    // ===== Auto width
+    // let max = 10;
+    // col.eachCell({ includeEmpty: true }, c => {
+    //   max = Math.max(max, (c.value?.toString().length || 0));
+    // });
+    // col.width = max + 2;
+
+    // ===== width fijo
+    col.width = 15;
+  });
+
+  // ===== Guardar
+  const buffer = await wb.xlsx.writeBuffer();
+  saveAs(new Blob([buffer]), 'Empleados_x_Proyecto_'+this.idProyecto+'.xlsx');
+}
+
+  //Reporte EmpleadosXProyecto F
 }
