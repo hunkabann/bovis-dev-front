@@ -24,8 +24,8 @@ getCatProyectos(ordenAlfabetico: boolean = true) {
     return this.http.get<TsProyectosResponse>(`${this.baseUrl}api/pcs/proyectos/${ordenAlfabetico}`)
   }
 
-  obtenerUsuarioTimesheet() {
-    return this.http.get<ObtenerUsuarioTimesheetResponse>(`${this.baseUrl}api/Timesheet/Usuarios`)
+  obtenerUsuarioTimesheet(fecha: string) {
+    return this.http.get<ObtenerUsuarioTimesheetResponse>(`${this.baseUrl}api/Timesheet/Usuarios/${fecha}`)
   }
 
   guardarUsuarioTimesheet(body: any, esActualizacion = false) {

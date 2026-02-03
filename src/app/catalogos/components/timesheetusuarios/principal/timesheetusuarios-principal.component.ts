@@ -26,9 +26,20 @@ export class timesheetusuariosPrincipalComponent implements OnInit {
 
   usuariotimesheet: UsuarioTimesheet[] = []
 
+  fechaLineaBase: string;// LineaBase
+
   constructor() { }
 
   ngOnInit(): void {
+    //LineaBase I
+    this.sharedService
+    .obtieneLineaBase(this.fechaLineaBase, 'TimesheetUsuarios')
+    .subscribe(fecha => {
+      this.fechaLineaBase = fecha;
+      console.log('TimesheetUsuarios Fecha final:{'+ fecha+'}');
+    });
+    //LineaBase F
+
     this.cargarClientes()
   }
   
@@ -36,7 +47,8 @@ export class timesheetusuariosPrincipalComponent implements OnInit {
     
     this.sharedService.cambiarEstado(true)
   
-    this.clientesService.obtenerUsuarioTimesheet()
+    //LineaBase en this.clientesService.obtenerUsuarioTimesheet
+    this.clientesService.obtenerUsuarioTimesheet(this.fechaLineaBase)
       .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
       .subscribe({
         next: ({data}) => {
