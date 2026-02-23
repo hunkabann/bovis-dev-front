@@ -208,6 +208,7 @@ export class SeccionContenidoComponent implements OnInit {
         reembolsable: rubro.reembolsable,
         idSeccion: this.seccion.idSeccion, //Fórmula Inflación
         idRubro: rubro.idRubro, //Fórmula Inflación
+        fechaFin: this.seccion.fechaFin,
       }
     }).onClose.subscribe((result) => {
       // SOLO avisamos que esta sección cambió

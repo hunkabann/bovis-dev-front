@@ -32,6 +32,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
   mesguardado: number;
   nukidSeccion: number; //Fórmula Inflación
   nukidRubro:number; //Fórmula Inflación
+  fechaFin: string;
 
   form = this.fb.group({
     numProyecto: [null],
@@ -63,9 +64,12 @@ export class ModificarRubroInflacionComponent implements OnInit {
     this.reembolsable = this.config.data.reembolsable;
     this.nukidSeccion = this.config.data.idSeccion; //Fórmula Inflación
     this.nukidRubro = this.config.data.idRubro; //Fórmula Inflación
+    this.fechaFin = this.config.data.fechaFin;
 
     console.log('this.nukidSeccion:'+this.nukidSeccion)
     console.log('this.nukidRubro:'+this.nukidRubro)
+    console.log('this.fechaInicio:'+this.fechaInicio)
+    console.log('this.fechaFin:'+this.fechaFin)
     //obtener los valores guardado en BD
     this.consultaDatosinflacion();
 
@@ -171,21 +175,55 @@ export class ModificarRubroInflacionComponent implements OnInit {
 
     private cargarCatalogoMeses(): void {
 
+      // Convertir strings a Date
+      const fechaInicio = new Date(this.fechaInicio);
+      const fechaFin = new Date(this.fechaFin);
 
-      const mesesBase: Omit<MesesFront, 'disabled'>[] = [
-        { code: 1,  name: 'Enero' },
-        { code: 2,  name: 'Febrero' },
-        { code: 3,  name: 'Marzo' },
-        { code: 4,  name: 'Abril' },
-        { code: 5,  name: 'Mayo' },
-        { code: 6,  name: 'Junio' },
-        { code: 7,  name: 'Julio' },
-        { code: 8,  name: 'Agosto' },
-        { code: 9,  name: 'Septiembre' },
-        { code: 10, name: 'Octubre' },
-        { code: 11, name: 'Noviembre' },
-        { code: 12, name: 'Diciembre' }
+      // Validación básica de fechas
+      if (isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime()) || fechaInicio > fechaFin) {
+        this.catMeses = [];
+        return;
+      }
+
+      const mesesBase: Omit<MesesFront, 'disabled'>[] = [];
+
+      const nombresMeses = [
+        'Enero', 'Febrero', 'Marzo', 'Abril',
+        'Mayo', 'Junio', 'Julio', 'Agosto',
+        'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
       ];
+
+      // Clonar fechaInicio para iterar sin modificar la original
+      let fechaIteradora = new Date(fechaInicio.getFullYear(), fechaInicio.getMonth(), 1);
+
+      while (fechaIteradora <= fechaFin) {
+
+        const mes = fechaIteradora.getMonth(); // 0-11
+        const anio = fechaIteradora.getFullYear();
+
+        mesesBase.push({
+          code: (anio * 100) + (mes + 1), // ejemplo: 202601
+          name: `${nombresMeses[mes]} ${anio}`
+        });
+
+        // Avanzar un mes
+        fechaIteradora.setMonth(fechaIteradora.getMonth() + 1);
+      }
+
+      // const mesesBase: Omit<MesesFront, 'disabled'>[] = [
+      //   { code: 1,  name: 'Enero' },
+      //   { code: 2,  name: 'Febrero' },
+      //   { code: 3,  name: 'Marzo' },
+      //   { code: 4,  name: 'Abril' },
+      //   { code: 5,  name: 'Mayo' },
+      //   { code: 6,  name: 'Junio' },
+      //   { code: 7,  name: 'Julio' },
+      //   { code: 8,  name: 'Agosto' },
+      //   { code: 9,  name: 'Septiembre' },
+      //   { code: 10, name: 'Octubre' },
+      //   { code: 11, name: 'Noviembre' },
+      //   { code: 12, name: 'Diciembre' }
+      // ];
 
       // ✅ Validaciones de seguridad
       if (
