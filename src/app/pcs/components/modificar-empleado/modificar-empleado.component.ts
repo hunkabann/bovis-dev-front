@@ -735,6 +735,21 @@ export class ModificarEmpleadoComponent implements OnInit {
       })
   }
 
+  aplicaValores() {
+    if(!this.form.value.aplicaTodosMeses) {
+      // si apagan el switch que no toque los controles de fecha
+      return;
+    }
+
+    this.fechas.controls.forEach((fecha, index) => {
+      if(!fecha.value.disabled) {
+        this.fechas.at(index).patchValue({
+          porcentaje: this.form.value.aplicaTodosMeses ? this.form.value.cantidad : 0
+        })
+      }
+    })
+  }
+
 }
 
 
