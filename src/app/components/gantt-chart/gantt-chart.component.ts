@@ -35,7 +35,7 @@ export class GanttChartComponent implements OnInit {
             const index = ctx.dataIndex;
             const project = this.transformedProjects[index];
             const start = project.start;
-            const end = new Date(start.getTime() + project.duration * 86400000);
+            const end = new Date(start.getTime() + (project.duration - 1) * 86400000);
             return `De: ${formatSimple(start)} a ${formatSimple(end)}`;
           }
         }
@@ -83,10 +83,16 @@ export class GanttChartComponent implements OnInit {
       }
 
       this.projectService.getProjects(idProyecto).subscribe((data: GanttItem[]) => {
-        this.transformedProjects = data.map(item => {
-          const start = new Date(item.x[0]);
-          const end = new Date(item.x[1]);
-          const duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24); // duración en días
+       this.transformedProjects = data.map(item => {
+          //const start = new Date(item.x[0]);
+          //const end = new Date(item.x[1]);
+          const rawStart = parseLocalDate(item.x[0]);
+          const rawEnd = parseLocalDate(item.x[1]);
+          const start = new Date(rawStart.getFullYear(), rawStart.getMonth(), 1);
+          const end = new Date(rawEnd.getFullYear(), rawEnd.getMonth() + 1, 0);
+
+          const duration = (end.getTime() - start.getTime()) / 86400000 + 1;
+
           return {
             y: item.y,
             start,
@@ -173,4 +179,10 @@ function formatSimple(d: Date | string): string {
   const m = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   return `${y}-${m}-${day}`;
+}
+
+// parsea la fecha
+function parseLocalDate(dateString: string): Date {
+  const [year, month, day] = dateString.split('-').map(Number);
+  return new Date(year, month - 1, day);
 }
