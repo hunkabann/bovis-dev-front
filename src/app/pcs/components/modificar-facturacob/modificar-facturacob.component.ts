@@ -155,8 +155,8 @@ export class ModificarFacturacobComponent implements OnInit {
       next: (resp) => {
 
         // Cerrar y devolver al padre el arreglo ACTUALIZADO
-        //const arregloActualizado = (aSalidaFee as any[]).map(f => ({
-        const arregloActualizado = (payload as any[]).map(f => ({
+        const arregloActualizado = (aSalidaFee as any[]).map(f => ({
+        //const arregloActualizado = (payload as any[]).map(f => ({
             reembolsable: false,
             mes: f.mes,
             anio: f.anio,
