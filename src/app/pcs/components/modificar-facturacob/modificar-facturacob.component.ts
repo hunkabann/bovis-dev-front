@@ -133,6 +133,16 @@ export class ModificarFacturacobComponent implements OnInit {
           fees: aSalidaFee,
       };
     }
+
+      // Eliminar duplicados por mes-año
+    const map = new Map<string, FechaEntradaFEELibre>();
+
+    payload.fees.forEach(fee => {
+      const key = `${fee.anio}-${fee.mes}`;
+      map.set(key, fee);
+    });
+
+    payload.fees = Array.from(map.values());
     //FEE libre F
 
     //console.log('payload:'+payload);
@@ -145,7 +155,8 @@ export class ModificarFacturacobComponent implements OnInit {
       next: (resp) => {
 
         // Cerrar y devolver al padre el arreglo ACTUALIZADO
-        const arregloActualizado = (aSalidaFee as any[]).map(f => ({
+        //const arregloActualizado = (aSalidaFee as any[]).map(f => ({
+        const arregloActualizado = (payload as any[]).map(f => ({
             reembolsable: false,
             mes: f.mes,
             anio: f.anio,
