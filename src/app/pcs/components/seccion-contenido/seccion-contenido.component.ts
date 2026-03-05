@@ -316,4 +316,10 @@ export class SeccionContenidoComponent implements OnInit {
   }
   //FEE libre F
 
+  mostrarComentario(): boolean {
+    // Los dos primeros acordeones no llevan comentario
+    return this.seccion?.idSeccion > 2;
+  }
+
 }
+

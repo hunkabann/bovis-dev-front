@@ -20,6 +20,9 @@
                         <th *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-right">
                             {{mesRegistro.desc | uppercase}}
                         </th>
+                        <th *ngIf="mostrarComentario()" class="text-left"> <!-- LDTF  2026-03-05  -->
+                            Comentario
+                        </th>     
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rubro let-iRubro="rowIndex">
@@ -57,6 +60,9 @@
                             <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
                                 {{ (rubro.fechas | porcentajeMes:mesRegistro:seccion.codigo:rubro.costoMensual) }}
                             </td>
+                            <td *ngIf="mostrarComentario()" class="text-left"> <!-- LDTF  2026-03- 05 -->
+                                {{ rubro.chcomentarios }}
+                            </td>
                         </ng-template>
                         <ng-template #thenrembolsableNo>
                             <td class="text-end">
@@ -64,6 +70,9 @@
                             </td>
                             <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
                                 {{ (rubro.fechas | porcentajeMes:mesRegistro:seccion.codigo:rubro.costoMensual) }}
+                            </td>
+                            <td *ngIf="mostrarComentario()" class="text-left"> <!-- LDTF  2026-03- 05 -->
+                                {{ rubro.chcomentarios }}
                             </td>
                         </ng-template>
                     </tr>
@@ -94,7 +103,7 @@
                         </td>
                         <td *ngFor="let mesRegistro of seccion.mesesProyecto" class="text-end">
                             {{ calcularTotalPorcentajePorMes(seccion.codigo, mesRegistro, seccionRegistro.reembolsable) | currency }}
-                        </td>
+                        <td *ngIf="mostrarComentario()"></td>   <!-- LDTF  2026-03- 05 -->
                     </tr>
                 </ng-template>
             </p-table>
