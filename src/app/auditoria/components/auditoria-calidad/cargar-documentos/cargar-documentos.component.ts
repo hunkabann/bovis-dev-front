@@ -46,6 +46,7 @@ export class CargarDocumentosComponent implements OnInit {
   proyectos: Opcion[] = []
   secciones: Seccion[] = []
 
+
   totalDocumentos: number = 0
   totalDocumentosValidados: number = 0
   numProyecto: number = null
@@ -55,6 +56,7 @@ export class CargarDocumentosComponent implements OnInit {
 
   ngOnInit(): void {
     this.verificarEstado()
+
 
     if (this.auditoriaService.esLegal) {
       this.Label_cumplimiento = "Descripción del entregable"
@@ -115,7 +117,9 @@ export class CargarDocumentosComponent implements OnInit {
         },
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: SUBJECTS.error })
       })
+
   }
+
 
   onSeleccionArchivo(event: UploadEvent, id: number, iParent: number, iChild: number, fileUpload: any) {
 

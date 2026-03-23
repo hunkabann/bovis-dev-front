@@ -8,7 +8,7 @@
             <button type="button" class="btn btn-info ml-5" (click)="cargarProyecto()">Nuevo proyecto</button>
         </p-toolbar>
 
-        <div class="col-12" >
+        <div class="col-10" >
             <label for="id_proyecto">Proyecto:</label>
             <p-dropdown [disabled]="stilovisible" id="id_proyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="cargarProyecto(true)" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [(ngModel)]="proyectoId"></p-dropdown>
         </div>
@@ -30,6 +30,25 @@
         <!--<div class="col-12">
             <button type="button" class="btn btn-info" (click)="cargarProyecto(true)" [disabled]="!proyectoId">Editar</button>
         </div>-->
+        <!-- LDTF línea  base I-->
+        <div class="col-2">
+            <label for="id_linea_base">Línea Base:</label>
+            <p-dropdown
+                #lineaBaseRef
+                [disabled]="lineaBaseDeshabilitado"
+                id="id_linea_base"
+                [options]="lineasBase"
+                placeholder="Seleccionar línea base"
+                optionLabel="nombre"
+                optionValue="id"
+                [showClear]="true"
+                [style]="{ width: '100%' }"
+                [filter]="true"
+                filterBy="nombre"
+                [(ngModel)]="lineaBaseSeleccionada">
+            </p-dropdown>
+        </div>
+        <!-- LDTF línea  base F-->
     </div>
 
     <router-outlet></router-outlet>

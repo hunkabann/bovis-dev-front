@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Subject } from 'rxjs';
 import { GenericResponse } from 'src/app/empleados/Models/empleados';
 import { environment } from 'src/environments/environment';
-import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse,GastosIngresosControlResponse, SeccionRespuesta, GastosIngresosSeccionesResponseNuevo, GastosIngresosInformacionResponse, TotalesIngresosResponse, DatosInflacionResponse } from '../models/pcs.model'; 
+import { EtapasPorProyectoResponse, GastosIngresosSeccionesResponse, ProyectoPorIDResponse,GastosIngresosControlResponse, SeccionRespuesta, GastosIngresosSeccionesResponseNuevo, GastosIngresosInformacionResponse, TotalesIngresosResponse, DatosInflacionResponse, LineaBaseResponse } from '../models/pcs.model'; 
 
 interface NuevoProyecto {
   id:     number,
@@ -63,6 +63,13 @@ export class PcsService {
     return esActualizacion
     ? this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/Proyectos`, body)
     : this.http.post<GenericResponse>(`${this.baseUrl}api/Pcs/Proyectos`, body)
+  }
+  
+  // LDTF línea base
+  obtenerLineaBasePorProyecto(idProyecto: number) {
+    return this.http.get<LineaBaseResponse>(
+      `${this.baseUrl}api/Pcs/Proyectos/LineaBase/${idProyecto}`
+    );
   }
 
   obtenerEtapasPorProyecto(idProyecto: number) {

@@ -2,6 +2,18 @@
 
 import { Mes } from "src/models/general.model";
 
+export interface LineaBase {
+  nukidlinea_base: number;
+  dtfecha: string;
+}
+
+export interface LineaBaseResponse {
+  data: LineaBase[];
+  success: boolean;
+  message: string | null;
+  transactionId: string | null;
+}
+
 export interface EtapasPorProyectoResponse {
     data:          EtapasPorProyectoData;
     success:       boolean;

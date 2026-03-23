@@ -9,6 +9,7 @@ import { SUBJECTS, TITLES } from 'src/utils/constants';
 import { CatalogosService } from '../services/catalogos.service';
 import { PcsService } from '../services/pcs.service';
 import { Calendar } from 'primeng/calendar'; //LEO Linea Base
+import { Dropdown } from 'primeng/dropdown';  // LDTF línea base
 
 @Component({
   selector: 'app-pcs',
@@ -41,11 +42,24 @@ export class PcsComponent implements OnInit {
   fecha_base: Date = null;//LEO Linea Base
   fechaSeleccionadaPorUsuario = false; // Para saber si el usuario cambió la fecha //LEO Linea Base
   @ViewChild('fechaBaseRef') fechaBaseRef!: Calendar;//LEO Linea Base
+  @ViewChild('lineaBaseRef') lineaBaseRef!: Dropdown; // LDTF línea base
+
+  lineasBase: any[] = [];  // LDTF línea base
+  lineaBaseSeleccionada: number | null = null;
+  lineaBaseDeshabilitado: boolean  = false;
+
 
   constructor() { }
 
   ngOnInit(): void {
     this.sharedService.cambiarEstado(true)
+
+    this.lineasBase = [
+      //{ id: 1, nombre: 'Línea Base 2024' },
+      //{ id: 2, nombre: 'Línea Base 2025' },
+      //{ id: 3, nombre: 'Línea Base 2026' }
+    ];  // valores iniciales línea base   LDTF, 
+
 
     //LEO I Linea Base
     if(this.fecha_base == null)
@@ -111,10 +125,14 @@ export class PcsComponent implements OnInit {
     if(event === 'IP'){      
       this.stilovisible = true   
       this.deshabilitaCalendario(false); // Habilita el calendario //LEO Linea Base
-  }else{
-    this.stilovisible = false
-    this.deshabilitaCalendario(true);// Deshabilita el calendario //LEO Linea Base
-  }
+      this.deshabilitaComboLineaBase(false);  // LDTF linea base; el combo de línea base está habilitado en IP
+      this.lineaBaseDeshabilitado = true;
+    }else{
+      this.stilovisible = false
+      this.deshabilitaCalendario(true);// Deshabilita el calendario //LEO Linea Base
+      this.deshabilitaComboLineaBase(true);  // LDTF linea base; el combo de línea base está deshabilitado fuera de IP
+      this.lineaBaseDeshabilitado = false;
+    }
 
     this.proyectoId = null;
   }
@@ -131,6 +149,13 @@ export class PcsComponent implements OnInit {
     }
     //LEO F Linea Base
 
+    // LDTF línea base I
+    if (this.proyectoId) {
+      this.cargarLineasBase(this.proyectoId);
+      this.lineaBaseSeleccionada = null; // reset
+    }
+    // LDTF línea base F
+
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: {
@@ -143,6 +168,28 @@ export class PcsComponent implements OnInit {
     })
 
     this.cambiarTabs(false,'')
+  }
+
+
+  cargarLineasBase(proyectoId: number) {
+     this.pcsService.obtenerLineaBasePorProyecto(proyectoId)
+    .subscribe(resp => {
+
+      if (resp.success) {
+        this.lineasBase = resp.data.map(x => ({
+          id: x.nukidlinea_base,
+          nombre: x.dtfecha
+        }));
+      }
+
+    });
+    /*
+    this.lineasBase = [
+      { id: 1, nombre: 'Base Inicial - Proyecto ' + proyectoId },
+      { id: 2, nombre: 'Base Ajustada - Proyecto ' + proyectoId },
+      { id: 3, nombre: 'Base Final - Proyecto ' + proyectoId }
+    ];
+    */
   }
 
   cambiarTabs(esEdicion: boolean = false,itemlabel : string ) {
@@ -158,9 +205,12 @@ export class PcsComponent implements OnInit {
 
 
     if( itemlabel == 'IP' || itemlabel == 'undefined' || itemlabel == '' || itemlabel == null){
-       this.stilovisible = false
+      this.stilovisible = false
+      this.lineaBaseDeshabilitado = false;
+
     }else{
       this.stilovisible = true 
+      this.lineaBaseDeshabilitado = true;
     }
 
 
@@ -193,6 +243,16 @@ export class PcsComponent implements OnInit {
     if (this.fechaBaseRef) {
       this.fechaBaseRef.disabled = bHabilita;
     }
+  }
+
+  deshabilitaComboLineaBase(bHabilita: boolean)
+  {
+    /*
+    if (this.lineaBaseRef) {
+      this.lineaBaseRef.disabled = bHabilita;
+    }
+      */
+    this.lineaBaseDeshabilitado = bHabilita;
   }
 
   private formatFechaQuery(fecha: Date): string {
