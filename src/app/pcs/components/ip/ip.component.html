@@ -8,7 +8,14 @@
 
 <ng-template #principal>
 
+    <p-confirmDialog></p-confirmDialog>
+
     <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
+        <p-button 
+            label="Crear Línea Base" 
+            styleClass="p-button-primary"
+            (click)="crearLineaBase()">
+        </p-button>
         <p-button icon="pi pi-file-excel" label="Layout Off Line" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
     </p-toolbar>
 

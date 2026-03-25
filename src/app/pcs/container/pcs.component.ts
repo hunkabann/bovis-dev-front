@@ -45,7 +45,7 @@ export class PcsComponent implements OnInit {
   @ViewChild('lineaBaseRef') lineaBaseRef!: Dropdown; // LDTF línea base
 
   lineasBase: any[] = [];  // LDTF línea base
-  lineaBaseSeleccionada: number | null = null;
+  lineaBaseId: number | null = null;
   lineaBaseDeshabilitado: boolean  = false;
 
 
@@ -55,9 +55,6 @@ export class PcsComponent implements OnInit {
     this.sharedService.cambiarEstado(true)
 
     this.lineasBase = [
-      //{ id: 1, nombre: 'Línea Base 2024' },
-      //{ id: 2, nombre: 'Línea Base 2025' },
-      //{ id: 3, nombre: 'Línea Base 2026' }
     ];  // valores iniciales línea base   LDTF, 
 
 
@@ -87,6 +84,10 @@ export class PcsComponent implements OnInit {
         this.proyectos.push({ code: proyecto.id.toString(), name: `${proyecto.id.toString()} - ${proyecto.nombre}` })
         // this.proyectoId = proyecto.id
       })
+
+    this.pcsService.recargarLineaBase$.subscribe(proyectoId => {
+      this.cargarLineasBase(proyectoId);
+    });
   }
 
   verificarEstado() {
@@ -95,12 +96,18 @@ export class PcsComponent implements OnInit {
       const esEdicion = params['esEdicion']
       const itemlabel = params['itemlabel']
       const fechaParam = params['fecha_base']; // leer la fecha //LEO Linea Base
+      const lineaBase = params['lineaBase']; // leer el identificador de linea base LDTF
 
       if (proyecto) {
         this.proyectoId = proyecto
         this.pcsService.enviarIdProyecto(this.proyectoId)
 
         this.cambiarTabs(esEdicion,itemlabel)
+      }
+
+      if(lineaBase)
+      {
+        this.lineaBaseId = lineaBase;
       }
 
       //LEO I Linea Base
@@ -135,11 +142,13 @@ export class PcsComponent implements OnInit {
     }
 
     this.proyectoId = null;
+    this.lineaBaseId = null;
   }
 
   cargarProyecto(esEdicion: boolean = false) {
     if (!esEdicion) {
       this.proyectoId = null
+      this.lineaBaseId = null;
     }
 
     //LEO I Linea Base
@@ -152,7 +161,7 @@ export class PcsComponent implements OnInit {
     // LDTF línea base I
     if (this.proyectoId) {
       this.cargarLineasBase(this.proyectoId);
-      this.lineaBaseSeleccionada = null; // reset
+      this.lineaBaseId = null; // reset
     }
     // LDTF línea base F
 
@@ -160,6 +169,7 @@ export class PcsComponent implements OnInit {
       relativeTo: this.activatedRoute,
       queryParams: {
         proyecto: esEdicion ? this.proyectoId : null,
+        lineasBase: esEdicion ? this.lineaBaseId : null,
         esEdicion: esEdicion ? 1 : null,
         nuevo: !esEdicion,
         fecha_base: this.fecha_base ? this.formatFechaQuery(this.fecha_base) : null //LEO Linea Base
@@ -183,13 +193,6 @@ export class PcsComponent implements OnInit {
       }
 
     });
-    /*
-    this.lineasBase = [
-      { id: 1, nombre: 'Base Inicial - Proyecto ' + proyectoId },
-      { id: 2, nombre: 'Base Ajustada - Proyecto ' + proyectoId },
-      { id: 3, nombre: 'Base Final - Proyecto ' + proyectoId }
-    ];
-    */
   }
 
   cambiarTabs(esEdicion: boolean = false,itemlabel : string ) {
@@ -197,6 +200,7 @@ export class PcsComponent implements OnInit {
       ...item,
       queryParams: {
         proyecto: this.proyectoId,
+        lineasBase: this.lineaBaseId,
         esEdicion: esEdicion ? 1 : null,
         fecha_base: this.fecha_base ? this.formatFechaQuery(this.fecha_base) : null //LEO Linea Base
       },

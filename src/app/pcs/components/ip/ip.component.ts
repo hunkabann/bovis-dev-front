@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { MessageService, PrimeNGConfig, ConfirmationService } from 'primeng/api';
 import { ICatalogo, ICatalogoCliente, ICatalogoCombos, IEmpleado, IEmpleadoNew } from '../../models/ip';
 import { CatalogosService } from '../../services/catalogos.service';
 import { FormBuilder, Validators, FormArray } from '@angular/forms';
@@ -20,11 +20,14 @@ import { Empleado, Etapa, EtapasPorProyectoData, GastosIngresosSeccionesData, Su
 import { obtenerMeses, } from 'src/helpers/helpers';
 import { CostosService } from 'src/app/costos/services/costos.service';
 import { CalcularSubtotalPipe } from 'src/app/pcs/pipes/calcular-subtotal.pipe';
+import { switchMap } from 'rxjs/operators';
 
 
 //import { addMonths, differenceInCalendarMonths, format} from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Mes } from 'src/models/general.model';
+
+
 
 @Component({
   selector: 'app-ip',
@@ -163,7 +166,9 @@ export class IpComponent implements OnInit {
     contingenciaPorcentaje: [null] //LEO inputs para FEEs I
   })
 
-  constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, private activatedRoute: ActivatedRoute, private router: Router) { }
+  constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, 
+              private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, 
+              private activatedRoute: ActivatedRoute, private router: Router, private confirmationService: ConfirmationService) { }
 
   catalogosService = inject(CatalogosService)
 
@@ -1411,5 +1416,67 @@ export class IpComponent implements OnInit {
     await new Promise(resolve => setTimeout(() => resolve, ms)).then(() => console.log("fired"));
   }
 
+  crearLineaBase() {
+
+    const fecha = new Date();
+    const fechaTexto = fecha.toLocaleDateString('es-MX');
+
+    this.confirmationService.confirm({
+      message: `¿Estás seguro de crear la Línea Base con la fecha ${fechaTexto}?`,
+      header: 'Confirmación',
+      icon: 'pi pi-exclamation-triangle',
+
+      acceptLabel: 'Aceptar',
+      rejectLabel: 'Cancelar',
+
+      accept: () => {
+        this.ejecutarCreacion();
+      },
+
+      reject: () => {
+        console.log('Cancelado');
+      }
+    });
+
+  }
+
+  ejecutarCreacion() {
+
+    const body = {
+      num_proyecto: this.idproyecto
+    };
+
+    this.pcsService.verificaLineaBase(body)
+      .pipe(
+        switchMap(respA => {
+          if (!respA.success) {
+            throw new Error(respA.message);
+          }
+          return this.pcsService.creaLineaBase(body);
+        })
+      )
+      .subscribe({
+        next: respB => {
+          if (respB.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Éxito',
+              detail: 'Línea base creada correctamente'
+            });
+
+            // se recarga el combo de linea base
+            this.pcsService.emitirRecargaLineaBase(this.idproyecto);
+          }
+        },
+        error: err => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.message
+          });
+        }
+      });
+
+  }
 
 }

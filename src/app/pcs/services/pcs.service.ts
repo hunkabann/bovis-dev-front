@@ -32,6 +32,8 @@ export class PcsService {
 
   private idProyectoObject = new Subject<number>()
   private nuevoProyecto = new Subject<NuevoProyecto>()
+  private recargarLineaBaseSource = new Subject<number>();
+  recargarLineaBase$ = this.recargarLineaBaseSource.asObservable();
 
   constructor() { }
   
@@ -165,5 +167,20 @@ export class PcsService {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/Fee`, body)
   }
   //FEE libre F
+
+
+  // LDTF Linew base I
+  verificaLineaBase(body: any) {
+    return this.http.post<GenericResponse>(`${this.baseUrl}api/Pcs/Proyectos/VerificaLineaBase`, body)
+  }
+
+  creaLineaBase(body: any) {
+    return this.http.post<GenericResponse>(`${this.baseUrl}api/Pcs/Proyectos/CreaLineaBase`, body)
+  }
+
+  emitirRecargaLineaBase(proyectoId: number) {
+    this.recargarLineaBaseSource.next(proyectoId);
+  }
+  // LDTF Linew base F
 
 }
