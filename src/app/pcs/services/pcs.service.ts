@@ -100,9 +100,22 @@ export class PcsService {
     return this.http.delete<GenericResponse>(`${this.baseUrl}api/Pcs/Empleados/${numEmpleado}/Fase/${idEtapa}`)
   }
 
+  /*
   obtenerProyectoPorId(id: number) {
     return this.http.get<ProyectoPorIDResponse>(`${this.baseUrl}api/Pcs/Proyectos/Info/${id}`)
   }
+    */
+  obtenerProyectoPorId(id: number, idLineaBase?: number) {    // LDTF - linea base- 25/mar/2026
+  let url = '';
+
+  if (idLineaBase !== undefined) {
+    url = `${this.baseUrl}api/Pcs/Proyectos/Info_lb/${id}/${idLineaBase}`;
+  } else {
+    url = `${this.baseUrl}api/Pcs/Proyectos/Info/${id}`;
+  }
+
+  return this.http.get<ProyectoPorIDResponse>(url);
+}
 
   obtenerGastosIngresosSecciones(numProyecto: number, tipo: string = 'gasto') {
     return this.http.get<GastosIngresosSeccionesResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/secciones/${numProyecto}/${tipo}`)
