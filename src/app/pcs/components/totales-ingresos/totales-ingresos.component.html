@@ -76,7 +76,8 @@
                         </div>
                         <div class="col-2">
                             <label for="btnGuardar2"></label>
-                            <button type="button" id="btnGuardar2" class="btn btn-info" (click)="guardarFee()">Guardar</button>
+                            <!-- LEOX se agrega al button "btnGuardar2" disabled-->
+                            <button type="button" id="btnGuardar2" class="btn btn-info" (click)="guardarFee()" [disabled]="bloqueado">Guardar</button>
                         </div>
                         <div class="col-2">
 
@@ -138,10 +139,12 @@
                     <tr *ngIf="registro.value.titulo?.includes('Factura')">
                     <td>
                         <div class="d-flex gap-2 justify-content-center">
+                            <!-- LEOX se agrega Facturación al button "Modificar rubro" disabled-->
                             <button 
                                 title="Modificar rubro" type="button"
                                 class="btn btn-primary"
                                 (click)="modificarRegistro(registro.value.registros, 1)"
+                                [disabled]="bloqueado"
                                 >
                                 <i class="pi pi-pencil vertical-align-middle"></i>
                             </button>
@@ -160,10 +163,12 @@
                     <tr *ngIf="registro.value.titulo == 'Cobranza'">
                     <td>
                         <div class="d-flex gap-2 justify-content-center">
+                            <!-- LEOX se agrega Cobranza al button "Modificar rubro" disabled-->
                             <button 
                                 title="Modificar rubro" type="button"
                                 class="btn btn-primary"
                                 (click)="modificarRegistro(registro.value.registros, 2)"
+                                [disabled]="bloqueado"
                                 >
                                 <i class="pi pi-pencil vertical-align-middle"></i>
                             </button>

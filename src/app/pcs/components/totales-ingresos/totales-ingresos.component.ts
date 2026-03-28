@@ -21,6 +21,7 @@ export class TotalesIngresosComponent implements OnInit {
 
   @Input() totalesData: TotalesIngresosResponseData;
   @Input() nunum_proyecto: number; //LEO inputs para FEEs 
+  @Input() bloqueado: boolean //LEOX
 
   registros: {
     ingreso: TotalesIngresosFormateado,

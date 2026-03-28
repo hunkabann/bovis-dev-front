@@ -22,6 +22,7 @@
                     <div *ngIf="!seccionesCargado[i]; else contenido" class="text-center">
                         <p-progressSpinner styleClass="w-5rem h-5rem custom-spinner"></p-progressSpinner>
                     </div>
+                    <!--LEOX agrego variable bloqueado-->
                     <!--LEO 2025-10-09 Puntos Bugs y Mejoras, en el llamado al componente seccion-contenido
                         se agregó la variable de entrada nombrePaginaPadre-->
                     <ng-template #contenido>
@@ -31,6 +32,7 @@
                             [secciones]="secciones.value"
                             [mostrarNoReembolsables]="false"
                             [nombrePaginaPadre]="nombrePagina"
+                            [bloqueado] = "btnBloqueado"
                         ></app-seccion-contenido>
                     </ng-template>
                 </ng-template>
@@ -43,7 +45,8 @@
                 <p><strong>Un momento.</strong></p>
             </div>
             <ng-template #totales>
-                <app-totales-ingresos [totalesData]="totalesData" [nunum_proyecto]="this.numProyectorubro"></app-totales-ingresos>  <!-- LEO inputs para FEEs -->
+                <!--LEOX agrego variable bloqueado-->
+                <app-totales-ingresos [totalesData]="totalesData" [nunum_proyecto]="this.numProyectorubro" [bloqueado] = "btnBloqueado"></app-totales-ingresos>  <!-- LEO inputs para FEEs -->
             </ng-template>
         </div>
     </div>

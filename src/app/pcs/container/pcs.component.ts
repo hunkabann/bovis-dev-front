@@ -47,7 +47,8 @@ export class PcsComponent implements OnInit {
   lineasBase: any[] = [];  // LDTF línea base
   lineaBaseId: number | null = null;
   lineaBaseDeshabilitado: boolean  = false;
-
+  lineaBaseOculto: boolean = false; //LEOX visible de inicio
+  btnBloqueado: boolean //LEOX para bloquear btn si una linea base seleccionada, habilitado de inicio
 
   constructor() { }
 
@@ -88,6 +89,8 @@ export class PcsComponent implements OnInit {
     this.pcsService.recargarLineaBase$.subscribe(proyectoId => {
       this.cargarLineasBase(proyectoId);
     });
+
+    this.btnBloqueado = this.lineaBaseId == undefined ? false : true; //LEOX si hay una linea seleccionada que inhabilite el btn
   }
 
   verificarEstado() {
@@ -129,16 +132,22 @@ export class PcsComponent implements OnInit {
 
    // console.log('VALOR DEL ITEM ----------------->>>>> ' + event)
 
-    if(event === 'IP'){      
+    if(event === 'IP'){    
+      console.log('Hola')  
       this.stilovisible = true   
       this.deshabilitaCalendario(false); // Habilita el calendario //LEO Linea Base
       this.deshabilitaComboLineaBase(false);  // LDTF linea base; el combo de línea base está habilitado en IP
-      this.lineaBaseDeshabilitado = true;
+      //this.lineaBaseDeshabilitado = true;
+      this.lineaBaseOculto = false; //LEOX
     }else{
+      console.log('Hola1')  
       this.stilovisible = false
       this.deshabilitaCalendario(true);// Deshabilita el calendario //LEO Linea Base
       this.deshabilitaComboLineaBase(true);  // LDTF linea base; el combo de línea base está deshabilitado fuera de IP
-      this.lineaBaseDeshabilitado = false;
+      //this.lineaBaseDeshabilitado = false;
+      if(event == "Control") {console.log('Hola2'); this.lineaBaseOculto = true; } //LEOX
+      else {this.lineaBaseOculto = false; console.log('Hola3');  } //LEOX
+      
     }
 
     this.proyectoId = null;
@@ -211,10 +220,13 @@ export class PcsComponent implements OnInit {
     if( itemlabel == 'IP' || itemlabel == 'undefined' || itemlabel == '' || itemlabel == null){
       this.stilovisible = false
       this.lineaBaseDeshabilitado = false;
+      this.lineaBaseOculto = false; //LEOX
 
     }else{
       this.stilovisible = true 
       this.lineaBaseDeshabilitado = true;
+      if( itemlabel == 'Control') {this.lineaBaseOculto = true;} //LEOX
+      else{ this.lineaBaseOculto = false; } //LEOX
     }
 
 
@@ -268,4 +280,22 @@ export class PcsComponent implements OnInit {
   }
 
   //LEO F Linea Base
+ 
+  //LEOX
+  AsignaValor(event: any)
+  {
+    console.log('PCS AsignaValor this.lineaBaseId:'+this.lineaBaseId)
+     // Actualiza el queryParam "lienasbase" en la URL sin recargar la página
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParamsHandling: 'merge', // mantiene los demás params (proyecto, esEdicion, etc.)
+      queryParams: {
+        lineasBase: this.lineaBaseId
+      }
+    });
+
+    console.log('PCS AsignaValor antes btnBloqueado:'+this.btnBloqueado)
+    this.btnBloqueado = this.lineaBaseId == undefined ? false : true; //LEOX si hay una linea seleccionada que inhabilite el btn
+    console.log('PCS AsignaValor despues btnBloqueado:'+this.btnBloqueado)
+  }
 }

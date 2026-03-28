@@ -5,3 +5,10 @@
   overflow-x: hidden;
   border: 1px solid #e5e5e5;
 }
+
+/* LEOX para deshabilitar el anchor o link */
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}

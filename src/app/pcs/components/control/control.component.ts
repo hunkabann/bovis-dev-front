@@ -74,6 +74,7 @@ export class ControlComponent implements OnInit {
   seccionesOpciones: SeccionOpcion[] = [...seccionesPCSControl];
   seccionesCargado: boolean[] = [];
   seccionesData: any[] = [];
+  lineaBaseId:number //LEOX
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -116,6 +117,8 @@ export class ControlComponent implements OnInit {
 
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
+        console.log('Control OnInit lineasBase:'+params.lineasBase); //LEOX
+        this.lineaBaseId = params.lineasBase //LEOX
 
         if (!params.proyecto) {
 

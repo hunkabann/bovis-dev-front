@@ -35,6 +35,7 @@ export class SeccionContenidoComponent implements OnInit {
   @Input() esEditable: boolean = false;
   @Input() mostrarNoReembolsables: boolean = true;
   @Input() nombrePaginaPadre: string; //LEO 2025-10-09 Puntos Bugs y Mejoras
+  @Input() bloqueado: boolean //LEOX para bloquear btn si una linea base seleccionada, habilitado de inicio
   @Output() modificarRubroEvent = new EventEmitter<ModificarRubroEmitterProps>();
 
   
@@ -76,11 +77,13 @@ export class SeccionContenidoComponent implements OnInit {
     this.seccion.fechaIni = new Date(this.seccion.fechaIni); //LEO Fórmula Inflación  
     
     //FEE libre I
-    if(this.seccion.idSeccion == 17) {
+    if(this.seccion.idSeccion == 17 && this.nombrePaginaPadre == "ingresosPagina") {
       //si se trata de "FEE  libre" que muestre el btn
       this.esEditable = true;
     }
     //FEE libre F
+
+
   }
   
   // modificarRubro(rubro: Rubro, seccionIndex: number, rubroIndex: number, idSeccion: number, reembolsable: boolean) {

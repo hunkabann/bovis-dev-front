@@ -53,6 +53,8 @@ export class GastosComponent implements OnInit {
   seccionesCargado: boolean[] = [];
   seccionesData: any[] = [];
   nombrePagina: string; //LEO 2025-10-09 Puntos Bugs y Mejoras
+  lineaBaseId:number //LEOX
+  btnBloqueado: boolean = false //LEOX para bloquear btn si una linea base seleccionada, habilitado de inicio
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router,
     private refreshService: SeccionRefreshService) //refrescar una sección
@@ -88,6 +90,9 @@ export class GastosComponent implements OnInit {
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
         if (params.proyecto) {
+          console.log('Gastos OnInit lineasBase:'+params.lineasBase); //LEOX
+          this.lineaBaseId = params.lineasBase //LEOX   
+          this.btnBloqueado = this.lineaBaseId == undefined ? false : true; //LEOX si hay una linea seleccionada que inhabilite el btn
           this.idproyecto = params.proyecto;
         }
       });

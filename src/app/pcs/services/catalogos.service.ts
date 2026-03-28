@@ -47,6 +47,7 @@ export class CatalogosService {
         const params = {
           proyecto:   data['proyecto'] || null,
           esEdicion:  data['esEdicion'] == 1
+          ,lineasBase: data['lineasBase']  //LEOX
         }
 
         this.esEdicion = params.esEdicion

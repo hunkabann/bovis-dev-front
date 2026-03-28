@@ -30,9 +30,9 @@
         <!--<div class="col-12">
             <button type="button" class="btn btn-info" (click)="cargarProyecto(true)" [disabled]="!proyectoId">Editar</button>
         </div>-->
-        <!-- LDTF línea  base I-->
+        <!-- LDTF línea  base I--><!-- LEOX se agrega onchange and hidden-->
         <div class="col-2">
-            <label for="id_linea_base">Línea Base:</label>
+            <label for="id_linea_base" [hidden]="lineaBaseOculto">Línea Base:</label>
             <p-dropdown
                 #lineaBaseRef
                 [disabled]="lineaBaseDeshabilitado"
@@ -45,6 +45,8 @@
                 [style]="{ width: '100%' }"
                 [filter]="true"
                 filterBy="nombre"
+                (onChange)="AsignaValor($event.value)"
+                [hidden] = "lineaBaseOculto"
                 [(ngModel)]="lineaBaseId">
             </p-dropdown>
         </div>

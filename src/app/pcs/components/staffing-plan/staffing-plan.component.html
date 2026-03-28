@@ -7,7 +7,8 @@
 
 <div class="d-flex gap-2 mb-2 justify-content-between mt-5" *ngIf="proyectoSeleccionado">
     <h1>Etapas</h1>
-    <a title="Agregar etapa" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" style="text-decoration: none;" (click)="agregarEtapa()"></a>
+    <!-- LEOX se agrega al anchor "Agregar etapa" el [class.disabled-link]-->
+    <a title="Agregar etapa" pButton pRipple icon="pi pi-plus" class="p-button-rounded p-button-info p-mr-2" style="text-decoration: none;" (click)="agregarEtapa()" [class.disabled-link]="btnBloqueado"></a>
 </div>
 
 
@@ -34,18 +35,21 @@
                             <span class="vertical-align-middle">{{obtenerNombreFase(etapa.value)}}</span>
                         </div>
                         <div class="options d-flex gap-2">
-                            <button title="Agregar empleado" type="button" class="btn btn-primary" (click)="modificarEtapa($event, etapa.value, i)">
+                            <!-- LEOX se agrega al button "Modificar Etapa" disabled y se cambia el title-->
+                            <button title="Modificar Etapa" type="button" class="btn btn-primary" (click)="modificarEtapa($event, etapa.value, i)" [disabled]="btnBloqueado">
                                 <i class="pi pi-pencil vertical-align-middle"></i>
                             </button>
                             <!-- <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null,null)">
                                 <i class="pi pi-user-plus vertical-align-middle"></i>
                             </button> -->
+                            <!-- LEOX se agrega al button "Agregar empleado" disabled -->
                             <!-- LEO TBD I -->
-                            <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null,null,null,null)">
+                            <button title="Agregar empleado" type="button" class="btn btn-success" (click)="modificarEmpleado($event, etapa.value, null, i, null,null,null,null,null)" [disabled]="btnBloqueado">
                                 <i class="pi pi-user-plus vertical-align-middle"></i>
                             </button>
                             <!-- LEO TBD F -->
-                            <button title="Eliminar etapa" type="button" class="btn btn-danger" (click)="eliminarEtapa($event, etapa.value, i)">
+                            <!-- LEOX se agrega al button "Eliminar etapa" disabled-->
+                            <button title="Eliminar etapa" type="button" class="btn btn-danger" (click)="eliminarEtapa($event, etapa.value, i)" [disabled]="btnBloqueado">
                                 <i class="pi pi-trash vertical-align-middle"></i>
                             </button>
                         </div>
@@ -72,12 +76,14 @@
                                         <!-- <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado,empleado.value.FEE, empleado.value.chalias)">
                                             <i class="pi pi-calendar vertical-align-middle"></i>
                                         </button> -->
+                                        <!-- LEOX se agrega al button "Modificar fechas" disabled-->
                                         <!-- LEO TBD I -->
-                                        <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado,empleado.value.FEE, empleado.value.chalias, empleado.value.etiqueta,empleado.value.IdPuesto)">
+                                        <button title="Modificar fechas" type="button" class="btn btn-primary" (click)="modificarEmpleado($event, etapa.value, empleado.value, i, iEmpleado,empleado.value.FEE, empleado.value.chalias, empleado.value.etiqueta,empleado.value.IdPuesto)" [disabled]="btnBloqueado">
                                             <i class="pi pi-calendar vertical-align-middle"></i>
                                         </button>
                                         <!-- LEO TBD F -->
-                                        <button title="Eliminar empleado" type="button" class="btn btn-danger" (click)="eliminarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)">
+                                        <!-- LEOX se agrega al button "Eliminar empleado" disabled-->
+                                        <button title="Eliminar empleado" type="button" class="btn btn-danger" (click)="eliminarEmpleado($event, etapa.value, empleado.value, i, iEmpleado)" [disabled]="btnBloqueado">
                                             <i class="pi pi-trash vertical-align-middle"></i>
                                         </button>
                                     </div>

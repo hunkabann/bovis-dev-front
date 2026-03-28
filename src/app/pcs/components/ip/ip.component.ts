@@ -165,6 +165,8 @@ export class IpComponent implements OnInit {
     utilidadPorcentaje: [null], //LEO inputs para FEEs I
     contingenciaPorcentaje: [null] //LEO inputs para FEEs I
   })
+  lineaBaseId:number //LEOX
+  btnBloqueado: boolean //LEOX para bloquear btn si una linea base seleccionada, habilitado de inicio
 
   constructor(private config: PrimeNGConfig, private catServ: CatalogosService, private fb: FormBuilder, private pcsService: PcsService, 
               private messageService: MessageService, private sharedService: SharedService, private cieService: CieService, 
@@ -178,7 +180,9 @@ export class IpComponent implements OnInit {
     this.pcsService.cambiarEstadoBotonNuevo(true)
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
-
+        console.log('IP OnInit lineasBase:'+params.lineasBase); //LEOX
+        this.lineaBaseId = params.lineasBase //LEOX asigna el idliena base
+        this.btnBloqueado = this.lineaBaseId == undefined ? false : true; //LEOX si hay una linea seleccionada que inhabilite el btn
         if (!params.proyecto) {
           this.proyecto = null
           this.cargando = false
@@ -192,7 +196,8 @@ export class IpComponent implements OnInit {
           this.mostrarFormulario = true
           // this.sharedService.cambiarEstado(true)
           // this.cargando = true
-          this.pcsService.obtenerProyectoPorId(this.idproyecto)
+          //LEOX  this.pcsService.obtenerProyectoPorId(this.idproyecto,this.lineaBaseId)
+          this.pcsService.obtenerProyectoPorId(this.idproyecto,this.lineaBaseId)
             .pipe(finalize(() => {
               // this.sharedService.cambiarEstado(false)
               this.cargando = false
@@ -200,6 +205,7 @@ export class IpComponent implements OnInit {
             .subscribe({
               next: ({ data }) => {
                 //console.log(data)
+                console.log('IP OnInit data.length:'+data.length); //LEOX
                 if (data.length >= 0) {
                   const [proyectoData] = data
                   const ids_clientes = proyectoData.clientes.map(cliente => cliente.idCliente.toString())
@@ -252,7 +258,8 @@ export class IpComponent implements OnInit {
       this.mostrarFormulario = true
       // this.sharedService.cambiarEstado(true)
       // this.cargando = true
-      this.pcsService.obtenerProyectoPorId(this.idproyecto)
+      //LEOX  this.pcsService.obtenerProyectoPorId(this.idproyecto,this.lineaBaseId)
+      this.pcsService.obtenerProyectoPorId(this.idproyecto, this.lineaBaseId)
         .pipe(finalize(() => {
           // this.sharedService.cambiarEstado(false)
           this.cargando = false
@@ -348,7 +355,8 @@ export class IpComponent implements OnInit {
             this.mostrarFormulario = true
             // this.sharedService.cambiarEstado(true)
             // this.cargando = true
-            this.pcsService.obtenerProyectoPorId(numProyecto)
+            //LEOX  this.pcsService.obtenerProyectoPorId(this.idproyecto,this.lineaBaseId)
+            this.pcsService.obtenerProyectoPorId(numProyecto, this.lineaBaseId)
               .pipe(finalize(() => {
                 // this.sharedService.cambiarEstado(false)
                 this.cargando = false

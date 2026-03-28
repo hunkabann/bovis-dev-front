@@ -29,11 +29,12 @@
                     <tr>
                         <td *ngIf="esEditable"> <!--FEE libre, se agrego al btn el seccion.idSeccion a la función modificarRubro -->
                             <div class="d-flex gap-2 justify-content-center">
+                                <!-- LEOX se agrega al inicio del disaabled la condicion (seccion.idSeccion == 17 && bloqueado)-->
                                 <button 
                                     title="Modificar rubro" type="button"
                                     class="btn btn-primary"
                                     (click)="modificarRubro(rubro, iRubro, seccion.idSeccion)" 
-                                    [disabled]="!rubro.idRubro || seccion.idSeccion == 2 ">
+                                    [disabled]="(seccion.idSeccion == 17 && bloqueado) || !rubro.idRubro || seccion.idSeccion == 2 || bloqueado">
                                     <i class="pi pi-pencil vertical-align-middle"></i>
                                 </button>
                             </div>

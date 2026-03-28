@@ -9,20 +9,23 @@
 <ng-template #principal>
 
     <p-confirmDialog></p-confirmDialog>
-
     <p-toolbar styleClass="p-1 mb-0 d-flex justify-content-end gap-2 text-right border-none" >
+        <!-- LEOX se agrega al button "crear linea" disabled-->
         <p-button 
             label="Crear Línea Base" 
             styleClass="p-button-primary"
+            [disabled]="btnBloqueado"
             (click)="crearLineaBase()">
         </p-button>
-        <p-button icon="pi pi-file-excel" label="Layout Off Line" styleClass="p-button-success" (click)="exportJsonToExcel()"></p-button>
+        <!-- LEOX se agrega al button "Layout off line" disabled-->
+        <p-button icon="pi pi-file-excel" label="Layout Off Line" styleClass="p-button-success" (click)="exportJsonToExcel()" [disabled]="btnBloqueado"></p-button>
     </p-toolbar>
 
     <div class="content" style="margin: 2%">
         <form [formGroup]="form" (ngSubmit)="guardar()" *ngIf="mostrarFormulario">
             <p-toolbar styleClass="p-1 mb-5 d-flex justify-content-end gap-2 text-right">
-                <button type="submit" class="btn btn-info" [disabled]="!form.valid">{{catalogosService.labelBotonPrincipal}}</button>
+                <!-- LEOX se agrega el id al button y se modifica disabled-->
+                <button type="submit" class="btn btn-info" id="btnPrincipal" [disabled]="!form.valid || btnBloqueado">{{catalogosService.labelBotonPrincipal}}</button>
             </p-toolbar>
 
             <p-accordion [activeIndex]="0">

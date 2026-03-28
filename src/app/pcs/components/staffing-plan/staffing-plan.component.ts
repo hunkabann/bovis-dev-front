@@ -59,6 +59,8 @@ export class StaffingPlanComponent implements OnInit {
 
   idproyecto: number;
   etapaTotales: any[] = [];
+  lineaBaseId:number //LEOX
+  btnBloqueado: boolean = false //LEOX para bloquear btn si una linea base seleccionada, habilitado de inicio
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) { }
 
@@ -89,9 +91,11 @@ export class StaffingPlanComponent implements OnInit {
 
     this.catalogosService.obtenerParametros()
       .subscribe(params => {
-
+        console.log('Staffing OnInit params.lineasbase:'+ params.lineasBase)//LEOX
+        this.lineaBaseId = params.lineasBase //LEOX
+        this.btnBloqueado = this.lineaBaseId == undefined ? false : true; //LEOX si hay una linea seleccionada que inhabilite el btn
         if (!params.proyecto) {
-
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: "No se ha seleccionado un Proyecto" })//LEOX
           //console.log("params.proyecto:" + params.proyecto)
         } else {
           this.idproyecto = params.proyecto
