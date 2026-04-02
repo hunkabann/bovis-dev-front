@@ -32,9 +32,32 @@ export class ProjectService {
   }
     */
 
-  getProjects(id: number): Observable<GanttItem[]> {
+  // getProjects(id: number): Observable<GanttItem[]> {
+  //   //return this.http.get<GanttItem[]>(`${this.baseUrl}api/Pcs/EtapasP/${id}`);
+  //   return this.http.get<any>(`${this.baseUrl}api/Pcs/EtapasP/${id}`).pipe(
+  //     map(response => {
+  //       // Aseguramos que data.data exista y sea un array
+  //       const rawData = response?.data?.data || [];
+  //       return rawData.map((item: any) => ({
+  //         x: [item.x[0], item.x[1]],
+  //         y: item.y
+  //       })) as GanttItem[];
+  //     })
+  //   );
+  // }
+  
+  //LEOX
+  getProjects(id: number, idLineaBase?: number): Observable<GanttItem[]> {
+    let url = '';
+
+    if (idLineaBase !== undefined) {
+      url = `${this.baseUrl}api/Pcs/EtapasP/${id}/${idLineaBase}`;
+    } else {
+      url = `${this.baseUrl}api/Pcs/EtapasP/${id}`;
+    }
+
     //return this.http.get<GanttItem[]>(`${this.baseUrl}api/Pcs/EtapasP/${id}`);
-    return this.http.get<any>(`${this.baseUrl}api/Pcs/EtapasP/${id}`).pipe(
+    return this.http.get<any>(url).pipe(
       map(response => {
         // Aseguramos que data.data exista y sea un array
         const rawData = response?.data?.data || [];

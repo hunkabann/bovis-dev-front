@@ -314,7 +314,8 @@ export class IpComponent implements OnInit {
         })
 
       // INICIA LLAMADO A STAFFING
-      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+      //LEOX se agrega this.lineaBaseId obtenerEtapasPorProyecto
+      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto, this.lineaBaseId)
         .pipe(finalize(() => {
           // this.sharedService.cambiarEstado(false)
           //this.proyectoSeleccionado = true
@@ -410,7 +411,8 @@ export class IpComponent implements OnInit {
 
 
             //INICIA LLAMADO A STAFFING
-            this.pcsService.obtenerEtapasPorProyecto(numProyecto)
+            //LEOX se agrega lineaBaseId 
+            this.pcsService.obtenerEtapasPorProyecto(numProyecto,this.lineaBaseId)
               .pipe(finalize(() => {
                 // this.sharedService.cambiarEstado(false)
                 //this.proyectoSeleccionado = true

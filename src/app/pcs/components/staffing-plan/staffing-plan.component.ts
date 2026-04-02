@@ -107,7 +107,9 @@ export class StaffingPlanComponent implements OnInit {
       //console.log("Staffing-plan.components Entro al this.idproyecto " + this.idproyecto)
 
       this.cargando = true
-      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+      //LEOX se agrega this.lineaBaseId this.pcsService.obtenerEtapasPorProyecto
+      console.log('obtenerEtapasPorProyecto3:'+this.lineaBaseId)
+      this.pcsService.obtenerEtapasPorProyecto(this.idproyecto, this.lineaBaseId)
         .pipe(finalize(() => {
           // this.sharedService.cambiarEstado(false)
           this.proyectoSeleccionado = true
@@ -126,7 +128,9 @@ export class StaffingPlanComponent implements OnInit {
           if (numProyecto) {
             // this.sharedService.cambiarEstado(true)
             this.cargando = true
-            this.pcsService.obtenerEtapasPorProyecto(numProyecto)
+            //LEOX se agrega this.lineaBaseId this.pcsService.obtenerEtapasPorProyecto
+            console.log('obtenerEtapasPorProyecto:'+this.lineaBaseId)
+            this.pcsService.obtenerEtapasPorProyecto(numProyecto, this.lineaBaseId)
               .pipe(finalize(() => {
                 // this.sharedService.cambiarEstado(false)
                 this.cargando = false
@@ -367,7 +371,9 @@ export class StaffingPlanComponent implements OnInit {
         this.etapas.clear();
         this.cargando = true
         //console.log('modificarEmpleado obtenerEtapasPorProyecto2:'+this.etapas.length) //LEO TBD
-        this.pcsService.obtenerEtapasPorProyecto(this.idproyecto)
+        //LEOX
+        console.log('obtenerEtapasPorProyecto2:'+this.lineaBaseId)
+        this.pcsService.obtenerEtapasPorProyecto(this.idproyecto,this.lineaBaseId)
             .pipe(finalize(() => {
             // this.sharedService.cambiarEstado(false)
             this.proyectoSeleccionado = true

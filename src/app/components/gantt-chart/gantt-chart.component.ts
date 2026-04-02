@@ -67,6 +67,7 @@ export class GanttChartComponent implements OnInit {
   min = new Date();
   max = new Date();
   transformedProjects: { y: string; start: Date; duration: number }[] = [];
+  lineaBaseId:number //LEOX
 
   constructor(
     private projectService: ProjectService,
@@ -76,13 +77,16 @@ export class GanttChartComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
       const idProyecto = +params['proyecto']; // 👈 leer parámetro de URL
-
+      console.log('Gantt OnInit lineasBase:'+params['lineasBase']); //LEOX
+        this.lineaBaseId = params['lineasBase'] //LEOX
       if (!idProyecto) {
         console.error('No se proporcionó un id de proyecto');
         return;
       }
 
-      this.projectService.getProjects(idProyecto).subscribe((data: GanttItem[]) => {
+      //LEOX se agrega el lineaBaseId
+
+      this.projectService.getProjects(idProyecto, this.lineaBaseId).subscribe((data: GanttItem[]) => {
        this.transformedProjects = data.map(item => {
           //const start = new Date(item.x[0]);
           //const end = new Date(item.x[1]);

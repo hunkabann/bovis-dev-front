@@ -74,10 +74,22 @@ export class PcsService {
     );
   }
 
-  obtenerEtapasPorProyecto(idProyecto: number) {
-    return this.http.get<EtapasPorProyectoResponse>(`${this.baseUrl}api/Pcs/Etapas/${idProyecto}`)
-  }
+  // obtenerEtapasPorProyecto(idProyecto: number) {
+  //   return this.http.get<EtapasPorProyectoResponse>(`${this.baseUrl}api/Pcs/Etapas/${idProyecto}`)
+  // }
 
+  //LEOX I
+  obtenerEtapasPorProyecto(idProyecto: number, idLineaBase?: number) {
+    let url = '';
+    if (idLineaBase !== undefined) {
+      url = `${this.baseUrl}api/Pcs/Etapas/${idProyecto}/${idLineaBase}`;
+    } else {
+      url = `${this.baseUrl}api/Pcs/Etapas/${idProyecto}`;
+    }    
+    return this.http.get<EtapasPorProyectoResponse>(url)
+  }  
+  //LEOX F
+  
   modificarEtapa(body: any) {
     return this.http.put<GenericResponse>(`${this.baseUrl}api/Pcs/Etapas`, body)
   }
