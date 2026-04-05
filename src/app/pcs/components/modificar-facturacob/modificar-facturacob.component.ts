@@ -61,7 +61,11 @@ export class ModificarFacturacobComponent implements OnInit {
       tipo: this.tipo
     });
 
+    const hoy = new Date(); // LDTF  04/Abr
+    const inicioMesActual = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+
     // Cargar fechas al FormArray
+    /*
     this.registrosEntrada.forEach(r => {
       this.fechasFA.push(
         this.fb.group({
@@ -70,6 +74,37 @@ export class ModificarFacturacobComponent implements OnInit {
           desc: descripcionMesAnio(r.mes,r.anio),
           disabled: deshabilitaControl(r.mes,r.anio),
           totalPorcentaje: [r.totalPorcentaje, Validators.required]
+        })
+      );
+    });
+    */
+    this.registrosEntrada.forEach(r => {
+
+      const fechaRegistro = new Date(r.anio, r.mes - 1, 1);
+
+      // lógica original
+      const disabledOriginal = deshabilitaControl(r.mes, r.anio);
+
+      let disabledFinal = disabledOriginal;
+
+      // Regla FEE libre
+      if (this.tipo === 3) {
+        // si es mes actual o futuro → siempre habilitado
+        if (fechaRegistro >= inicioMesActual) {
+          disabledFinal = false;
+        }
+      }
+
+      this.fechasFA.push(
+        this.fb.group({
+          mes: [r.mes],
+          anio: [r.anio],
+          desc: descripcionMesAnio(r.mes, r.anio),
+          disabled: disabledFinal,
+          totalPorcentaje: [
+            { value: r.totalPorcentaje, disabled: disabledFinal },
+            Validators.required
+          ]
         })
       );
     });
