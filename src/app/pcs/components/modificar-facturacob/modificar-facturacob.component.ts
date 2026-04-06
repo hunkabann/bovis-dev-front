@@ -147,7 +147,8 @@ export class ModificarFacturacobComponent implements OnInit {
     //FEE libre I
     else {
       //para FEE libre se cambia el listado de fechas
-      (this.form.value.fechas as FechaFormValue[]).forEach(fecha => {
+      //(this.form.value.fechas as FechaFormValue[]).forEach(fecha => {
+      (this.form.getRawValue().fechas as FechaFormValue[]).forEach(fecha => {
 
         const nuevo: FechaEntradaFEELibre = {
             mes: fecha.mes,
