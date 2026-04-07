@@ -111,6 +111,7 @@ export class ModificarFacturacobComponent implements OnInit {
     });
   }
 
+  /*
   guardar() {
     let payload;
 
@@ -244,6 +245,155 @@ export class ModificarFacturacobComponent implements OnInit {
       });
     }//FEE libre 
   }
+    */
+
+  guardar() {
+
+    let payload;
+
+    const aSalida: FechaEntradaFacturaCob[] = [];
+    const aSalidaFee: FechaEntradaFEELibre[] = []; //FEE libre
+
+    //  Construcción base para Facturación / Cobranza
+    (this.form.value.fechas as FechaFormValue[]).forEach(fecha => {
+
+      const nuevo: FechaEntradaFacturaCob = {
+        mes: fecha.mes,
+        anio: fecha.anio,
+        reembolsable: true,
+        totalPorcentaje: fecha.totalPorcentaje
+      };
+
+      aSalida.push(nuevo);
+    });
+
+    //  Tipo 1: Facturación
+    if (this.tipo == 1) {
+      payload = {
+        nunum_proyecto: this.numProyecto,
+        tipo: this.tipo,
+        //facturacion: this.form.value.fechas
+        facturacion: aSalida,
+      };
+    }
+
+    //  Tipo 2: Cobranza
+    else if (this.tipo == 2) { //FEE libre
+      payload = {
+        nunum_proyecto: this.numProyecto,
+        tipo: this.tipo,
+        //cobranza: this.form.value.fechas
+        cobranza: aSalida,
+      };
+    }
+
+    //  Tipo 3: FEE libre
+    //FEE libre I
+    else {
+
+      //para FEE libre se cambia el listado de fechas
+      //(this.form.value.fechas as FechaFormValue[]).forEach(fecha => {
+      (this.form.getRawValue().fechas as FechaFormValue[]).forEach(fecha => {
+
+        const nuevo: FechaEntradaFEELibre = {
+          mes: fecha.mes,
+          anio: fecha.anio,
+          reembolsable: true,
+          totalPorcentaje: fecha.totalPorcentaje
+        };
+
+        aSalidaFee.push(nuevo);
+      });
+
+      payload = {
+        nunum_proyecto: this.numProyecto,
+        tipo: this.tipo,
+        idSeccion: this.idSeccion,
+        idRubro: this.idRubro,
+        reembolsable: true,
+        fees: aSalidaFee,
+      };
+
+      // Eliminar duplicados por mes-año (solo aplica a FEE libre)
+      const map = new Map<string, FechaEntradaFEELibre>();
+
+      payload.fees.forEach(fee => {
+        const key = `${fee.anio}-${fee.mes}`;
+        map.set(key, fee);
+      });
+
+      payload.fees = Array.from(map.values());
+    }
+    //FEE libre F
+
+    //console.log('payload:'+payload);
+
+    //  Guardado según tipo
+    //FEE libre I
+    if (this.tipo == 3) {
+
+      //guardar FEE libre
+      console.log('Guardare FEE libre');
+
+      this.pcsService.actualizarFee(payload).subscribe({
+
+        next: (resp) => {
+
+          // Cerrar y devolver al padre el arreglo ACTUALIZADO
+          const arregloActualizado = payload.fees.map((f: any) => ({
+            reembolsable: false,
+            mes: f.mes,
+            anio: f.anio,
+            totalPorcentaje: f.totalPorcentaje,
+            porcentaje: f.totalPorcentaje
+          }));
+
+          this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+
+          this.ref.close({
+            rubroActualizado: arregloActualizado
+          });
+        },
+
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
+        }
+
+      });
+
+    }
+    //FEE libre F
+    else {
+
+      //guardar Facturacion o Cobranza
+      this.pcsService.actualizarFacturacob(payload).subscribe({
+
+        next: (resp) => {
+
+          // Cerrar y devolver al padre el arreglo ACTUALIZADO
+          const arregloActualizado = (this.form.value.fechas as any[]).map(f => ({
+            reembolsable: false,
+            mes: f.mes,
+            anio: f.anio,
+            totalPorcentaje: f.totalPorcentaje
+          }));
+
+          this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+
+          this.ref.close({
+            rubroActualizado: arregloActualizado
+          });
+        },
+
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error });
+        }
+
+      });
+
+    }//FEE libre 
+
+  } // guardar
 
 }
 
