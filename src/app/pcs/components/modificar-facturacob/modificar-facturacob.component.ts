@@ -87,8 +87,9 @@ export class ModificarFacturacobComponent implements OnInit {
 
       let disabledFinal = disabledOriginal;
 
-      // Regla FEE libre
-      if (this.tipo === 3) {
+      // Regla FEE libre, cobranza y facturación
+      //if (this.tipo === 3) {
+      if ([1, 2, 3].includes(this.tipo)) {
         // si es mes actual o futuro → siempre habilitado
         if (fechaRegistro >= inicioMesActual) {
           disabledFinal = false;
