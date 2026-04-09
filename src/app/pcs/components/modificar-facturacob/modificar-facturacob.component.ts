@@ -326,7 +326,7 @@ export class ModificarFacturacobComponent implements OnInit {
     }
     //FEE libre F
 
-    //console.log('payload:'+payload);
+    //console.log('payload: ' + payload);
 
     //  Guardado según tipo
     //FEE libre I
@@ -375,7 +375,7 @@ export class ModificarFacturacobComponent implements OnInit {
             reembolsable: false,
             mes: f.mes,
             anio: f.anio,
-            totalPorcentaje: f.totalPorcentaje
+            totalPorcentaje: f.totalPorcentaje ?? 0   // LDTF, el cero se puso para que deje blancos en el acordeon despues de actualizar 08/Abr/2026
           }));
 
           this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
