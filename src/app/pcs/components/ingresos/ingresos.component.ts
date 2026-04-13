@@ -181,7 +181,8 @@ export class IngresosComponent implements OnInit {
 
   async cargarInformacionSeccion(event: any) {
     const { index } = event;
-    this.pcsService.obtenerInformacionGastosIngresos(this.idproyecto, 'ingreso', this.secciones.value.at(index).seccion)
+    //LEOX obtenerInformacionGastosIngresos
+    this.pcsService.obtenerInformacionGastosIngresos(this.idproyecto, 'ingreso', this.secciones.value.at(index).seccion, this.lineaBaseId)
       .pipe(finalize(() => this.seccionesCargado[index] = true))
       .subscribe({
         next: async (result) => {

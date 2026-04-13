@@ -177,7 +177,8 @@ export class GastosComponent implements OnInit {
 
   async cargarInformacionSeccion(event: any) {
     const { index } = event;
-    this.pcsService.obtenerInformacionGastosIngresos(this.idproyecto, 'gasto', this.secciones.value.at(index).seccion)
+    //LEOX obtenerInformacionGastosIngresos
+    this.pcsService.obtenerInformacionGastosIngresos(this.idproyecto, 'gasto', this.secciones.value.at(index).seccion, this.lineaBaseId)
       .pipe(finalize(() => this.seccionesCargado[index] = true))
       .subscribe({
         next: async (result) => {
@@ -210,12 +211,13 @@ export class GastosComponent implements OnInit {
     refrescarSeccion(index: number) {
       console.log('RefrescarSeccion:'+index)
     this.seccionesCargado[index] = false;
-
+    //LEOX obtenerInformacionGastosIngresos
     this.pcsService
       .obtenerInformacionGastosIngresos(
         this.idproyecto,
         'gasto',
-        this.secciones.value.at(index).seccion
+        this.secciones.value.at(index).seccion,
+        this.lineaBaseId
       )
       .pipe(finalize(() => this.seccionesCargado[index] = true))
       .subscribe({
