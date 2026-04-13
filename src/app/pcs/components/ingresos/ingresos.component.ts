@@ -169,7 +169,8 @@ export class IngresosComponent implements OnInit {
         }
       });
 
-    this.pcsService.obtenerTotalesIngresos(numProyecto)
+    //LEOX obtenerTotalesIngresos
+    this.pcsService.obtenerTotalesIngresos(numProyecto, this.lineaBaseId)
       .pipe(finalize(() => this.cargandoTotales = false))
       .subscribe({
         next: ({data}) => {
