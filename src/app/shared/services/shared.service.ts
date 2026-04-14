@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { errorsArray } from 'src/utils/constants';
-
+import { Subject } from 'rxjs';//LEOX2
 @Injectable({
   providedIn: 'root'
 })
@@ -38,5 +38,12 @@ export class SharedService {
     })
 
     return mensaje
+  }
+
+  private etapasActualizadasSource = new Subject<void>(); //LEOX2
+  etapasActualizadas$ = this.etapasActualizadasSource.asObservable();//LEOX2
+  //LEOX2
+  notificarCambioEtapas() {
+    this.etapasActualizadasSource.next();
   }
 }

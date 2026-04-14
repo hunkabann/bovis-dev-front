@@ -243,25 +243,12 @@ export class StaffingPlanComponent implements OnInit {
             meses: this.fb.array(await obtenerMeses(new Date(etapa.fechaIni), new Date(etapa.fechaFin)))
           }))
         }
+        this.sharedService.notificarCambioEtapas();//LEOX2 
       })
+     
   }
 
-  eliminarEtapa(event: Event, etapa: Etapa, index: number) {
 
-    event.stopPropagation();
-
-    this.sharedService.cambiarEstado(true)
-
-    this.pcsService.eliminarEtapa(etapa.idFase)
-      .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
-      .subscribe({
-        next: (data) => {
-          this.etapas.removeAt(index)
-          this.messageService.add({ severity: 'success', summary: TITLES.success, detail: 'La etapa ha sido eliminada.' })
-        },
-        error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
-      })
-  }
 
   modificarEtapa(event: Event, etapa: Etapa, etapaIndex: number) {
     event.stopPropagation();
@@ -288,7 +275,7 @@ export class StaffingPlanComponent implements OnInit {
             fechaIni: etapaRes.fechaIni,
             fechaFin: etapaRes.fechaFin
           });
-
+          this.sharedService.notificarCambioEtapas();//LEOX2
           this.meses(etapaIndex).clear();
 
           this.etapaTotales[etapa.idFase] = [];
@@ -334,6 +321,7 @@ export class StaffingPlanComponent implements OnInit {
           })
         }
       })
+      
   }
 
   modificarEmpleado(event: Event, etapa: Etapa, empleado: Empleado | null, etapaIndex: number, empleadoIndex: number | null, FEE: number | null, chalias: string | null, etiquetaTBD: string | null, IdPuesto: string | null) {
@@ -464,5 +452,35 @@ export class StaffingPlanComponent implements OnInit {
 
   originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
     return 0;
+  }
+
+  eliminarEtapa(event: Event, etapa: Etapa, index: number) {
+  event.stopPropagation();
+
+  this.sharedService.cambiarEstado(true);
+
+  this.pcsService.eliminarEtapa(etapa.idFase)
+    .pipe(finalize(() => this.sharedService.cambiarEstado(false)))
+    .subscribe({
+      next: () => {
+        this.etapas.removeAt(index);
+
+        this.messageService.add({
+          severity: 'success',
+          summary: TITLES.success,
+          detail: 'La etapa ha sido eliminada.'
+        });
+
+        // Notificas al gantt
+        this.sharedService.notificarCambioEtapas();
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: TITLES.error,
+          detail: err.error
+        });
+      }
+    });
   }
 }
