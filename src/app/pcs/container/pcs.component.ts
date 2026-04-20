@@ -172,6 +172,10 @@ export class PcsComponent implements OnInit {
       this.cargarLineasBase(this.proyectoId);
       this.lineaBaseId = null; // reset
     }
+    else{
+      console.log('PCS cargarProyecto que limpie lineas this.proyectoId:'+this.proyectoId)
+      this.lineasBase = [];
+    }
     // LDTF línea base F
 
     this.router.navigate([], {
