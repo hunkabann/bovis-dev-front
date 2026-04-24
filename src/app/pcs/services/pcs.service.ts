@@ -137,8 +137,16 @@ export class PcsService {
     return this.http.get<GastosIngresosSeccionesResponseNuevo>(`${this.baseUrl}api/Pcs/GastosIngresos/secciones/${numProyecto}/${tipo}`)
   }
 
-  obtenerInformacionGastosIngresos(numProyecto: number, tipo: 'gasto' | 'ingreso', seccion: string) {
-    return this.http.get<GastosIngresosInformacionResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/${numProyecto}/${tipo}/${seccion}`)
+  //LEOX
+  obtenerInformacionGastosIngresos(numProyecto: number, tipo: 'gasto' | 'ingreso', seccion: string, idLineaBase?: number) {
+    let url = '';
+    if (idLineaBase !== undefined) {
+      url = `${this.baseUrl}api/Pcs/GastosIngresos_lb/${numProyecto}/${tipo}/${seccion}/${idLineaBase}`
+    }
+    else{
+      url = `${this.baseUrl}api/Pcs/GastosIngresos/${numProyecto}/${tipo}/${seccion}`
+    }
+    return this.http.get<GastosIngresosInformacionResponse>(url);
   }
 
   obtenerInformacionSeccion(numProyecto: number, seccion: string) {
@@ -153,8 +161,16 @@ export class PcsService {
     return this.http.get<GastosIngresosControlResponse>(`${this.baseUrl}api/Pcs/GastosIngresos/${numProyecto}/${tipo}`)
   }
 
-  obtenerTotalesIngresos(numProyecto: number) {
-    return this.http.get<TotalesIngresosResponse>(`${this.baseUrl}api/Pcs/TotalesIngresos/${numProyecto}`);
+  obtenerTotalesIngresos(numProyecto: number, idLineaBase?: number) {
+    let url = '';
+
+    if (idLineaBase !== undefined) {
+      url = `${this.baseUrl}api/Pcs/TotalesIngresos/${numProyecto}/${idLineaBase}`;
+    } else {
+      url = `${this.baseUrl}api/Pcs/TotalesIngresos/${numProyecto}`;
+    }
+
+    return this.http.get<TotalesIngresosResponse>(url);
   }
   
   //LEO inputs para FEEs I
