@@ -4,6 +4,7 @@ import { ChartData, ChartOptions, ChartDataset } from 'chart.js';
 import { GanttItem, ProjectService } from '../../services/project.service';
 import type { TimeScaleOptions } from 'chart.js';
 import { SharedService } from 'src/app/shared/services/shared.service';//LEOX2
+import { es } from 'date-fns/locale';
 
 @Component({
   selector: 'app-gantt-chart',
@@ -23,6 +24,7 @@ export class GanttChartComponent implements OnInit {
     responsive: true,
     indexAxis: 'y',
     maintainAspectRatio: false,
+    locale: 'es',
     plugins: {
       legend: { display: false },
       datalabels: {
@@ -46,8 +48,16 @@ export class GanttChartComponent implements OnInit {
       x: {
         type: 'time',
         stacked: true,
+        adapters: {
+          date: {
+            locale: es
+          }
+        },
         time: {
           unit: 'month',
+          displayFormats: {
+            month: 'MMM yyyy' // Ej: ene 2025
+          },
           tooltipFormat: 'yyyy-MM-dd'
         },
         title: {
