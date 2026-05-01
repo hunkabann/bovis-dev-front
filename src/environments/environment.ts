@@ -4,10 +4,13 @@
 // The list of file replacements can be found in `angular.json`.
 export const environment = {
   production: false,
-  urlApiBovis: 'https://bovis-dev-api-up.azurewebsites.net/',
+  //urlApiBovis: 'https://bovis-dev-api-up.azurewebsites.net/',  
+  urlApiBovis: 'https://bovisbak-heapcra8dfbvgned.mexicocentral-01.azurewebsites.net/',  
   redirectUri: 'http://localhost:4200/',
-  clientID: '2a3addef-64ef-407c-a86a-b9913237e5c5',
-  urlAuthority: 'https://login.microsoftonline.com/48986ced-d307-4c91-85be-933ccbcbaeb3',
+  //clientID: '2a3addef-64ef-407c-a86a-b9913237e5c5',
+  clientID: '73b73f14-ff3d-4ab9-8815-75021f268f09',
+  //urlAuthority: 'https://login.microsoftonline.com/48986ced-d307-4c91-85be-933ccbcbaeb3',
+  urlAuthority: 'https://login.microsoftonline.com/67cad92e-05ce-404f-9bfb-6d5e0fea8d1c',
   tokenUser: 'B0V1$-2023',
   tokenSecret: 'P4$w0RD_2023'
 };
