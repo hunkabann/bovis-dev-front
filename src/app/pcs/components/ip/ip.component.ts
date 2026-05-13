@@ -1462,11 +1462,15 @@ export class IpComponent implements OnInit {
     const areaProyecto =
       Number(this.form.get('area_proyecto')?.value) || 0;
 
-    const resultado = costoConstruccion * areaProyecto;
+    // Evitar división entre cero
+    const resultado =
+      areaProyecto > 0
+        ? costoConstruccion / areaProyecto
+        : 0;
 
     this.form.patchValue({
       costo_promedio_m2: resultado
-    }, { emitEvent: false });
+    });
   }
 
   ejecutarCreacion() {
