@@ -151,7 +151,8 @@ export class IpComponent implements OnInit {
     ids_clientes: [[''], [Validators.required]],
     id_empresa: ['', [Validators.required]],
     id_director_ejecutivo: ['', [Validators.required]],
-    costo_promedio_m2: [null],
+    //costo_promedio_m2: [null],
+    costo_promedio_m2: [{ value: 0, disabled: true }],  // LDTF costo promedio
     fecha_inicio: [null, [Validators.required]],
     fecha_fin: [null, [Validators.required]],
     total_meses: [0],
@@ -161,6 +162,8 @@ export class IpComponent implements OnInit {
     correo_contacto: [null],
     impuesto_nomina: [0, [Validators.required]],
     id_unidad_negocio: ['', [Validators.required]],
+    costo_construccion: [0],  // LDTF costo promedio
+    area_proyecto: [0],       // LDTF costo promedio
     overheadPorcentaje: [null], //LEO inputs para FEEs I
     utilidadPorcentaje: [null], //LEO inputs para FEEs I
     contingenciaPorcentaje: [null] //LEO inputs para FEEs I
@@ -1448,6 +1451,22 @@ export class IpComponent implements OnInit {
       }
     });
 
+  }
+
+
+  calcularCostoPromedio(): void {
+
+    const costoConstruccion =
+      Number(this.form.get('costo_construccion')?.value) || 0;
+
+    const areaProyecto =
+      Number(this.form.get('area_proyecto')?.value) || 0;
+
+    const resultado = costoConstruccion * areaProyecto;
+
+    this.form.patchValue({
+      costo_promedio_m2: resultado
+    }, { emitEvent: false });
   }
 
   ejecutarCreacion() {
