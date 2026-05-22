@@ -121,18 +121,24 @@
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Fee - Porcentaje de OH sobre el total no reembolsable</td>
-                        <td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:overheadPorcentaje | currency}}</td><!-- LEO inputs para FEEs -->
-                        <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: overheadPorcentaje |currency}}</td><!-- LEO inputs para FEEs -->
+                        <!-- <td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:overheadPorcentaje | currency}}</td>--><!-- LEO inputs para FEEs -->
+                        <!-- <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: overheadPorcentaje |currency}}</td> --> <!-- LEO inputs para FEEs -->
+                        <td class="text-right">   {{ getSubtotalOH() | currency }} </td>    <!-- LDTF -->
+                        <td *ngFor="let valor of ingresoOH" class="text-right">{{ valor.totalPorcentaje | currency }} </td> <!-- LDTF -->
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Fee - Porcentaje de Utilidad sobre el total no reembolsable</td>
-                        <td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:utilidadPorcentaje | currency}}</td><!-- LEO inputs para FEEs -->
-                        <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: utilidadPorcentaje |currency}}</td><!-- LEO inputs para FEEs -->
+                        <!--<td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:utilidadPorcentaje | currency}}</td>--><!-- LEO inputs para FEEs -->
+                        <!--<td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: utilidadPorcentaje |currency}}</td>--><!-- LEO inputs para FEEs -->
+                        <td class="text-right">  {{ getSubtotalUtilidad() | currency }}</td>    <!-- LDTF -->
+                        <td *ngFor="let valor of ingresoUtilidad" class="text-right">  {{ valor.totalPorcentaje | currency }}</td>    <!-- LDTF -->
                     </tr>
                     <tr *ngIf="registro.value.titulo == 'Ingreso'">
                         <td>Contingencia - % sobre Costos No Reembolsables</td>
-                        <td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:contingenciaPorcentaje | currency}}</td><!-- LEO inputs para FEEs -->
-                        <td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: contingenciaPorcentaje |currency}}</td><!-- LEO inputs para FEEs -->
+                        <!--<td class="text-right">{{filterNoReembolsables(registro.value.registros) | porcentajeImportesSubtotal:contingenciaPorcentaje | currency}}</td>--><!-- LEO inputs para FEEs -->
+                        <!--<td *ngFor="let valor of filterNoReembolsables(registro.value.registros)" class="text-right">{{valor.totalPorcentaje | porcentajeImportes: contingenciaPorcentaje |currency}}</td>--><!-- LEO inputs para FEEs -->
+                        <td class="text-right">  {{ getSubtotalContingencia() | currency }}</td>    <!-- LDTF -->
+                        <td *ngFor="let valor of ingresoContingencia" class="text-right">  {{ valor.totalPorcentaje | currency }}</td>    <!-- LDTF -->
                     </tr>
 
                     <!-- FACTURACIÓN -->

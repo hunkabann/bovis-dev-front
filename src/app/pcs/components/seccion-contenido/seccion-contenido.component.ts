@@ -261,8 +261,12 @@ export class SeccionContenidoComponent implements OnInit {
 
   abreRubroFactCob(rubro: any[], idFuente: number, rubroIndex: number) {
     //se mapea la entrada de Fecha a GastosIngresosTotales para que muestre la info la modal
+    //console.log('rubro:', rubro);
+    //console.log('rubroIndex:', rubroIndex);
+    //console.log('rubro seleccionado:', rubro[rubroIndex]);
     let lst = this.mapeaFechasToGastostotales(rubro);
-    console.log('abreRubroFactCob Idseccion:'+this.seccion.idSeccion);
+    //console.log('lst (resultado mapeo):', lst);
+    //console.log('abreRubroFactCob Idseccion:' + this.seccion.idSeccion);
     this.ref = this.dialogService.open(ModificarFacturacobComponent, {
       header: 'Modificar ' + rubro[rubroIndex].rubro,
       width: '700px',

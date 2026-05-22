@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter  } from '@angular/core';
 import { GastosIngresosTotales, TotalesIngresosFormateado, TotalesIngresosResponseData } from '../../models/pcs.model';
 import { Mes } from '../../../../models/general.model';
 import { KeyValue } from '@angular/common';
@@ -22,6 +22,10 @@ export class TotalesIngresosComponent implements OnInit {
   @Input() totalesData: TotalesIngresosResponseData;
   @Input() nunum_proyecto: number; //LEO inputs para FEEs 
   @Input() bloqueado: boolean //LEOX
+  @Output() recargar = new EventEmitter<void>();  // LDTF para recargar la info de fee después de guardar
+  ingresoOH: GastosIngresosTotales[] = [];      // LDTF
+  ingresoUtilidad: GastosIngresosTotales[] = [];
+  ingresoContingencia: GastosIngresosTotales[] = [];
 
   registros: {
     ingreso: TotalesIngresosFormateado,
@@ -72,6 +76,13 @@ export class TotalesIngresosComponent implements OnInit {
       this.overheadPorcentaje = this.totalesData.overheadPorcentaje;
       this.utilidadPorcentaje = this.totalesData.utilidadPorcentaje;
       this.contingenciaPorcentaje = this.totalesData.contingenciaPorcentaje;
+      this.ingresoOH = this.totalesData.ingresoOH || [];
+      this.ingresoUtilidad = this.totalesData.ingresoUtilidad || [];
+      this.ingresoContingencia = this.totalesData.ingresoContingencia || [];
+
+      //console.log('OH', this.ingresoOH);
+      //console.log('Utilidad', this.ingresoUtilidad);
+      //console.log('Contingencia', this.ingresoContingencia);
 
       if(this.totalesData.ingreso) {
         this.totalesData.ingreso.forEach((ingreso: GastosIngresosTotales) => {
@@ -130,6 +141,18 @@ export class TotalesIngresosComponent implements OnInit {
     }
   }
 
+  getSubtotalOH(): number {
+    return this.ingresoOH.reduce((a, b) => a + b.totalPorcentaje, 0);
+  }
+
+  getSubtotalUtilidad(): number {
+    return this.ingresoUtilidad.reduce((a, b) => a + b.totalPorcentaje, 0);
+  }
+
+  getSubtotalContingencia(): number {
+    return this.ingresoContingencia.reduce((a, b) => a + b.totalPorcentaje, 0);
+  }
+
   originalOrder = (a: KeyValue<string, TotalesIngresosFormateado>, b: KeyValue<string, TotalesIngresosFormateado>): number => {
     return 0;
   }
@@ -144,6 +167,7 @@ export class TotalesIngresosComponent implements OnInit {
     return ingresos?.filter(i => i.reembolsable === false) || [];
   }
 
+  /*
   guardarFee()
   {
     // validar opcionalmente
@@ -167,7 +191,48 @@ export class TotalesIngresosComponent implements OnInit {
     });
 
   }
-  //LEO inputs para FEEs F
+    */
+  guardarFee()
+  {
+    if (this.overheadPorcentaje == null &&
+        this.utilidadPorcentaje == null &&
+        this.contingenciaPorcentaje == null)
+    {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Advertencia',
+        detail: 'Completa al menos 1 porcentaje'
+      });
+      return;
+    }
+
+    this.pcsService.guardarFeePorcentaje(true, {
+      nunum_proyecto: this.nunum_proyecto,
+      overheadPorcentaje: this.overheadPorcentaje,
+      utilidadPorcentaje: this.utilidadPorcentaje,
+      contingenciaPorcentaje: this.contingenciaPorcentaje
+    }).subscribe({
+      next: (data) => {
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'OK',
+          detail: 'Guardado correctamente'
+        });
+
+        // <-- AQUÍ
+        this.recargar.emit();
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: TITLES.error,
+          detail: err.error
+        });
+      }
+    });
+  }
+    //LEO inputs para FEEs F
  
   //LEO Facturación y Cobranza I
   modificarRegistro(rubro: any[], idFuente: number) {

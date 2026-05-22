@@ -378,6 +378,9 @@ export interface TotalesIngresosResponseData {
     ingreso:     GastosIngresosTotales[];
     facturacion: GastosIngresosTotales[];
     cobranza:    GastosIngresosTotales[];
+    ingresoOH: GastosIngresosTotales[]; // LDTF inputs para FEEs ingresos
+    ingresoUtilidad: GastosIngresosTotales[]; // LDTF inputs para FEEs ingresos
+    ingresoContingencia: GastosIngresosTotales[]; // LDTF inputs para FEEs ingresos
     overheadPorcentaje: number; //LEO inputs para FEEs
     utilidadPorcentaje: number; //LEO inputs para FEEs
     contingenciaPorcentaje: number; //LEO inputs para FEEs
