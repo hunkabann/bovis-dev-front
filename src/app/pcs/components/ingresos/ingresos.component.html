@@ -46,7 +46,19 @@
             </div>
             <ng-template #totales>
                 <!--LEOX agrego variable bloqueado-->
-                <app-totales-ingresos [totalesData]="totalesData" [nunum_proyecto]="this.numProyectorubro" [bloqueado] = "btnBloqueado"></app-totales-ingresos>  <!-- LEO inputs para FEEs -->
+                <!--
+                <app-totales-ingresos
+                    [totalesData]="totalesData"
+                    [nunum_proyecto]="numProyectorubro"
+                    [bloqueado]="btnBloqueado"
+                    (recargar)="cargarInformacion(numProyectorubro)">
+                </app-totales-ingresos>-->  <!-- LEO inputs para FEEs -->
+                <app-totales-ingresos
+                    [totalesData]="totalesData"
+                    [nunum_proyecto]="numProyectorubro"
+                    [bloqueado]="btnBloqueado"
+                    (recargar)="recargarTotales()">
+                </app-totales-ingresos>
             </ng-template>
         </div>
     </div>

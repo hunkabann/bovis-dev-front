@@ -137,6 +137,31 @@ export class IngresosComponent implements OnInit {
     return rubros.filter(rubro => rubro.value.reembolsable === false || rubro.value.reembolsable === null);
   }
 
+
+  // LDTF  para recargar despues de actualizar los porcentajes fee
+  recargarTotales() {
+
+    this.cargandoTotales = true;
+
+    this.pcsService.obtenerTotalesIngresos(
+        this.numProyectorubro,
+        this.lineaBaseId
+    )
+    .pipe(finalize(() => this.cargandoTotales = false))
+    .subscribe({
+        next: ({ data }) => {
+            this.totalesData = data;
+        },
+        error: (err) => {
+            this.messageService.add({
+                severity: 'error',
+                summary: TITLES.error,
+                detail: err.error
+            });
+        }
+    });
+  }
+
   async cargarInformacion(numProyecto: number) {
 
     this.mesesProyecto = null;
@@ -211,5 +236,7 @@ export class IngresosComponent implements OnInit {
   padTwoDigits(num: number) {
     return num.toString().padStart(2, "0");
   }
+
+  
 
 }
