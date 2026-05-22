@@ -752,7 +752,7 @@ console.log('IdProy:'+this.idProyecto)
     });
 }
 
-private _pivotEmpProyecto(data: TimeSheetEmpProyecto) {
+private _pivotEmpProyecto_ant(data: TimeSheetEmpProyecto) {
 
   const meses = [...new Set(
     data.detalle.map(d => `${this._mesTexto(d.nummes)} ${d.numanio}`)
@@ -774,6 +774,59 @@ private _pivotEmpProyecto(data: TimeSheetEmpProyecto) {
 
   return {
     headers: ['EMPLEADO','NUMERO', ...meses],
+    rows: Array.from(map.values())
+  };
+}
+
+private _pivotEmpProyecto(data: TimeSheetEmpProyecto) {
+
+  // ===== Obtener meses únicos y ordenarlos
+  const mesesOrdenados = [...new Map(
+    data.detalle.map(d => [
+      `${d.numanio}-${d.nummes}`,
+      {
+        key: `${this._mesTexto(d.nummes)} ${d.numanio}`,
+        anio: d.numanio,
+        mes: d.nummes
+      }
+    ])
+  ).values()]
+  .sort((a, b) => {
+
+    // Orden por año
+    if (a.anio !== b.anio) {
+      return a.anio - b.anio;
+    }
+
+    // Orden por mes
+    return a.mes - b.mes;
+  });
+
+  const meses = mesesOrdenados.map(x => x.key);
+
+  const map = new Map<string, any>();
+
+  data.detalle.forEach(d => {
+
+    if (!map.has(d.nukid_empleado)) {
+
+      const row: any = {
+        EMPLEADO: d.nombre,
+        NUMERO: d.nukid_empleado
+      };
+
+      meses.forEach(m => row[m] = '');
+
+      map.set(d.nukid_empleado, row);
+    }
+
+    const key = `${this._mesTexto(d.nummes)} ${d.numanio}`;
+
+    map.get(d.nukid_empleado)[key] = Number(d.numcosto);
+  });
+
+  return {
+    headers: ['EMPLEADO', 'NUMERO', ...meses],
     rows: Array.from(map.values())
   };
 }
