@@ -2,6 +2,7 @@ import { Component, OnInit, inject,ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { CostosService } from '../../services/costos.service';
 import { SharedService } from '../../../shared/services/shared.service';
+import { EmpleadosService } from '../../../empleados/services/empleados.service';
 import { finalize, forkJoin } from 'rxjs';
 import { SUBJECTS, TITLES,EXCEL_EXTENSION } from 'src/utils/constants';
 import { CostoEmpleado,encabezados,Beneficio,BeneficiosProyectos,Opcion,OpcionEmp } from '../../models/costos.model';
@@ -16,6 +17,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { Dropdown } from 'primeng/dropdown';
 import {TableModule} from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import * as XLSX from 'xlsx';
 
 interface ICatalogo {
   name: string;
@@ -120,7 +122,9 @@ export class CostoEmpleadoComponent implements OnInit {
   IDUnidadNegocio: number = 0;
 
   opcionFiltro: number = 0;
-  constructor() { }
+  constructor(
+  private empleadosService: EmpleadosService
+  ) {}
 
   ngOnInit(): void {
     this.sharedService.cambiarEstado(true)
@@ -164,6 +168,132 @@ export class CostoEmpleadoComponent implements OnInit {
         },
         error: (err) => this.messageService.add({severity: 'error', summary: TITLES.error, detail: err.error})
       })
+  }
+
+
+  cargarExcel(event:any){
+
+    const archivo = event.target.files[0];
+
+    if(!archivo){
+      return;
+    }
+
+
+    const reader = new FileReader();
+
+
+    reader.onload = (e:any)=>{
+
+
+      const workbook = XLSX.read(
+        new Uint8Array(e.target.result),
+        {type:'array'}
+      );
+
+
+      const hoja = workbook.Sheets[workbook.SheetNames[0]];
+
+
+      const empleados:any[] =
+        XLSX.utils.sheet_to_json(hoja);
+
+
+      empleados.forEach(row => {
+
+
+        const numeroEmpleado = row["Num. Empleado"].toString();
+
+
+        this.empleadosService
+          .getCostoID(numeroEmpleado)
+          .subscribe(resp=>{
+
+
+            if(resp.data && resp.data.length > 0) {
+
+
+              const costoEmpleado = resp.data[0];
+
+
+              const datosActualizar = {
+
+
+                idCostoEmpleado:
+                  costoEmpleado.idCostoEmpleado,
+
+                NumEmpleadoRrHh:
+                  costoEmpleado.numEmpleadoRrHh,
+
+                sueldoBruto:
+                  row["Salario Bruto"],
+
+
+                cotizacion:
+                  row["Salario de diario integrado"]
+
+              };
+
+
+              console.log("Payload actualización", datosActualizar);
+
+
+
+              this.empleadosService
+                .guardarCostoEmpleadoActualiza(
+                  datosActualizar,
+                  true,
+                  "api/Costo/" + costoEmpleado.idCostoEmpleado
+                )
+                .subscribe({
+
+                  next:(resultado)=>{
+
+                    console.log(
+                      "Actualizado empleado:",
+                      numeroEmpleado,
+                      resultado
+                    );
+
+                  },
+
+                  error:(error)=>{
+
+                    console.error(
+                      "Error actualizando:",
+                      numeroEmpleado,
+                      error
+                    );
+
+                  }
+
+                });
+
+
+            }
+
+
+          });
+
+
+      });
+
+
+    };
+
+
+    reader.readAsArrayBuffer(archivo);
+
+  }
+
+
+
+  importarSalarios(datos: any[]) {
+
+    // aquí llamarías tu servicio API
+
+    console.log("Enviando:", datos);
+
   }
 
   exportJsonToExcel(): void {
