@@ -54,6 +54,9 @@ export class ModificarRubroInflacionComponent implements OnInit {
 
     //llenando las variables
     this.mesActual = new Date().getMonth() + 1; // Enero = 1
+    const hoy = new Date();
+
+    this.mesActual = (hoy.getFullYear() * 100) + (hoy.getMonth() + 1);
     // Recibir datos enviados
     //this.registrosEntrada = this.config.data.registros;
     this.rubroEntrada = this.config.data.rubroEnvio; 
@@ -225,7 +228,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
       //   { code: 12, name: 'Diciembre' }
       // ];
 
-      // ✅ Validaciones de seguridad
+      /*
       if (
         !this.mesInicio || this.mesInicio < 1 || this.mesInicio > 12 ||
         !this.mesActual || this.mesActual < 1 || this.mesActual > 12
@@ -233,7 +236,16 @@ export class ModificarRubroInflacionComponent implements OnInit {
         this.catMeses = [];
         return;
       }
+        */
+      if (
+        !this.mesInicio ||
+        !this.mesActual
+      ) {
+        this.catMeses = [];
+        return;
+      }
 
+      /*
       // 1. MOSTRAR SOLO DESDE mesInicio HASTA DICIEMBRE
       this.catMeses = mesesBase
         .filter(mes => mes.code >= this.mesInicio)
@@ -242,6 +254,28 @@ export class ModificarRubroInflacionComponent implements OnInit {
           // 2. DESHABILITAR MESES MENORES AL mesActual
           disabled: mes.code < this.mesActual
         }));
+        */
+       // MOSTRAR SOLO DESDE MES ACTUAL EN ADELANTE
+      this.catMeses = mesesBase
+        .filter(mes => mes.code >= this.mesActual)
+        .map(mes => ({
+            ...mes,
+            disabled: false
+        }));
+
+
+      // SELECCIONAR MES ACTUAL
+      setTimeout(() => {
+        const control = this.form.get('numes_ini_calculo');
+
+        if(control){
+          control.setValue(this.mesActual, {emitEvent:false});
+        }
+
+        this.cdRef.detectChanges();
+
+      },100);
+
 
       // 3. SELECCIÓN AUTOMÁTICA DEL MES
       const mesParaSeleccionar =
@@ -263,6 +297,14 @@ export class ModificarRubroInflacionComponent implements OnInit {
       // console.log('MesActual:', this.mesActual);
       // console.log('Catálogo final:', this.catMeses);
       // console.log('Mes seleccionado:', mesParaSeleccionar);
+
+      /*
+      console.log('fechaInicio:', this.fechaInicio);
+      console.log('fechaFin:', this.fechaFin);
+      console.log('mesInicio:', this.mesInicio);
+      console.log('mesActual:', this.mesActual);
+      console.log('mesesBase:', mesesBase);
+      */
     
   }
 
