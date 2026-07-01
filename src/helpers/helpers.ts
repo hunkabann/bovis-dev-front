@@ -35,7 +35,10 @@ const mimeTypeExtensions: any = {
   'image/jpeg': 'jpeg'
 };
 
+/*
 export const obtenerMeses = (fechaInicio: Date, fechaFin: Date): Mes[] => {
+
+  console.log('obtenerMeses');
 
   const diferenciaMeses = differenceInCalendarMonths(fechaFin, fechaInicio);
   const meses: Mes[] = []
@@ -54,6 +57,26 @@ export const obtenerMeses = (fechaInicio: Date, fechaFin: Date): Mes[] => {
   }
 
   return meses
+}
+  */
+
+// Se está corrigiendo como se obtienen los meses
+export const obtenerMeses = (fechaInicio: Date, fechaFin: Date): Mes[] => {
+
+  const diferenciaMeses = differenceInCalendarMonths(fechaFin, fechaInicio);
+  const meses: Mes[] = [];
+
+  for (let i = 0; i <= diferenciaMeses; i++) {
+    const fecha = addMonths(fechaInicio, i);
+
+    meses.push({
+      mes: +format(fecha, 'M'),
+      anio: +format(fecha, 'yyyy'),
+      desc: format(fecha, 'LLL/yyyy', { locale: es })
+    });
+  }
+
+  return meses;
 }
 
 export const obtenerMesesTrans = (fechaInicio: Date, fechaFin: Date): number => {
