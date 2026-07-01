@@ -58,6 +58,11 @@ export class SeccionContenidoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    //console.log("guacala");
+    //console.log(this.seccion.mesesProyecto);
+    //console.table(this.seccion.mesesProyecto);
+
     this.seccionesFormateadas[0].rubros = [];
     if (this.mostrarNoReembolsables) {
       this.seccionesFormateadas[1] = {
@@ -112,6 +117,7 @@ export class SeccionContenidoComponent implements OnInit {
   }
   
   calcularTotalPorcentajePorMes(codigo: string, mes: Mes, isReembolsable: Boolean): number {
+      console.log("codigo: " + codigo + " - mes: " + mes + " - isReembolsable: " + isReembolsable);
         // const seccion = this.secciones.find(ctrl => ctrl.seccion === seccionNombre);
         // if(!isReembolsable) {
         //   return 0;
@@ -151,6 +157,7 @@ export class SeccionContenidoComponent implements OnInit {
       }
   
   calcularSubTotal(rubros: Rubro[]): number {
+    //console.log("rubros: " + rubros);
     let subtotal = 0
     rubros.forEach(rubro => {
       rubro.fechas.forEach(fecha => {
@@ -172,7 +179,7 @@ export class SeccionContenidoComponent implements OnInit {
   //abreRubro abre la modal que se viene manejando siempre 
   abreRubro(rubro: Rubro, rubroIndex: number) {
     // this.modificarRubroEvent.emit({rubro, idSeccion, fechaIni: this.seccion.fechaIni, fechaFin: this.seccion.fechaFin});
-    console.log('Abre Modal Modificar Rubro IdRubro:'+ rubro.idRubro)
+    console.log('- Abre Modal Modificar Rubro IdRubro:'+ rubro.idRubro)
     this.dialogService.open(ModificarRubroComponent, {
       header: rubro.rubro,
       width: '50%',
@@ -314,6 +321,7 @@ export class SeccionContenidoComponent implements OnInit {
   }  
 
   mapeaFechasToGastostotales(lstEntrada: Fecha[]): GastosIngresosTotales[] {
+    console.log("mapeaFechasToGastostotales");
     return lstEntrada.map(fecha => ({
       mes: fecha.mes,
       anio: fecha.anio,
