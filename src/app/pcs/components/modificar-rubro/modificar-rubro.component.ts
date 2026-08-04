@@ -161,6 +161,7 @@ export class ModificarRubroComponent implements OnInit {
   }
 
   guardar() {
+    //console.log(this.form.value);
     this.sharedService.cambiarEstado(true)
 
     this.pcsService.actualizarRubro(this.form.value)
@@ -187,6 +188,7 @@ export class ModificarRubroComponent implements OnInit {
   }
     */
 
+  /*
   cambiarValoresFechas() {  // LDTF         que no rellene de ceros si se apaga el switch de aplica todos los meses
 
     const aplica = this.form.value.aplicaTodosMeses;
@@ -208,6 +210,42 @@ export class ModificarRubroComponent implements OnInit {
         // No ponemos cero
       }
     });
+  }
+    */
+  cambiarValoresFechas() {  // LDTF, para que tome en cuenta el mes corriente
+
+    const aplica = this.form.value.aplicaTodosMeses;
+
+    // Primer día del mes actual
+    const fechaActualMes = new Date(
+      this.fechaActual.getFullYear(),
+      this.fechaActual.getMonth(),
+      1
+    );
+
+    this.fechas.controls.forEach((fecha, index) => {
+
+      // Primer día del mes del registro
+      const fechaRegistro = new Date(
+        fecha.value.anio,
+        fecha.value.mes - 1,
+        1
+      );
+
+      // Solo desde el mes actual en adelante
+      if (fechaRegistro >= fechaActualMes) {
+
+        // SOLO modifica cuando está encendido
+        if (aplica) {
+          this.fechas.at(index).patchValue({
+            porcentaje: this.form.value.cantidad
+          });
+        }
+
+        // Cuando se apaga NO hace nada
+      }
+    });
+
   }
 
   obtenerPorcentaje(fechas: Fecha[], mesRegistro: Mes) {
