@@ -91,8 +91,18 @@ export class ModificarRubroComponent implements OnInit {
       })
     }
 
-    this.selectedUnidad = rubro.unidad?.toString()
+    this.selectedUnidad = rubro.unidad?.toString();
 
+    if (this.selectedUnidad === 'pp') {   // ldtf, para ocultar los campos cuando al cargar la unidad es pp
+      this.stilovisible = 'visible';
+      this.stilovisiblepp = 'hidden';
+    } else if (this.selectedUnidad === 'otro') {
+      this.stilovisible = 'hidden';
+      this.stilovisiblepp = 'visible';
+    } else {
+      this.stilovisible = 'visible';
+      this.stilovisiblepp = 'visible';
+    }
     const fechaInicio = new Date(this.config.data.fechaInicio)
     const fechaFin = new Date(this.config.data.fechaFin)
     // console.log("this.config.data.fechaInicio:" + this.config.data.fechaInicio)
