@@ -193,11 +193,15 @@ export class SeccionContenidoComponent implements OnInit {
       }
     }).onClose.subscribe((result) => {
       if (result && result.rubro) {
+        /*
         const rubroRespuesta = result.rubro as Rubro;
         this.seccionesFormateadas[rubroRespuesta.reembolsable ? 0 : 1].rubros[rubroIndex] = {
           ...rubro,
           ...rubroRespuesta,
         };
+        */
+        // Avisar al componente padre que debe volver a cargar la sección
+        this.refreshService.refrescarSeccion(this.indexSeccion);  // para recargar la sección, ldtf
       }
     });
   }  
