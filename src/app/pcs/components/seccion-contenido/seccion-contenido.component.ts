@@ -217,7 +217,7 @@ export class SeccionContenidoComponent implements OnInit {
       data: {
         rubroEnvio: rubro,
         fechaInicio: this.seccion.fechaIni,
-        mesInicio: this.seccion.fechaIni.getMonth()+1,
+        mesInicio: this.seccion.fechaIni.getMonth() + 1,
         numProyecto: this.seccion.numProyecto,
         reembolsable: rubro.reembolsable,
         idSeccion: this.seccion.idSeccion, //Fórmula Inflación
@@ -226,7 +226,15 @@ export class SeccionContenidoComponent implements OnInit {
       }
     }).onClose.subscribe((result) => {
       // SOLO avisamos que esta sección cambió
+      /*
       if (this.nombrePaginaPadre === 'gastosPagina') {
+        this.refreshService.refrescarSeccion(this.indexSeccion);
+      }
+        */
+      if (
+        result?.guardado === true &&
+        this.nombrePaginaPadre === 'gastosPagina'
+      ) {
         this.refreshService.refrescarSeccion(this.indexSeccion);
       }
 
