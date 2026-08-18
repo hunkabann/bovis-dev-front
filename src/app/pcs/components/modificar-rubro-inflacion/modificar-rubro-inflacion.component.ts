@@ -145,7 +145,9 @@ export class ModificarRubroInflacionComponent implements OnInit {
         this.pcsService.actualizarDatosInflacionRubro(payload).subscribe({
           next: (resp) => {
             this.messageService.add({ severity: 'success', summary: 'OK', detail: 'Guardado correctamente' });
+            // Indicar al componente padre que SÍ hubo guardado
             this.ref.close({
+              guardado: true
             });
           },
 
