@@ -52,8 +52,14 @@ export class ModificarRubroInflacionComponent implements OnInit {
 
   ngOnInit(): void {
 
+    /*
+    console.log('========== DATA RECIBIDA DEL MODAL ==========');
+    console.log(this.config.data);
+    console.log('=============================================');
+    */
+
     //llenando las variables
-    this.mesActual = new Date().getMonth() + 1; // Enero = 1
+    //this.mesActual = new Date().getMonth() + 1; // Enero = 1
     const hoy = new Date();
 
     this.mesActual = (hoy.getFullYear() * 100) + (hoy.getMonth() + 1);
@@ -69,22 +75,26 @@ export class ModificarRubroInflacionComponent implements OnInit {
     this.nukidRubro = this.config.data.idRubro; //Fórmula Inflación
     this.fechaFin = this.config.data.fechaFin;
 
+    /*
     console.log('this.nukidSeccion:'+this.nukidSeccion)
     console.log('this.nukidRubro:'+this.nukidRubro)
     console.log('this.fechaInicio:'+this.fechaInicio)
     console.log('this.fechaFin:'+this.fechaFin)
-    //obtener los valores guardado en BD
-    this.consultaDatosinflacion();
-
+    */
     //Llenado de los meses para el combo 
     this.cargarCatalogoMeses();
 
+    //obtener los valores guardado en BD
+    this.consultaDatosinflacion();
+
     // Setear valores al form
+    /*
     this.form.patchValue({
       numProyecto: this.numProyecto,
       numes_ini_calculo: this.mesguardado,
       porcentaje: this.numPorcentaje,
     });
+    */
 
     //this.form.get('numes_ini_calculo')?.setValue(this.mesInicio );
   }
@@ -265,6 +275,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
 
 
       // SELECCIONAR MES ACTUAL
+      /*
       setTimeout(() => {
         const control = this.form.get('numes_ini_calculo');
 
@@ -275,6 +286,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
         this.cdRef.detectChanges();
 
       },100);
+      */
 
 
       // 3. SELECCIÓN AUTOMÁTICA DEL MES
@@ -284,6 +296,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
           : this.mesInicio;
 
       // FORZADO DE SELECCIÓN PARA DYNAMIC DIALOG
+      /*
       setTimeout(() => {
         const control = this.form.get('numes_ini_calculo');
         if (control) {
@@ -292,6 +305,7 @@ export class ModificarRubroInflacionComponent implements OnInit {
 
         this.cdRef.detectChanges(); // fuerza repintado del dropdown
       }, 100); // este 100ms es CLAVE en diálogos
+      */
 
       // console.log('MesInicio:', this.mesInicio);
       // console.log('MesActual:', this.mesActual);
@@ -305,9 +319,78 @@ export class ModificarRubroInflacionComponent implements OnInit {
       console.log('mesActual:', this.mesActual);
       console.log('mesesBase:', mesesBase);
       */
+
+      // Valores iniciales del formulario
+      const valoresFormulario: any = {};
+
+      // --------------------------------------------------
+      // MES DE INICIO
+      // --------------------------------------------------
+      const unidad = this.rubroEntrada?.unidad;
+
+      if (unidad) {
+
+        const [mesTexto, anioTexto] = unidad.split('/');
+
+        const meses: { [key: string]: number } = {
+          ene: 1,
+          feb: 2,
+          mar: 3,
+          abr: 4,
+          may: 5,
+          jun: 6,
+          jul: 7,
+          ago: 8,
+          sep: 9,
+          oct: 10,
+          nov: 11,
+          dic: 12
+        };
+
+        const mes = meses[mesTexto.toLowerCase()];
+        const anio = Number(anioTexto);
+
+        if (mes && anio) {
+
+          const codigoMes = (anio * 100) + mes;
+
+          // Verificar que exista en el catálogo
+          const mesCatalogo = this.catMeses.find(
+            x => x.code === codigoMes
+          );
+
+          if (mesCatalogo) {
+            valoresFormulario.numes_ini_calculo = codigoMes;
+          }
+        }
+      }
+
+      // --------------------------------------------------
+      // PORCENTAJE
+      // --------------------------------------------------
+      const cantidad = this.rubroEntrada?.cantidad;
+
+      //if (cantidad !== null && cantidad !== undefined && cantidad !== '') {
+      if (cantidad !== null) {
+        valoresFormulario.porcentaje = cantidad;
+      }
+
+      // --------------------------------------------------
+      // APLICAR VALORES
+      // --------------------------------------------------
+      if (Object.keys(valoresFormulario).length > 0) {
+
+        this.form.patchValue(valoresFormulario);
+
+        console.log('Valores iniciales aplicados:', valoresFormulario);
+
+        this.cdRef.detectChanges();
+      }
+
     
   }
 
+  /*
   consultaDatosinflacion() {
 
     this.pcsService.obtenerDatosInflacion(this.numProyecto, '')
@@ -322,6 +405,95 @@ export class ModificarRubroInflacionComponent implements OnInit {
         error: (err) => this.messageService.add({ severity: 'error', summary: TITLES.error, detail: err.error })
       });
   
+  }
+      */
+    consultaDatosinflacion() {
+
+      this.pcsService.obtenerDatosInflacion(this.numProyecto, '')
+      .subscribe({
+        next: ({ data }) => {
+
+          console.log('Datos inflación servicio:', data);
+
+          // Solo usar los datos de BD si NO vienen datos en el rubro
+          if (this.rubroEntrada?.cantidad != null) {
+            this.form.get('porcentaje')?.setValue(
+              this.rubroEntrada.cantidad
+            );
+          } else if (data?.nuprocentaje != null && data.nuprocentaje !== 0) {
+            this.form.get('porcentaje')?.setValue(
+              data.nuprocentaje
+            );
+          } else {
+            this.form.get('porcentaje')?.setValue(null);
+          }
+
+
+          if (this.rubroEntrada?.unidad) {
+
+            const [mesTexto, anioTexto] =
+              this.rubroEntrada.unidad.split('/');
+
+            const meses: { [key: string]: number } = {
+              ene: 1,
+              feb: 2,
+              mar: 3,
+              abr: 4,
+              may: 5,
+              jun: 6,
+              jul: 7,
+              ago: 8,
+              sep: 9,
+              oct: 10,
+              nov: 11,
+              dic: 12
+            };
+
+            const mes = meses[mesTexto.toLowerCase()];
+            const anio = Number(anioTexto);
+
+            if (mes && anio) {
+
+              const codigoMes = (anio * 100) + mes;
+
+              console.log('Unidad:', this.rubroEntrada.unidad);
+              console.log('numes_ini_calculo:', codigoMes);
+
+              this.form.get('numes_ini_calculo')?.setValue(
+                codigoMes
+              );
+
+            } else {
+              this.form.get('numes_ini_calculo')?.setValue(null);
+            }
+
+          } else if (
+            data?.numes_ini_calculo != null &&
+            data.numes_ini_calculo !== 0
+          ) {
+
+            this.form.get('numes_ini_calculo')?.setValue(
+              data.numes_ini_calculo
+            );
+
+          } else {
+
+            this.form.get('numes_ini_calculo')?.setValue(null);
+
+          }
+
+        },
+
+        error: (err) => {
+
+          this.messageService.add({
+            severity: 'error',
+            summary: TITLES.error,
+            detail: err.error
+          });
+
+        }
+      });
   }
 }
 
