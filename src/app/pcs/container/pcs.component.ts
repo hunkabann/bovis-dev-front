@@ -27,6 +27,7 @@ export class PcsComponent implements OnInit {
   pcsService = inject(PcsService)
 
   stilovisible: boolean = false
+  actualizandoValoresPP: boolean = false; //  LDTF
 
   items: MenuItem[] = [
     { label: 'IP', routerLink: 'ip' },
@@ -302,4 +303,81 @@ export class PcsComponent implements OnInit {
     this.btnBloqueado = this.lineaBaseId == undefined ? false : true; //LEOX si hay una linea seleccionada que inhabilite el btn
     console.log('PCS AsignaValor despues btnBloqueado:'+this.btnBloqueado)
   }
+
+
+  // LDTF actuaiza los gastos pp masivamente
+  actualizarValoresPP(): void {
+
+    // No hay proyecto seleccionado
+    if (!this.proyectoId) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Aviso',
+        detail: 'Debes seleccionar un proyecto.'
+      });
+      return;
+    }
+
+    // Hay una línea base seleccionada
+    if (this.lineaBaseId !== null && this.lineaBaseId !== undefined) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Aviso',
+        detail: 'No se pueden actualizar los valores PP mientras hay una línea base seleccionada.'
+      });
+      return;
+    }
+
+    // Evitar doble ejecución
+    if (this.actualizandoValoresPP) {
+      return;
+    }
+
+    this.actualizandoValoresPP = true;
+
+    this.pcsService.actualizarValoresPP(this.proyectoId)
+      .pipe(
+        finalize(() => {
+          this.actualizandoValoresPP = false;
+        })
+      )
+      .subscribe({
+        next: (resp) => {
+
+          console.log('Valores PP actualizados correctamente:', resp);
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Proceso terminado',
+            detail: 'Los valores PP se actualizaron correctamente.'
+          });
+
+        },
+
+        error: (err) => {
+
+          console.error('Error al actualizar valores PP:', err);
+
+          let mensaje = 'Ocurrió un error al actualizar los valores PP.';
+
+          if (typeof err.error === 'string') {
+            mensaje = err.error;
+          }
+          else if (err.error?.message) {
+            mensaje = err.error.message;
+          }
+          else if (err.message) {
+            mensaje = err.message;
+          }
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: mensaje,
+            life: 8000
+          });
+        }
+      });
+  }
+
 }

@@ -74,6 +74,17 @@ export class PcsService {
     );
   }
 
+
+  // actualizar los gatos pp por proyecto
+  actualizarValoresPP(nunumProyecto: number) {
+    return this.http.put(
+      `${this.baseUrl}api/Pcs/GastosIngresos/Proyecto_pp`,
+      {
+        nunum_proyecto: nunumProyecto
+      }
+    );
+  }
+
   // obtenerEtapasPorProyecto(idProyecto: number) {
   //   return this.http.get<EtapasPorProyectoResponse>(`${this.baseUrl}api/Pcs/Etapas/${idProyecto}`)
   // }
