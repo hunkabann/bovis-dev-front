@@ -8,7 +8,7 @@
             <button type="button" class="btn btn-info ml-5" (click)="cargarProyecto()">Nuevo proyecto</button>
         </p-toolbar>
 
-        <div class="col-10" >
+        <div class="col-8" >
             <label for="id_proyecto">Proyecto:</label>
             <p-dropdown [disabled]="stilovisible" id="id_proyecto" [options]="proyectos" placeholder="Seleccionar un proyecto" (onChange)="cargarProyecto(true)" optionLabel="name" [showClear]="true" [style]="{ width: '100%' }" optionValue="code" [filter]="true" filterBy="name" [(ngModel)]="proyectoId"></p-dropdown>
         </div>
@@ -49,8 +49,28 @@
                 [hidden] = "lineaBaseOculto"
                 [(ngModel)]="lineaBaseId">
             </p-dropdown>
+
         </div>
         <!-- LDTF línea  base F-->
+        <div class="col-2 d-flex align-items-end">
+
+            <button
+                type="button"
+                class="btn btn-secondary"
+                [disabled]=" lineaBaseId !== null || actualizandoValoresPP || !proyectoId "
+                (click)="actualizarValoresPP()">
+
+                <i class="pi"
+                    [ngClass]="actualizandoValoresPP
+                        ? 'pi-spin pi-spinner'
+                        : 'pi-refresh'">
+                </i>
+
+                {{ actualizandoValoresPP ? 'Actualizando...'  : 'Actualizar valores PP' }}
+
+            </button>
+
+        </div>
     </div>
 
     <router-outlet></router-outlet>
